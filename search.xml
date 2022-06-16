@@ -1,6 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>next定制</title>
+    <url>/2022/06/16/config/next%20tips/</url>
+    <content><![CDATA[<h2 id="js脚本实现自定义menu页"><a href="#js脚本实现自定义menu页" class="headerlink" title="js脚本实现自定义menu页"></a>js脚本实现自定义menu页</h2><blockquote>
+<p>操作对象：blog&#x2F;theme&#x2F;next&#x2F;文件夹下</p>
+</blockquote>
+<ul>
+<li><p>在主题配置文件<code>_config.yml</code>中<code>menu</code>栏下添加新的标签页，并在<code>blog/source</code>文件夹下添加同样的文件夹，<code>||</code>右侧是图标，采用的是<code>Font Awesome</code>中的图标位置，不过推荐用<code>fa-solid</code>类型的<code>icon</code>，因为其他的好像显示失败。注意在如<code>/source/pwn</code>中的<code>index.md</code>中不需要写<code>type</code>和<code>layout</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">menu:</span><br><span class="line">  home: / || fa fa-home</span><br><span class="line">  about: /about/ || fa fa-user</span><br><span class="line">  tags: /tags/ || fa fa-tags</span><br><span class="line">  categories: /categories/ || fa fa-th</span><br><span class="line">  archives: /archives/ || fa fa-archive</span><br><span class="line">  pwn: /pwn/ || fas fa-flag-checkered</span><br><span class="line">  system: /system/ || fas fa-laptop-code</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在<code>/theme/next/scripts</code>下新建一个<code>pwn.js</code>文件来控制新的<code>pwn</code>菜单栏的内容</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> pagination = <span class="built_in">require</span>(<span class="string">&#x27;hexo-pagination&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> filteredCategory = <span class="string">&#x27;pwn&#x27;</span>;</span><br><span class="line"></span><br><span class="line">hexo.<span class="property">extend</span>.<span class="property">generator</span>.<span class="title function_">register</span>(<span class="string">&#x27;pwn&#x27;</span>, <span class="keyword">function</span>(<span class="params">locals</span>)&#123;</span><br><span class="line">  <span class="keyword">var</span> pwnPosts = locals.<span class="property">posts</span>.<span class="title function_">filter</span>(<span class="keyword">function</span>(<span class="params">x</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> x.<span class="property">categories</span>.<span class="property">data</span>[<span class="number">0</span>].<span class="property">name</span> == filteredCategory;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">pagination</span>(<span class="string">&#x27;pwn&#x27;</span>, pwnPosts, &#123;</span><br><span class="line">    <span class="attr">perPage</span>: <span class="number">12</span>,</span><br><span class="line">    <span class="attr">layout</span>: [<span class="string">&#x27;archive&#x27;</span>]</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注意最后一个<code>layout</code>可以用<code>&#39;archive&#39;</code>来呈现时间轴的效果，不必再自定义了（报错麻烦）</li>
+<li>这段代码的功能就是把所有文章按照<code>category</code>过滤，属于<code>pwn</code>的显示出来</li>
+</ul>
+</li>
+<li><p>执行生效即可</p>
+</li>
+</ul>
+<h2 id="pace实现加载特效"><a href="#pace实现加载特效" class="headerlink" title="pace实现加载特效"></a>pace实现加载特效</h2><p>由于网页不可能一直都秒进，总会等待一段时间的，所以可以设置顶部加载条。Next 已经集成了很多加载特效，可以在下面选项中在线调试测试一下。</p>
+<p>搜索<code>pace</code>，找到如下代码：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"># 页面顶部加载条</span><br><span class="line"># Progress bar in the <span class="attribute">top</span> during page loading.</span><br><span class="line">pace: true</span><br><span class="line"># Themes list:</span><br><span class="line">#pace-theme-big-counter</span><br><span class="line">#pace-theme-bounce</span><br><span class="line">#pace-theme-barber-shop</span><br><span class="line">#pace-theme-center-atom</span><br><span class="line">#pace-theme-center-circle</span><br><span class="line">#pace-theme-center-radar</span><br><span class="line">#pace-theme-center-simple</span><br><span class="line">#pace-theme-corner-indicator</span><br><span class="line">#pace-theme-fill-left</span><br><span class="line">#pace-theme-flash</span><br><span class="line">#pace-theme-loading-bar</span><br><span class="line">#pace-theme-mac-osx</span><br><span class="line">#pace-theme-minimal</span><br><span class="line"># For example</span><br><span class="line"># pace_theme: pace-theme-center-simple</span><br><span class="line">pace_theme: pace-theme-minimal  # 默认设置，可以修改为上述任何一个</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <categories>
+        <category>hexo</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+        <tag>next theme</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Heap 1</title>
+    <url>/2022/06/16/pwn/%E5%A0%86%E5%88%A9%E7%94%A8%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<h1 id="堆利用基础"><a href="#堆利用基础" class="headerlink" title="堆利用基础"></a>堆利用基础</h1><h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2>]]></content>
+      <categories>
+        <category>pwn</category>
+      </categories>
+      <tags>
+        <tag>pwn</tag>
+        <tag>heap</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>ucore_lab4</title>
     <url>/2022/06/16/system/ucore_lab4/</url>
     <content><![CDATA[<h1 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h1><h2 id="分类测试"><a href="#分类测试" class="headerlink" title="分类测试"></a>分类测试</h2>]]></content>
@@ -436,48 +484,6 @@
       <tags>
         <tag>pwn</tag>
         <tag>stack</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Heap 1</title>
-    <url>/2022/06/16/pwn/%E5%A0%86%E5%88%A9%E7%94%A8%E5%9F%BA%E7%A1%80/</url>
-    <content><![CDATA[<h1 id="堆利用基础"><a href="#堆利用基础" class="headerlink" title="堆利用基础"></a>堆利用基础</h1><h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2>]]></content>
-      <categories>
-        <category>pwn</category>
-      </categories>
-      <tags>
-        <tag>pwn</tag>
-        <tag>heap</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>hexo 自定义 menu</title>
-    <url>/2022/06/16/config/next%E8%87%AA%E5%AE%9A%E4%B9%89menu/</url>
-    <content><![CDATA[<h3 id="js脚本"><a href="#js脚本" class="headerlink" title="js脚本"></a>js脚本</h3><blockquote>
-<p>操作对象：blog&#x2F;theme&#x2F;next&#x2F;文件夹下</p>
-</blockquote>
-<ul>
-<li><p>在主题配置文件<code>_config.yml</code>中<code>menu</code>栏下添加新的标签页，并在<code>blog/source</code>文件夹下添加同样的文件夹，<code>||</code>右侧是图标，采用的是<code>Font Awesome</code>中的图标位置，不过推荐用<code>fa-solid</code>类型的<code>icon</code>，因为其他的好像显示失败。注意在如<code>/source/pwn</code>中的<code>index.md</code>中不需要写<code>type</code>和<code>layout</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">menu:</span><br><span class="line">  home: / || fa fa-home</span><br><span class="line">  about: /about/ || fa fa-user</span><br><span class="line">  tags: /tags/ || fa fa-tags</span><br><span class="line">  categories: /categories/ || fa fa-th</span><br><span class="line">  archives: /archives/ || fa fa-archive</span><br><span class="line">  pwn: /pwn/ || fas fa-flag-checkered</span><br><span class="line">  system: /system/ || fas fa-laptop-code</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在<code>/theme/next/scripts</code>下新建一个<code>pwn.js</code>文件来控制新的<code>pwn</code>菜单栏的内容</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> pagination = <span class="built_in">require</span>(<span class="string">&#x27;hexo-pagination&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> filteredCategory = <span class="string">&#x27;pwn&#x27;</span>;</span><br><span class="line"></span><br><span class="line">hexo.<span class="property">extend</span>.<span class="property">generator</span>.<span class="title function_">register</span>(<span class="string">&#x27;pwn&#x27;</span>, <span class="keyword">function</span>(<span class="params">locals</span>)&#123;</span><br><span class="line">  <span class="keyword">var</span> pwnPosts = locals.<span class="property">posts</span>.<span class="title function_">filter</span>(<span class="keyword">function</span>(<span class="params">x</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> x.<span class="property">categories</span>.<span class="property">data</span>[<span class="number">0</span>].<span class="property">name</span> == filteredCategory;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">pagination</span>(<span class="string">&#x27;pwn&#x27;</span>, pwnPosts, &#123;</span><br><span class="line">    <span class="attr">perPage</span>: <span class="number">12</span>,</span><br><span class="line">    <span class="attr">layout</span>: [<span class="string">&#x27;archive&#x27;</span>]</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>注意最后一个<code>layout</code>可以用<code>&#39;archive&#39;</code>来呈现时间轴的效果，不必再自定义了（报错麻烦）</li>
-<li>这段代码的功能就是把所有文章按照<code>category</code>过滤，属于<code>pwn</code>的显示出来</li>
-</ul>
-</li>
-<li><p>执行生效即可</p>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>hexo</category>
-      </categories>
-      <tags>
-        <tag>hexo</tag>
-        <tag>next theme</tag>
       </tags>
   </entry>
 </search>
