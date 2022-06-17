@@ -30,7 +30,7 @@
 <meta property="og:description" content="自定义menu, 并和categories结合">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-06-16T14:59:09.000Z">
-<meta property="article:modified_time" content="2022-06-17T07:28:33.558Z">
+<meta property="article:modified_time" content="2022-06-17T07:36:05.116Z">
 <meta property="article:author" content="Gan Gecen">
 <meta property="article:tag" content="hexo">
 <meta property="article:tag" content="next theme">
@@ -237,7 +237,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-06-17 15:28:33" itemprop="dateModified" datetime="2022-06-17T15:28:33+08:00">2022-06-17</time>
+                <time title="Modified: 2022-06-17 15:36:05" itemprop="dateModified" datetime="2022-06-17T15:36:05+08:00">2022-06-17</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -301,7 +301,29 @@
 
 <h2 id="加载图片"><a href="#加载图片" class="headerlink" title="加载图片"></a>加载图片</h2><ul>
 <li><p>装插件</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm </span><br></pre></td></tr></table></figure></li>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-renderer-marked</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在全局配置文件<code>_config.yml</code>中</p>
+<ol>
+<li><p>修改是否生成资源文件夹</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">post_asset_folder: true</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>添加标记</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">marked:</span><br><span class="line">  prependRoot: true</span><br><span class="line">  postAsset: true</span><br></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><p>此时通过<code>hexo new &#39;title&#39;</code>可以在<code>_posts</code>中生成<code>title.md</code>和同名资源文件夹<code>title</code></p>
+<blockquote>
+<p>都是可移动的，但资源文件夹和原文件要同时移动</p>
+</blockquote>
+</li>
+<li><p>修改<code>typora</code>图片偏好为相对路径优先</p>
+</li>
+<li><p>进入相对路径后注意只有一个图片名（在对应的资源文件夹下）</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">![name](name.<span class="property">png</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>当缩放时<code>src</code>也只能有图片名</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;brop_stop_gadgets.png&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;brop_stop_gadgets&quot;</span> <span class="attr">style</span>=<span class="string">&quot;zoom:38%;&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure></li>
 </ul>
 
     </div>
@@ -339,8 +361,8 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/06/16/pwn/heap-1/" rel="prev" title="Heap 1">
-      <i class="fa fa-chevron-left"></i> Heap 1
+    <a href="/2022/06/16/pwn/heap-1/" rel="prev" title="heap 1">
+      <i class="fa fa-chevron-left"></i> heap 1
     </a></div>
       <div class="post-nav-item">
     <a href="/2022/06/17/pwn/heap-2/" rel="next" title="heap 2">

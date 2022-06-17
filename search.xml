@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Blind ROP</title>
+    <title>blind ROP</title>
     <url>/2022/06/16/pwn/brop/</url>
     <content><![CDATA[<h1 id="Blind-ROP"><a href="#Blind-ROP" class="headerlink" title="Blind ROP"></a>Blind ROP</h1><hr>
 <h2 id="x86与x64回顾"><a href="#x86与x64回顾" class="headerlink" title="x86与x64回顾"></a>x86与x64回顾</h2><ul>
@@ -334,10 +334,6 @@
 <p>结合中间输出可以让结果有迹可循一点，次数找到了<code>0x4006b6</code>，为了找到开始地址，可以输出程序没有崩溃时的接收结果，看是否与程序开始时候的提示一致。</p>
 <img src="brop_stop_gadgets.png" alt="brop_stop_gadgets" style="zoom:38%;" />
 
-
-
-
-
 <h3 id="寻找-brop-gadgets"><a href="#寻找-brop-gadgets" class="headerlink" title="寻找 brop gadgets"></a>寻找 brop gadgets</h3><blockquote>
 <p>此处是为了找到<code>__libc_csu_init</code>的末尾那一段重要部分，即</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[*] </span><br><span class="line">pop rbx, pop rbp, pop r12, pop r13, pop r14, pop r15, ret</span><br><span class="line">[*] + 0x7 </span><br><span class="line">pop rsi, pop r15, ret</span><br><span class="line">[*] + 0x9</span><br><span class="line">pop rdi, ret</span><br></pre></td></tr></table></figure>
@@ -431,22 +427,9 @@
       </tags>
   </entry>
   <entry>
-    <title>Heap 1</title>
+    <title>heap 1</title>
     <url>/2022/06/16/pwn/heap-1/</url>
     <content><![CDATA[<h1 id="堆利用基础"><a href="#堆利用基础" class="headerlink" title="堆利用基础"></a>堆利用基础</h1><h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p><img src="/2022/06/16/pwn/heap-1/program_virtual_address_memory_space.png" alt="program_virtual_address_memory_space"></p>
-]]></content>
-      <categories>
-        <category>pwn</category>
-      </categories>
-      <tags>
-        <tag>pwn</tag>
-        <tag>heap</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>heap 2</title>
-    <url>/2022/06/17/pwn/heap-2/</url>
-    <content><![CDATA[<p><img src="/2022/06/17/pwn/heap-2/program_virtual_address_memory_space.png" alt="program_virtual_address_memory_space"></p>
 ]]></content>
       <categories>
         <category>pwn</category>
@@ -485,7 +468,29 @@
 
 <h2 id="加载图片"><a href="#加载图片" class="headerlink" title="加载图片"></a>加载图片</h2><ul>
 <li><p>装插件</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm </span><br></pre></td></tr></table></figure></li>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install hexo-renderer-marked</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在全局配置文件<code>_config.yml</code>中</p>
+<ol>
+<li><p>修改是否生成资源文件夹</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">post_asset_folder: true</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>添加标记</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">marked:</span><br><span class="line">  prependRoot: true</span><br><span class="line">  postAsset: true</span><br></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><p>此时通过<code>hexo new &#39;title&#39;</code>可以在<code>_posts</code>中生成<code>title.md</code>和同名资源文件夹<code>title</code></p>
+<blockquote>
+<p>都是可移动的，但资源文件夹和原文件要同时移动</p>
+</blockquote>
+</li>
+<li><p>修改<code>typora</code>图片偏好为相对路径优先</p>
+</li>
+<li><p>进入相对路径后注意只有一个图片名（在对应的资源文件夹下）</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">![name](name.<span class="property">png</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>当缩放时<code>src</code>也只能有图片名</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;brop_stop_gadgets.png&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;brop_stop_gadgets&quot;</span> <span class="attr">style</span>=<span class="string">&quot;zoom:38%;&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure></li>
 </ul>
 ]]></content>
       <categories>
@@ -494,6 +499,19 @@
       <tags>
         <tag>hexo</tag>
         <tag>next theme</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>heap 2</title>
+    <url>/2022/06/17/pwn/heap-2/</url>
+    <content><![CDATA[<p><img src="/2022/06/17/pwn/heap-2/program_virtual_address_memory_space.png" alt="program_virtual_address_memory_space"></p>
+]]></content>
+      <categories>
+        <category>pwn</category>
+      </categories>
+      <tags>
+        <tag>pwn</tag>
+        <tag>heap</tag>
       </tags>
   </entry>
   <entry>

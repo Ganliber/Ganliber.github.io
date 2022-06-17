@@ -24,7 +24,7 @@
 
   <meta name="description" content="关于_libc_csu_init的利用和blind rop的方法。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Blind ROP">
+<meta property="og:title" content="blind ROP">
 <meta property="og:url" content="https://ganliber.github.io/2022/06/16/pwn/brop/index.html">
 <meta property="og:site_name" content="Ganliber&#39;s Home">
 <meta property="og:description" content="关于_libc_csu_init的利用和blind rop的方法。">
@@ -37,7 +37,7 @@
 <meta property="og:image" content="https://ganliber.github.io/2022/06/16/pwn/brop/brop_stop_gadgets.png">
 <meta property="og:image" content="https://ganliber.github.io/2022/06/16/pwn/brop/brop_puts@plt.png">
 <meta property="article:published_time" content="2022-06-16T08:47:30.000Z">
-<meta property="article:modified_time" content="2022-06-17T07:26:28.308Z">
+<meta property="article:modified_time" content="2022-06-17T07:36:14.890Z">
 <meta property="article:author" content="Gan Gecen">
 <meta property="article:tag" content="pwn">
 <meta property="article:tag" content="stack">
@@ -57,7 +57,7 @@
   };
 </script>
 
-  <title>Blind ROP | Ganliber's Home</title>
+  <title>blind ROP | Ganliber's Home</title>
   
 
 
@@ -228,7 +228,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Blind ROP
+          blind ROP
         </h1>
 
         <div class="post-meta">
@@ -245,7 +245,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-06-17 15:26:28" itemprop="dateModified" datetime="2022-06-17T15:26:28+08:00">2022-06-17</time>
+                <time title="Modified: 2022-06-17 15:36:14" itemprop="dateModified" datetime="2022-06-17T15:36:14+08:00">2022-06-17</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -614,10 +614,6 @@
 <p>结合中间输出可以让结果有迹可循一点，次数找到了<code>0x4006b6</code>，为了找到开始地址，可以输出程序没有崩溃时的接收结果，看是否与程序开始时候的提示一致。</p>
 <img src="brop_stop_gadgets.png" alt="brop_stop_gadgets" style="zoom:38%;" />
 
-
-
-
-
 <h3 id="寻找-brop-gadgets"><a href="#寻找-brop-gadgets" class="headerlink" title="寻找 brop gadgets"></a>寻找 brop gadgets</h3><blockquote>
 <p>此处是为了找到<code>__libc_csu_init</code>的末尾那一段重要部分，即</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[*] </span><br><span class="line">pop rbx, pop rbp, pop r12, pop r13, pop r14, pop r15, ret</span><br><span class="line">[*] + 0x7 </span><br><span class="line">pop rsi, pop r15, ret</span><br><span class="line">[*] + 0x9</span><br><span class="line">pop rdi, ret</span><br></pre></td></tr></table></figure>
@@ -716,7 +712,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>Post link: </strong>
-    <a href="https://ganliber.github.io/2022/06/16/pwn/brop/" title="Blind ROP">https://ganliber.github.io/2022/06/16/pwn/brop/</a>
+    <a href="https://ganliber.github.io/2022/06/16/pwn/brop/" title="blind ROP">https://ganliber.github.io/2022/06/16/pwn/brop/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
@@ -741,8 +737,8 @@
       <i class="fa fa-chevron-left"></i> ucore_lab4
     </a></div>
       <div class="post-nav-item">
-    <a href="/2022/06/16/pwn/heap-1/" rel="next" title="Heap 1">
-      Heap 1 <i class="fa fa-chevron-right"></i>
+    <a href="/2022/06/16/pwn/heap-1/" rel="next" title="heap 1">
+      heap 1 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -969,7 +965,7 @@
   var disqus_config = function() {
     this.page.url = "https://ganliber.github.io/2022/06/16/pwn/brop/";
     this.page.identifier = "2022/06/16/pwn/brop/";
-    this.page.title = "Blind ROP";
+    this.page.title = "blind ROP";
     };
   NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
     if (window.DISQUS) {
