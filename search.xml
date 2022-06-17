@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>ucore_lab4</title>
+    <url>/2022/06/16/system/ucore_lab4/</url>
+    <content><![CDATA[<h1 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h1><h2 id="分类测试"><a href="#分类测试" class="headerlink" title="分类测试"></a>分类测试</h2>]]></content>
+      <categories>
+        <category>system</category>
+      </categories>
+      <tags>
+        <tag>operating system</tag>
+        <tag>system</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>next定制</title>
     <url>/2022/06/16/config/next%20tips/</url>
     <content><![CDATA[<h2 id="js脚本实现自定义menu页"><a href="#js脚本实现自定义menu页" class="headerlink" title="js脚本实现自定义menu页"></a>js脚本实现自定义menu页</h2><blockquote>
@@ -46,18 +58,6 @@
       <tags>
         <tag>pwn</tag>
         <tag>heap</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>ucore_lab4</title>
-    <url>/2022/06/16/system/ucore_lab4/</url>
-    <content><![CDATA[<h1 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h1><h2 id="分类测试"><a href="#分类测试" class="headerlink" title="分类测试"></a>分类测试</h2>]]></content>
-      <categories>
-        <category>system</category>
-      </categories>
-      <tags>
-        <tag>operating system</tag>
-        <tag>system</tag>
       </tags>
   </entry>
   <entry>
