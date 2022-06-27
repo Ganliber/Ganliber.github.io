@@ -549,4 +549,114 @@
         <tag>heap</tag>
       </tags>
   </entry>
+  <entry>
+    <title>os_notes</title>
+    <url>/2022/06/27/system/os-notes/</url>
+    <content><![CDATA[<h1 id="NOTES-Modern-Operating-System"><a href="#NOTES-Modern-Operating-System" class="headerlink" title="NOTES: Modern Operating System"></a>NOTES: Modern Operating System</h1><hr>
+<h2 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h2><hr>
+<ul>
+<li>转址旁路缓存<code>TLB (Translation Lookaside Buffer)</code><ul>
+<li>TLB命中：<code>TLB hit</code></li>
+<li>TLB未命中：<code>TLB miss</code></li>
+</ul>
+</li>
+<li><code>AArch64 (based on ARMv8.0)</code> 架构：4级页表<ul>
+<li>最小页：有<code>4KB</code>,<code>16KB</code>,<code>64KB</code>,可通过<code>TCR_EL1</code>进行配置</li>
+</ul>
+</li>
+<li>一种TLB刷新机制：为<code>TLB</code>缓存项打”标签”来减少程序切换时TLB刷新的开销<ul>
+<li><code>ASID (Address Space IDentifier)</code>：基于<code>aarch64</code></li>
+<li><code>PCID (Process Context IDentifier)</code>：基于<code>x86-64</code></li>
+</ul>
+</li>
+<li>换页<code>page swapping</code><ul>
+<li>换出<code>swap out</code></li>
+<li>换入<code>swap in</code></li>
+</ul>
+</li>
+<li>缺页异常<code>page fault</code></li>
+<li>预取<code>prefetching</code>机制：发生<code>swap in</code>时，预测还有哪些页即将被访问，提前将其换入物理内存，减少<code>page fault</code></li>
+<li>按需页分配<code>demand paging</code><ul>
+<li>未分配状态</li>
+<li>已分配但未映射至物理内存状态（初次访问时出发<code>page fault</code>）</li>
+<li>区分两种状态：<ul>
+<li>Linux中，程序的虚拟内存空间由多个虚拟内存区域构成，即<code>VMA (Virtual Memory Area)</code>：含<code>beginning VA</code>，<code>ending VA</code>，访问权限等信息。</li>
+<li>P -&gt; page fault<ul>
+<li>P属于VMA：已分配未映射</li>
+<li>P不属于VMA：未分配</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>页替换策略<ul>
+<li><code>MIN/OPT (Minimum / Optimal 最优策略)</code></li>
+<li><code>FIFO (First-In First-Out)</code></li>
+<li><code>Second Chance</code></li>
+<li><code>LRU (Least Recently Used)</code>：基于程序过去频繁访问的页后续也可能被访问</li>
+<li><code>MRU (Most Recently Used)</code>：基于程序不会反复访问相同地址情况</li>
+<li><code>clock algorithm</code>：时钟算法策略</li>
+</ul>
+</li>
+<li>工作集模型<code>working set model</code><ul>
+<li>基于：优先将非工作集中的页换出</li>
+<li>工作集时钟算法：<ul>
+<li>维护2个状态：<strong>上次使用时间</strong>和<strong>访问位</strong></li>
+<li>定期检查算时间间隔</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>共享内存<code>shared memory</code><ul>
+<li>写时拷贝<code>copy-on-write</code></li>
+<li>内存去重<code>memory deduplication</code><ul>
+<li>定期扫描相同内容的物理页，找到映射对应的虚拟页，保留一个物理页，其余通过<code>copy-on-write</code>映射到该物理页，释放其他物理页。</li>
+<li>如Linux的<code>KSM (Kernel Same-page Merging)</code>机制</li>
+<li>性能下降产生延迟，资源利用率提高</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>内存压缩<ul>
+<li>如Linux的<code>zswap</code>机制，<code>zswap</code>区域（仍属于内存区域）：为内存换页过程提供缓冲区</li>
+<li>更加高效的磁盘批量<code>I/O</code></li>
+</ul>
+</li>
+<li>大页<code>huge page</code><ul>
+<li>Linux提供透明大页<code>transparent huge page</code>机制：自动将一个应用程序中连续的4KB内存页合并成2MB的内存页</li>
+<li>提高效率（减少TLB项，提高TLB命中率），可能浪费物理内存资源</li>
+</ul>
+</li>
+<li>内存碎片<code>fragmentation</code><ul>
+<li>内部碎片<code>internal fragmentation</code></li>
+<li>外部碎片<code>external fragmentation</code></li>
+</ul>
+</li>
+<li>伙伴系统<code>buddy system</code><ul>
+<li>减少外部碎片</li>
+</ul>
+</li>
+<li><code>SLAB</code>分配器<ul>
+<li>减少内部碎片</li>
+<li>包括<code>SLAB</code>，<code>SLUB</code>，<code>SLOB</code></li>
+<li>linux-2.6.23之后内核默认采用<code>SLUB</code>分配器（依赖于伙伴系统）</li>
+</ul>
+</li>
+<li>常用空闲链表<ul>
+<li>隐式空闲链表<code>implicit free list</code></li>
+<li>显式空闲链表<code>explicit free list</code></li>
+<li>分离空闲链表<code>segregated free list</code></li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>system</category>
+      </categories>
+      <tags>
+        <tag>operating system</tag>
+        <tag>system</tag>
+      </tags>
+  </entry>
 </search>
