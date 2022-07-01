@@ -553,7 +553,10 @@
     <title>os_notes</title>
     <url>/2022/06/27/system/os-notes/</url>
     <content><![CDATA[<h1 id="NOTES-Modern-Operating-System"><a href="#NOTES-Modern-Operating-System" class="headerlink" title="NOTES: Modern Operating System"></a>NOTES: Modern Operating System</h1><hr>
-<h2 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h2><hr>
+<blockquote>
+<p>前几章内容暂省略</p>
+</blockquote>
+<h2 id="4-内存管理"><a href="#4-内存管理" class="headerlink" title="4 内存管理"></a>4 内存管理</h2><hr>
 <ul>
 <li>转址旁路缓存<code>TLB (Translation Lookaside Buffer)</code><ul>
 <li>TLB命中：<code>TLB hit</code></li>
@@ -650,7 +653,62 @@
 </ul>
 </li>
 </ul>
-]]></content>
+<h2 id="5-进程与线程"><a href="#5-进程与线程" class="headerlink" title="5 进程与线程"></a>5 进程与线程</h2><hr>
+<h3 id="process"><a href="#process" class="headerlink" title="process"></a>process</h3><ul>
+<li><p>进程控制块<code>PCB (Process Control Block)</code></p>
+</li>
+<li><p>僵尸进程<code>zombie</code></p>
+</li>
+<li><p>进程管理：</p>
+<ul>
+<li><p>进程组<code>process group</code>：进程的集合 —&gt; 进程组标识符<code>tgid (In Linux PCB)</code></p>
+</li>
+<li><p>会话<code>session</code>：进程组的集合</p>
+<blockquote>
+<p>根据执行状态划分为：</p>
+</blockquote>
+<ul>
+<li>前台进程组<code>foreground thread group</code></li>
+<li>后台进程组<code>background thread group</code></li>
+</ul>
+</li>
+<li><p><code>process group</code>和<code>session</code>主要用于<code>shell</code>环境的中的进程管理</p>
+<ul>
+<li>进程id -&gt; <code>PID</code></li>
+<li>进程组id -&gt; <code>GID</code></li>
+<li>会话id -&gt; <code>SID</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>控制中断进程<code>controlling terminal</code></p>
+</li>
+</ul>
+<h3 id="thread"><a href="#thread" class="headerlink" title="thread"></a>thread</h3><ul>
+<li><p>用户态线程<code>user-level thread</code></p>
+</li>
+<li><p>内核态线程<code>kernel-level thread</code></p>
+</li>
+<li><p>多线程模型<code>multithreading model</code></p>
+</li>
+<li><p>线程控制块<code>Thread Control Block</code></p>
+</li>
+<li><p>NPTL<code>Native POSIX Thread Library</code>：自<code>Linux 2.6</code>引入的线程库，沿用至今</p>
+</li>
+</ul>
+<h3 id="fiber"><a href="#fiber" class="headerlink" title="fiber"></a>fiber</h3><blockquote>
+<p>完全在用户态下完成</p>
+</blockquote>
+<ul>
+<li>抢占式多任务处理<code>preemptive multitasking</code></li>
+<li>合作氏多任务处理<code>cooperative multitasking</code></li>
+<li><code>(Windows) TLS(Fiber Local Storage)</code> ：纤程本地存储，用来为每个纤程保存同一变量的私有拷贝</li>
+<li>协程<code>coroutine</code>：为了便于与操作系统提供的纤程支持相区分，程序语言提供的纤程支持称为协程</li>
+</ul>
+<h2 id="6-操作系统调度"><a href="#6-操作系统调度" class="headerlink" title="6 操作系统调度"></a>6 操作系统调度</h2><hr>
+<h2 id="7-进程间通信"><a href="#7-进程间通信" class="headerlink" title="7 进程间通信"></a>7 进程间通信</h2><hr>
+<h2 id="8-同步原语"><a href="#8-同步原语" class="headerlink" title="8 同步原语"></a>8 同步原语</h2><hr>
+<h2 id="9-文件系统"><a href="#9-文件系统" class="headerlink" title="9 文件系统"></a>9 文件系统</h2>]]></content>
       <categories>
         <category>system</category>
       </categories>
