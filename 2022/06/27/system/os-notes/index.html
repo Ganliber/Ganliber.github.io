@@ -30,7 +30,7 @@
 <meta property="og:description" content="关于《现代操作系统: 原理与实现》的一些简记">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-06-27T14:31:04.000Z">
-<meta property="article:modified_time" content="2022-07-02T11:40:59.326Z">
+<meta property="article:modified_time" content="2022-07-02T17:47:05.394Z">
 <meta property="article:author" content="Gan Gecen">
 <meta property="article:tag" content="operating system">
 <meta property="article:tag" content="system">
@@ -237,7 +237,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-07-02 19:40:59" itemprop="dateModified" datetime="2022-07-02T19:40:59+08:00">2022-07-02</time>
+                <time title="Modified: 2022-07-03 01:47:05" itemprop="dateModified" datetime="2022-07-03T01:47:05+08:00">2022-07-03</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -429,6 +429,95 @@
 <li>协程<code>coroutine</code>：为了便于与操作系统提供的纤程支持相区分，程序语言提供的纤程支持称为协程</li>
 </ul>
 <h2 id="6-操作系统调度"><a href="#6-操作系统调度" class="headerlink" title="6 操作系统调度"></a>6 操作系统调度</h2><hr>
+<ul>
+<li><p>优先级<code>priority</code></p>
+</li>
+<li><p>时间片<code>time slice</code></p>
+</li>
+<li><p>截止时间<code>deadline</code></p>
+</li>
+<li><p>任务调度&#x2F;CPU调度<code>task scheduling</code></p>
+</li>
+<li><p>线程<code>thread</code>是调度器的调度对象，又叫做<strong>任务</strong><code>task</code></p>
+<ul>
+<li>运行队列<code>run queue</code></li>
+<li><code>Linux</code>使用的调度器会用红黑树实现运行队列</li>
+</ul>
+</li>
+<li><p>确定调度指标<code>what</code> ——&gt; 做出调度决策<code>how</code></p>
+<ul>
+<li><p>调度指标</p>
+<ul>
+<li><p>分类</p>
+<ul>
+<li>性能相关指标<ul>
+<li>批处理任务<ul>
+<li><strong>吞吐量</strong>：单位时间内处理的任务数量</li>
+<li><strong>周转时间</strong>：任务从被发起直到执行结束所需的时间</li>
+</ul>
+</li>
+<li>交互式任务<ul>
+<li><strong>响应时间</strong>：任务从被发起直至第一次向用户返回输出以响应用户所需的时间</li>
+</ul>
+</li>
+<li>调度开销：做出决策的时间应该尽可能短</li>
+</ul>
+</li>
+<li>非性能指标：<strong>公平性</strong>、<strong>资源利用率</strong></li>
+<li>任务场景需求：<strong>实时性</strong>、<strong>能耗</strong></li>
+</ul>
+</li>
+<li><p>权衡</p>
+<ul>
+<li>调度开销和调度效果</li>
+<li>优先级和公平性</li>
+<li>性能与能耗</li>
+</ul>
+</li>
+<li><p>调度机制</p>
+<ul>
+<li><p>进程调度<code>process scheduling</code>机制</p>
+<ul>
+<li><p>长期调度<code>long-term scheduling/job scheduling</code></p>
+<blockquote>
+<p>限制系统中真正被用来进行短期调度管理的进程数量，避免短期调度的开销过大</p>
+<p>根据进程使用的资源类型，分类：计算密集型<code>CPU-bound</code>和<code>I/O</code>密集型<code>I/O-bound</code></p>
+</blockquote>
+</li>
+<li><p>短期调度<code>short-term scheduling/job scheduling</code></p>
+<blockquote>
+<p>实际做出调度决策的机制</p>
+<p>负责进程在 <strong>预备</strong>，<strong>运行</strong>，<strong>阻塞</strong> 状态间的转换 </p>
+</blockquote>
+</li>
+<li><p>中期调度<code>medium-term scheduling/job scheduling</code></p>
+<blockquote>
+<p>长短期调度 —&gt; based on CPU and I&#x2F;O resource</p>
+<p>中期调度 —&gt; based on memory</p>
+<p>中期调度也是换页机制的一部分，当<strong>系统中内存使用量过大</strong>，就会触发换页机制，挂起处于<strong>预备状态</strong>的&#x2F;<strong>阻碍状态</strong>的进程，置为<strong>挂起预备状态&#x2F;挂起阻塞状态</strong>并放入<strong>挂起运行队列&#x2F;挂起阻塞队列</strong></p>
+<p>引入无法被短期调度执行的两个状态</p>
+<ul>
+<li>挂起预备状态<code>suspended ready</code></li>
+<li>挂起阻塞状态<code>suspended blocking</code></li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>批处理队列<code>batch queue</code></p>
+</li>
+<li><p>阻塞队列<code>blocking queue</code></p>
+</li>
+<li></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>调度决策</p>
+</li>
+</ul>
+</li>
+</ul>
 <h2 id="7-进程间通信"><a href="#7-进程间通信" class="headerlink" title="7 进程间通信"></a>7 进程间通信</h2><hr>
 <h2 id="8-同步原语"><a href="#8-同步原语" class="headerlink" title="8 同步原语"></a>8 同步原语</h2><hr>
 <h2 id="9-文件系统"><a href="#9-文件系统" class="headerlink" title="9 文件系统"></a>9 文件系统</h2><hr>
@@ -572,7 +661,7 @@
 <li><p>文件内存映射：<code>mmap</code>接口</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">;--- POSIX 文件内存映射接口 ---;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 提供映射的目标虚拟地址, 长度, 属性, 标志位, 文件描述符, 起始位置在文件中的偏移量 */</span></span><br><span class="line"><span class="type">void</span> *<span class="title function_">mmap</span><span class="params">(<span class="type">void</span> *addr, <span class="type">size_t</span> len, <span class="type">int</span> prot, <span class="type">int</span> flags, <span class="type">int</span> fildes, <span class="type">off_t</span> off)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* msync是请求VFS对指定内存映射区域进行同步写回操作 */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">msync</span><span class="params">(<span class="type">void</span> *addr, <span class="type">size_t</span> len, <span class="type">int</span> flags)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 当所有操作完成之后, APP可以调用munmap, 移除指定的虚拟内存地址区域上的内存映射 */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">munmap</span><span class="params">(<span class="type">void</span> *addr, <span class="type">size_t</span> len)</span>;</span><br></pre></td></tr></table></figure>
 </li>
-<li><p><strong>挂载</strong>（mounting）是指由操作系统使一个<strong>存储设备</strong>（诸如硬盘、CD-ROM或共享资源）上的<strong>电脑档案</strong>和<strong>目录</strong>可供用户通过计算机的文件系统访问的一个过程。一般来说，当计算机关机时，每个已<strong>挂载</strong>存储都将经历一次卸载，以确保所有排队的数据被写入，并保证介质上文件系统结构的完整性。</p>
+<li><p><strong>挂载</strong><code>mounting</code>是指由操作系统使一个<strong>存储设备</strong>（诸如硬盘、CD-ROM或共享资源）上的<strong>电脑档案</strong>和<strong>目录</strong>可供用户通过计算机的文件系统访问的一个过程。一般来说，当计算机关机时，每个已<strong>挂载</strong>存储都将经历一次卸载，以确保所有排队的数据被写入，并保证介质上文件系统结构的完整性。</p>
 <ul>
 <li><strong>linux</strong>操作系统将所有的设备都看作文件，它将整个计算机的资源都整合成一个大的文件目录。我们要访问存储设备中的文件，必须将文件所在的分区挂载到一个已存在的目录上，然后通过访问这个目录来访问存储设备。挂载就是把设备放在一个目录下，让系统知道怎么管理这个设备里的文件，了解这个存储设备的可读写特性之类的过程。</li>
 <li>我们不是有<code>/dev/sdb1</code>吗，直接对它操作不就行了？这不是它的目录吗？</li>
@@ -580,7 +669,39 @@
 <li>这时提问者使用了 <code>mount /dev/sdb1 ~/Share/</code> ，把新硬盘的区sdb1挂载到工作目录的<code>~/Share/</code>文件夹下，之后访问这个<code>~/Share/</code>文件夹就相当于访问这个硬盘2的sdb1分区了。对&#x2F;Share&#x2F;的任何操作，都相当于对sdb1里文件的操作。<strong>这也就是挂载的作用：使用户可以访问这个分区（磁盘）。</strong></li>
 </ul>
 </li>
-<li></li>
+<li><p>每个文件系统都有一个根目录，但应用程序所使用的路径通常只有一个根目录。</p>
+</li>
+<li><p>Linux 的<code>VFS</code>维护一个统一的<code>VFS</code>文件系统树，OS启动时会有一个根文件系统，如<code>FS0</code></p>
+<ul>
+<li>在根文件系统的基础上，其他文件系统可以被自由地挂载到VFS的任何一个目录之上，这些<strong>作为挂载目标的目录，便称为挂载点</strong></li>
+<li>Linux通过三种结构体<code>vfsmount (挂载文件系统信息)</code>、<code>mountpoint (挂载点信息)</code>、<code>mount (挂载文件系统结构体, 且包含了前两种)</code>，其<code>VFS</code>可以灵活地挂载多种文件系统，让各种不同的文件系统可以在相同的操作系统下工作。</li>
+</ul>
+</li>
+<li><p>伪文件系统<code>pseudo file system</code>：Linux实现的一些不用于<strong>保存文件数据</strong>的文件系统</p>
+<ul>
+<li>作用之一：允许用户<code>user</code>态应用程序通过<strong>读取文件</strong>的方式对读取内核提供的信息，并通过<strong>写入文件</strong>的方式对操作系统<strong>内核</strong>进行配置和调整</li>
+</ul>
+</li>
+<li><p>FAT文件系统</p>
+<ul>
+<li>FAT<code>File Allocation Table</code>：文件分配表</li>
+<li>簇<code>cluster</code>（对应于之前所说的<strong>块</strong><code>block</code>）：逻辑存储单元，每个簇对应于物理存储上的一个或多个存储扇区<code>sector</code></li>
+<li>簇号：每个簇对应的地址</li>
+<li><code>FAT</code>是一个由簇号组成的数组，且FAT中记录的簇号，为逻辑上的下一个簇的簇号（类比单链表）</li>
+</ul>
+</li>
+<li><p>NTFS<code>New Technology File System</code></p>
+<ul>
+<li>主文件表<code>MFT (Master File Table)</code></li>
+<li>稀疏文件<code>sparse file</code>：存在大片连续为0（所有比特位均为0）的数据的文件</li>
+</ul>
+</li>
+<li><p><code>FUSE</code>与用户态文件系统</p>
+<ul>
+<li><code>FUSE</code>模块：为了能让其他应用程序使用用户态文件系统提供的服务，<strong>宏内核</strong>中需要加入支持相应功能的模块，比较流行和常用的是<code>FUSE</code>模块和框架</li>
+<li>存在问题：性能较差</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
