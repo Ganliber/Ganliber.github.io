@@ -30,7 +30,7 @@
 <meta property="og:description" content="关于《现代操作系统: 原理与实现》的一些简记">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-06-27T14:31:04.000Z">
-<meta property="article:modified_time" content="2022-07-01T09:14:41.667Z">
+<meta property="article:modified_time" content="2022-07-02T11:40:59.326Z">
 <meta property="article:author" content="Gan Gecen">
 <meta property="article:tag" content="operating system">
 <meta property="article:tag" content="system">
@@ -237,7 +237,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-07-01 17:14:41" itemprop="dateModified" datetime="2022-07-01T17:14:41+08:00">2022-07-01</time>
+                <time title="Modified: 2022-07-02 19:40:59" itemprop="dateModified" datetime="2022-07-02T19:40:59+08:00">2022-07-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -431,7 +431,160 @@
 <h2 id="6-操作系统调度"><a href="#6-操作系统调度" class="headerlink" title="6 操作系统调度"></a>6 操作系统调度</h2><hr>
 <h2 id="7-进程间通信"><a href="#7-进程间通信" class="headerlink" title="7 进程间通信"></a>7 进程间通信</h2><hr>
 <h2 id="8-同步原语"><a href="#8-同步原语" class="headerlink" title="8 同步原语"></a>8 同步原语</h2><hr>
-<h2 id="9-文件系统"><a href="#9-文件系统" class="headerlink" title="9 文件系统"></a>9 文件系统</h2>
+<h2 id="9-文件系统"><a href="#9-文件系统" class="headerlink" title="9 文件系统"></a>9 文件系统</h2><hr>
+<ul>
+<li><p>机械硬盘<code>Hard Disk Drive (HDD)</code>、固态硬盘<code>Solid-State Drive (SSD)</code></p>
+</li>
+<li><p>文件数据<code>file data</code>、文件元数据<code>file metadata</code></p>
+</li>
+<li><p>块设备<code>block device</code></p>
+</li>
+<li><p>块<code>block</code>：块设备读写的最小单元，大小一般为512字节或4KB</p>
+</li>
+<li><p>虚拟文件系统<code>Virtual File System (VFS)</code></p>
+<ul>
+<li>页缓存<code>page cache</code></li>
+<li>inode缓存<code>icache</code></li>
+<li>目录项缓存<code>dcache</code></li>
+</ul>
+</li>
+<li><p>inode : index node</p>
+</li>
+<li><p>文件类型（一部分）</p>
+<ul>
+<li>常规文件<code>regular file</code></li>
+<li>目录文件<code>directory file</code></li>
+<li>符号链接文件<code>symbolic link file</code></li>
+<li><code>FIFO</code>文件：以队列形式传递数据，又称命名管道</li>
+<li>套接字文件：用于传递数据，比<code>FIFO</code>更加灵活</li>
+<li>字符设备文件</li>
+<li>块设备文件</li>
+</ul>
+</li>
+<li><p>目录：一种特殊的类型的<strong>文件</strong>（即目录本身也是一种文件），记录了文件名到<code>inode</code>号的映射</p>
+</li>
+<li><p>文件名不是文件的<code>metadata</code></p>
+</li>
+<li><p>硬链接<code>hard link</code></p>
+</li>
+<li><p>符号链接（软链接）<code>soft link</code></p>
+<ul>
+<li><code>ln -s file slink</code> 为<code>file</code>创建名为<code>slink</code>的软链接</li>
+<li>符号链接文件保留的是一个字符串，表示一个文件路径</li>
+<li>只支持<strong>读</strong>操作</li>
+</ul>
+</li>
+<li><p>文件系统的存储布局</p>
+<blockquote>
+<p>只有<strong>文件数据区域</strong>被用来存放应用程序的数据，因此<strong>文件系统所显示的可用大小 &lt; 存储设备总容量</strong></p>
+</blockquote>
+<ul>
+<li><p>超级块<code>super block</code></p>
+</li>
+<li><p>块分配信息</p>
+<blockquote>
+<p>标记<strong>文件数据块</strong>区域<strong>各个块</strong>的使用情况</p>
+</blockquote>
+<ul>
+<li>位图<code>bitmap</code></li>
+</ul>
+</li>
+<li><p><code>inode</code>分配信息</p>
+<blockquote>
+<p>标记**<code>inode</code>表<strong>的</strong>各个<code>inode</code>**的使用情况</p>
+</blockquote>
+</li>
+<li><p><code>inode</code>表</p>
+<ul>
+<li>以数组<code>array</code>的形式保存了整个文件系统中所有的<code>inode</code>结构</li>
+<li><code>inode</code>号：<code>inode</code>在此表中的索引</li>
+<li>文件系统中对<code>inode</code>的引用只需要使用<code>inode</code>号即可，无需保存<code>inode</code>结构在存储设备中的偏移量<code>offset</code></li>
+<li><code>inode</code>表的大小在文件系统创建时已经固定，因此文件系统所能保存的最大文件数量受此限制</li>
+</ul>
+</li>
+<li><p>文件数据块</p>
+</li>
+</ul>
+</li>
+<li><p>虚拟文件系统<code>VFS (Virtual File System)</code>：对多种<code>File System</code>协调，允许它们在同一个<code>OS</code>上共同工作</p>
+<ul>
+<li>Linux <code>VFS (Virtual Filesystem Switch)</code><ul>
+<li><p>VFS超级块</p>
+</li>
+<li><p>VFS的<code>inode</code>：VFS维护了一个<code>inode</code>缓存（<code>icache</code>），该缓存使用Hash表保存了OS的所有的<code>inode</code>的结构</p>
+</li>
+<li><p>VFS的文件数据管理</p>
+<ul>
+<li>基数树<code>radix tree</code></li>
+</ul>
+</li>
+<li><p>VFS的目录项</p>
+<ul>
+<li>VFS在内存中为目录项维护了一个缓存，目录项缓存（<code>dcache</code>）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>VFS和文件系统的交互</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">VFS ---(read-modify-write)--- File System</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Linux VFS 定义文件系统应提供的方法的形式：函数指针<code>function pointer</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt;回调函数</span><br><span class="line">函数指针作为某个函数的参数,函数指针变量可以作为某个函数的参数来使用的，回调函数就是一个通过函数指针调用的函数。简单讲：回调函数是由别人的函数执行时调用你实现的函数。</span><br><span class="line">&gt;&gt;&gt;以下是来自知乎作者常溪玲的解说：</span><br><span class="line">你到一个商店买东西，刚好你要的东西没有货，于是你在店员那里留下了你的电话，过了几天店里有货了，店员就打了你的电话，然后你接到电话后就到店里去取了货。在这个例子里，你的电话号码就叫回调函数，你把电话留给店员就叫登记回调函数，店里后来有货了叫做触发了回调关联的事件，店员给你打电话叫做调用回调函数，你到店里去取货叫做响应回调事件。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Linux and its VFS : 实现文件读写等操作<code>(OS(kernel) --- APP(user))</code></p>
+<ul>
+<li><p>路径解析</p>
+<blockquote>
+<p><code>open</code>：文件路径 —&gt; 文件描述符<code>file descriptor</code></p>
+</blockquote>
+<ul>
+<li><p>open  —libc—&gt; SYS_open（系统调用）—&gt; VFS</p>
+</li>
+<li><p>VFS对路径进行拆分得到一系列文件名（包含目录名），如果是绝对路径就从根目录开始查找，如果是相对路径，就从当前<code>.</code>目录（即工作目录）开始查找，查找过程中包括一系列权限检查，是否为目录检查等检查过程。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 应用程序可以使用 getcwd 和 chdir 获取和修改当前工作目录</span></span><br><span class="line">getcwd</span><br><span class="line">chdir</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>路径解析完成后得到一个<code>inode</code>，但不直接返回给app，而是在<code>inode</code>上添加了一层抽象，即文件描述符<code>file descriptor</code></p>
+</li>
+</ul>
+</li>
+<li><p>文件描述符</p>
+<blockquote>
+<p>实际上是一个<code>integer</code>，由<code>VFS</code>进行维护</p>
+</blockquote>
+<ul>
+<li><code>VFS</code>为每一个<code>process</code>维护一个文件描述符表<code>file descriptor table</code>，以文件描述符<code>fd (file descriptor)</code>为索引<code>index</code>，保存一组<strong>文件描述结构</strong></li>
+</ul>
+</li>
+<li><p>相对路径：不以<code>/</code>开头的路径，均为相对路径</p>
+</li>
+<li><p>页缓存：Linux kernel 将读缓存和写缓冲区的功能合并起来管理，称为页缓存</p>
+<blockquote>
+<p>持久化和性能权衡之产物：文件系统将是否使用页缓存机制的判断和选择权交予APP</p>
+<p>APP可以通过打开文件时附带<code>O_DIRECT</code>标志，提示文件系统<strong>不要使用页缓存</strong>  –&gt; <strong>直接I&#x2F;O</strong></p>
+<p>页缓存 –&gt; <strong>缓存I&#x2F;O</strong></p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">flowchart </span><br><span class="line">		meta1(从存储设备中读取数据\n创建新的缓存页) --&gt; clean_page((干净页))</span><br><span class="line">		meta2(缓存页被回收) --- clean_page</span><br><span class="line">		clean_page --&gt;|修改缓存页中的数据| dirty_page((脏页))</span><br><span class="line">		dirty_page --&gt;|页中数据被写会存储设备| clean_page</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Linux 在页缓存的基础上实现了文件的<strong>内存映射机制</strong></p>
+</li>
+<li><p>文件内存映射：<code>mmap</code>接口</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">;--- POSIX 文件内存映射接口 ---;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 提供映射的目标虚拟地址, 长度, 属性, 标志位, 文件描述符, 起始位置在文件中的偏移量 */</span></span><br><span class="line"><span class="type">void</span> *<span class="title function_">mmap</span><span class="params">(<span class="type">void</span> *addr, <span class="type">size_t</span> len, <span class="type">int</span> prot, <span class="type">int</span> flags, <span class="type">int</span> fildes, <span class="type">off_t</span> off)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* msync是请求VFS对指定内存映射区域进行同步写回操作 */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">msync</span><span class="params">(<span class="type">void</span> *addr, <span class="type">size_t</span> len, <span class="type">int</span> flags)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 当所有操作完成之后, APP可以调用munmap, 移除指定的虚拟内存地址区域上的内存映射 */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">munmap</span><span class="params">(<span class="type">void</span> *addr, <span class="type">size_t</span> len)</span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>挂载</strong>（mounting）是指由操作系统使一个<strong>存储设备</strong>（诸如硬盘、CD-ROM或共享资源）上的<strong>电脑档案</strong>和<strong>目录</strong>可供用户通过计算机的文件系统访问的一个过程。一般来说，当计算机关机时，每个已<strong>挂载</strong>存储都将经历一次卸载，以确保所有排队的数据被写入，并保证介质上文件系统结构的完整性。</p>
+<ul>
+<li><strong>linux</strong>操作系统将所有的设备都看作文件，它将整个计算机的资源都整合成一个大的文件目录。我们要访问存储设备中的文件，必须将文件所在的分区挂载到一个已存在的目录上，然后通过访问这个目录来访问存储设备。挂载就是把设备放在一个目录下，让系统知道怎么管理这个设备里的文件，了解这个存储设备的可读写特性之类的过程。</li>
+<li>我们不是有<code>/dev/sdb1</code>吗，直接对它操作不就行了？这不是它的目录吗？</li>
+<li>这不是它的目录。虽然&#x2F;dev是个目录，但&#x2F;dev&#x2F;sdb1不是目录。可以发现ls&#x2F;dev&#x2F;sdb1无法执行。&#x2F;dev&#x2F;sdb1，是一个类似指针的东西，指向这个分区的原始数据块。mount前，系统并不知道这个数据块哪部分数据代表文件，如何对它们操作。</li>
+<li>这时提问者使用了 <code>mount /dev/sdb1 ~/Share/</code> ，把新硬盘的区sdb1挂载到工作目录的<code>~/Share/</code>文件夹下，之后访问这个<code>~/Share/</code>文件夹就相当于访问这个硬盘2的sdb1分区了。对&#x2F;Share&#x2F;的任何操作，都相当于对sdb1里文件的操作。<strong>这也就是挂载的作用：使用户可以访问这个分区（磁盘）。</strong></li>
+</ul>
+</li>
+<li></li>
+</ul>
+</li>
+</ul>
+
     </div>
 
     
