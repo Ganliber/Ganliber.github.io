@@ -796,6 +796,36 @@
 </li>
 </ul>
 <h2 id="7-进程间通信"><a href="#7-进程间通信" class="headerlink" title="7 进程间通信"></a>7 进程间通信</h2><hr>
+<ul>
+<li><p>进程间通信<code>Inter-Process Communication (IPC)</code></p>
+</li>
+<li><p>消息<code>message</code>：一种常见通信数据的抽象，包含一个头部<code>header</code>和一个数据段<code>payload</code></p>
+<ul>
+<li><code>header</code> : 魔数<code>magic number</code>，状态<code>state</code>，消息长度<code>message length</code>，验证码<code>verification code</code>等</li>
+<li><code>payload</code> : 纯数据（如字符串<code>string</code>），系统资源（如文件描述符<code>file descriptor</code>）</li>
+</ul>
+</li>
+<li><p>消息传递基本接口：</p>
+<ul>
+<li>Send(message)</li>
+<li>Recv(message)</li>
+<li>RPC(req_message, resp_message)  —&gt; 远程过程调用：<code>Remote Procedure Call</code></li>
+<li>Reply(resp_message)</li>
+</ul>
+</li>
+<li><p>内存重映射<code>memory remapping</code></p>
+</li>
+<li><p>IPC Classification</p>
+<ul>
+<li>单向（管道，信号等）和双向（RPC）</li>
+<li>同步（阻塞进程直到该IPC操作完成）和异步（非阻塞的，进程发起一次操作即可返回，不需要等待其完成）<ul>
+<li>同步：被调用者<code>callee</code>处理请求时，调用者<code>caller</code>会处于<code>block</code>的状态</li>
+</ul>
+</li>
+</ul>
+</li>
+<li></li>
+</ul>
 <h2 id="8-同步原语"><a href="#8-同步原语" class="headerlink" title="8 同步原语"></a>8 同步原语</h2><hr>
 <h2 id="9-文件系统"><a href="#9-文件系统" class="headerlink" title="9 文件系统"></a>9 文件系统</h2><hr>
 <ul>
