@@ -785,7 +785,6 @@
 </li>
 <li><p>阻塞队列<code>blocking queue</code></p>
 </li>
-<li></li>
 </ul>
 </li>
 </ul>
@@ -819,14 +818,209 @@
 <ul>
 <li>单向（管道，信号等）和双向（RPC）</li>
 <li>同步（阻塞进程直到该IPC操作完成）和异步（非阻塞的，进程发起一次操作即可返回，不需要等待其完成）<ul>
-<li>同步：被调用者<code>callee</code>处理请求时，调用者<code>caller</code>会处于<code>block</code>的状态</li>
+<li><p>同步：被调用者<code>callee</code>处理请求时，调用者<code>caller</code>会处于<code>block</code>的状态，当<code>callee</code>执行完任务后，控制流会切回<code>caller</code></p>
+<ul>
+<li>一般是<strong>双向</strong>IPC（或RPC）</li>
+</ul>
+</li>
+<li><p>异步：多个并行的控制流，异步<code>IPC</code>通常通过轮询内存状态或注册回调函数（如果<code>kernel</code>支持的话）来获取返回结果。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>超时机制</p>
+<ul>
+<li>拒绝服务<code>denial-of-service</code></li>
+</ul>
+</li>
+<li><p>通信连接管理</p>
+<ul>
+<li>直接通信：通信的<code>process</code>一方需要<strong>显示</strong>地标识另一方</li>
+<li>间接通信：通过一个中间<strong>信箱</strong>完成通信，每一个信箱有一个唯一的标识符，共享信箱交换<code>message</code>，进程间连接的建立发生在共享一个<strong>信箱</strong>时候。（如管道）</li>
+</ul>
+</li>
+<li><p>权限检查机制</p>
+<ul>
+<li>微内核，如<code>seL4</code>等微内核系统的<code>Capability</code>机制</li>
+<li>宏内核，如<code>Linux</code>， 将IPC安全检查机制和文件检查结合在一起</li>
+</ul>
+</li>
+<li><p><code>System V</code>进程间通信：即宏内核下的三种进程间通信机制：</p>
+<ul>
+<li><code>System V</code>消息队列</li>
+<li><code>System V</code>信号量</li>
+<li><code>System V</code>共享内存</li>
+</ul>
+</li>
+<li><p><code>System V</code>通信的权限管理：在<code>Linux</code>等宏内核中是基于文件<code>File</code>的权限检查机制</p>
+<ul>
+<li><p>访问模式<code>mode</code></p>
+</li>
+<li><p>权限检查</p>
+<blockquote>
+<p><code>Linux</code>对<code>IPC</code>进行权限管理的<code>IPC_PERM</code>结构，类似文件的<strong>“访问模式”</strong></p>
+<p>权限检查机制确保安全性</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta"># uid 用户标识符</span></span><br><span class="line"><span class="meta"># gid 用户组标识符</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">ipc_perm</span> &#123;</span></span><br><span class="line">  <span class="type">key_t</span> key; <span class="comment">// 进程可以根据key来索引到一个IPC对象</span></span><br><span class="line">  <span class="type">uid_t</span> uid; <span class="comment">// owner uid</span></span><br><span class="line">  <span class="type">gid_t</span> gid; <span class="comment">// owner gid</span></span><br><span class="line">  <span class="type">uid_t</span> cuid; <span class="comment">// creator uid</span></span><br><span class="line">  <span class="type">gid_t</span> cgid; <span class="comment">// creator gid</span></span><br><span class="line">  <span class="type">mode_t</span> mode; <span class="comment">// 访问模式</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>命名服务<code>naming server</code></p>
+<ul>
+<li><p><strong>权限分发</strong>通过一个用户态的服务——<strong>命名服务</strong>实现</p>
+</li>
+<li><p>过程：</p>
+<ol>
+<li>各个服务（如文件系统服务，数据库系统服务等）向<code>naming server</code>注册自己的服务名。</li>
+<li>客户端进程向<code>naming server</code>上查询当前服务，并选择所需要的<strong>服务</strong>去尝试获取权限。</li>
+<li>是否分发权限，是由<code>naming server</code>和对应的<strong>服务端进程</strong>（如文件系统进程，网络系统进程，数据库进程）根据特定的策略（如无条件，需要私钥签名的证书）来判断的。</li>
+</ol>
+</li>
+<li><p>优点：</p>
+<ul>
+<li>各个服务不再是<code>kernel</code>中的<code>ID</code>等抽象的表示，而是对应用更友好的<strong>名字<code>name</code></strong></li>
+</ul>
+</li>
+<li><p><code>naming server</code>一般在用户态</p>
+</li>
+</ul>
+</li>
+<li><p>继承</p>
+<ul>
+<li>除了命名服务外的另外一种常见的<strong>分发权限</strong>的方式</li>
+<li><code>Linux</code>中，<strong>匿名管道</strong> —&gt; 用于父子进程之间的通信，内核通过在<code>fork</code>时<strong>复制</strong><code>copy</code>文件描述符表<code>File Descriptor Table</code>来建立<strong>父子进程</strong>之间的连接</li>
 </ul>
 </li>
 </ul>
 </li>
+</ul>
+<h3 id="宏内核IPC"><a href="#宏内核IPC" class="headerlink" title="宏内核IPC"></a>宏内核<code>IPC</code></h3><blockquote>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> 管道<code>pipe</code></li>
+<li><input disabled="" type="checkbox"> <code>System V</code><ul>
+<li><input checked="" disabled="" type="checkbox"> 消息队列</li>
+<li><input disabled="" type="checkbox"> 信号量</li>
+<li><input disabled="" type="checkbox"> 共享内存</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> <code>Linux</code>信号机制</li>
+<li><input disabled="" type="checkbox"> 套接字<code>socket</code>机制</li>
+</ul>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>IPC机制</th>
+<th>数据抽象</th>
+<th>参与者</th>
+<th>方向</th>
+<th>内核实现</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>管道<code>pipe</code></td>
+<td>字节流</td>
+<td>两个进程</td>
+<td>单向</td>
+<td>通常是<code>FIFO</code>缓冲区管理数据，分为<strong>匿名管道</strong>和<strong>命名管道</strong></td>
+</tr>
+<tr>
+<td>消息队列</td>
+<td>消息</td>
+<td>多进程</td>
+<td>单向双向</td>
+<td>队列的组织方式，通过文件权限管理对队列的访问</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<ul>
+<li><p>管道</p>
+<ul>
+<li><p>匿名管道：通过<code>pipe</code>的系统调用创建</p>
+<blockquote>
+<p>父子进程</p>
+</blockquote>
+</li>
+<li><p>命名管道：通过<code>mkfifo</code>命令创建 —&gt; 指定一个全局文件名</p>
+<blockquote>
+<p>远距离进程（任意两个进程）</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p><code>System V MQ (Message Queue 消息队列)</code></p>
+<ul>
+<li><p>发送和接收<code>message</code>的接口是<code>kernel</code>提供的</p>
+</li>
+<li><p><code>kernel</code>从<code>system memory</code>中分配一个队列数据结构，作为消息<code>message</code>的内核对象</p>
+</li>
+<li><p><code>MQ</code>基本操作：</p>
+<blockquote>
+<p>In Linux, the following operations are defined as system call.</p>
+</blockquote>
+<ul>
+<li><code>msgget</code>：允许进程获取已有消息队列的连接，或者创建一个新的消息队列</li>
+<li><code>msgsnd</code></li>
+<li><code>msgrcv</code></li>
+<li><code>msgctl</code>：可以控制和管理一个消息队列，如修改消息队列的权限信息，或删除消息队列</li>
+</ul>
+</li>
+<li><p>消息发送和消息接收一般是<strong>非阻塞的</strong></p>
+</li>
+<li><p><code>Linux kernel</code>实现：</p>
+<ul>
+<li><strong>系统管理员</strong>通常可以配置<strong>单个消息</strong><code>single message</code>的最大空间、<strong>单个消息队列</strong><code>single MQ</code>的最大空间、全系统的消息队列个数</li>
+<li>通常建议使用<strong>共享内存机制</strong>传递长消息，而非使用<code>MQ</code></li>
+<li>消息在用户态和内核态之间传递时，会有拷贝开销：<ul>
+<li><code>copy_from_user</code></li>
+<li><code>copy_to_user</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><code>System V</code>信号量</p>
+<ul>
 <li></li>
 </ul>
+</li>
+</ul>
 <h2 id="8-同步原语"><a href="#8-同步原语" class="headerlink" title="8 同步原语"></a>8 同步原语</h2><hr>
+<ul>
+<li>同步原语<code>synchronization primitive</code>：正确高效处理多线程多核等的同步问题的抽象<ul>
+<li>将海量数据根据核心数量划分，从而能够在同一时间分配子任务到多个核心上并行处理，并最终收集这些子任务的处理结果。</li>
+<li>意味着对共享资源的并发访问。</li>
+<li>生产者：处理这些划分数据的线程</li>
+<li>消费者：收集处理结果的线程</li>
+<li>多核CPU：任务可以被划分给不同CPU核心上的线程同时处理</li>
+<li>单核CPU：多线程可能营造每个线程在单独CPU上的“假象”</li>
+</ul>
+</li>
+<li>原子操作<code>synchronization primitive</code>：指不可被打断的一个或一系列操作，要么这一系列指令都执行完成，要么这一系列指令一条都没有执行，不会出现执行到一半的状态。<ul>
+<li>常见原子操作：比较与置换<code>Compare-And-Swap, CAS</code>，拿取并累加<code>Fetch-And-Add, FAA</code></li>
+</ul>
+</li>
+</ul>
 <h2 id="9-文件系统"><a href="#9-文件系统" class="headerlink" title="9 文件系统"></a>9 文件系统</h2><hr>
 <ul>
 <li><p>机械硬盘<code>Hard Disk Drive (HDD)</code>、固态硬盘<code>Solid-State Drive (SSD)</code></p>
