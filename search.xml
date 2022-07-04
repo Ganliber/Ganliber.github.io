@@ -1139,17 +1139,28 @@
 </li>
 </ul>
 <h3 id="条件变量"><a href="#条件变量" class="headerlink" title="条件变量"></a>条件变量</h3><ul>
-<li>循环等待<code>busy looping</code>：如剩余资源为0时，<code>producer</code>会陷入循环等待&#x2F;循环忙直到<code>consumer</code>释放空位。<ul>
+<li><p>循环等待<code>busy looping</code>：如剩余资源为0时，<code>producer</code>会陷入循环等待&#x2F;循环忙直到<code>consumer</code>释放空位。</p>
+<ul>
 <li>需要挂起&#x2F;唤醒机制 —&gt; 避免<code>busy looping</code>导致<code>CPU</code>资源浪费</li>
 <li>引入条件变量<code>condition variable</code></li>
 </ul>
 </li>
-<li><code>Condition Variable</code> 提供了两个接口：<code>cond_wait</code> and <code>cond_signal</code><ul>
+<li><p><code>Condition Variable</code> 提供了两个接口：<code>cond_wait</code> and <code>cond_signal</code></p>
+<ul>
 <li><code>cond_wait</code> ：用于挂起当前<code>process</code></li>
 <li><code>cond_signal</code>：用于唤醒等待在该<code>condition variable</code>上的线程<code>thread</code></li>
 </ul>
 </li>
-<li></li>
+<li><p>生产者消费者问题：基于<code>condition variable</code></p>
+<blockquote>
+<ol>
+<li>使用互斥锁保护计数器：<code>empty_cnt_lock</code>保护<code>empty_slot</code>，<code>filled_cnt_lock</code>保护<code>filled_slot</code></li>
+<li>使用条件变量时必须配合<code>mutex lock</code>使用</li>
+<li><code>cond_wait</code>在挂起当前<code>thread</code>的同时，该互斥锁<code>mutex lock</code>会被原子地释放</li>
+<li>挂起的线程被唤醒后，其会在<code>cond_wait</code>返回之前重新获取互斥锁<code>mutex lock</code></li>
+</ol>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> empty_slot = <span class="number">5</span>; ---&gt; 公共变量,由锁 empty_cnt_lock 保护</span><br><span class="line"><span class="type">int</span> filled_slot = <span class="number">0</span>; ---&gt; 公共变量,由锁 filled_cnt_lock 保护</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">cond</span> <span class="title">empty_cond</span>;</span> ---&gt; 条件变量:生产者 --&gt; 缓冲区无空位</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">lock</span> <span class="title">empty_cnt_lock</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">cond</span> <span class="title">filled_cond</span>;</span> ---&gt; 条件变量:消费者 --&gt; 缓冲区无数据</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">lock</span> <span class="title">filled_cnt_lock</span>;</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">producer</span><span class="params">(<span class="type">void</span>)</span> &#123;</span><br><span class="line">    <span class="type">int</span> new_msg;</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>) &#123;</span><br><span class="line">        new_msg = produce_new();</span><br><span class="line"><span class="comment">//        </span></span><br><span class="line">        lock(&amp;empty_cnt_lock);</span><br><span class="line">        	<span class="keyword">while</span>(empty_slot==<span class="number">0</span>)</span><br><span class="line">                cond_wait(&amp;empty_cond, &amp;empty_cnt_lock); </span><br><span class="line">        			--&gt; 当有新的空位产生时候,消费者会利用cond_signal操作唤醒等待在empty_cond上的</span><br><span class="line">                     --&gt; 生产者</span><br><span class="line">        	empty_slot--;</span><br><span class="line">        unlock(&amp;empty_cnt_lock);</span><br><span class="line">        </span><br><span class="line">        buffer_add_safe(new_msg);</span><br><span class="line">        </span><br><span class="line">        lock(&amp;filled_cnt_lock);</span><br><span class="line">        	filled_slot++;</span><br><span class="line">        	cond_signal(&amp;filled_cond); --&gt; 唤醒等待的消费者</span><br><span class="line">        unlock(&amp;filled_cnt_lock);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">consumer</span><span class="params">(<span class="type">void</span>)</span> &#123;</span><br><span class="line">    <span class="type">int</span> cur_msg;</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>) &#123;</span><br><span class="line">        lock(&amp;filled_cnt_lock);</span><br><span class="line">        	<span class="keyword">while</span>(filled_slot==<span class="number">0</span>)</span><br><span class="line">                cond_wait(&amp;filled_cond, &amp;filled_cnt_lock);</span><br><span class="line">        	filled_slot--;</span><br><span class="line">        unlock(&amp;filled_cnt_lock);</span><br><span class="line">        </span><br><span class="line">        cur_msg = buffer_remove_safe();</span><br><span class="line">        </span><br><span class="line">        lock(&amp;empty_cnt_lock);</span><br><span class="line">        	empty_slot++;</span><br><span class="line">        	cond_signal(&amp;empty_cond);</span><br><span class="line">        unlock(&amp;empty_cnt_lock);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 </ul>
 <h2 id="9-文件系统"><a href="#9-文件系统" class="headerlink" title="9 文件系统"></a>9 文件系统</h2><hr>
 <ul>
