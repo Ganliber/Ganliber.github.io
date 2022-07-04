@@ -30,7 +30,7 @@
 <meta property="og:description" content="关于《现代操作系统: 原理与实现》的一些简记">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-06-27T14:31:04.000Z">
-<meta property="article:modified_time" content="2022-07-03T18:02:31.713Z">
+<meta property="article:modified_time" content="2022-07-04T12:08:42.178Z">
 <meta property="article:author" content="Gan Gecen">
 <meta property="article:tag" content="operating system">
 <meta property="article:tag" content="system">
@@ -237,7 +237,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-07-04 02:02:31" itemprop="dateModified" datetime="2022-07-04T02:02:31+08:00">2022-07-04</time>
+                <time title="Modified: 2022-07-04 20:08:42" itemprop="dateModified" datetime="2022-07-04T20:08:42+08:00">2022-07-04</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -739,10 +739,140 @@
 <li>单核CPU：多线程可能营造每个线程在单独CPU上的“假象”</li>
 </ul>
 </li>
-<li>原子操作<code>synchronization primitive</code>：指不可被打断的一个或一系列操作，要么这一系列指令都执行完成，要么这一系列指令一条都没有执行，不会出现执行到一半的状态。<ul>
-<li>常见原子操作：比较与置换<code>Compare-And-Swap, CAS</code>，拿取并累加<code>Fetch-And-Add, FAA</code></li>
+</ul>
+<h3 id="互斥锁"><a href="#互斥锁" class="headerlink" title="互斥锁"></a>互斥锁</h3><ul>
+<li><p>竞争冒险<code>race hazard</code>：程序的正确性依赖于特定的执行顺序的情况</p>
+</li>
+<li><p>互斥访问<code>mutual exclusion</code>：任意时刻只允许至多一个线程<code>thread</code>访问的方式</p>
+</li>
+<li><p>临界区<code>critical section</code>：保证<strong>互斥访问共享资源</strong>的代码区域</p>
+<ul>
+<li>在同一时刻，至多只有一个线程可以执行临界区中的代码</li>
+<li>在临界区内，一个线程可以安全地对共享资源进行操作</li>
 </ul>
 </li>
+<li><p>临界区问题：如何通过设计<strong>协议</strong>来保证<strong>互斥访问临界区</strong>的问题</p>
+<ul>
+<li><p>适用范围</p>
+<ul>
+<li>多核并行，多核多线程</li>
+<li>单核多线程</li>
+</ul>
+</li>
+<li><p>流程</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">  --- 申请进入临界区 ---</span><br><span class="line">          临界区</span><br><span class="line">  --- 标识退出临界区 ---</span><br><span class="line">  other(); <span class="comment"># 其他代码</span></span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>软件实现的要求</p>
+<blockquote>
+<p> 算法设计</p>
+</blockquote>
+<ol>
+<li>互斥访问</li>
+<li>有限等待</li>
+<li>空闲让进</li>
+</ol>
+</li>
+<li><p>硬件实现</p>
+<blockquote>
+<p>（单核）关闭中断，但不适用于多核</p>
+</blockquote>
+<ul>
+<li>线程<code>thread</code>进入临界区关闭中断，离开临界区后再开启中断</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>软件实现：皮特森算法</p>
+<blockquote>
+<ol>
+<li>经典皮特森算法只能用于两个线程的情况</li>
+<li><code>Micha Hofri</code>扩展了皮特森算法，使其能够被使用与任意数量的线程</li>
+<li>皮特森算法要求<code>CPU</code>严格按照<strong>程序顺序</strong>执行<strong>访存操作</strong></li>
+</ol>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">bool</span> flag[<span class="number">2</span>] = &#123; <span class="literal">false</span> &#125;;<span class="comment">// flag[0]-&gt;thread_0 ; flag[1]-&gt;thread_1</span></span><br><span class="line"><span class="type">int</span> turn;</span><br><span class="line"></span><br><span class="line">--- Thread <span class="number">0</span> ---</span><br><span class="line"><span class="keyword">while</span>(<span class="literal">true</span>) &#123;</span><br><span class="line">  flag[<span class="number">0</span>] = <span class="literal">true</span>;</span><br><span class="line">  turn = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">while</span> (flag[<span class="number">1</span>]==<span class="literal">true</span> &amp;&amp; turn==<span class="number">1</span>);</span><br><span class="line">  critical_section();<span class="comment">//临界区</span></span><br><span class="line">  flag[<span class="number">0</span>] = <span class="literal">false</span>;</span><br><span class="line">  other_code();<span class="comment">//其他代码</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">--- Thread <span class="number">1</span> ---</span><br><span class="line"><span class="keyword">while</span>(<span class="literal">true</span>) &#123;</span><br><span class="line">  flag[<span class="number">1</span>] = <span class="literal">true</span>;</span><br><span class="line">  turn = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">while</span>(flag[<span class="number">0</span>]==<span class="literal">true</span> &amp;&amp; trun == <span class="number">0</span>);</span><br><span class="line">  critical_section();<span class="comment">//临界区</span></span><br><span class="line">  flag[<span class="number">1</span>] = <span class="literal">false</span>;</span><br><span class="line">  other_code();<span class="comment">//其他代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>软硬件结合：原子操作 –&gt; 互斥锁</p>
+<ul>
+<li><p>原子操作<code>atomic operation</code>：指不可被打断的一个或一系列操作，要么这一系列指令都执行完成，要么这一系列指令一条都没有执行，不会出现执行到一半的状态。</p>
+<ul>
+<li><p>常见原子操作：比较与置换<code>Compare-And-Swap, CAS</code>，拿取并累加<code>Fetch-And-Add, FAA</code></p>
+<blockquote>
+<p><code>CAS</code>和<code>FFA</code>类C代码的实现（只是用来说明功能，C代码本身不具备原子性）</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">CAS</span><span class="params">(<span class="type">int</span> *addr, <span class="type">int</span> expected, <span class="type">int</span> new_value)</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (*addr == expected) *addr = new_value;</span><br><span class="line">  <span class="keyword">else</span> expected = *addr;</span><br><span class="line">  <span class="keyword">return</span> expected;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">FFA</span><span class="params">(<span class="type">int</span> *addr, <span class="type">int</span> add_value)</span> &#123;</span><br><span class="line">  <span class="type">int</span> tmp = *addr;</span><br><span class="line">  *addr = tmp + add_value;</span><br><span class="line">  <span class="keyword">return</span> tmp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>更新遗失<code>loss update</code></p>
+</li>
+<li><p><code>Intel x86-64</code>平台内联汇编实现原子操作</p>
+<blockquote>
+<p><code>Intel</code>平台通过<code>lock</code>前缀来实现操作的原子性</p>
+<p><code>atomic_CAS</code>解析</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> *addr == expected:</span><br><span class="line">  *addr = new_value</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">  expected = *addr</span><br></pre></td></tr></table></figure>
+
+<p>比较地址<code>addr</code>处的值<code>*addr</code>和<code>expected</code>，如果相等：<code>*addr = new_value</code>；否则：<code>expected = *addr</code></p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">atomic_CAS</span><span class="params">(<span class="type">int</span> *addr, <span class="type">int</span> expected, <span class="type">int</span> new_value)</span> &#123;</span><br><span class="line">  <span class="keyword">asm</span> <span class="title function_">volatile</span><span class="params">(<span class="string">&quot;lock cmpxchg %[new], %[ptr]&quot;</span></span></span><br><span class="line"><span class="params">              :<span class="string">&quot;+a&quot;</span>(expected), [ptr] <span class="string">&quot;+m&quot;</span>(*addr)</span></span><br><span class="line"><span class="params">              :[new] <span class="string">&quot;r&quot;</span>(new_value)</span></span><br><span class="line"><span class="params">              :<span class="string">&quot;memory&quot;</span>)</span>;</span><br><span class="line">  <span class="keyword">return</span> expected;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>ARM</code>平台基于<code>Load-Link/Store-Conditional (LL/SC)</code>指令组合‘</p>
+<ul>
+<li><code>ARMv8.1</code>支持了<code>LSE(Large System Extension)</code>，可以使用单条指令完成原子操作<ul>
+<li><code>Load-Link</code>：<ul>
+<li>监视器<code>monitor</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>互斥锁<code>mutex lock</code></p>
+<ul>
+<li><p>自旋锁<code>spin lock</code>：基于原子的<code>CAS</code>实现</p>
+<blockquote>
+<ol>
+<li>此处不考虑<strong>访存操作乱序的问题</strong></li>
+<li>满足 2 项，无法确保<strong>公平性</strong><ul>
+<li><input checked="" disabled="" type="checkbox"> 互斥访问</li>
+<li><input disabled="" type="checkbox"> 有限等待</li>
+<li><input checked="" disabled="" type="checkbox"> 空闲让进</li>
+</ul>
+</li>
+<li>实现简单，低时延高效率</li>
+<li>异构（ARM移动CPU大小核架构，小核运行频率低与大核竞争不易拿到锁），无法保证公平性</li>
+</ol>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># implementation of spin lock by C language</span></span><br><span class="line"><span class="meta"># lock == 1 : 有人拿了锁</span></span><br><span class="line"><span class="meta"># lock == 0 : 该锁空闲</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">lock_init</span><span class="params">(<span class="type">int</span> *lock)</span> &#123;</span><br><span class="line">  *lock = <span class="number">0</span>;<span class="comment">//初始化自旋锁</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">lock</span><span class="params">(<span class="type">int</span> *lock)</span> &#123;</span><br><span class="line">  <span class="keyword">while</span>(atomic_CAS(lock, <span class="number">0</span>, <span class="number">1</span>) != <span class="number">0</span>);<span class="comment">//循环忙等</span></span><br><span class="line">--+</span><br><span class="line">  +-&gt; 判断lock是否空闲,如果空闲,则上锁;不空闲,则一直在循环中等待</span><br><span class="line">  +-&gt; <span class="keyword">if</span> lock==<span class="number">0</span> -&gt; lock=<span class="number">1</span>,<span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">  +-&gt; <span class="keyword">if</span> lock==<span class="number">1</span> -&gt; expected=lock=<span class="number">1</span>,<span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">--+</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> unlock(<span class="type">int</span> *lock) &#123;</span><br><span class="line">  *lock = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>排号自旋锁（或排号锁）<code>ticket lock</code>：利用原子的<code>FFA</code>实现</p>
+<blockquote>
+<ol>
+<li>按照竞争者申请锁的顺序传递锁，锁的竞争者组成了<code>FIFO</code>等待队列</li>
+</ol>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">## 此处没有考虑 integer overflow</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">lock</span> &#123;</span></span><br><span class="line">  <span class="keyword">volatile</span> <span class="type">int</span> owner;<span class="comment">//当前lock持有者序号</span></span><br><span class="line">  <span class="keyword">volatile</span> <span class="type">int</span> next;<span class="comment">//下一个要分发lock的竞争者的序号</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">lock_init</span><span class="params">(<span class="keyword">struct</span> lock *lock)</span> &#123;</span><br><span class="line">  <span class="comment">//初始化排号锁</span></span><br><span class="line">  lock-&gt;owner = <span class="number">0</span>;</span><br><span class="line">  lock-&gt;next = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">lock</span><span class="params">(<span class="keyword">struct</span> lock*lock)</span> &#123;</span><br><span class="line">  <span class="comment">//拿取自己的序号</span></span><br><span class="line">  <span class="keyword">volatile</span> <span class="type">int</span> my_ticket = atomic_FAA(&amp;lock-&gt;next, <span class="number">1</span>);<span class="comment">// 取号排队</span></span><br><span class="line">  <span class="keyword">while</span> (lock-&gt;owner != my_ticket);<span class="comment">//循环忙等,如果</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">unlock</span><span class="params">(<span class="keyword">struct</span> lock*lock)</span> &#123;</span><br><span class="line">  <span class="comment">//传递给下一个竞争者</span></span><br><span class="line">  lock-&gt;owner++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="条件变量"><a href="#条件变量" class="headerlink" title="条件变量"></a>条件变量</h3><ul>
+<li>循环等待<code>busy looping</code>：如剩余资源为0时，<code>producer</code>会陷入循环等待&#x2F;循环忙直到<code>consumer</code>释放空位。<ul>
+<li>需要挂起&#x2F;唤醒机制 —&gt; 避免<code>busy looping</code>导致<code>CPU</code>资源浪费</li>
+<li>引入条件变量<code>condition variable</code></li>
+</ul>
+</li>
+<li><code>Condition Variable</code> 提供了两个接口：<code>cond_wait</code> and <code>cond_signal</code><ul>
+<li><code>cond_wait</code> ：用于挂起当前<code>process</code></li>
+<li><code>cond_signal</code>：用于唤醒等待在该<code>condition variable</code>上的线程<code>thread</code></li>
+</ul>
+</li>
+<li></li>
 </ul>
 <h2 id="9-文件系统"><a href="#9-文件系统" class="headerlink" title="9 文件系统"></a>9 文件系统</h2><hr>
 <ul>
@@ -1034,7 +1164,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#NOTES-Modern-Operating-System"><span class="nav-number">1.</span> <span class="nav-text">NOTES: Modern Operating System</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="nav-number">1.1.</span> <span class="nav-text">4 内存管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B"><span class="nav-number">1.2.</span> <span class="nav-text">5 进程与线程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#process"><span class="nav-number">1.2.1.</span> <span class="nav-text">process</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#thread"><span class="nav-number">1.2.2.</span> <span class="nav-text">thread</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fiber"><span class="nav-number">1.2.3.</span> <span class="nav-text">fiber</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%B0%83%E5%BA%A6"><span class="nav-number">1.3.</span> <span class="nav-text">6 操作系统调度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1"><span class="nav-number">1.4.</span> <span class="nav-text">7 进程间通信</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%8F%E5%86%85%E6%A0%B8IPC"><span class="nav-number">1.4.1.</span> <span class="nav-text">宏内核IPC</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-%E5%90%8C%E6%AD%A5%E5%8E%9F%E8%AF%AD"><span class="nav-number">1.5.</span> <span class="nav-text">8 同步原语</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.6.</span> <span class="nav-text">9 文件系统</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#NOTES-Modern-Operating-System"><span class="nav-number">1.</span> <span class="nav-text">NOTES: Modern Operating System</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="nav-number">1.1.</span> <span class="nav-text">4 内存管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B"><span class="nav-number">1.2.</span> <span class="nav-text">5 进程与线程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#process"><span class="nav-number">1.2.1.</span> <span class="nav-text">process</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#thread"><span class="nav-number">1.2.2.</span> <span class="nav-text">thread</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fiber"><span class="nav-number">1.2.3.</span> <span class="nav-text">fiber</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%B0%83%E5%BA%A6"><span class="nav-number">1.3.</span> <span class="nav-text">6 操作系统调度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1"><span class="nav-number">1.4.</span> <span class="nav-text">7 进程间通信</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%8F%E5%86%85%E6%A0%B8IPC"><span class="nav-number">1.4.1.</span> <span class="nav-text">宏内核IPC</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-%E5%90%8C%E6%AD%A5%E5%8E%9F%E8%AF%AD"><span class="nav-number">1.5.</span> <span class="nav-text">8 同步原语</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%92%E6%96%A5%E9%94%81"><span class="nav-number">1.5.1.</span> <span class="nav-text">互斥锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F"><span class="nav-number">1.5.2.</span> <span class="nav-text">条件变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.6.</span> <span class="nav-text">9 文件系统</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
