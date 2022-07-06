@@ -22,15 +22,15 @@
     var CONFIG = {"hostname":"ganliber.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="关于《现代操作系统: 原理与实现》的一些简记">
+  <meta name="description" content="关于《现代操作系统: 原理与实现》的一些简记(上)">
 <meta property="og:type" content="article">
-<meta property="og:title" content="os_notes">
+<meta property="og:title" content="OS Notes Part(I)">
 <meta property="og:url" content="https://ganliber.github.io/2022/06/27/system/os-notes/index.html">
 <meta property="og:site_name" content="Ganliber&#39;s Home">
-<meta property="og:description" content="关于《现代操作系统: 原理与实现》的一些简记">
+<meta property="og:description" content="关于《现代操作系统: 原理与实现》的一些简记(上)">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-06-27T14:31:04.000Z">
-<meta property="article:modified_time" content="2022-07-05T17:24:43.480Z">
+<meta property="article:modified_time" content="2022-07-06T18:05:24.078Z">
 <meta property="article:author" content="Gan Gecen">
 <meta property="article:tag" content="operating system">
 <meta property="article:tag" content="system">
@@ -49,7 +49,7 @@
   };
 </script>
 
-  <title>os_notes | Ganliber's Home</title>
+  <title>OS Notes Part(I) | Ganliber's Home</title>
   
 
 
@@ -139,7 +139,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">6</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">7</span></a>
 
   </li>
         <li class="menu-item menu-item-pwn">
@@ -220,7 +220,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          os_notes
+          OS Notes Part(I)
         </h1>
 
         <div class="post-meta">
@@ -237,7 +237,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-07-06 01:24:43" itemprop="dateModified" datetime="2022-07-06T01:24:43+08:00">2022-07-06</time>
+                <time title="Modified: 2022-07-07 02:05:24" itemprop="dateModified" datetime="2022-07-07T02:05:24+08:00">2022-07-07</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -264,7 +264,7 @@
   </span>
   
   
-            <div class="post-description"> 关于《现代操作系统: 原理与实现》的一些简记 </div>
+            <div class="post-description"> 关于《现代操作系统: 原理与实现》的一些简记(上) </div>
 
         </div>
       </header>
@@ -275,9 +275,14 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="NOTES-Modern-Operating-System"><a href="#NOTES-Modern-Operating-System" class="headerlink" title="NOTES: Modern Operating System"></a>NOTES: Modern Operating System</h1><hr>
-<blockquote>
+        <h1 id="Modern-Operating-System-I"><a href="#Modern-Operating-System-I" class="headerlink" title="Modern Operating System (I)"></a>Modern Operating System (I)</h1><blockquote>
 <p>前几章内容暂省略</p>
+<ul>
+<li><input disabled="" type="checkbox"> 内存管理</li>
+<li><input disabled="" type="checkbox"> 进程与线程</li>
+<li><input disabled="" type="checkbox"> 操作系统调度</li>
+<li><input disabled="" type="checkbox"> 进程间通信</li>
+</ul>
 </blockquote>
 <h2 id="4-内存管理"><a href="#4-内存管理" class="headerlink" title="4 内存管理"></a>4 内存管理</h2><hr>
 <ul>
@@ -824,495 +829,6 @@
 <li><p><code>Linux</code>套接字</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">socket(<span class="type">int</span> domain, <span class="type">int</span> type, <span class="type">int</span> protocol);</span><br><span class="line">* domain: 寻址方式, [IP + port] or [local path];</span><br><span class="line">* type: 通信方式, [SOCK_STREAM](数据流,对应[TCP]) or [SOCK_DGRAM](数据报,对应[UDP])</span><br><span class="line">* protocol: 定义协议相关配置, [TCP] or [UDP];</span><br></pre></td></tr></table></figure></li>
 </ul>
-<h2 id="8-同步原语"><a href="#8-同步原语" class="headerlink" title="8 同步原语"></a>8 同步原语</h2><hr>
-<ul>
-<li>同步原语<code>synchronization primitive</code>：正确高效处理多线程多核等的同步问题的抽象<ul>
-<li>将海量数据根据核心数量划分，从而能够在同一时间分配子任务到多个核心上并行处理，并最终收集这些子任务的处理结果。</li>
-<li>意味着对共享资源的并发访问。</li>
-<li>生产者：处理这些划分数据的线程</li>
-<li>消费者：收集处理结果的线程</li>
-<li>多核CPU：任务可以被划分给不同CPU核心上的线程同时处理</li>
-<li>单核CPU：多线程可能营造每个线程在单独CPU上的“假象”</li>
-</ul>
-</li>
-</ul>
-<h3 id="互斥锁"><a href="#互斥锁" class="headerlink" title="互斥锁"></a>互斥锁</h3><ul>
-<li><p>竞争冒险<code>race hazard</code>：程序的正确性依赖于特定的执行顺序的情况</p>
-</li>
-<li><p>互斥访问<code>mutual exclusion</code>：任意时刻只允许至多一个线程<code>thread</code>访问的方式</p>
-</li>
-<li><p>临界区<code>critical section</code>：保证<strong>互斥访问共享资源</strong>的代码区域</p>
-<ul>
-<li>在同一时刻，至多只有一个线程可以执行临界区中的代码</li>
-<li>在临界区内，一个线程可以安全地对共享资源进行操作</li>
-</ul>
-</li>
-<li><p>临界区问题：如何通过设计<strong>协议</strong>来保证<strong>互斥访问临界区</strong>的问题</p>
-<ul>
-<li><p>适用范围</p>
-<ul>
-<li>多核并行，多核多线程</li>
-<li>单核多线程</li>
-</ul>
-</li>
-<li><p>流程</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">  --- 申请进入临界区 ---</span><br><span class="line">          临界区</span><br><span class="line">  --- 标识退出临界区 ---</span><br><span class="line">  other(); <span class="comment"># 其他代码</span></span><br></pre></td></tr></table></figure>
-
-
-</li>
-<li><p>软件实现的要求</p>
-<blockquote>
-<p> 算法设计</p>
-</blockquote>
-<ol>
-<li>互斥访问</li>
-<li>有限等待</li>
-<li>空闲让进</li>
-</ol>
-</li>
-<li><p>硬件实现</p>
-<blockquote>
-<p>（单核）关闭中断，但不适用于多核</p>
-</blockquote>
-<ul>
-<li>线程<code>thread</code>进入临界区关闭中断，离开临界区后再开启中断</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>软件实现：皮特森算法</p>
-<blockquote>
-<ol>
-<li>经典皮特森算法只能用于两个线程的情况</li>
-<li><code>Micha Hofri</code>扩展了皮特森算法，使其能够被使用与任意数量的线程</li>
-<li>皮特森算法要求<code>CPU</code>严格按照<strong>程序顺序</strong>执行<strong>访存操作</strong></li>
-</ol>
-</blockquote>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">bool</span> flag[<span class="number">2</span>] = &#123; <span class="literal">false</span> &#125;;<span class="comment">// flag[0]-&gt;thread_0 ; flag[1]-&gt;thread_1</span></span><br><span class="line"><span class="type">int</span> turn;</span><br><span class="line"></span><br><span class="line">--- Thread <span class="number">0</span> ---</span><br><span class="line"><span class="keyword">while</span>(<span class="literal">true</span>) &#123;</span><br><span class="line">  flag[<span class="number">0</span>] = <span class="literal">true</span>;</span><br><span class="line">  turn = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">while</span> (flag[<span class="number">1</span>]==<span class="literal">true</span> &amp;&amp; turn==<span class="number">1</span>);</span><br><span class="line">  critical_section();<span class="comment">//临界区</span></span><br><span class="line">  flag[<span class="number">0</span>] = <span class="literal">false</span>;</span><br><span class="line">  other_code();<span class="comment">//其他代码</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">--- Thread <span class="number">1</span> ---</span><br><span class="line"><span class="keyword">while</span>(<span class="literal">true</span>) &#123;</span><br><span class="line">  flag[<span class="number">1</span>] = <span class="literal">true</span>;</span><br><span class="line">  turn = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">while</span>(flag[<span class="number">0</span>]==<span class="literal">true</span> &amp;&amp; trun == <span class="number">0</span>);</span><br><span class="line">  critical_section();<span class="comment">//临界区</span></span><br><span class="line">  flag[<span class="number">1</span>] = <span class="literal">false</span>;</span><br><span class="line">  other_code();<span class="comment">//其他代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>软硬件结合：原子操作 –&gt; 互斥锁</p>
-<ul>
-<li><p>原子操作<code>atomic operation</code>：指不可被打断的一个或一系列操作，要么这一系列指令都执行完成，要么这一系列指令一条都没有执行，不会出现执行到一半的状态。</p>
-<ul>
-<li><p>常见原子操作：比较与置换<code>Compare-And-Swap, CAS</code>，拿取并累加<code>Fetch-And-Add, FAA</code></p>
-<blockquote>
-<p><code>CAS</code>和<code>FFA</code>类C代码的实现（只是用来说明功能，C代码本身不具备原子性）</p>
-</blockquote>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">CAS</span><span class="params">(<span class="type">int</span> *addr, <span class="type">int</span> expected, <span class="type">int</span> new_value)</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (*addr == expected) *addr = new_value;</span><br><span class="line">  <span class="keyword">else</span> expected = *addr;</span><br><span class="line">  <span class="keyword">return</span> expected;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">FFA</span><span class="params">(<span class="type">int</span> *addr, <span class="type">int</span> add_value)</span> &#123;</span><br><span class="line">  <span class="type">int</span> tmp = *addr;</span><br><span class="line">  *addr = tmp + add_value;</span><br><span class="line">  <span class="keyword">return</span> tmp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>更新遗失<code>loss update</code></p>
-</li>
-<li><p><code>Intel x86-64</code>平台内联汇编实现原子操作</p>
-<blockquote>
-<p><code>Intel</code>平台通过<code>lock</code>前缀来实现操作的原子性</p>
-<p><code>atomic_CAS</code>解析</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> *addr == expected:</span><br><span class="line">  *addr = new_value</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">  expected = *addr</span><br></pre></td></tr></table></figure>
-
-<p>比较地址<code>addr</code>处的值<code>*addr</code>和<code>expected</code>，如果相等：<code>*addr = new_value</code>；否则：<code>expected = *addr</code></p>
-</blockquote>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">atomic_CAS</span><span class="params">(<span class="type">int</span> *addr, <span class="type">int</span> expected, <span class="type">int</span> new_value)</span> &#123;</span><br><span class="line">  <span class="keyword">asm</span> <span class="title function_">volatile</span><span class="params">(<span class="string">&quot;lock cmpxchg %[new], %[ptr]&quot;</span></span></span><br><span class="line"><span class="params">              :<span class="string">&quot;+a&quot;</span>(expected), [ptr] <span class="string">&quot;+m&quot;</span>(*addr)</span></span><br><span class="line"><span class="params">              :[new] <span class="string">&quot;r&quot;</span>(new_value)</span></span><br><span class="line"><span class="params">              :<span class="string">&quot;memory&quot;</span>)</span>;</span><br><span class="line">  <span class="keyword">return</span> expected;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>ARM</code>平台基于<code>Load-Link/Store-Conditional (LL/SC)</code>指令组合‘</p>
-<ul>
-<li><code>ARMv8.1</code>支持了<code>LSE(Large System Extension)</code>，可以使用单条指令完成原子操作<ul>
-<li><code>Load-Link</code>：<ul>
-<li>监视器<code>monitor</code></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>互斥锁<code>mutex lock</code></p>
-<ul>
-<li><p>自旋锁<code>spin lock</code>：基于原子的<code>CAS</code>实现</p>
-<blockquote>
-<ol>
-<li>此处不考虑<strong>访存操作乱序的问题</strong></li>
-<li>满足 2 项，无法确保<strong>公平性</strong><ul>
-<li><input checked="" disabled="" type="checkbox"> 互斥访问</li>
-<li><input disabled="" type="checkbox"> 有限等待</li>
-<li><input checked="" disabled="" type="checkbox"> 空闲让进</li>
-</ul>
-</li>
-<li>实现简单，低时延高效率</li>
-<li>异构（ARM移动CPU大小核架构，小核运行频率低与大核竞争不易拿到锁），无法保证公平性</li>
-</ol>
-</blockquote>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># implementation of spin lock by C language</span></span><br><span class="line"><span class="meta"># lock == 1 : 有人拿了锁</span></span><br><span class="line"><span class="meta"># lock == 0 : 该锁空闲</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">lock_init</span><span class="params">(<span class="type">int</span> *lock)</span> &#123;</span><br><span class="line">  *lock = <span class="number">0</span>;<span class="comment">//初始化自旋锁</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">lock</span><span class="params">(<span class="type">int</span> *lock)</span> &#123;</span><br><span class="line">  <span class="keyword">while</span>(atomic_CAS(lock, <span class="number">0</span>, <span class="number">1</span>) != <span class="number">0</span>);<span class="comment">//循环忙等</span></span><br><span class="line">--+</span><br><span class="line">  +-&gt; 判断lock是否空闲,如果空闲,则上锁;不空闲,则一直在循环中等待</span><br><span class="line">  +-&gt; <span class="keyword">if</span> lock==<span class="number">0</span> -&gt; lock=<span class="number">1</span>,<span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">  +-&gt; <span class="keyword">if</span> lock==<span class="number">1</span> -&gt; expected=lock=<span class="number">1</span>,<span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">--+</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> unlock(<span class="type">int</span> *lock) &#123;</span><br><span class="line">  *lock = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-</li>
-<li><p>排号自旋锁（或排号锁）<code>ticket lock</code>：利用原子的<code>FFA</code>实现</p>
-<blockquote>
-<ol>
-<li>按照竞争者申请锁的顺序传递锁，锁的竞争者组成了<code>FIFO</code>等待队列</li>
-</ol>
-</blockquote>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">## 此处没有考虑 integer overflow</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">lock</span> &#123;</span></span><br><span class="line">  <span class="keyword">volatile</span> <span class="type">int</span> owner;<span class="comment">//当前lock持有者序号</span></span><br><span class="line">  <span class="keyword">volatile</span> <span class="type">int</span> next;<span class="comment">//下一个要分发lock的竞争者的序号</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">lock_init</span><span class="params">(<span class="keyword">struct</span> lock *lock)</span> &#123;</span><br><span class="line">  <span class="comment">//初始化排号锁</span></span><br><span class="line">  lock-&gt;owner = <span class="number">0</span>;</span><br><span class="line">  lock-&gt;next = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">lock</span><span class="params">(<span class="keyword">struct</span> lock *lock)</span> &#123;</span><br><span class="line">  <span class="comment">//拿取自己的序号</span></span><br><span class="line">  <span class="keyword">volatile</span> <span class="type">int</span> my_ticket = atomic_FAA(&amp;lock-&gt;next, <span class="number">1</span>);<span class="comment">// 取号排队</span></span><br><span class="line">  <span class="keyword">while</span> (lock-&gt;owner != my_ticket);<span class="comment">//循环忙等,如果</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">unlock</span><span class="params">(<span class="keyword">struct</span> lock*lock)</span> &#123;</span><br><span class="line">  <span class="comment">//传递给下一个竞争者</span></span><br><span class="line">  lock-&gt;owner++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="条件变量"><a href="#条件变量" class="headerlink" title="条件变量"></a>条件变量</h3><ul>
-<li><p>循环等待<code>busy looping</code>：如剩余资源为0时，<code>producer</code>会陷入循环等待&#x2F;循环忙直到<code>consumer</code>释放空位。</p>
-<ul>
-<li>需要挂起&#x2F;唤醒机制 —&gt; 避免<code>busy looping</code>导致<code>CPU</code>资源浪费</li>
-<li>引入条件变量<code>condition variable</code></li>
-</ul>
-</li>
-<li><p><code>Condition Variable</code> 提供了两个接口：<code>cond_wait</code> and <code>cond_signal</code></p>
-<ul>
-<li><code>cond_wait</code> ：用于挂起当前<code>process</code></li>
-<li><code>cond_signal</code>：用于唤醒等待在该<code>condition variable</code>上的线程<code>thread</code></li>
-</ul>
-</li>
-<li><p>生产者消费者问题：基于<code>condition variable</code></p>
-<blockquote>
-<ol>
-<li>使用互斥锁保护计数器：<code>empty_cnt_lock</code>保护<code>empty_slot</code>，<code>filled_cnt_lock</code>保护<code>filled_slot</code></li>
-<li>使用条件变量时必须配合<code>mutex lock</code>使用</li>
-<li><code>cond_wait</code>在挂起当前<code>thread</code>的同时，该互斥锁<code>mutex lock</code>会被原子地释放</li>
-<li>挂起的线程被唤醒后，其会在<code>cond_wait</code>返回之前重新获取互斥锁<code>mutex lock</code></li>
-</ol>
-</blockquote>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> empty_slot = <span class="number">5</span>; ---&gt; 公共变量,由锁 empty_cnt_lock 保护</span><br><span class="line"><span class="type">int</span> filled_slot = <span class="number">0</span>; ---&gt; 公共变量,由锁 filled_cnt_lock 保护</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">cond</span> <span class="title">empty_cond</span>;</span> ---&gt; 条件变量:生产者 --&gt; 缓冲区无空位</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">lock</span> <span class="title">empty_cnt_lock</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">cond</span> <span class="title">filled_cond</span>;</span> ---&gt; 条件变量:消费者 --&gt; 缓冲区无数据</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">lock</span> <span class="title">filled_cnt_lock</span>;</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">producer</span><span class="params">(<span class="type">void</span>)</span> &#123;</span><br><span class="line">    <span class="type">int</span> new_msg;</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>) &#123;</span><br><span class="line">        new_msg = produce_new();</span><br><span class="line"><span class="comment">//        </span></span><br><span class="line">        lock(&amp;empty_cnt_lock);</span><br><span class="line">        	<span class="keyword">while</span>(empty_slot==<span class="number">0</span>)</span><br><span class="line">                cond_wait(&amp;empty_cond, &amp;empty_cnt_lock); </span><br><span class="line">        			--&gt; 当有新的空位产生时候,消费者会利用cond_signal操作唤醒等待在empty_cond上的</span><br><span class="line">                     --&gt; 生产者</span><br><span class="line">        	empty_slot--;</span><br><span class="line">        unlock(&amp;empty_cnt_lock);</span><br><span class="line">        </span><br><span class="line">        buffer_add_safe(new_msg);</span><br><span class="line">        </span><br><span class="line">        lock(&amp;filled_cnt_lock);</span><br><span class="line">        	filled_slot++;</span><br><span class="line">        	cond_signal(&amp;filled_cond); --&gt; 唤醒等待的消费者</span><br><span class="line">        unlock(&amp;filled_cnt_lock);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">consumer</span><span class="params">(<span class="type">void</span>)</span> &#123;</span><br><span class="line">    <span class="type">int</span> cur_msg;</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>) &#123;</span><br><span class="line">        lock(&amp;filled_cnt_lock);</span><br><span class="line">        	<span class="keyword">while</span>(filled_slot==<span class="number">0</span>)</span><br><span class="line">                cond_wait(&amp;filled_cond, &amp;filled_cnt_lock);</span><br><span class="line">        	filled_slot--;</span><br><span class="line">        unlock(&amp;filled_cnt_lock);</span><br><span class="line">        </span><br><span class="line">        cur_msg = buffer_remove_safe();</span><br><span class="line">        </span><br><span class="line">        lock(&amp;empty_cnt_lock);</span><br><span class="line">        	empty_slot++;</span><br><span class="line">        	cond_signal(&amp;empty_cond);</span><br><span class="line">        unlock(&amp;empty_cnt_lock);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>条件变量的实现</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">cond</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">thread</span> *<span class="title">wait_list</span>;</span> --&gt; 记录等待在该条件变量上的线程</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">cond_wait</span><span class="params">(<span class="keyword">struct</span> cond *cond, <span class="keyword">struct</span> lock*mutex)</span> &#123;</span><br><span class="line">    list_append(cond-&gt;wait_list, thread_self()); --&gt; 将当前线程thread_self()加入等待队列</span><br><span class="line">    atomic_block_unlock(mutex); --&gt; 原子地挂起并同时释放锁,这两步必须是原子的</span><br><span class="line">                                --&gt; 此时已经挂起并且释放了锁</span><br><span class="line">                                --&gt; 这个过程应由OS辅助完成,Linux kernel 通过futex机制实现该功能</span><br><span class="line">    lock(mutex); --&gt; 重新获得互斥锁</span><br><span class="line">                 --&gt; 该步骤是接收到cond_signal唤醒挂起的线程后紧接着执行的</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">cond_signal</span><span class="params">(<span class="keyword">struct</span> cond *cond)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(!list_empty(cond-&gt;wait_list))</span><br><span class="line">        wakeup(list_remove(cond-&gt;wait_list)); --&gt; OS提供的唤醒服务</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">cond_broadcast</span><span class="params">(<span class="keyword">struct</span> cond *cond)</span> &#123;</span><br><span class="line">    <span class="keyword">while</span>(!list_empty(cond-&gt;wait_list))</span><br><span class="line">        wakeup(list_remove(cond-&gt;wait_list));</span><br><span class="line">&#125; --&gt; 条件变量一般提供广播操作用来唤醒所有等待在条件变量上的线程`thread`</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a>信号量</h3><ul>
-<li><p>信号量<code>semaphore</code>：在不同线程之间充当信号灯，根据<strong>剩余资源数量</strong>控制不同线程的<strong>执行</strong>或者<strong>等待</strong></p>
-<ul>
-<li><p>除了初始化，只支持两种操作用来更新，信号量又叫做<code>PV原语</code></p>
-<ul>
-<li><code>init</code>：初始化工作，即赋予信号量<code>semaphore</code>初始值</li>
-<li><code>P (荷兰语 Proberen 检验)</code>：<code>wait</code></li>
-<li><code>V (荷兰语 Verhogen 自增)</code>：<code>signal</code></li>
-</ul>
-</li>
-<li><p>信号量用来【辅助控制多个线程访问 <em><strong>有限数量</strong></em>  的 <em><strong>共享资源</strong></em>  的】，只允许三个不同的操作对齐值进行修改<code>init, wait(P) and signal(V)</code></p>
-<ul>
-<li><p>信号量的角度：</p>
-<ul>
-<li>消耗<strong>共享资源</strong>的线程：<code>wait</code> –&gt; 等待资源就绪</li>
-<li>产生&#x2F;释放<strong>共享资源</strong>的线程：<code>signal</code> –&gt; 通知资源就绪，即<strong>被释放的资源</strong>的量</li>
-</ul>
-</li>
-<li><p>资源角度</p>
-<ul>
-<li>对于<code>producer</code>【<strong>共享资源</strong>】是空闲空间<code>free space</code></li>
-<li>对于<code>consumer</code>【<strong>共享资源</strong>】是已占用的空间</li>
-</ul>
-</li>
-<li><p>生产者消费者问题</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">sem_t</span> empty_slot;</span><br><span class="line"><span class="type">sem_t</span> filled_slot; --&gt; 两个信号量</span><br><span class="line"><span class="type">void</span> <span class="title function_">producer</span><span class="params">(<span class="type">void</span>)</span> &#123;</span><br><span class="line">    <span class="type">int</span> new_msg;</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>) &#123;</span><br><span class="line">        new_msg = produce_new();</span><br><span class="line">        wait(&amp;empty_slot); --&gt; P</span><br><span class="line">        	<span class="title function_">buffer_add_safe</span><span class="params">(new_msg)</span>;</span><br><span class="line">        signal(&amp;filled_slot); --&gt; V</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">consumer</span><span class="params">(<span class="type">void</span>)</span> &#123;</span><br><span class="line">    <span class="type">int</span> cur_msg;</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>) &#123;</span><br><span class="line">        wait(&amp;filled_slot); --&gt; P</span><br><span class="line">        	cur_msg = buffer_remove_safe();</span><br><span class="line">        signal(&amp;empty_slot); --&gt; V</span><br><span class="line">        	<span class="title function_">consume_msg</span><span class="params">(cur_msg)</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>信号量的实现</p>
-<ul>
-<li>只有一个资源被释放时，同时通知多个<code>thread</code>是不明智的策略，应让多余的<code>thread</code>挂起并放弃<code>CPU</code></li>
-<li>使用<code>condition variable</code>和<code>mutex lock</code>实现<code>semaphore</code></li>
-<li>该实现不能保证<code>thread</code>按照调用<code>wait</code>的顺序依次拿到资源，但并不会破坏对有限等待的保证</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sem</span> &#123;</span></span><br><span class="line">    <span class="type">int</span> value; --&gt; value&gt;=<span class="number">0</span>,无thread等待,value=剩余资源数量</span><br><span class="line">          --&gt; value&lt;<span class="number">0</span>,有thread等待,|value|=number of threads which are waiting</span><br><span class="line">    <span class="type">int</span> wakeup; --&gt; 有线程等待时可用资源数量,亦即应该唤醒的thread数量</span><br><span class="line">          --&gt; wakeup&gt;=<span class="number">0</span></span><br><span class="line">    <span class="keyword">struct</span> lock sem_lock;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">cond</span> <span class="title">sem_cond</span>;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">wait</span><span class="params">(<span class="keyword">struct</span> sem*s)</span> &#123;</span><br><span class="line">    lock(&amp;s-&gt;sem_lock);<span class="comment">//上锁</span></span><br><span class="line">    s-&gt;value--;</span><br><span class="line"></span><br><span class="line">---------------- <span class="keyword">if</span> value&gt;=<span class="number">0</span>,有空闲资源,wait执行完毕</span><br><span class="line">    	<span class="keyword">if</span>(s-&gt;value&lt;<span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">do</span> &#123;</span><br><span class="line">                cond_wait(&amp;s-&gt;sem_cond, &amp;s-&gt;sem_lock);</span><br><span class="line">            &#125;<span class="keyword">while</span>(s-&gt;wakeup==<span class="number">0</span>); --&gt; <span class="keyword">do</span>...<span class="keyword">while</span> 语句很关键,先排队后检查</span><br><span class="line">               					--&gt; 避免了某一线程调用完signal</span><br><span class="line">                				--&gt; 立即调用wait导致其他thread进入无线等待中</span><br><span class="line">            s-&gt;wakeup--;</span><br><span class="line">        &#125;</span><br><span class="line">---------------- <span class="keyword">if</span> value&lt;<span class="number">0</span>,value不能表示当前可用资源数量,需要检查wakeup;</span><br><span class="line">---------------- <span class="keyword">if</span> wakeup&gt;<span class="number">0</span>,有可用资源(只不过需要排队);</span><br><span class="line">---------------- <span class="keyword">if</span> wakeup==<span class="number">0</span>,没有可用资源,此时需要挂起</span><br><span class="line"></span><br><span class="line">    unlock(&amp;s-&gt;sem_lock);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">signal</span><span class="params">(<span class="keyword">struct</span> sem *s)</span> &#123;</span><br><span class="line">    lock(&amp;sem_lock);</span><br><span class="line">    	s-&gt;value++;</span><br><span class="line">    	<span class="keyword">if</span> (s-&gt;value&lt;=<span class="number">0</span>) &#123; </span><br><span class="line">--&gt; 当s-&gt;value&lt;=<span class="number">0</span>时(还是已经++过的value值,说明value原本是负数)</span><br><span class="line">--&gt; 此时有thread等待,因此添加的资源也体现在wakeup上</span><br><span class="line">--&gt; 正因为此时有thread等待,所以增加wakeup的值并唤醒这些正在等待的</span><br><span class="line">--&gt; 线程的其中一个来利用新增加的资源</span><br><span class="line">            s-&gt;wakeup++;</span><br><span class="line">            cond_signal(&amp;s-&gt;sem_cond); </span><br><span class="line">--&gt; wakeup资源增多,即唤醒之前wakeup=<span class="number">0</span>导致的挂起等待</span><br><span class="line">--&gt; 至少wakeup=<span class="number">1</span>,因此之前因为wakeup=<span class="number">0</span>挂起的线程也被唤醒了</span><br><span class="line">        &#125;</span><br><span class="line">    unlock(&amp;sem_lock);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h4 id="summary"><a href="#summary" class="headerlink" title="summary"></a>summary</h4><ul>
-<li>信号量：协调多个线程对一系列共享资源的有序操作</li>
-<li>信号量与互斥锁：<ul>
-<li>区别较大</li>
-</ul>
-</li>
-<li>条件变量与信号量：<ul>
-<li>信号量是由条件变量，互斥锁，以及计数器实现的</li>
-<li>计数器是信号量的核心，用于表示当前可用资源的数量</li>
-</ul>
-</li>
-<li>条件变量与互斥锁：<ul>
-<li>互斥锁<code>mutex lock</code>：解决临界区问题，保证互斥访问共享资源</li>
-<li>条件变量<code>condition variable</code>：提供【挂起 &#x2F; 唤醒】机制，避免循环等待<code>busy looping</code>，节省<code>CPU</code>资源</li>
-<li>二者搭配使用</li>
-</ul>
-</li>
-</ul>
-<h3 id="读写锁"><a href="#读写锁" class="headerlink" title="读写锁"></a>读写锁</h3><ul>
-<li><p>对共享资源的读操作是不互斥的</p>
-</li>
-<li><p>只需要保证<strong>写共享数据的线程</strong>和<strong>读共享数据的线程</strong>不能同时执行即可，读写锁<code>reader writer lock</code>即解决此问题的一种同步原语<code>synchronization primitive</code></p>
-</li>
-<li><p><code>critical seection</code>：</p>
-<ul>
-<li>读临界区：可写，可读</li>
-<li>写临界区：（别的）不可写，不可读</li>
-</ul>
-</li>
-<li><p><code>reader writer lock</code>使用</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">rwlock</span> <span class="title">lock</span>;</span></span><br><span class="line"><span class="type">char</span> data[SIZE];</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">reader</span><span class="params">(<span class="type">void</span>)</span> &#123;</span><br><span class="line">    lock_reader(&amp;lock);</span><br><span class="line">    read_data(data); --&gt; 读临界区</span><br><span class="line">    unlock_reader(&amp;lock); </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">writer</span><span class="params">(<span class="type">void</span>)</span> &#123;</span><br><span class="line">    lock_writer(&amp;lock);</span><br><span class="line">    update_data(data); --&gt; 写临界区</span><br><span class="line">    unlock_writer(&amp;lock);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>reader writer lock</code>实现</p>
-<blockquote>
-<ol>
-<li>倾向性：<ol>
-<li>偏向读者的读写锁：读者优先，读者直接进入，写者等待所有读者离开临界区之后再进入临界区<ul>
-<li><code>reader</code>与<code>writer</code>互斥</li>
-<li><code>writer</code>与<code>writer</code>互斥</li>
-</ul>
-</li>
-<li>偏向写者的读写锁：写者优先，即读者写者同时准备进入时，先等待之前所有读者离开临界区，之后写者进入，写者离开后读者再进入<ul>
-<li>有新的<code>writer</code>到达后阻塞新的<code>reader</code></li>
-</ul>
-</li>
-</ol>
-</li>
-</ol>
-</blockquote>
-<ul>
-<li><p>偏向读者<code>reader</code>的读写锁</p>
-<blockquote>
-<p>原则：只要有一个<code>reader</code>就把<code>writer</code>的给锁上</p>
-</blockquote>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">---&gt; 偏向读者reader的读写锁 &lt;---</span><br><span class="line">---&gt; reader和writer不共享锁 &lt;---</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">rwlock</span> &#123;</span></span><br><span class="line">    <span class="type">int</span> reader_cnt; --&gt; 记录当前reader数</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">lock</span> <span class="title">reader_lock</span>;</span> --&gt; 对reader_cnt进行更新的互斥锁</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">lock</span> <span class="title">writer_lock</span>;</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">lock_reader</span><span class="params">(<span class="keyword">struct</span> rwlock *lock)</span> &#123;</span><br><span class="line">    lock(&amp;lock-&gt;reader_lock);</span><br><span class="line">    	lock-&gt;reader_cnt ++;</span><br><span class="line">    	<span class="keyword">if</span>(lock-&gt;reader_cnt==<span class="number">1</span>) --&gt;第一个读者,即有读者时就不能有写者进入临界区</span><br><span class="line">            lock(&amp;lock-&gt;writer_lock); --&gt;因此锁住写者writer,阻塞后续writer</span><br><span class="line">    <span class="title function_">unlock</span><span class="params">(&amp;lock-&gt;reader_lock)</span>;</span><br><span class="line">&#125; --&gt; 可以有多个reader同时进入critical section,但一旦有writer就需要等待临界区的读者全部离开后才可以进入临界区</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">unlock_reader</span><span class="params">(<span class="keyword">struct</span> rwlock *lock)</span> &#123;</span><br><span class="line">    lock(&amp;lock-&gt;reader_lock);</span><br><span class="line">    	lock-&gt;reader_cnt--;</span><br><span class="line">    	<span class="keyword">if</span>(lock-&gt;reader_cnt==<span class="number">0</span>) --&gt; 最后一个读者</span><br><span class="line">            unlock(&amp;lock-&gt;writer_lock);</span><br><span class="line">    unlock(&amp;lock-&gt;reader_lock);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">lock_writer</span><span class="params">(<span class="keyword">struct</span> rwlock *lock)</span> &#123;</span><br><span class="line">    lock(&amp;lock-&gt;writer_lock);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">unlock_writer</span><span class="params">(<span class="keyword">struct</span> rwlock *lock)</span> &#123;</span><br><span class="line">    unlock(&amp;lock-&gt;writer_lock);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>偏向写者<code>writer</code>的读写锁</p>
-<blockquote>
-<ol>
-<li>外锁<code>rwlock</code>结构体内部借助了<code>mutex lock</code>来实现对外锁本身元数据<code>reader_cnt</code>和<code>has_writer</code>的保护</li>
-<li>锁中的精华部分依然在<strong>条件变量</strong>的应用上<ol>
-<li><code>cond_wait</code></li>
-<li><code>cond_signal</code></li>
-</ol>
-</li>
-<li>读者不用等待读者，只需要等待写者 —&gt; 一个<code>while</code></li>
-<li>写者既要等待读者，又要等待写者 —&gt; 两个<code>while</code></li>
-<li>等<code>reader</code>就用<code>reader_cond</code>；等<code>writer</code>就用<code>writer_cond</code></li>
-<li>释放<code>unlock</code>时需要唤醒等待自己的线程<ol>
-<li><code>reader unlock</code> –&gt; 唤醒<strong>一个</strong>等待自己的<code>writer</code> –&gt; cond_signal</li>
-<li><code>writer unlock</code> –&gt;唤醒<strong>所有</strong>等待自己的<code>reader</code>和<code>writer</code> –&gt; cond_broadcast</li>
-</ol>
-</li>
-</ol>
-</blockquote>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">---&gt; 偏向读者writer的读写锁 &lt;---</span><br><span class="line">---&gt; reader和writer共享锁 &lt;---</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">rwlock</span> &#123;</span></span><br><span class="line">    <span class="keyword">volatile</span> <span class="type">int</span> reader_cnt; --&gt; 记录当前reader数</span><br><span class="line">    <span class="keyword">volatile</span> <span class="type">bool</span> has_writer; --&gt; 表示当前是否有writer到达</span><br><span class="line">        					--&gt; reader_cnt和has_writer属于metadata</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">lock</span> <span class="title">lock</span>;</span> --&gt; 共享lock,要求读者和写者在操作元数据前得到该锁</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">cond</span> <span class="title">reader_cond</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">cond</span> <span class="title">writer_cond</span>;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">lock_reader</span><span class="params">(<span class="keyword">struct</span> rwlock *rwlock)</span> &#123;</span><br><span class="line">    lock(&amp;rwlock-&gt;lock);</span><br><span class="line">    	<span class="keyword">while</span>(rwlock-&gt;has_writer==<span class="literal">true</span>)</span><br><span class="line">            cond_wait(&amp;rwlock-&gt;writer_cond, &amp;rwlock-&gt;lock);</span><br><span class="line">   						   --&gt; 该reader进入之前只要有writer,或者</span><br><span class="line">                             --&gt; 有writer排队期望得到lock(即使没有进入临界区)</span><br><span class="line">                             --&gt; 就挂起reader</span><br><span class="line">    	rwlock-&gt;reader_cnt++;</span><br><span class="line">    unlock(&amp;rwlock-&gt;lock);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">unlock_reader</span><span class="params">(<span class="keyword">struct</span> rwlock *rwlock)</span> &#123;</span><br><span class="line">    lock(&amp;rwlock-&gt;lock);</span><br><span class="line">    	rwlock-&gt;reader_cnt--;</span><br><span class="line">    	<span class="keyword">if</span> (rwlock-&gt;reader_cnt == <span class="number">0</span>)</span><br><span class="line">            cond_signal(&amp;rwlock-&gt;reader_cond);</span><br><span class="line">						--&gt; 由于reader和writer是冲突的因此</span><br><span class="line">                          --&gt; 要等到</span><br><span class="line">    unlock(&amp;rwlock-&gt;lock);	</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">lock_writer</span><span class="params">(<span class="keyword">struct</span> rwlock *rwlock)</span> &#123;</span><br><span class="line">    lock(&amp;rwlock-&gt;lock);</span><br><span class="line">    	<span class="keyword">while</span>(rwlock-&gt;has_writer == <span class="literal">true</span>)</span><br><span class="line">            cond_wait(&amp;rwlock-&gt;writer_cond, &amp;rwlock-&gt;lock); --&gt; 等待前面的writer</span><br><span class="line">    	rwlock-&gt;has_writer = <span class="literal">true</span>; --&gt;提前声明,避免后续的reader抢占</span><br><span class="line">    	<span class="keyword">while</span>(rwlock-&gt;reader_cnt&gt;<span class="number">0</span>)</span><br><span class="line">            cond_wait(&amp;rwlock-&gt;reader_cond, &amp;rwlock-&gt;lock); --&gt; 等待前面的reader</span><br><span class="line">    <span class="title function_">unlock</span><span class="params">(&amp;rwlock-&gt;lock)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">unlock_writer</span><span class="params">(<span class="keyword">struct</span> rwlock *rwlock)</span> &#123;</span><br><span class="line">    lock(&amp;rwlock-&gt;lock);</span><br><span class="line">    	rwlock-&gt;has_writer = <span class="literal">false</span>;</span><br><span class="line">    	cond_broadcast(&amp;rwlock-&gt;writer_cond); </span><br><span class="line">    				--&gt; 广播释放所有的挂起在writer_cond上的thread</span><br><span class="line">                      --&gt; 包括等待ta的所有writer和所有reader</span><br><span class="line">    <span class="title function_">unlock</span><span class="params">(&amp;rwlock-&gt;lock)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-<h4 id="summary-1"><a href="#summary-1" class="headerlink" title="summary"></a>summary</h4><ul>
-<li>偏向<code>reader</code>：提高读者<code>reader</code>之间的并行度，但写延迟较高</li>
-<li>偏向<code>writer</code>：写延迟低，读者<code>reader</code>并行度低</li>
-</ul>
-<h3 id="RCU"><a href="#RCU" class="headerlink" title="RCU"></a>RCU</h3><blockquote>
-<p>读写锁允许多个读者同时进入读临界区，但写者会阻塞读者，读者仍然需要在关键路径上添加读者锁，造成性能开销</p>
-</blockquote>
-<ul>
-<li><code>RCU (Read-Copy Update)</code>：<ul>
-<li>允许多个<code>reader</code>进入<code>critical section</code></li>
-<li><code>writer</code>不会阻塞<code>reader</code></li>
-<li><code>reader</code>不需要使用额外的同步原语<code>synchronization primitive</code>保护<code>reader critical section</code></li>
-</ul>
-</li>
-<li>主流CPU提供对 【<strong>地址对齐</strong>】的单一读写操作的原子性保证<ul>
-<li><code>ARM</code>中被称为<code>single copy atomicity</code>单拷贝原子性</li>
-<li>支持【位宽】一般与CPU位宽一致</li>
-<li><code>64-bit</code>CPU保证【<strong>地址对齐</strong>的64位数据】的读写操作的原子性：如0x5118,0x6730，即二进制下后三位均为0，16进制下最低四位为8或0</li>
-</ul>
-</li>
-<li>【订阅 &#x2F; 发布】机制<ul>
-<li></li>
-</ul>
-</li>
-</ul>
-<h2 id="9-文件系统"><a href="#9-文件系统" class="headerlink" title="9 文件系统"></a>9 文件系统</h2><hr>
-<ul>
-<li><p>机械硬盘<code>Hard Disk Drive (HDD)</code>、固态硬盘<code>Solid-State Drive (SSD)</code></p>
-</li>
-<li><p>文件数据<code>file data</code>、文件元数据<code>file metadata</code></p>
-</li>
-<li><p>块设备<code>block device</code></p>
-</li>
-<li><p>块<code>block</code>：块设备读写的最小单元，大小一般为512字节或4KB</p>
-</li>
-<li><p>虚拟文件系统<code>Virtual File System (VFS)</code></p>
-<ul>
-<li>页缓存<code>page cache</code></li>
-<li>inode缓存<code>icache</code></li>
-<li>目录项缓存<code>dcache</code></li>
-</ul>
-</li>
-<li><p>inode : index node</p>
-</li>
-<li><p>文件类型（一部分）</p>
-<ul>
-<li>常规文件<code>regular file</code></li>
-<li>目录文件<code>directory file</code></li>
-<li>符号链接文件<code>symbolic link file</code></li>
-<li><code>FIFO</code>文件：以队列形式传递数据，又称命名管道</li>
-<li>套接字文件：用于传递数据，比<code>FIFO</code>更加灵活</li>
-<li>字符设备文件</li>
-<li>块设备文件</li>
-</ul>
-</li>
-<li><p>目录：一种特殊的类型的<strong>文件</strong>（即目录本身也是一种文件），记录了文件名到<code>inode</code>号的映射</p>
-</li>
-<li><p>文件名不是文件的<code>metadata</code></p>
-</li>
-<li><p>硬链接<code>hard link</code></p>
-</li>
-<li><p>符号链接（软链接）<code>soft link</code></p>
-<ul>
-<li><code>ln -s file slink</code> 为<code>file</code>创建名为<code>slink</code>的软链接</li>
-<li>符号链接文件保留的是一个字符串，表示一个文件路径</li>
-<li>只支持<strong>读</strong>操作</li>
-</ul>
-</li>
-<li><p>文件系统的存储布局</p>
-<blockquote>
-<p>只有<strong>文件数据区域</strong>被用来存放应用程序的数据，因此<strong>文件系统所显示的可用大小 &lt; 存储设备总容量</strong></p>
-</blockquote>
-<ul>
-<li><p>超级块<code>super block</code></p>
-</li>
-<li><p>块分配信息</p>
-<blockquote>
-<p>标记<strong>文件数据块</strong>区域<strong>各个块</strong>的使用情况</p>
-</blockquote>
-<ul>
-<li>位图<code>bitmap</code></li>
-</ul>
-</li>
-<li><p><code>inode</code>分配信息</p>
-<blockquote>
-<p>标记**<code>inode</code>表<strong>的</strong>各个<code>inode</code>**的使用情况</p>
-</blockquote>
-</li>
-<li><p><code>inode</code>表</p>
-<ul>
-<li>以数组<code>array</code>的形式保存了整个文件系统中所有的<code>inode</code>结构</li>
-<li><code>inode</code>号：<code>inode</code>在此表中的索引</li>
-<li>文件系统中对<code>inode</code>的引用只需要使用<code>inode</code>号即可，无需保存<code>inode</code>结构在存储设备中的偏移量<code>offset</code></li>
-<li><code>inode</code>表的大小在文件系统创建时已经固定，因此文件系统所能保存的最大文件数量受此限制</li>
-</ul>
-</li>
-<li><p>文件数据块</p>
-</li>
-</ul>
-</li>
-<li><p>虚拟文件系统<code>VFS (Virtual File System)</code>：对多种<code>File System</code>协调，允许它们在同一个<code>OS</code>上共同工作</p>
-<ul>
-<li>Linux <code>VFS (Virtual Filesystem Switch)</code><ul>
-<li><p>VFS超级块</p>
-</li>
-<li><p>VFS的<code>inode</code>：VFS维护了一个<code>inode</code>缓存（<code>icache</code>），该缓存使用Hash表保存了OS的所有的<code>inode</code>的结构</p>
-</li>
-<li><p>VFS的文件数据管理</p>
-<ul>
-<li>基数树<code>radix tree</code></li>
-</ul>
-</li>
-<li><p>VFS的目录项</p>
-<ul>
-<li>VFS在内存中为目录项维护了一个缓存，目录项缓存（<code>dcache</code>）</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>VFS和文件系统的交互</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">VFS ---(read-modify-write)--- File System</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Linux VFS 定义文件系统应提供的方法的形式：函数指针<code>function pointer</code></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt;回调函数</span><br><span class="line">函数指针作为某个函数的参数,函数指针变量可以作为某个函数的参数来使用的，回调函数就是一个通过函数指针调用的函数。简单讲：回调函数是由别人的函数执行时调用你实现的函数。</span><br><span class="line">&gt;&gt;&gt;以下是来自知乎作者常溪玲的解说：</span><br><span class="line">你到一个商店买东西，刚好你要的东西没有货，于是你在店员那里留下了你的电话，过了几天店里有货了，店员就打了你的电话，然后你接到电话后就到店里去取了货。在这个例子里，你的电话号码就叫回调函数，你把电话留给店员就叫登记回调函数，店里后来有货了叫做触发了回调关联的事件，店员给你打电话叫做调用回调函数，你到店里去取货叫做响应回调事件。</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Linux and its VFS : 实现文件读写等操作<code>(OS(kernel) --- APP(user))</code></p>
-<ul>
-<li><p>路径解析</p>
-<blockquote>
-<p><code>open</code>：文件路径 —&gt; 文件描述符<code>file descriptor</code></p>
-</blockquote>
-<ul>
-<li><p>open  —libc—&gt; SYS_open（系统调用）—&gt; VFS</p>
-</li>
-<li><p>VFS对路径进行拆分得到一系列文件名（包含目录名），如果是绝对路径就从根目录开始查找，如果是相对路径，就从当前<code>.</code>目录（即工作目录）开始查找，查找过程中包括一系列权限检查，是否为目录检查等检查过程。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 应用程序可以使用 getcwd 和 chdir 获取和修改当前工作目录</span></span><br><span class="line">getcwd</span><br><span class="line">chdir</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>路径解析完成后得到一个<code>inode</code>，但不直接返回给app，而是在<code>inode</code>上添加了一层抽象，即文件描述符<code>file descriptor</code></p>
-</li>
-</ul>
-</li>
-<li><p>文件描述符</p>
-<blockquote>
-<p>实际上是一个<code>integer</code>，由<code>VFS</code>进行维护</p>
-</blockquote>
-<ul>
-<li><code>VFS</code>为每一个<code>process</code>维护一个文件描述符表<code>file descriptor table</code>，以文件描述符<code>fd (file descriptor)</code>为索引<code>index</code>，保存一组<strong>文件描述结构</strong></li>
-</ul>
-</li>
-<li><p>相对路径：不以<code>/</code>开头的路径，均为相对路径</p>
-</li>
-<li><p>页缓存：Linux kernel 将读缓存和写缓冲区的功能合并起来管理，称为页缓存</p>
-<blockquote>
-<p>持久化和性能权衡之产物：文件系统将是否使用页缓存机制的判断和选择权交予APP</p>
-<p>APP可以通过打开文件时附带<code>O_DIRECT</code>标志，提示文件系统<strong>不要使用页缓存</strong>  –&gt; <strong>直接I&#x2F;O</strong></p>
-<p>页缓存 –&gt; <strong>缓存I&#x2F;O</strong></p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">flowchart </span><br><span class="line">		meta1(从存储设备中读取数据\n创建新的缓存页) --&gt; clean_page((干净页))</span><br><span class="line">		meta2(缓存页被回收) --- clean_page</span><br><span class="line">		clean_page --&gt;|修改缓存页中的数据| dirty_page((脏页))</span><br><span class="line">		dirty_page --&gt;|页中数据被写会存储设备| clean_page</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Linux 在页缓存的基础上实现了文件的<strong>内存映射机制</strong></p>
-</li>
-<li><p>文件内存映射：<code>mmap</code>接口</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">;--- POSIX 文件内存映射接口 ---;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 提供映射的目标虚拟地址, 长度, 属性, 标志位, 文件描述符, 起始位置在文件中的偏移量 */</span></span><br><span class="line"><span class="type">void</span> *<span class="title function_">mmap</span><span class="params">(<span class="type">void</span> *addr, <span class="type">size_t</span> len, <span class="type">int</span> prot, <span class="type">int</span> flags, <span class="type">int</span> fildes, <span class="type">off_t</span> off)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* msync是请求VFS对指定内存映射区域进行同步写回操作 */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">msync</span><span class="params">(<span class="type">void</span> *addr, <span class="type">size_t</span> len, <span class="type">int</span> flags)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 当所有操作完成之后, APP可以调用munmap, 移除指定的虚拟内存地址区域上的内存映射 */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">munmap</span><span class="params">(<span class="type">void</span> *addr, <span class="type">size_t</span> len)</span>;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>挂载</strong><code>mounting</code>是指由操作系统使一个<strong>存储设备</strong>（诸如硬盘、CD-ROM或共享资源）上的<strong>电脑档案</strong>和<strong>目录</strong>可供用户通过计算机的文件系统访问的一个过程。一般来说，当计算机关机时，每个已<strong>挂载</strong>存储都将经历一次卸载，以确保所有排队的数据被写入，并保证介质上文件系统结构的完整性。</p>
-<ul>
-<li><strong>linux</strong>操作系统将所有的设备都看作文件，它将整个计算机的资源都整合成一个大的文件目录。我们要访问存储设备中的文件，必须将文件所在的分区挂载到一个已存在的目录上，然后通过访问这个目录来访问存储设备。挂载就是把设备放在一个目录下，让系统知道怎么管理这个设备里的文件，了解这个存储设备的可读写特性之类的过程。</li>
-<li>我们不是有<code>/dev/sdb1</code>吗，直接对它操作不就行了？这不是它的目录吗？</li>
-<li>这不是它的目录。虽然&#x2F;dev是个目录，但&#x2F;dev&#x2F;sdb1不是目录。可以发现ls&#x2F;dev&#x2F;sdb1无法执行。&#x2F;dev&#x2F;sdb1，是一个类似指针的东西，指向这个分区的原始数据块。mount前，系统并不知道这个数据块哪部分数据代表文件，如何对它们操作。</li>
-<li>这时提问者使用了 <code>mount /dev/sdb1 ~/Share/</code> ，把新硬盘的区sdb1挂载到工作目录的<code>~/Share/</code>文件夹下，之后访问这个<code>~/Share/</code>文件夹就相当于访问这个硬盘2的sdb1分区了。对&#x2F;Share&#x2F;的任何操作，都相当于对sdb1里文件的操作。<strong>这也就是挂载的作用：使用户可以访问这个分区（磁盘）。</strong></li>
-</ul>
-</li>
-<li><p>每个文件系统都有一个根目录，但应用程序所使用的路径通常只有一个根目录。</p>
-</li>
-<li><p>Linux 的<code>VFS</code>维护一个统一的<code>VFS</code>文件系统树，OS启动时会有一个根文件系统，如<code>FS0</code></p>
-<ul>
-<li>在根文件系统的基础上，其他文件系统可以被自由地挂载到VFS的任何一个目录之上，这些<strong>作为挂载目标的目录，便称为挂载点</strong></li>
-<li>Linux通过三种结构体<code>vfsmount (挂载文件系统信息)</code>、<code>mountpoint (挂载点信息)</code>、<code>mount (挂载文件系统结构体, 且包含了前两种)</code>，其<code>VFS</code>可以灵活地挂载多种文件系统，让各种不同的文件系统可以在相同的操作系统下工作。</li>
-</ul>
-</li>
-<li><p>伪文件系统<code>pseudo file system</code>：Linux实现的一些不用于<strong>保存文件数据</strong>的文件系统</p>
-<ul>
-<li>作用之一：允许用户<code>user</code>态应用程序通过<strong>读取文件</strong>的方式对读取内核提供的信息，并通过<strong>写入文件</strong>的方式对操作系统<strong>内核</strong>进行配置和调整</li>
-</ul>
-</li>
-<li><p>FAT文件系统</p>
-<ul>
-<li>FAT<code>File Allocation Table</code>：文件分配表</li>
-<li>簇<code>cluster</code>（对应于之前所说的<strong>块</strong><code>block</code>）：逻辑存储单元，每个簇对应于物理存储上的一个或多个存储扇区<code>sector</code></li>
-<li>簇号：每个簇对应的地址</li>
-<li><code>FAT</code>是一个由簇号组成的数组，且FAT中记录的簇号，为逻辑上的下一个簇的簇号（类比单链表）</li>
-</ul>
-</li>
-<li><p>NTFS<code>New Technology File System</code></p>
-<ul>
-<li>主文件表<code>MFT (Master File Table)</code></li>
-<li>稀疏文件<code>sparse file</code>：存在大片连续为0（所有比特位均为0）的数据的文件</li>
-</ul>
-</li>
-<li><p><code>FUSE</code>与用户态文件系统</p>
-<ul>
-<li><code>FUSE</code>模块：为了能让其他应用程序使用用户态文件系统提供的服务，<strong>宏内核</strong>中需要加入支持相应功能的模块，比较流行和常用的是<code>FUSE</code>模块和框架<ul>
-<li>存在问题：性能较差</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
 
     </div>
 
@@ -1328,7 +844,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>Post link: </strong>
-    <a href="https://ganliber.github.io/2022/06/27/system/os-notes/" title="os_notes">https://ganliber.github.io/2022/06/27/system/os-notes/</a>
+    <a href="https://ganliber.github.io/2022/06/27/system/os-notes/" title="OS Notes Part(I)">https://ganliber.github.io/2022/06/27/system/os-notes/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
@@ -1352,7 +868,10 @@
     <a href="/2022/06/17/pwn/heap-2/" rel="prev" title="heap 2">
       <i class="fa fa-chevron-left"></i> heap 2
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2022/07/07/system/os-notes-second/" rel="next" title="OS Notes Part(II)">
+      OS Notes Part(II) <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -1418,7 +937,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#NOTES-Modern-Operating-System"><span class="nav-number">1.</span> <span class="nav-text">NOTES: Modern Operating System</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="nav-number">1.1.</span> <span class="nav-text">4 内存管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B"><span class="nav-number">1.2.</span> <span class="nav-text">5 进程与线程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#process"><span class="nav-number">1.2.1.</span> <span class="nav-text">process</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#thread"><span class="nav-number">1.2.2.</span> <span class="nav-text">thread</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fiber"><span class="nav-number">1.2.3.</span> <span class="nav-text">fiber</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%B0%83%E5%BA%A6"><span class="nav-number">1.3.</span> <span class="nav-text">6 操作系统调度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1"><span class="nav-number">1.4.</span> <span class="nav-text">7 进程间通信</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BD%E5%90%8D%E6%9C%8D%E5%8A%A1"><span class="nav-number">1.4.1.</span> <span class="nav-text">命名服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%8F%E5%86%85%E6%A0%B8IPC"><span class="nav-number">1.4.2.</span> <span class="nav-text">宏内核IPC</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AE%A1%E9%81%93"><span class="nav-number">1.4.2.1.</span> <span class="nav-text">管道</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#System-V-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-number">1.4.2.2.</span> <span class="nav-text">System V 消息队列</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#System-V-%E4%BF%A1%E5%8F%B7%E9%87%8F"><span class="nav-number">1.4.2.3.</span> <span class="nav-text">System V 信号量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#System-V-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98"><span class="nav-number">1.4.2.4.</span> <span class="nav-text">System V 共享内存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7IPC"><span class="nav-number">1.4.2.5.</span> <span class="nav-text">信号IPC</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A5%97%E6%8E%A5%E5%AD%97"><span class="nav-number">1.4.2.6.</span> <span class="nav-text">套接字</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-%E5%90%8C%E6%AD%A5%E5%8E%9F%E8%AF%AD"><span class="nav-number">1.5.</span> <span class="nav-text">8 同步原语</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%92%E6%96%A5%E9%94%81"><span class="nav-number">1.5.1.</span> <span class="nav-text">互斥锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F"><span class="nav-number">1.5.2.</span> <span class="nav-text">条件变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7%E9%87%8F"><span class="nav-number">1.5.3.</span> <span class="nav-text">信号量</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#summary"><span class="nav-number">1.5.3.1.</span> <span class="nav-text">summary</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%BB%E5%86%99%E9%94%81"><span class="nav-number">1.5.4.</span> <span class="nav-text">读写锁</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#summary-1"><span class="nav-number">1.5.4.1.</span> <span class="nav-text">summary</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RCU"><span class="nav-number">1.5.5.</span> <span class="nav-text">RCU</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.6.</span> <span class="nav-text">9 文件系统</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Modern-Operating-System-I"><span class="nav-number">1.</span> <span class="nav-text">Modern Operating System (I)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="nav-number">1.1.</span> <span class="nav-text">4 内存管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B"><span class="nav-number">1.2.</span> <span class="nav-text">5 进程与线程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#process"><span class="nav-number">1.2.1.</span> <span class="nav-text">process</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#thread"><span class="nav-number">1.2.2.</span> <span class="nav-text">thread</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fiber"><span class="nav-number">1.2.3.</span> <span class="nav-text">fiber</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%B0%83%E5%BA%A6"><span class="nav-number">1.3.</span> <span class="nav-text">6 操作系统调度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1"><span class="nav-number">1.4.</span> <span class="nav-text">7 进程间通信</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BD%E5%90%8D%E6%9C%8D%E5%8A%A1"><span class="nav-number">1.4.1.</span> <span class="nav-text">命名服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%8F%E5%86%85%E6%A0%B8IPC"><span class="nav-number">1.4.2.</span> <span class="nav-text">宏内核IPC</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AE%A1%E9%81%93"><span class="nav-number">1.4.2.1.</span> <span class="nav-text">管道</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#System-V-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-number">1.4.2.2.</span> <span class="nav-text">System V 消息队列</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#System-V-%E4%BF%A1%E5%8F%B7%E9%87%8F"><span class="nav-number">1.4.2.3.</span> <span class="nav-text">System V 信号量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#System-V-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98"><span class="nav-number">1.4.2.4.</span> <span class="nav-text">System V 共享内存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7IPC"><span class="nav-number">1.4.2.5.</span> <span class="nav-text">信号IPC</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A5%97%E6%8E%A5%E5%AD%97"><span class="nav-number">1.4.2.6.</span> <span class="nav-text">套接字</span></a></li></ol></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -1434,7 +953,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-count">7</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1578,7 +1097,7 @@
   var disqus_config = function() {
     this.page.url = "https://ganliber.github.io/2022/06/27/system/os-notes/";
     this.page.identifier = "2022/06/27/system/os-notes/";
-    this.page.title = "os_notes";
+    this.page.title = "OS Notes Part(I)";
     };
   NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
     if (window.DISQUS) {
