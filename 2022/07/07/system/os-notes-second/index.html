@@ -30,7 +30,7 @@
 <meta property="og:description" content="关于《现代操作系统: 原理与实现》的一些简记(下)">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-07-06T17:57:36.000Z">
-<meta property="article:modified_time" content="2022-07-06T18:20:12.073Z">
+<meta property="article:modified_time" content="2022-07-07T04:21:15.969Z">
 <meta property="article:author" content="Gan Gecen">
 <meta property="article:tag" content="operating system">
 <meta property="article:tag" content="system">
@@ -129,12 +129,12 @@
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">7</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">8</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">3</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">4</span></a>
 
   </li>
         <li class="menu-item menu-item-archives">
@@ -150,6 +150,11 @@
         <li class="menu-item menu-item-system">
 
     <a href="/system/" rel="section"><i class="fas fa-laptop-code fa-fw"></i>system</a>
+
+  </li>
+        <li class="menu-item menu-item-paper">
+
+    <a href="/paper/" rel="section"><i class="fas fa-glasses fa-fw"></i>paper</a>
 
   </li>
       <li class="menu-item menu-item-search">
@@ -231,7 +236,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2022-07-07 01:57:36 / Modified: 02:20:12" itemprop="dateCreated datePublished" datetime="2022-07-07T01:57:36+08:00">2022-07-07</time>
+              <time title="Created: 2022-07-07 01:57:36 / Modified: 12:21:15" itemprop="dateCreated datePublished" datetime="2022-07-07T01:57:36+08:00">2022-07-07</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -881,7 +886,7 @@
 </ul>
 </li>
 </ul>
-
+<h2 id="10-设备驱动"><a href="#10-设备驱动" class="headerlink" title="10 设备驱动"></a>10 设备驱动</h2>
     </div>
 
     
@@ -920,7 +925,10 @@
     <a href="/2022/06/27/system/os-notes/" rel="prev" title="OS Notes Part(I)">
       <i class="fa fa-chevron-left"></i> OS Notes Part(I)
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2022/07/07/paper/PR0001-kernel-REPT/" rel="next" title="PR-1 [kernel REPT]">
+      PR-1 [kernel REPT] <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -986,7 +994,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Modern-Operating-System-II"><span class="nav-number">1.</span> <span class="nav-text">Modern Operating System (II)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#8-%E5%90%8C%E6%AD%A5%E5%8E%9F%E8%AF%AD"><span class="nav-number">1.1.</span> <span class="nav-text">8 同步原语</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%92%E6%96%A5%E9%94%81"><span class="nav-number">1.1.1.</span> <span class="nav-text">互斥锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F"><span class="nav-number">1.1.2.</span> <span class="nav-text">条件变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7%E9%87%8F"><span class="nav-number">1.1.3.</span> <span class="nav-text">信号量</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#summary"><span class="nav-number">1.1.3.1.</span> <span class="nav-text">summary</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%BB%E5%86%99%E9%94%81"><span class="nav-number">1.1.4.</span> <span class="nav-text">读写锁</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#summary-1"><span class="nav-number">1.1.4.1.</span> <span class="nav-text">summary</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RCU"><span class="nav-number">1.1.5.</span> <span class="nav-text">RCU</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%A1%E7%A8%8B"><span class="nav-number">1.1.6.</span> <span class="nav-text">管程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5%E5%B8%A6%E6%9D%A5%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">1.1.7.</span> <span class="nav-text">同步带来的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%BB%E9%94%81"><span class="nav-number">1.1.7.1.</span> <span class="nav-text">死锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%BB%E9%94%81%E9%81%BF%E5%85%8D%E7%AE%97%E6%B3%95"><span class="nav-number">1.1.7.2.</span> <span class="nav-text">死锁避免算法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B4%BB%E9%94%81"><span class="nav-number">1.1.8.</span> <span class="nav-text">活锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%85%88%E7%BA%A7%E5%8F%8D%E8%BD%AC"><span class="nav-number">1.1.9.</span> <span class="nav-text">优先级反转</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux%E4%B8%AD%E7%9A%84futex"><span class="nav-number">1.1.10.</span> <span class="nav-text">Linux中的futex</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.2.</span> <span class="nav-text">9 文件系统</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Modern-Operating-System-II"><span class="nav-number">1.</span> <span class="nav-text">Modern Operating System (II)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#8-%E5%90%8C%E6%AD%A5%E5%8E%9F%E8%AF%AD"><span class="nav-number">1.1.</span> <span class="nav-text">8 同步原语</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%92%E6%96%A5%E9%94%81"><span class="nav-number">1.1.1.</span> <span class="nav-text">互斥锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F"><span class="nav-number">1.1.2.</span> <span class="nav-text">条件变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7%E9%87%8F"><span class="nav-number">1.1.3.</span> <span class="nav-text">信号量</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#summary"><span class="nav-number">1.1.3.1.</span> <span class="nav-text">summary</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%BB%E5%86%99%E9%94%81"><span class="nav-number">1.1.4.</span> <span class="nav-text">读写锁</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#summary-1"><span class="nav-number">1.1.4.1.</span> <span class="nav-text">summary</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RCU"><span class="nav-number">1.1.5.</span> <span class="nav-text">RCU</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%A1%E7%A8%8B"><span class="nav-number">1.1.6.</span> <span class="nav-text">管程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5%E5%B8%A6%E6%9D%A5%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">1.1.7.</span> <span class="nav-text">同步带来的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%BB%E9%94%81"><span class="nav-number">1.1.7.1.</span> <span class="nav-text">死锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%BB%E9%94%81%E9%81%BF%E5%85%8D%E7%AE%97%E6%B3%95"><span class="nav-number">1.1.7.2.</span> <span class="nav-text">死锁避免算法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B4%BB%E9%94%81"><span class="nav-number">1.1.8.</span> <span class="nav-text">活锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%85%88%E7%BA%A7%E5%8F%8D%E8%BD%AC"><span class="nav-number">1.1.9.</span> <span class="nav-text">优先级反转</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux%E4%B8%AD%E7%9A%84futex"><span class="nav-number">1.1.10.</span> <span class="nav-text">Linux中的futex</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.2.</span> <span class="nav-text">9 文件系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8"><span class="nav-number">1.3.</span> <span class="nav-text">10 设备驱动</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -1009,13 +1017,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

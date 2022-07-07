@@ -63,18 +63,6 @@
       </tags>
   </entry>
   <entry>
-    <title>ucore_lab4</title>
-    <url>/2022/06/16/system/ucore_lab4/</url>
-    <content><![CDATA[<h1 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h1><h2 id="分类测试"><a href="#分类测试" class="headerlink" title="分类测试"></a>分类测试</h2>]]></content>
-      <categories>
-        <category>system</category>
-      </categories>
-      <tags>
-        <tag>operating system</tag>
-        <tag>system</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>blind ROP</title>
     <url>/2022/06/16/pwn/brop/</url>
     <content><![CDATA[<h1 id="Blind-ROP"><a href="#Blind-ROP" class="headerlink" title="Blind ROP"></a>Blind ROP</h1><hr>
@@ -1730,13 +1718,30 @@
 </ul>
 </li>
 </ul>
-]]></content>
+<h2 id="10-设备驱动"><a href="#10-设备驱动" class="headerlink" title="10 设备驱动"></a>10 设备驱动</h2>]]></content>
       <categories>
         <category>system</category>
       </categories>
       <tags>
         <tag>operating system</tag>
         <tag>system</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>PR-1 [kernel REPT]</title>
+    <url>/2022/07/07/paper/PR0001-kernel-REPT/</url>
+    <content><![CDATA[<h1 id="PR-Reverse-Debugging-of-Kernel-Failures-in-Deployed-Systems"><a href="#PR-Reverse-Debugging-of-Kernel-Failures-in-Deployed-Systems" class="headerlink" title="PR : Reverse Debugging of Kernel Failures in Deployed Systems"></a>PR : Reverse Debugging of Kernel Failures in Deployed Systems</h1><hr>
+<blockquote>
+<p>论文地址：<a href="https://www.usenix.org/conference/atc20/presentation/ge">https://www.usenix.org/conference/atc20/presentation/ge</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>paper</category>
+      </categories>
+      <tags>
+        <tag>operating system</tag>
+        <tag>system</tag>
+        <tag>paper reading</tag>
       </tags>
   </entry>
 </search>
