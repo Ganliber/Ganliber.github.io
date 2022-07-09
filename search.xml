@@ -2098,4 +2098,61 @@
         <tag>system</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Linux Kernel ：Environment</title>
+    <url>/2022/07/09/system/kernel-env/</url>
+    <content><![CDATA[<h1 id="Kernel环境搭建"><a href="#Kernel环境搭建" class="headerlink" title="Kernel环境搭建"></a>Kernel环境搭建</h1><h2 id="source-code"><a href="#source-code" class="headerlink" title="source code"></a>source code</h2><h3 id="recently-version"><a href="#recently-version" class="headerlink" title="recently version"></a>recently version</h3><ul>
+<li><p>清华源下载内核：<a href="https://mirrors.tuna.tsinghua.edu.cn/kernel/">https://mirrors.tuna.tsinghua.edu.cn/kernel/</a></p>
+</li>
+<li><p>下载某个版本的核</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -O -L https://mirrors.tuna.tsinghua.edu.cn/kernel/v5.x/linux-5.4.98.tar.xz</span><br><span class="line">unxz linux-5.4.98.tar.xz</span><br></pre></td></tr></table></figure>
+
+<p>此时得到的是<code>.tar</code>文件</p>
+</li>
+<li><p>签名验证</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -O -L https://mirrors.tuna.tsinghua.edu.cn/kernel/v5.x/linux-5.4.98.tar.sign</span><br></pre></td></tr></table></figure>
+
+<p>导入<code>Torvalds</code>的公钥</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --locate-keys torvalds@kernel.org gregkh@kernel.org</span><br></pre></td></tr></table></figure>
+
+<p>使用密钥（我们可以选择使用 TOFU 信任对应的密钥）并验证</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --tofu-policy good 647F28654894E3BD457199BE38DBBDC86092693E</span><br><span class="line">gpg --trust-model tofu --verify linux-5.4.98.tar.sign</span><br></pre></td></tr></table></figure>
+
+<p>最终得到验证结果</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg: assuming signed data <span class="keyword">in</span> <span class="string">&#x27;linux-5.4.98.tar&#x27;</span></span><br><span class="line">gpg: Signature made 2021年02月13日 星期六 20时54分47秒 CST</span><br><span class="line">gpg:                using RSA key 647F28654894E3BD457199BE38DBBDC86092693E</span><br><span class="line">gpg: Good signature from <span class="string">&quot;Greg Kroah-Hartman &lt;gregkh@kernel.org&gt;&quot;</span> [full]</span><br><span class="line">gpg: gregkh@kernel.org: Verified 1 signatures <span class="keyword">in</span> the past 0 seconds.  Encrypted</span><br><span class="line">     0 messages.</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>解压即可得到源码</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tar -xf linux-5.4.98.tar</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="old-version"><a href="#old-version" class="headerlink" title="old version"></a>old version</h3><ul>
+<li><p>赵炯博士维护的网站有早起<code>linux 0.11</code>和<code>linux 0.12</code>的源码：<a href="http://www.oldlinux.org/Linux.old/">http://www.oldlinux.org/Linux.old/</a></p>
+</li>
+<li><p>解压</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tar -zxvf linux-0.11.tar.gz</span><br><span class="line">tar -zxvf linux-0.12.tar.gz</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>旧版本环境搭建</p>
+<ul>
+<li>链接：<a href="https://blog.csdn.net/u011728480/article/details/114491022">https://blog.csdn.net/u011728480/article/details/114491022</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="编译和调试"><a href="#编译和调试" class="headerlink" title="编译和调试"></a>编译和调试</h2><ul>
+<li>参考链接<ul>
+<li><a href="http://kerneltravel.net/blog/2021/debug_kernel_szp/">http://kerneltravel.net/blog/2021/debug_kernel_szp/</a></li>
+<li><a href="https://www.anquanke.com/post/id/258874">https://www.anquanke.com/post/id/258874</a></li>
+</ul>
+</li>
+<li></li>
+</ul>
+]]></content>
+      <categories>
+        <category>system</category>
+      </categories>
+      <tags>
+        <tag>operating system</tag>
+        <tag>system</tag>
+        <tag>pwn</tag>
+        <tag>Linux kernel</tag>
+      </tags>
+  </entry>
 </search>
