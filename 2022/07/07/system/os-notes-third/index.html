@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-indicator.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ganliber.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="关于《现代操作系统: 原理与实现》的一些简记(下)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="os-notes-third">
+<meta property="og:url" content="https://ganliber.github.io/2022/07/07/system/os-notes-third/index.html">
+<meta property="og:site_name" content="Ganliber&#39;s Home">
+<meta property="og:description" content="关于《现代操作系统: 原理与实现》的一些简记(下)">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-07-07T06:15:21.000Z">
+<meta property="article:modified_time" content="2022-07-09T09:26:01.456Z">
+<meta property="article:author" content="Gan Gecen">
+<meta property="article:tag" content="operating system">
+<meta property="article:tag" content="system">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://ganliber.github.io/2022/07/07/system/os-notes-third/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>os-notes-third | Ganliber's Home</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Ganliber's Home</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">8</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">4</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">8</span></a>
+
+  </li>
+        <li class="menu-item menu-item-pwn">
+
+    <a href="/pwn/" rel="section"><i class="fas fa-flag-checkered fa-fw"></i>pwn</a>
+
+  </li>
+        <li class="menu-item menu-item-system">
+
+    <a href="/system/" rel="section"><i class="fas fa-laptop-code fa-fw"></i>system</a>
+
+  </li>
+        <li class="menu-item menu-item-paper">
+
+    <a href="/paper/" rel="section"><i class="fas fa-glasses fa-fw"></i>paper</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://ganliber.github.io/2022/07/07/system/os-notes-third/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Gan Gecen">
+      <meta itemprop="description" content="An information security practitioner, focusing on system, Linux and pwn">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ganliber's Home">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          os-notes-third
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-07-07 14:15:21" itemprop="dateCreated datePublished" datetime="2022-07-07T14:15:21+08:00">2022-07-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-07-09 17:26:01" itemprop="dateModified" datetime="2022-07-09T17:26:01+08:00">2022-07-09</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/system/" itemprop="url" rel="index"><span itemprop="name">system</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/2022/07/07/system/os-notes-third/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/07/07/system/os-notes-third/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+            <div class="post-description"> 关于《现代操作系统: 原理与实现》的一些简记(下) </div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Modern-Operating-System-III"><a href="#Modern-Operating-System-III" class="headerlink" title="Modern Operating System (III)"></a>Modern Operating System (III)</h1><blockquote>
+<ul>
+<li><input disabled="" type="checkbox"> 设备管理</li>
+<li><input disabled="" type="checkbox"> 系统虚拟化</li>
+</ul>
+</blockquote>
+<h2 id="10-设备管理"><a href="#10-设备管理" class="headerlink" title="10 设备管理"></a>10 设备管理</h2><ul>
+<li>设备树<code>device tree</code>文件拓展名为<code>.dts</code>编译生成的二进制文件为<code>.dtb</code>，操作系统启动时<code>kernel</code>通过读取<code>dtb</code>二进制文件获取设备信息</li>
+<li>通过<code>MMIO</code>内存映射的方式可以实现<code>CPU</code>对设备的控制，但需要不断【轮询】设备的状态寄存器，效率低下，因此引入【中断】处理机制</li>
+<li>ARM架构在CPU和设备之间引入了【中断控制器<code>interrupt controller</code>】来管理中断<ul>
+<li>优先级<code>priority</code></li>
+<li>抢占<code>preemption</code></li>
+</ul>
+</li>
+<li><code>ARMv8</code>中断控制器称为【<strong>通用中断控制器</strong><code>Generic Interrupt Controller, GIC</code>】</li>
+</ul>
+<h3 id="设备驱动"><a href="#设备驱动" class="headerlink" title="设备驱动"></a>设备驱动</h3><h4 id="Interrupt-Review"><a href="#Interrupt-Review" class="headerlink" title="Interrupt Review"></a>Interrupt Review</h4><ul>
+<li><p><code>Linux</code>中断处理过程</p>
+<ul>
+<li>top half : 完成一些必要但轻量级的工作, 如向中断控制器确认中断<ul>
+<li>硬中断处理函数(又称为中断服务例程<code>ISR (Interrupt Service Routine</code>)</li>
+</ul>
+</li>
+<li>bottom half : 完成剩余的、复杂且时延要求较低的操作<ul>
+<li>软中断</li>
+<li>tasklet</li>
+<li>工作队列</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Linux 通过<code>request_irq()</code>注册设备的硬中断处理函数</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">request_irq</span><span class="params">(</span></span><br><span class="line"><span class="params">  <span class="type">unsigned</span> <span class="type">int</span> irq, <span class="comment">// 申请中断号</span></span></span><br><span class="line"><span class="params">  <span class="type">iqr_handler_t</span> handler, <span class="comment">//中断处理函数</span></span></span><br><span class="line"><span class="params">  <span class="type">unsigned</span> <span class="type">long</span> irqflags, <span class="comment">//中断类型</span></span></span><br><span class="line"><span class="params">  <span class="type">const</span> <span class="type">char</span>* devname, <span class="comment">//设备名</span></span></span><br><span class="line"><span class="params">  <span class="type">void</span> * dev_id, <span class="comment">//设备id</span></span></span><br><span class="line"><span class="params">)</span>;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="tasklet-mechanism"><a href="#tasklet-mechanism" class="headerlink" title="tasklet mechanism"></a>tasklet mechanism</h4><blockquote>
+<p>Linux软中断只能在代码编译时静态分配, 无法根据需要进行动态创建, 因此Linux基于软中断了tasklet机制</p>
+</blockquote>
+<ul>
+<li><p><code>Linux</code>中<code>tasklet</code>结构体的声明</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> &#123;</span></span><br><span class="line">    TASKLET_STATE_SCHED, <span class="comment">// 已在kernel注册,可调度</span></span><br><span class="line">    TASKLET_STATE_RUN <span class="comment">//当前正在运行</span></span><br><span class="line">&#125;;      </span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">tasklet_struct</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">tasklet_struct</span> *<span class="title">next</span>;</span><span class="comment">//链表</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> state;<span class="comment">//是否被调度</span></span><br><span class="line">    <span class="type">atomic_t</span> count;<span class="comment">//是否被禁用,count&gt;0被禁用;count==0被启动</span></span><br><span class="line">    <span class="type">void</span> (*func)(<span class="type">unsigned</span> <span class="type">long</span>);<span class="comment">//回调函数,即被执行的具体函数</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> data;<span class="comment">//func的参数</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>tasklet</code>机制与<code>softirq</code>区别</p>
+<ul>
+<li><code>tasklet</code>允许在运行时动态创建,<code>softirq</code>在代码编译时已经分配好了</li>
+<li><code>Linux</code>不允许在多个<code>CPU</code>上并发执行<code>tasklet</code>, 然而<code>Linux</code>允许<code>softirq</code>在多个<code>CPU</code>上并行执行来提升软中断的处理效率, 并且<code>softirq</code>可以被硬中断抢占</li>
+<li><code>tasklet</code>依托于<strong>中断上下文</strong>, 不能睡眠, 不可抢占, 可能引起系统延迟</li>
+<li><code>work queue</code>依托于<strong>线程上下文</strong>, 允许睡眠, 降低了<code>bottom half</code>的开发难度, 同时也关注效率</li>
+</ul>
+</li>
+</ul>
+<h4 id="work-queue"><a href="#work-queue" class="headerlink" title="work queue"></a>work queue</h4><ul>
+<li><code>work queue</code>把需要推迟的函数,即<code>bottom half</code>, 交给内核线程执行</li>
+<li><code>CMWQ (Concurrency Managed WorkQueue)</code>: 并发可管理工作队列<ul>
+<li>提出线程池<code>worker-pool</code>, 不同<code>work queue</code>之间可以共享线程池, 从而有效减少了<strong>资源浪费</strong>和<strong>频繁调度</strong></li>
+</ul>
+</li>
+</ul>
+<h3 id="设备驱动和设备驱动模型"><a href="#设备驱动和设备驱动模型" class="headerlink" title="设备驱动和设备驱动模型"></a>设备驱动和设备驱动模型</h3><ul>
+<li>设备驱动<code>device driver</code>: 操作系统中负责控制设备的定制化程序<ul>
+<li>定制化: 驱动本身需要根据设备的<strong>具体型号</strong>和<strong>相应参数</strong>进行特定配置</li>
+</ul>
+</li>
+</ul>
+<h4 id="设备驱动模型"><a href="#设备驱动模型" class="headerlink" title="设备驱动模型"></a>设备驱动模型</h4><ul>
+<li><code>OS</code>事先规定好一组【数据结构】和应该实现的【接口】, 然后【驱动开发人员】将【设备驱动】转化为对【数据结构的填充】以及【接口函数的挂在】</li>
+<li><code>Linux kernel</code>从2.6版本后引入<em><strong>设备驱动模型</strong></em></li>
+</ul>
+<h5 id="Linux设备抽象"><a href="#Linux设备抽象" class="headerlink" title="Linux设备抽象"></a>Linux设备抽象</h5><ul>
+<li><p>Modern OS : 采用可拓展的结构设计</p>
+<ul>
+<li>即: OS新功能可以通过新加载的模块来实现, 驱动程序也是这样</li>
+</ul>
+</li>
+<li><p>Linux 设备抽象</p>
+<ul>
+<li><p>查看内核代码:</p>
+<ul>
+<li>Linux的内核源代码可以从很多途径得到. 一般来讲, 在安装的linux系统下, <code>/usr/src/linux</code>目录下的东西就是内核源代码。.对于源代码的阅读,要想比较顺利,事先最好对源代码的知识背景有一定的了解.</li>
+</ul>
+</li>
+<li><p><code>linux/drivers</code>目录</p>
+<ul>
+<li><p>每个子目录基本上代表了一种<strong>设备驱动</strong></p>
+<blockquote>
+<p>此处介绍三种基本设备抽象<br>1.字符设备 2.块设备 3.网络设备</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p><code>linux/drivers/char</code>  –&gt; 字符设备<code>char device</code></p>
+<blockquote>
+<ul>
+<li>粒度: <strong>字节</strong></li>
+<li>字符设备包含了标准的文件操作接口, <code>open</code>, <code>read</code>, <code>write</code>, <code>close</code></li>
+<li><code>fb</code>(显存),<code>tty</code>(终端),<code>alsa</code>(声卡)</li>
+<li><code>major number</code>主设备号, <code>minor number</code>次设备号</li>
+</ul>
+</blockquote>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> /proc/devices </span><br><span class="line">  --&gt; 查看Character devices文件系统获取字符设备列表</span><br><span class="line">Character devices:</span><br><span class="line">1 mem</span><br><span class="line">4 /dev/vc/0</span><br><span class="line">4 <span class="built_in">tty</span></span><br><span class="line">4 ttyS</span><br><span class="line">5 /dev/tty</span><br><span class="line">5 /dev/console</span><br><span class="line">5 /dev/ptmx</span><br><span class="line">5 ttyprintk</span><br><span class="line">6 lp</span><br><span class="line">7 vcs</span><br><span class="line">...</span><br><span class="line">29 fb</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>对于每一个<code>char device</code>, <code>Linux</code>都会分配一个主设备号<code>major number</code>, 用于<em><strong>识别操作该设备的驱动实体</strong></em>, 一个驱动可能同时操作同类型的多个设备,就会分配一个次设备号<code>minor number</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">ls</span> -la /dev/tty /dev/console</span><br><span class="line">crw--w---- 1 root <span class="built_in">tty</span> 5, 1 7月   7 18:46 /dev/console</span><br><span class="line">crw-rw-rw- 1 root <span class="built_in">tty</span> 5, 0 7月   7 18:45 /dev/tty</span><br><span class="line">&gt; major number: 5</span><br><span class="line">&gt; minor number: 0, 1</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>块设备<code>Block Device</code></p>
+<blockquote>
+<ul>
+<li>粒度: <em><strong>块</strong></em> (设备寻址的最小单元,有512bytes,1KB or 4KB)</li>
+<li><code>ramdisk</code>:虚拟磁盘</li>
+<li>储存卡(<code>SD</code>卡和<code>MMC</code>卡)</li>
+<li>磁盘(<code>HDD</code>和<code>SSD</code>)等</li>
+</ul>
+</blockquote>
+</li>
+<li><p>网络设备<code>network device</code></p>
+<blockquote>
+<ul>
+<li>粒度（处理的数据单位）：网络包<code>packet</code></li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="Linux-设备驱动模型"><a href="#Linux-设备驱动模型" class="headerlink" title="Linux 设备驱动模型"></a>Linux 设备驱动模型</h5><ul>
+<li><p>设备<code>device</code></p>
+</li>
+<li><p>驱动<code>driver</code></p>
+</li>
+<li><p>总线<code>bus</code></p>
+</li>
+<li><p>类<code>class</code></p>
+</li>
+</ul>
+<h5 id="Linux-的sysfs文件系统"><a href="#Linux-的sysfs文件系统" class="headerlink" title="Linux 的sysfs文件系统"></a>Linux 的<code>sysfs</code>文件系统</h5><ul>
+<li><p><code>sysfs</code>挂载目录为<code>/sys</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># virtualbox @ virtualbox-VirtualBox in /sys [22:45:56] </span></span><br><span class="line">$ <span class="built_in">ls</span></span><br><span class="line">block  bus  class  dev  devices  firmware  fs  hypervisor  kernel  module  power</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>block : 当前系统可用块设备，如【磁盘】和【分区】</p>
+</li>
+<li><p>bus：系统中总线（PCI，IDE，USB）连接的物理设备情况</p>
+</li>
+<li><p>class：当前系统中可用的驱动类型，如【网卡】，【声卡】，【USB设备】</p>
+</li>
+<li><p>dev：当前系统中字符设备和块设备的主次设备号</p>
+</li>
+<li><p>devices：系统中已挂载设备的层次化结构</p>
+</li>
+<li><p>firmware：如x86上的<code>ACPI</code>等系统固件信息</p>
+</li>
+<li><p>fs：当前系统已挂载的【文件系统信息】</p>
+</li>
+<li><p>module：当前系统已加载的内核模块，Linux设备驱动均有对应的内核模块</p>
+</li>
+<li><p>power：电源管理子系统的相关信息</p>
+</li>
+</ul>
+<h5 id="L4设备驱动模型"><a href="#L4设备驱动模型" class="headerlink" title="L4设备驱动模型"></a>L4设备驱动模型</h5><ul>
+<li><p>设备驱动环境<code>Device Driver Environment, DDE</code></p>
+<ul>
+<li>复用其他OS上的设备驱动环境</li>
+</ul>
+</li>
+<li><p>DDE层次</p>
+<ul>
+<li><p>DDEKit</p>
+</li>
+<li><p>DDE系统环境</p>
+</li>
+<li><p>原生驱动</p>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="Linux-用户态驱动框架"><a href="#Linux-用户态驱动框架" class="headerlink" title="Linux 用户态驱动框架"></a>Linux 用户态驱动框架</h5><blockquote>
+<ol>
+<li><p>避免重构</p>
+</li>
+<li><p>规避约束：Linux需要满足GNU的许可证<code>General Public License, GPL</code>，而商用的驱动代码放在用户态方便闭源，如Linux上的<code>NVIDIA</code>驱动</p>
+</li>
+</ol>
+</blockquote>
+<h6 id="两种Linux用户态驱动框架"><a href="#两种Linux用户态驱动框架" class="headerlink" title="两种Linux用户态驱动框架"></a>两种Linux用户态驱动框架</h6><ul>
+<li><p>用户空间<code>I/O</code>，<code>Userspace I/O, UIO</code></p>
+</li>
+<li><p>虚拟空间<code>I/O</code>，&#96;Virtual Function I&#x2F;O, VFIO</p>
+</li>
+</ul>
+<h2 id="11-系统虚拟化"><a href="#11-系统虚拟化" class="headerlink" title="11 系统虚拟化"></a>11 系统虚拟化</h2><ul>
+<li><p>虚拟监控器<code>VMM (Virtual Machine Monitor)</code>，也称为<code>Hypervisor</code></p>
+</li>
+<li><p>虚拟机<code>VM (Virtual Machine)</code></p>
+</li>
+<li><p>基础设施即服务<code>IaaS (Infrastructure)</code></p>
+</li>
+<li><p>虚拟机自省<code>VMI (Virtual Machine Introspection)</code>技术：允许<code>VMM</code>从外部检查虚拟机内部状态是否正确，判断虚拟机是否遭到入寝</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">虚拟机: guest machine</span><br><span class="line">对应物理主机: host machine</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>系统虚拟化技术</p>
+</li>
+<li><p>系统虚拟化技术</p>
+<ul>
+<li><p>CPU虚拟化</p>
+</li>
+<li><p>内存虚拟化</p>
+</li>
+<li><p>I&#x2F;O虚拟化</p>
+</li>
+</ul>
+</li>
+<li><p>虚拟机监控器分类</p>
+<blockquote>
+<p>Hypervisor，又称虚拟机监控器（英语：<strong>virtual machine monitor</strong>，缩写为VMM），是用来创建与执行虚拟机的软件、固件或硬件。 被hypervisor用来执行一个或多个虚拟机的电脑称为宿主机（host machine），这些虚拟机则称为客户机（guest machine）。</p>
+</blockquote>
+<ul>
+<li><p>Type-1：Xen</p>
+</li>
+<li><p>Type-2：Qemu, KVM</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="CPU虚拟化"><a href="#CPU虚拟化" class="headerlink" title="CPU虚拟化"></a>CPU虚拟化</h3><h4 id="下陷和模拟"><a href="#下陷和模拟" class="headerlink" title="下陷和模拟"></a>下陷和模拟</h4><blockquote>
+<p><code>trap-and-emulate</code></p>
+</blockquote>
+<h4 id="可虚拟化架构和不可虚拟化架构"><a href="#可虚拟化架构和不可虚拟化架构" class="headerlink" title="可虚拟化架构和不可虚拟化架构"></a>可虚拟化架构和不可虚拟化架构</h4><ul>
+<li><p>指令</p>
+<ul>
+<li><p>特权指令<code>privileged instruction</code>：在【用户态】执行时会触发下陷<code>trap</code>的指令</p>
+</li>
+<li><p>敏感指令<code>sensitive instruction</code>：管理物理资源或者更改CPU状态的指令</p>
+<ul>
+<li><p>读写特殊寄存器或执行特殊指令以更改CPU状态</p>
+</li>
+<li><p>读写敏感内存</p>
+</li>
+<li><p>执行<code>I/O</code>指令，如<code>x86</code>中的<code>in</code>和<code>out</code>指令</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>可虚拟化架构：所有<code>sensitive instruction</code>都是<code>privileged instruction</code>，即所有敏感指令在非特权级下执行都会出发下陷<code>trap</code></p>
+</li>
+<li><p>不可虚拟化架构：不满足上定义的架构</p>
+</li>
+<li><p>弥补不可虚拟化架构缺陷的方法（5种）</p>
+<ul>
+<li><p>解释执行</p>
+<ul>
+<li><p>粒度：单条指令</p>
+</li>
+<li><p>过程：指令 –&gt; 软件模拟</p>
+</li>
+<li><p>评估：带来较大的性能开销</p>
+</li>
+</ul>
+</li>
+<li><p>动态二进制翻译</p>
+<ul>
+<li><p>粒度：基本块<code>basic block</code>（一段按顺序执行的代码块，中间没有任何改变控制流的指令）</p>
+</li>
+<li><p>过程：翻译后的<code>basic block</code>成为【代码补丁】，并放置于【代码补丁缓存】中，执行基本块的核心就在于执行代码补丁</p>
+</li>
+<li><p>评估：批量翻译，缓存</p>
+</li>
+</ul>
+</li>
+<li><p>扫描与翻译</p>
+<ul>
+<li>过程：（宿主机与虚拟机的【指令集架构<code>ISA (Instruction Set Architecture</code>】相同）只让<code>sensitive instruction</code>下陷，其他指令直接执行</li>
+</ul>
+</li>
+<li><p>半虚拟化技术</p>
+<ul>
+<li><p>全虚拟化<code>full virtualization</code>：无需修改<code>guest machine</code>源码的方式</p>
+</li>
+<li><p>半虚拟化<code>para-virtualization</code>：允许修改客户虚拟机源码的方式</p>
+<ul>
+<li><p>超级调用<code>hypercall</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hypervisor 提供--&gt;hypercall--&gt; Virtual Machine</span><br><span class="line">修改 guest machine 的代码</span><br><span class="line">--&gt; 替换 [不可虚拟化的指令] 改为超级调用 [hypercall]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>优势：</p>
+<ol>
+<li><p>带来更高性能</p>
+</li>
+<li><p>缓解语义鸿沟<code>semantic gap</code></p>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>硬件虚拟化技术</p>
+<ul>
+<li><p>x86</p>
+<ul>
+<li><p>根模式<code>root mode</code>和非根模式<code>non-root mode</code></p>
+</li>
+<li><p><code>Intel VT-x</code>为每一个虚拟机提供了【虚拟机控制结构<code>VMCS (Virtual Machine Control Structure)</code>】</p>
+</li>
+</ul>
+</li>
+<li><p>ARMv8</p>
+<ul>
+<li><p>增加<code>EL2</code>特权级</p>
+</li>
+<li><p>在<code>ARMv8.0</code>的硬件虚拟化中，必须将<code>KVM</code>的一部分功能从<code>Linux</code>中剥离出来，以<code>Lowvisor</code>的形式运行在<code>EL2</code>中，OS和其他<code>KVM</code>功能依然运行在<code>EL1</code>中</p>
+<blockquote>
+<ol>
+<li><p>但<code>KVM</code>和<code>Lowvisor</code>可能有多次特权级转换，带来开销</p>
+</li>
+<li><p>为了解决性能和开销问题，<code>ARMv8.1</code>提出<code>VHE (Virtual Host Extension)</code></p>
+</li>
+</ol>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">  --&gt; hypercall                  --&gt; hypercall(maybe)</span><br><span class="line">VM              KVM <span class="title function_">Lowvisor</span><span class="params">(EL2)</span>                    Linux and <span class="title function_">KVM</span><span class="params">(EL1)</span> </span><br><span class="line">  <span class="keyword">return</span>    &lt;--                  <span class="keyword">return</span>    &lt;--<span class="params">(maybe)</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p><code>VHE</code>：可在<code>EL2</code>运行完整的<code>Host Machine</code>系统，<code>KVM</code>进入<code>EL2</code>，其与宿主操作系统<code>Linux</code>之间的交互不会带来任何特权级转换</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="内存虚拟化"><a href="#内存虚拟化" class="headerlink" title="内存虚拟化"></a>内存虚拟化</h3><ul>
+<li><p>客户虚拟地址<code>GVA (Guest Virtual Address)</code>：进程和客户操作系统使用的虚拟地址</p>
+</li>
+<li><p>客户物理地址<code>GPA (Guest Physical Address)</code>：虚拟机内部使用的物理地址</p>
+</li>
+<li><p>主机物理地址<code>HPA (Host Physical Address)</code>：真正在总线中访问的物理地址</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GVA -第一阶段地址翻译-&gt; GPA -第二阶段地址翻译-&gt; HPA</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="影子页表"><a href="#影子页表" class="headerlink" title="影子页表"></a>影子页表</h4><ul>
+<li><p><code>SPT (Shadow Page Table)</code></p>
+</li>
+<li><p>一般页表使用过程</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span> 静态配置(OS)[VA -PT-&gt; PA] </span><br><span class="line"><span class="number">2.</span> 页表安装(OS)[PT base_address-&gt;页表基址寄存器] </span><br><span class="line"><span class="number">3.</span> 动态翻译(MMU)[VA -&gt; PA]</span><br><span class="line">* PT:Page Table</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>影子页表使用过程</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span> 静态配置(OS)[GVA -PT-&gt; GPA] </span><br><span class="line"><span class="number">2.</span> 页表安装(OS)[PT base_address-&gt;页表基址寄存器]</span><br><span class="line"><span class="number">3.</span> 虚拟机下陷(Hypervisor)[GVA -new PT-&gt; HPA]</span><br><span class="line"><span class="number">4.</span> 页表安装(Hypervisor)[new PT base_address-&gt;页表基址寄存器]</span><br><span class="line"><span class="number">3.</span> 动态翻译(MMU)[GVA -&gt; HPA]</span><br><span class="line">* PT:Page Table</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="I-x2F-O虚拟化"><a href="#I-x2F-O虚拟化" class="headerlink" title="I&#x2F;O虚拟化"></a>I&#x2F;O虚拟化</h3><h3 id="QEMU-x2F-KVM"><a href="#QEMU-x2F-KVM" class="headerlink" title="QEMU&#x2F;KVM"></a>QEMU&#x2F;KVM</h3><h4 id="KVM"><a href="#KVM" class="headerlink" title="KVM"></a>KVM</h4><h4 id="QEMU"><a href="#QEMU" class="headerlink" title="QEMU"></a>QEMU</h4>
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Gan Gecen
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://ganliber.github.io/2022/07/07/system/os-notes-third/" title="os-notes-third">https://ganliber.github.io/2022/07/07/system/os-notes-third/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/operating-system/" rel="tag"># operating system</a>
+              <a href="/tags/system/" rel="tag"># system</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/07/07/paper/PR0001-kernel-REPT/" rel="prev" title="PR-1 [kernel REPT]">
+      <i class="fa fa-chevron-left"></i> PR-1 [kernel REPT]
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Modern-Operating-System-III"><span class="nav-number">1.</span> <span class="nav-text">Modern Operating System (III)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#10-%E8%AE%BE%E5%A4%87%E7%AE%A1%E7%90%86"><span class="nav-number">1.1.</span> <span class="nav-text">10 设备管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8"><span class="nav-number">1.1.1.</span> <span class="nav-text">设备驱动</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Interrupt-Review"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">Interrupt Review</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tasklet-mechanism"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">tasklet mechanism</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#work-queue"><span class="nav-number">1.1.1.3.</span> <span class="nav-text">work queue</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E5%92%8C%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.1.2.</span> <span class="nav-text">设备驱动和设备驱动模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">设备驱动模型</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Linux%E8%AE%BE%E5%A4%87%E6%8A%BD%E8%B1%A1"><span class="nav-number">1.1.2.1.1.</span> <span class="nav-text">Linux设备抽象</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Linux-%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.1.2.1.2.</span> <span class="nav-text">Linux 设备驱动模型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Linux-%E7%9A%84sysfs%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.1.2.1.3.</span> <span class="nav-text">Linux 的sysfs文件系统</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#L4%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.1.2.1.4.</span> <span class="nav-text">L4设备驱动模型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Linux-%E7%94%A8%E6%88%B7%E6%80%81%E9%A9%B1%E5%8A%A8%E6%A1%86%E6%9E%B6"><span class="nav-number">1.1.2.1.5.</span> <span class="nav-text">Linux 用户态驱动框架</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E4%B8%A4%E7%A7%8DLinux%E7%94%A8%E6%88%B7%E6%80%81%E9%A9%B1%E5%8A%A8%E6%A1%86%E6%9E%B6"><span class="nav-number">1.1.2.1.5.1.</span> <span class="nav-text">两种Linux用户态驱动框架</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11-%E7%B3%BB%E7%BB%9F%E8%99%9A%E6%8B%9F%E5%8C%96"><span class="nav-number">1.2.</span> <span class="nav-text">11 系统虚拟化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU%E8%99%9A%E6%8B%9F%E5%8C%96"><span class="nav-number">1.2.1.</span> <span class="nav-text">CPU虚拟化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%8B%E9%99%B7%E5%92%8C%E6%A8%A1%E6%8B%9F"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">下陷和模拟</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%AF%E8%99%9A%E6%8B%9F%E5%8C%96%E6%9E%B6%E6%9E%84%E5%92%8C%E4%B8%8D%E5%8F%AF%E8%99%9A%E6%8B%9F%E5%8C%96%E6%9E%B6%E6%9E%84"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">可虚拟化架构和不可虚拟化架构</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96"><span class="nav-number">1.2.2.</span> <span class="nav-text">内存虚拟化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BD%B1%E5%AD%90%E9%A1%B5%E8%A1%A8"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">影子页表</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#I-x2F-O%E8%99%9A%E6%8B%9F%E5%8C%96"><span class="nav-number">1.2.3.</span> <span class="nav-text">I&#x2F;O虚拟化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#QEMU-x2F-KVM"><span class="nav-number">1.2.4.</span> <span class="nav-text">QEMU&#x2F;KVM</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#KVM"><span class="nav-number">1.2.4.1.</span> <span class="nav-text">KVM</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#QEMU"><span class="nav-number">1.2.4.2.</span> <span class="nav-text">QEMU</span></a></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Gan Gecen"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Gan Gecen</p>
+  <div class="site-description" itemprop="description">An information security practitioner, focusing on system, Linux and pwn</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Ganliber" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Ganliber" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:Gecenliber@outlook.com" title="E-Mail → mailto:Gecenliber@outlook.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/Ganliber" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;Ganliber" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gan Gecen</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+
+<div class="powered-by">
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <i class="fa fa-user-md"></i>
+    <span id="busuanzi_container_site_uv">
+        访客数:<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_pv">
+        访问量:<span id="busuanzi_value_site_pv"></span>
+    </span>
+</div>
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://Ganliber.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://ganliber.github.io/2022/07/07/system/os-notes-third/";
+    this.page.identifier = "2022/07/07/system/os-notes-third/";
+    this.page.title = "os-notes-third";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://Ganliber.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+</script>
+
+</body>
+</html>
