@@ -2039,7 +2039,25 @@
   <entry>
     <title>Linux Kernel ：Environment</title>
     <url>/2022/07/09/system/kernel-env/</url>
-    <content><![CDATA[<h1 id="Kernel环境搭建"><a href="#Kernel环境搭建" class="headerlink" title="Kernel环境搭建"></a>Kernel环境搭建</h1><h2 id="source-code"><a href="#source-code" class="headerlink" title="source code"></a>source code</h2><h3 id="recently-version"><a href="#recently-version" class="headerlink" title="recently version"></a>recently version</h3><ul>
+    <content><![CDATA[<h1 id="Kernel环境搭建"><a href="#Kernel环境搭建" class="headerlink" title="Kernel环境搭建"></a>Kernel环境搭建</h1><h2 id="source-code"><a href="#source-code" class="headerlink" title="source code"></a>source code</h2><ul>
+<li><p>查看当前内核版本</p>
+<blockquote>
+<p>注解：</p>
+<ol>
+<li><code>/proc</code>文件系统，它不是普通的文件系统，而是系统内核的映像</li>
+<li>该目录中的文件是存放在系统【内存】之中的，它以【文件系统】的方式为访问系统内核数据的操作提供接口。</li>
+<li>而我们使用命令<code>uname -a</code>的信息就是从该文件获取的，当然用方法二的命令直接查看它的内容也可以达到同等效果.另外，加上参数”a”是获得【详细信息】，如果不加参数为查看系统名称。</li>
+</ol>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[Method 1] <span class="built_in">uname</span> -a</span><br><span class="line">[Method 2] <span class="built_in">cat</span> /proc/version</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看整个系统剩余磁盘空间</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">df</span> -hl</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看<code>[1]</code>当前目录【总大小】，<code>[2]</code>指定目录大小，<code>[3]</code>当前目录下各文件、文件夹的大小</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[1] <span class="built_in">du</span> -sh</span><br><span class="line">[2] <span class="built_in">du</span> -sh [目录名称]</span><br><span class="line">[3] <span class="built_in">du</span> -h --max-depth=1 *</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="recently-version"><a href="#recently-version" class="headerlink" title="recently version"></a>recently version</h3><ul>
 <li><p>清华源下载内核：<a href="https://mirrors.tuna.tsinghua.edu.cn/kernel/">https://mirrors.tuna.tsinghua.edu.cn/kernel/</a></p>
 </li>
 <li><p>下载某个版本的核</p>
@@ -2076,11 +2094,66 @@
 </ul>
 <h2 id="编译和调试"><a href="#编译和调试" class="headerlink" title="编译和调试"></a>编译和调试</h2><ul>
 <li>参考链接<ul>
-<li><a href="http://kerneltravel.net/blog/2021/debug_kernel_szp/">http://kerneltravel.net/blog/2021/debug_kernel_szp/</a></li>
-<li><a href="https://www.anquanke.com/post/id/258874">https://www.anquanke.com/post/id/258874</a></li>
+<li><input disabled="" type="checkbox"> <a href="http://kerneltravel.net/blog/2021/debug_kernel_szp/">http://kerneltravel.net/blog/2021/debug_kernel_szp/</a></li>
+<li><input disabled="" type="checkbox"> <a href="https://www.anquanke.com/post/id/258874">https://www.anquanke.com/post/id/258874</a></li>
+<li><input checked="" disabled="" type="checkbox"> <a href="https://www.jianshu.com/p/17b8261fe74e">https://www.jianshu.com/p/17b8261fe74e</a></li>
 </ul>
 </li>
-<li></li>
+</ul>
+<h3 id="工具准备"><a href="#工具准备" class="headerlink" title="工具准备"></a>工具准备</h3><ul>
+<li><p>环境</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">ubuntu20<span class="number">.04</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>更新软件源</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>安装依赖</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install git fakeroot build-essential ncurses-dev xz-utils qemu flex libncurses5-dev fakeroot build-essential ncurses-dev xz-utils libssl-dev bc bison libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev libelf-dev</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>下载<code>linux-5.11.tar.xz</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.11.tar.xz</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>解压</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tar -xvf linux-5.11.tar.xz</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>进入文件夹内【配置编译选项】</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">make menuconfig</span><br></pre></td></tr></table></figure>
+
+<p>注意要在虚拟机里做（不是<code>vscode</code>或<code>powershell</code>终端）</p>
+<p><img src="/2022/07/09/system/kernel-env/make_menuconfig.png" alt="make config"></p>
+<ul>
+<li><p>通过空格键进行【选择&#x2F;取消选择】</p>
+</li>
+<li><p>开启的（一般已经默认开启了）</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[<span class="number">1</span> 调试] Kernel hacking —-&gt; Compile-time checks <span class="keyword">and</span> compiler options —-&gt; Compile the kernel <span class="keyword">with</span> debug info</span><br><span class="line">[<span class="number">2</span> KGDB调试内核] Kernel hacking —-&gt; <span class="type">Generic</span> Kernel Debugging Instruments —&gt; KGDB: kernel debugger</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>关闭的</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[<span class="number">1</span> 关闭KALSR(否则会导致打断点失败)]Processor <span class="built_in">type</span> <span class="keyword">and</span> features -&gt; Randomize the address of the kernel image (KASLR)</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>编译</p>
+<blockquote>
+<p><code>-j$(nproc)</code>是尽可能多线程的编译，可加速，且可以通过指令<code>nproc</code>查看当前系统所支持的所线程的数量</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">make -j$(<span class="built_in">nproc</span>)</span><br><span class="line">...</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编译报错解决</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">No rule to make target <span class="string">&#x27;debian/canonical-certs.pem&#x27;</span>, needed by <span class="string">&#x27;certs/x509_certificate_list&#x27;</span>.  Stop.</span><br></pre></td></tr></table></figure>
+
+<p>编辑<code>.config</code>文件</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vim .config</span><br></pre></td></tr></table></figure>
+
+<p>修改<code>CONFIG_SYSTEM_TRUSTED_KEYS</code>，将其置空。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 原本内容</span><br><span class="line">CONFIG_SYSTEM_TRUSTED_KEYS=&quot;debian/canonical-certs.pem&quot;</span><br><span class="line"># 将该项原有内容删掉即可，如下</span><br><span class="line">CONFIG_SYSTEM_TRUSTED_KEYS=&quot;&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>先用<code>qemu</code>测试一下（没有文件系统会<code>kernel panic</code>）</p>
+<blockquote>
+<p>这时候，qemu会卡住不动，因为现在还没有文件系统，电脑加电启动首先由bootloader加载内核，内核紧接着需要挂载内存根文件系统。</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">qemu-system-x86_64 -kernel <span class="built_in">arch</span>/x86/boot/bzImage</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="制作根文件系统"><a href="#制作根文件系统" class="headerlink" title="制作根文件系统"></a>制作根文件系统</h3><ul>
+<li>获取bu</li>
 </ul>
 ]]></content>
       <categories>
@@ -2180,7 +2253,10 @@
     <title>Linux Kernel ：Basic Knowledge</title>
     <url>/2022/07/10/system/kernel-pwn-1/</url>
     <content><![CDATA[<h1 id="Basic-Knowledge-for-linux-kernel-pwn"><a href="#Basic-Knowledge-for-linux-kernel-pwn" class="headerlink" title="Basic Knowledge for linux kernel pwn"></a>Basic Knowledge for linux kernel pwn</h1><hr>
-<h3 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h3><ul>
+<h2 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h2><blockquote>
+<p>参考：<a href="https://www.anquanke.com/post/id/258874">https://www.anquanke.com/post/id/258874</a></p>
+</blockquote>
+<h3 id="系统调用"><a href="#系统调用" class="headerlink" title="系统调用"></a>系统调用</h3><ul>
 <li><p><strong>系统调用表</strong></p>
 <ol>
 <li><p>所有的系统调用被声明于内核源码<code>arch/x86/entry/syscalls/syscall_64.tbl</code>中，在该表中声明了系统调用的标号、类型、名称、内核态函数名称</p>
@@ -2224,7 +2300,193 @@
 </li>
 </ol>
 </li>
-<li></li>
+</ul>
+<h3 id="进程管理"><a href="#进程管理" class="headerlink" title="进程管理"></a>进程管理</h3><ul>
+<li><p>在内核中使用结构体 <code>task_struct</code> 表示一个进程，该结构体定义于内核源码<code>include/linux/sched.h</code>中</p>
+<p><img src="/2022/07/10/system/kernel-pwn-1/task_struct.png" alt="task_struct"></p>
+</li>
+<li><p>关于进程权限管理部分（注释部分更改了）</p>
+<blockquote>
+<ol>
+<li><p><strong>Process credentials</strong> 是 kernel 用以判断一个进程权限的凭证，在 kernel 中使用 <code>cred</code> 结构体进行标识，对于一个进程而言应当有三个 cred：</p>
+<ul>
+<li><p><strong>ptracer_cred：</strong>使用<code>ptrace</code>系统调用跟踪该进程的上级进程的cred（gdb调试便是使用了这个系统调用，常见的反调试机制的原理便是提前占用了这个位置）</p>
+</li>
+<li><p><strong>real_cred：</strong>即<strong>客体凭证</strong>（<strong>objective cred</strong>），通常是一个进程最初启动时所具有的权限</p>
+</li>
+<li><p><strong>cred：</strong>即<strong>主体凭证</strong>（<strong>subjective cred</strong>），该进程的有效cred，kernel以此作为进程权限的凭证</p>
+</li>
+</ul>
+</li>
+<li><p>当进程 A 向进程 B 发送消息时，A为主体，B为客体</p>
+</li>
+</ol>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">-&gt;Process credentials:</span><br><span class="line">	--&gt; Tracer<span class="number">&#x27;</span>s credentials at attach:</span><br><span class="line">	<span class="type">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">cred</span> __<span class="title">rcu</span>		*<span class="title">ptracer_cred</span>;</span></span><br><span class="line">	--&gt; Objective and real subjective task <span class="title function_">credentials</span> <span class="params">(COW)</span>:</span><br><span class="line">	<span class="type">const</span> <span class="keyword">struct</span> cred __rcu		*real_cred;</span><br><span class="line">	--&gt; Effective (overridable) subjective task <span class="title function_">credentials</span> <span class="params">(COW)</span>:</span><br><span class="line">	<span class="type">const</span> <span class="keyword">struct</span> cred __rcu		*cred;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="进程权限凭证-struct-cred"><a href="#进程权限凭证-struct-cred" class="headerlink" title="进程权限凭证 struct : cred"></a>进程权限凭证 struct : cred</h4><blockquote>
+<p>对于一个进程，在内核当中使用一个结构体<code>cred</code>管理其权限，该结构体定义于内核源码<code>include/linux/cred.h</code> 中</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">cred</span> &#123;</span></span><br><span class="line">	<span class="type">atomic_t</span>	usage;</span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> CONFIG_DEBUG_CREDENTIALS</span></span><br><span class="line">	<span class="type">atomic_t</span>	subscribers;	<span class="comment">/* number of processes subscribed */</span></span><br><span class="line">	<span class="type">void</span>		*put_addr;</span><br><span class="line">	<span class="type">unsigned</span>	magic;</span><br><span class="line"><span class="meta">#<span class="keyword">define</span> CRED_MAGIC	0x43736564</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> CRED_MAGIC_DEAD	0x44656144</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line">	<span class="type">kuid_t</span>		uid;		--&gt; real UID of the task */</span><br><span class="line">	<span class="type">kgid_t</span>		gid;		--&gt; real GID of the task */</span><br><span class="line">	<span class="type">kuid_t</span>		suid;		<span class="comment">/* saved UID of the task */</span></span><br><span class="line">	<span class="type">kgid_t</span>		sgid;		<span class="comment">/* saved GID of the task */</span></span><br><span class="line">	<span class="type">kuid_t</span>		euid;		<span class="comment">/* effective UID of the task */</span></span><br><span class="line">	<span class="type">kgid_t</span>		egid;		<span class="comment">/* effective GID of the task */</span></span><br><span class="line">	<span class="type">kuid_t</span>		fsuid;		<span class="comment">/* UID for VFS ops */</span></span><br><span class="line">	<span class="type">kgid_t</span>		fsgid;		<span class="comment">/* GID for VFS ops */</span></span><br><span class="line">	<span class="type">unsigned</span>	securebits;	<span class="comment">/* SUID-less security management */</span></span><br><span class="line">	<span class="type">kernel_cap_t</span>	cap_inheritable; <span class="comment">/* caps our children can inherit */</span></span><br><span class="line">	<span class="type">kernel_cap_t</span>	cap_permitted;	<span class="comment">/* caps we&#x27;re permitted */</span></span><br><span class="line">	<span class="type">kernel_cap_t</span>	cap_effective;	<span class="comment">/* caps we can actually use */</span></span><br><span class="line">	<span class="type">kernel_cap_t</span>	cap_bset;	<span class="comment">/* capability bounding set */</span></span><br><span class="line">	<span class="type">kernel_cap_t</span>	cap_ambient;	<span class="comment">/* Ambient capability set */</span></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> CONFIG_KEYS</span></span><br><span class="line">	<span class="type">unsigned</span> <span class="type">char</span>	jit_keyring;	<span class="comment">/* default keyring to attach requested</span></span><br><span class="line"><span class="comment">					 * keys to */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">key</span>	*<span class="title">session_keyring</span>;</span> <span class="comment">/* keyring inherited over fork */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">key</span>	*<span class="title">process_keyring</span>;</span> <span class="comment">/* keyring private to this process */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">key</span>	*<span class="title">thread_keyring</span>;</span> <span class="comment">/* keyring private to this thread */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">key</span>	*<span class="title">request_key_auth</span>;</span> <span class="comment">/* assumed request_key authority */</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> CONFIG_SECURITY</span></span><br><span class="line">	<span class="type">void</span>		*security;	<span class="comment">/* subjective LSM security */</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">user_struct</span> *<span class="title">user</span>;</span>	<span class="comment">/* real user ID subscription */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">user_namespace</span> *<span class="title">user_ns</span>;</span> <span class="comment">/* user_ns the caps and keyrings are relative to. */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">group_info</span> *<span class="title">group_info</span>;</span>	<span class="comment">/* supplementary groups for euid/fsgid */</span></span><br><span class="line">	<span class="comment">/* RCU deletion */</span></span><br><span class="line">	<span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">		<span class="type">int</span> non_rcu;			<span class="comment">/* Can we skip RCU deletion? */</span></span><br><span class="line">		<span class="class"><span class="keyword">struct</span> <span class="title">rcu_head</span>	<span class="title">rcu</span>;</span>		<span class="comment">/* RCU deletion hook */</span></span><br><span class="line">	&#125;;</span><br><span class="line">&#125; __randomize_layout;</span><br></pre></td></tr></table></figure>
+
+<p>一个cred结构体中记载了<strong>一个进程四种不同的用户ID</strong>：</p>
+<ul>
+<li><strong>真实用户ID</strong>（real UID）：标识一个进程<strong>启动时的用户ID</strong></li>
+<li><strong>保存用户ID</strong>（saved UID）：标识一个进程<strong>最初的有效用户ID</strong></li>
+<li><strong>有效用户ID</strong>（effective UID）：标识一个进程<strong>正在运行时所属的用户ID</strong>，一个进程在运行途中是可以改变自己所属用户的，因而权限机制也是通过有效用户ID进行认证的，内核通过 euid 来进行特权判断；为了防止用户一直使用高权限，当任务完成之后，euid 会与 suid 进行交换，恢复进程的有效权限</li>
+<li><strong>文件系统用户ID</strong>（UID for VFS ops）：标识一个进程<strong>创建文件时进行标识的用户ID</strong></li>
+</ul>
+<h4 id="进程权限改变"><a href="#进程权限改变" class="headerlink" title="进程权限改变"></a>进程权限改变</h4><ol>
+<li>只要改变一个进程的<code>cred</code>结构体，就能改变其执行权限</li>
+<li>在内核空间有如下两个函数，都位于<code>kernel/cred.c</code>中：<ul>
+<li><code>struct cred* prepare_kernel_cred(struct task_struct* daemon)</code>：该函数用以拷贝一个进程的cred结构体，并返回一个新的cred结构体，需要注意的是<code>daemon</code>参数应为<strong>有效的进程描述符地址或NULL</strong></li>
+<li><code>int commit_creds(struct cred *new)</code>：该函数用以将一个新的<code>cred</code>结构体应用到进程</li>
+</ul>
+</li>
+</ol>
+<h4 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h4><ul>
+<li><p>关于函数<code>prepare_kernel_cred</code></p>
+<ul>
+<li><p>注释</p>
+<figure class="highlight tex"><table><tr><td class="code"><pre><span class="line">/**</span><br><span class="line"> * prepare<span class="built_in">_</span>kernel<span class="built_in">_</span>cred - Prepare a set of credentials[凭据] for a kernel service</span><br><span class="line"> * @daemon: A userspace daemon to be used as a reference</span><br><span class="line"> *</span><br><span class="line"> * Prepare a set of credentials for a kernel service.  This can then be used to</span><br><span class="line"> * override a task&#x27;s own credentials so that work can be done on behalf of that</span><br><span class="line"> * task that requires a different subjective context.</span><br><span class="line"> *</span><br><span class="line"> * @daemon is used to provide a base for the security record, but can be NULL.   &lt;-----!!!</span><br><span class="line"> * If @daemon is supplied, then the security data will be derived from that;</span><br><span class="line"> * otherwise they&#x27;ll be set to 0 and no groups, full capabilities and no keys.</span><br><span class="line"> *</span><br><span class="line"> * The caller may change these controls afterwards if desired.</span><br><span class="line"> *</span><br><span class="line"> * Returns the new credentials or NULL if out of memory.</span><br><span class="line"> *</span><br><span class="line"> * Does not take, and does not return holding current-&gt;cred<span class="built_in">_</span>replace<span class="built_in">_</span>mutex.</span><br><span class="line"> */</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>声明<code>cred.h</code></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="keyword">struct</span> cred *<span class="title function_">prepare_kernel_cred</span><span class="params">(<span class="keyword">struct</span> task_struct *)</span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>定义<code>cred.c</code></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">struct</span> cred *<span class="title function_">prepare_kernel_cred</span><span class="params">(<span class="keyword">struct</span> task_struct *daemon)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">cred</span> *<span class="title">old</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">cred</span> *<span class="title">new</span>;</span></span><br><span class="line"></span><br><span class="line">	new = kmem_cache_alloc(cred_jar, GFP_KERNEL);</span><br><span class="line">	<span class="keyword">if</span> (!new)</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">	kdebug(<span class="string">&quot;prepare_kernel_cred() alloc %p&quot;</span>, new);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (daemon)</span><br><span class="line">		old = get_task_cred(daemon);</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		old = get_cred(&amp;init_cred); &lt;-- <span class="keyword">if</span> daemon is null</span><br><span class="line">...</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>在<code>prepare_kernel_cred()</code>函数中，若传入的参数为<code>NULL</code>，则会缺省使用<code>init</code>进程的<code>cred</code>作为模板进行拷贝，【<strong>即可以直接获得一个标识着root权限的cred结构体</strong>】（这是由于<code>init</code>进程是<code>root</code>权限的）</p>
+<ul>
+<li><p>关于<code>init</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">init (the first process forked by kernel <span class="keyword">in</span> OS)</span><br><span class="line">	* pid : <span class="number">1</span> --&gt; 进程<span class="built_in">id</span></span><br><span class="line">	* gid : <span class="number">1</span> --&gt; 进程组<span class="built_in">id</span></span><br><span class="line">	* sid : <span class="number">1</span> --&gt; 会话<span class="built_in">id</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>init_cred</code>的声明位置：<code>linux-5.4.98/include/linux/init_task.h</code></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="class"><span class="keyword">struct</span> <span class="title">cred</span> <span class="title">init_cred</span>;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>定义位置：<code>linux-5.4.98/kernel/cred.c</code></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * The initial credentials for the initial task</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">cred</span> <span class="title">init_cred</span> =</span> &#123;</span><br><span class="line">	.usage			= ATOMIC_INIT(<span class="number">4</span>),</span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> CONFIG_DEBUG_CREDENTIALS</span></span><br><span class="line">	.subscribers		= ATOMIC_INIT(<span class="number">2</span>),</span><br><span class="line">	.magic			= CRED_MAGIC,</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line">	.uid			= GLOBAL_ROOT_UID,</span><br><span class="line">	.gid			= GLOBAL_ROOT_GID,</span><br><span class="line">	.suid			= GLOBAL_ROOT_UID,</span><br><span class="line">	.sgid			= GLOBAL_ROOT_GID,</span><br><span class="line">	.euid			= GLOBAL_ROOT_UID,</span><br><span class="line">	.egid			= GLOBAL_ROOT_GID,</span><br><span class="line">	.fsuid			= GLOBAL_ROOT_UID,</span><br><span class="line">	.fsgid			= GLOBAL_ROOT_GID,</span><br><span class="line">	.securebits		= SECUREBITS_DEFAULT,</span><br><span class="line">	.cap_inheritable	= CAP_EMPTY_SET,</span><br><span class="line">	.cap_permitted		= CAP_FULL_SET,</span><br><span class="line">	.cap_effective		= CAP_FULL_SET,</span><br><span class="line">	.cap_bset		= CAP_FULL_SET,</span><br><span class="line">	.user			= INIT_USER,</span><br><span class="line">	.user_ns		= &amp;init_user_ns,</span><br><span class="line">	.group_info		= &amp;init_groups,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h3 id="I-x2F-O"><a href="#I-x2F-O" class="headerlink" title="I&#x2F;O"></a>I&#x2F;O</h3><h4 id="一切皆文件"><a href="#一切皆文件" class="headerlink" title="一切皆文件"></a>一切皆文件</h4><ul>
+<li>在Linux系统的视角下，无论是文件、设备、管道，还是目录、进程，甚至是磁盘、套接字等等，<strong>一切都可以被抽象为文件，一切都可以使用访问文件的方式进行操作</strong>通过这样一种哲学，Linux予开发者以高层次抽象的统一性，提供了<code>操作的一致性</code>：<ul>
+<li><strong>所有的读取操作都可以通过read进行</strong></li>
+<li><strong>所有的更改操作都可以通过write进行</strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="进程文件系统"><a href="#进程文件系统" class="headerlink" title="进程文件系统"></a>进程文件系统</h4><ul>
+<li>进程文件系统（<code>process file system</code>， 简写为<code>procfs</code>）用以描述一个进程，其中包括该进程所打开的文件描述符、堆栈内存布局、环境变量等等<ol>
+<li>进程文件系统本身是一个【<strong>伪文件系统</strong>】，通常被挂载到<code>/proc</code>目录下，并不真正占用储存空间，而是占用一定的内存</li>
+<li>当一个进程被建立起来时，其进程文件系统便会被挂载到<code>/proc/[PID]</code>下，我们可以在该目录下查看其相关信息</li>
+</ol>
+</li>
+</ul>
+<h4 id="文件描述符"><a href="#文件描述符" class="headerlink" title="文件描述符"></a>文件描述符</h4><ul>
+<li><p>进程通过<strong>文件描述符</strong>（<strong>file descriptor</strong>）来完成对文件的访问，其在形式上是一个非负整数，本质上是对文件的索引值，进程所有执行 I&#x2F;O 操作的系统调用都会通过文件描述符</p>
+</li>
+<li><p>每个进程都<strong>独立有着一个文件描述符表</strong>，存放着该进程所打开的文件索引，每当进程<strong>成功</strong>打开一个现有文件&#x2F;创建一个新文件时（通过系统调用open进行操作），<strong>内核会向进程返回一个文件描述符</strong></p>
+</li>
+<li><p>在kernel中有着一个文件表，由所有的进程共享</p>
+<blockquote>
+<p><strong>stdin、stdout、stderr</strong></p>
+</blockquote>
+<p>每个<code>*NIX</code>进程都应当有着三个标准的POSIX文件描述符，对应着三个标准文件流：</p>
+<table>
+<thead>
+<tr>
+<th>stdin</th>
+<th>标准输入</th>
+<th><strong>0</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>stdout</td>
+<td>标准输出</td>
+<td>1</td>
+</tr>
+<tr>
+<td>stderr</td>
+<td>标准错误</td>
+<td>2</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>【<em><strong>此后打开的文件描述符应当从标号<code>3</code>起始</strong></em>】！！！</p>
+</li>
+</ul>
+<h4 id="syscall-ioctl"><a href="#syscall-ioctl" class="headerlink" title="syscall: ioctl"></a>syscall: ioctl</h4><blockquote>
+<p>在<code>*NIX</code>中一切都可以被视为文件，因而一切都可以以访问文件的方式进行操作，为了方便，Linux定义了系统调用<code>ioctl</code>供进程与设备之间进行通信</p>
+</blockquote>
+<p>系统调用<code>ioctl</code>是一个专用于设备输入输出操作的一个系统调用，其调用方式如下：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">ioctl</span><span class="params">(<span class="type">int</span> fd, <span class="type">unsigned</span> <span class="type">long</span> request, ...)</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>fd：设备的文件描述符</strong></li>
+<li><strong>request：请求码</strong></li>
+<li><strong>其他参数</strong></li>
+</ul>
+<p>对于一个提供了<code>ioctl</code>通信方式的设备而言，我们可以通过其文件描述符<code>fd</code>、使用不同的请求码及其他请求参数通过<code>ioctl</code>系统调用完成不同的对设备的<code>I/O</code>操作</p>
+<blockquote>
+<p>例如CD-ROM驱动程序弹出光驱的这一操作就对应着对“光驱设备”这一文件通过ioctl传递特定的请求码与请求参数完成</p>
+</blockquote>
+<h3 id="LKMs"><a href="#LKMs" class="headerlink" title="LKMs"></a>LKMs</h3><ul>
+<li><code>Loadable Kernel Modules(LKMs)</code>：<ul>
+<li>Linux Kernle采用的是宏内核架构，一切的系统服务都需要由内核来提供，虽然效率较高，但是：<ol>
+<li>缺乏可扩展性与可维护性</li>
+<li>内核需要装载很多可能用到的服务，但这些服务最终可能未必会用到，还会占据大量内存空间</li>
+<li>新服务的提供往往意味着要<strong>重新编译</strong>整个内核</li>
+</ol>
+</li>
+<li>综合以上考虑，<strong>可装载内核模块</strong><code>Loadable Kernel Modules</code>，简称<code>LKMs</code>，出现了，位于内核空间的LKMs可以提供<strong>新的系统调用</strong>或其他服务，</li>
+<li>LKMs可以像积木一样被装载入内核&#x2F;从内核中卸载，大大提高了kernel的可拓展性与可维护性</li>
+</ul>
+</li>
+<li>常见的外设驱动便是LKM的一种</li>
+<li>LKMs与用户态可执行文件一样都采用ELF格式，但是<strong>LKMs运行在内核空间，且无法脱离内核运行</strong></li>
+<li>通常与LKM相关的命令有以下三个：<ul>
+<li><code>lsmod</code>：列出现有的LKMs</li>
+<li><code>insmod</code>：装载新的LKM（需要root）</li>
+<li><code>rmmod</code>：从内核中移除LKM（需要root）</li>
+</ul>
+</li>
+</ul>
+<h3 id="保护机制"><a href="#保护机制" class="headerlink" title="保护机制"></a>保护机制</h3><h4 id="KASLR"><a href="#KASLR" class="headerlink" title="KASLR"></a>KASLR</h4><blockquote>
+<p>内核内存布局参考：<a href="https://elixir.bootlin.com/linux/latest/source/Documentation/x86/x86_64/mm.rst">多版本kernel内核内存布局</a></p>
+</blockquote>
+<ul>
+<li>KASLR即【内核空间地址随机化（<code>kernel address space layout randomize</code>）】，与用户态程序的ASLR相类似——在内核镜像映射到实际的地址空间时加上一个偏移值，但是内核内部的相对偏移其实还是不变的</li>
+<li>在未开启KASLR保护机制时，内核的基址为<code>0xffffffff81000000</code></li>
+</ul>
+<h4 id="FGKASLR"><a href="#FGKASLR" class="headerlink" title="FGKASLR"></a>FGKASLR</h4><blockquote>
+<p>KASLR 虽然在一定程度上能够缓解攻击，但是若是攻击者通过一些信息泄露漏洞获取到内核中的某个地址，仍能够直接得知内核加载地址偏移从而得知整个内核地址布局</p>
+</blockquote>
+<ul>
+<li>因此有研究者基于 KASLR 实现了 FGKASLR，<strong>以函数粒度重新排布内核代码</strong></li>
+</ul>
+<h4 id="Stack-Protector"><a href="#Stack-Protector" class="headerlink" title="Stack Protector"></a>Stack Protector</h4><blockquote>
+<p>类似于用户态程序的<code>canary</code>，通常又被称作是<code>stack cookie</code>，用以检测<strong>是否发生内核堆栈溢出</strong>，若是发生内核堆栈溢出则会产生<code>kernel panic</code></p>
+</blockquote>
+<ul>
+<li>内核中的<code>canary</code>的值通常取自<code>gs</code>段寄存器某个固定偏移处的值</li>
+</ul>
+<h4 id="SMAP-x2F-SMEP"><a href="#SMAP-x2F-SMEP" class="headerlink" title="SMAP&#x2F;SMEP"></a>SMAP&#x2F;SMEP</h4><ul>
+<li>SMAP：管理模式【<strong>访问</strong>】保护（<code>Supervisor Mode Access Prevention</code>）</li>
+<li>SMEP：管理模式【<strong>执行</strong>】保护（<code>Supervisor Mode Execution Prevention</code>）</li>
+<li>这两种保护通常是同时开启的，用以阻止<strong>内核空间直接访问&#x2F;执行用户空间的数据</strong>，完全地将内核空间与用户空间相分隔开，用以防范<code>ret2usr</code>（return-to-user，将内核空间的指令指针重定向至用户空间上构造好的提权代码）攻击</li>
+<li>SMEP保护的绕过有以下两种方式：<ul>
+<li>在设计中，为了使隔离的数据进行交换时具有更高的性能，隐性地址共享始终存在（VDSO &amp; VSYSCALL），<strong>用户态进程与内核共享同一块物理内存</strong>，因此通过隐性内存共享可以完整的绕过软件和硬件的隔离保护，这种攻击方式被称之为<code>ret2dir</code>（return-to-direct-mapped memory ）</li>
+<li>Intel下系统根据CR4控制寄存器的第20位标识是否开启SMEP保护（1为开启，0为关闭），若是能够通过kernel ROP改变CR4寄存器的值便能够关闭SMEP保护，完成SMEP-bypass，接下来就能够重新进行<code>ret2usr</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="KPTI"><a href="#KPTI" class="headerlink" title="KPTI"></a>KPTI</h4><blockquote>
+<p>KPTI即<code>内核页表隔离</code>（Kernel page-table isolation），内核空间与用户空间分别使用两组不同的页表集，这对于内核的内存管理产生了根本性的变化</p>
+</blockquote>
+<ul>
+<li><strong>KPTI 机制的出现使得 ret2usr 彻底成为过去式</strong></li>
 </ul>
 ]]></content>
       <categories>
