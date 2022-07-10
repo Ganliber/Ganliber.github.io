@@ -22,18 +22,23 @@
     var CONFIG = {"hostname":"ganliber.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="An information security practitioner, focusing on system, Linux and pwn">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Ganliber&#39;s Home">
-<meta property="og:url" content="https://ganliber.github.io/pwn/index.html">
+  <meta name="description" content="Basic knowledge for kernel pwn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux Kernel ：Basic Knowledge">
+<meta property="og:url" content="https://ganliber.github.io/2022/07/10/system/kernel-pwn-1/index.html">
 <meta property="og:site_name" content="Ganliber&#39;s Home">
-<meta property="og:description" content="An information security practitioner, focusing on system, Linux and pwn">
+<meta property="og:description" content="Basic knowledge for kernel pwn">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-07-10T09:25:34.000Z">
+<meta property="article:modified_time" content="2022-07-10T09:32:53.264Z">
 <meta property="article:author" content="Gan Gecen">
-<meta property="article:tag" content="OS, pwn, Linux, Security, Blockchain">
+<meta property="article:tag" content="operating system">
+<meta property="article:tag" content="system">
+<meta property="article:tag" content="pwn">
+<meta property="article:tag" content="Linux kernel">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://ganliber.github.io/pwn/">
+<link rel="canonical" href="https://ganliber.github.io/2022/07/10/system/kernel-pwn-1/">
 
 
 <script id="page-configurations">
@@ -41,12 +46,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'en'
   };
 </script>
 
-  <title>Archive | Ganliber's Home</title>
+  <title>Linux Kernel ：Basic Knowledge | Ganliber's Home</title>
   
 
 
@@ -207,96 +212,186 @@
         <div class="content-wrap">
           
 
-          <div class="content archive">
+          <div class="content post posts-expand">
             
 
+    
   
   
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://ganliber.github.io/2022/07/10/system/kernel-pwn-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Gan Gecen">
+      <meta itemprop="description" content="An information security practitioner, focusing on system, Linux and pwn">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ganliber's Home">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux Kernel ：Basic Knowledge
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-07-10 17:25:34 / Modified: 17:32:53" itemprop="dateCreated datePublished" datetime="2022-07-10T17:25:34+08:00">2022-07-10</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/system/" itemprop="url" rel="index"><span itemprop="name">system</span></a>
+                </span>
+            </span>
+
+          
   
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <span class="collection-header">Um..! 11 posts in total. Keep on posting.</span>
-      </div>
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/2022/07/10/system/kernel-pwn-1/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/07/10/system/kernel-pwn-1/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+            <div class="post-description"> Basic knowledge for kernel pwn  </div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <span class="collection-header">2022</span>
-    </div>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2022-06-16T16:47:30+08:00"
-              content="2022-06-16">
-          06-16
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/06/16/pwn/brop/" itemprop="url">
-            <span itemprop="name">blind ROP</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2022-06-16T17:47:30+08:00"
-              content="2022-06-16">
-          06-16
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/06/16/pwn/heap-1/" itemprop="url">
-            <span itemprop="name">heap 1</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2022-06-17T15:11:22+08:00"
-              content="2022-06-17">
-          06-17
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/06/17/pwn/heap-2/" itemprop="url">
-            <span itemprop="name">heap 2</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
+        <h1 id="Basic-Knowledge-for-linux-kernel-pwn"><a href="#Basic-Knowledge-for-linux-kernel-pwn" class="headerlink" title="Basic Knowledge for linux kernel pwn"></a>Basic Knowledge for linux kernel pwn</h1><hr>
+<h3 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h3><ul>
+<li><p><strong>系统调用表</strong></p>
+<ol>
+<li><p>所有的系统调用被声明于内核源码<code>arch/x86/entry/syscalls/syscall_64.tbl</code>中，在该表中声明了系统调用的标号、类型、名称、内核态函数名称</p>
+</li>
+<li><p>在内核中使用【系统调用表】<code>System Call Table</code>对系统调用进行索引，该表中储存了不同标号的系统调用函数的地址</p>
+</li>
+</ol>
+</li>
+<li><p><strong>进入系统调用</strong></p>
+<ol>
+<li><p>Linux 下进入系统调用有两种主要的方式：</p>
+<ul>
+<li><p>32位：执行 <code>int 0x80</code>汇编指令（80号中断）</p>
+</li>
+<li><p>64位：执行 <code>syscall</code> 汇编指令 &#x2F; 执行 <code>sysenter</code> 汇编指令（only intel）</p>
+</li>
+</ul>
+</li>
+<li><p>Linux 由用户态进入到内核态的流程</p>
+<blockquote>
+<p>Linux下的系统调用以<code>eax/rax</code>寄存器作为<strong>系统调用号</strong>，参数传递约束如下：</p>
+</blockquote>
+<ul>
+<li><p>32 位：<code>ebx、ecx、edx、esi、edi、ebp</code>作为第一个参数、第二个参数…进行参数传递</p>
+</li>
+<li><p>64 位：<code>rdi、rsi、rdx、rcx、r8、r9</code>作为第一个参数、第二个参数…进行参数传递</p>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p><strong>退出系统调用</strong></p>
+<ol>
+<li><p>内核执行完系统调用后退出系统调用也有对应的两种方式：</p>
+<ul>
+<li><p>执行<code>iret</code>汇编指令</p>
+</li>
+<li><p>执行 <code>sysret</code> 汇编指令 &#x2F; 执行<code>sysexit</code>汇编指令（only Intel）</p>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+<li></li>
+</ul>
 
     </div>
-  </div>
-  
-  
-  
 
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Gan Gecen
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://ganliber.github.io/2022/07/10/system/kernel-pwn-1/" title="Linux Kernel ：Basic Knowledge">https://ganliber.github.io/2022/07/10/system/kernel-pwn-1/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/operating-system/" rel="tag"># operating system</a>
+              <a href="/tags/system/" rel="tag"># system</a>
+              <a href="/tags/pwn/" rel="tag"># pwn</a>
+              <a href="/tags/Linux-kernel/" rel="tag"># Linux kernel</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/07/09/system/kernel-env/" rel="prev" title="Linux Kernel ：Environment">
+      <i class="fa fa-chevron-left"></i> Linux Kernel ：Environment
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/07/10/configure/configure-001-vscode-connect-vmware/" rel="next" title="解决vscode连接本地vmware失败问题">
+      解决vscode连接本地vmware失败问题 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
   
 
 
 
           </div>
           
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -343,6 +438,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Basic-Knowledge-for-linux-kernel-pwn"><span class="nav-number">1.</span> <span class="nav-text">Basic Knowledge for linux kernel pwn</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86"><span class="nav-number">1.0.1.</span> <span class="nav-text">前置知识</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -497,6 +593,26 @@
   }
   // defer loading until the whole page loading is completed
   window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://ganliber.github.io/2022/07/10/system/kernel-pwn-1/";
+    this.page.identifier = "2022/07/10/system/kernel-pwn-1/";
+    this.page.title = "Linux Kernel ：Basic Knowledge";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://Ganliber.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
 </script>
 
 </body>

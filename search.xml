@@ -1,68 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>next定制</title>
-    <url>/2022/06/16/config/next%20tips/</url>
-    <content><![CDATA[<h2 id="js脚本实现自定义menu页"><a href="#js脚本实现自定义menu页" class="headerlink" title="js脚本实现自定义menu页"></a>js脚本实现自定义menu页</h2><blockquote>
-<p>操作对象：blog&#x2F;theme&#x2F;next&#x2F;文件夹下</p>
-</blockquote>
-<ul>
-<li><p>在主题配置文件<code>_config.yml</code>中<code>menu</code>栏下添加新的标签页，并在<code>blog/source</code>文件夹下添加同样的文件夹，<code>||</code>右侧是图标，采用的是<code>Font Awesome</code>中的图标位置，不过推荐用<code>fa-solid</code>类型的<code>icon</code>，因为其他的好像显示失败。注意在如<code>/source/pwn</code>中的<code>index.md</code>中不需要写<code>type</code>和<code>layout</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">menu:</span><br><span class="line">  home: / || fa fa-home</span><br><span class="line">  about: /about/ || fa fa-user</span><br><span class="line">  tags: /tags/ || fa fa-tags</span><br><span class="line">  categories: /categories/ || fa fa-th</span><br><span class="line">  archives: /archives/ || fa fa-archive</span><br><span class="line">  pwn: /pwn/ || fas fa-flag-checkered</span><br><span class="line">  system: /system/ || fas fa-laptop-code</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在<code>/theme/next/scripts</code>下新建一个<code>pwn.js</code>文件来控制新的<code>pwn</code>菜单栏的内容</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> pagination = <span class="built_in">require</span>(<span class="string">&#x27;hexo-pagination&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> filteredCategory = <span class="string">&#x27;pwn&#x27;</span>;</span><br><span class="line"></span><br><span class="line">hexo.<span class="property">extend</span>.<span class="property">generator</span>.<span class="title function_">register</span>(<span class="string">&#x27;pwn&#x27;</span>, <span class="keyword">function</span>(<span class="params">locals</span>)&#123;</span><br><span class="line">  <span class="keyword">var</span> pwnPosts = locals.<span class="property">posts</span>.<span class="title function_">filter</span>(<span class="keyword">function</span>(<span class="params">x</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> x.<span class="property">categories</span>.<span class="property">data</span>[<span class="number">0</span>].<span class="property">name</span> == filteredCategory;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">pagination</span>(<span class="string">&#x27;pwn&#x27;</span>, pwnPosts, &#123;</span><br><span class="line">    <span class="attr">perPage</span>: <span class="number">12</span>,</span><br><span class="line">    <span class="attr">layout</span>: [<span class="string">&#x27;archive&#x27;</span>]</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>注意最后一个<code>layout</code>可以用<code>&#39;archive&#39;</code>来呈现时间轴的效果，不必再自定义了（报错麻烦）</li>
-<li>这段代码的功能就是把所有文章按照<code>category</code>过滤，属于<code>pwn</code>的显示出来</li>
-</ul>
-</li>
-<li><p>执行生效即可</p>
-</li>
-</ul>
-<h2 id="pace实现加载特效"><a href="#pace实现加载特效" class="headerlink" title="pace实现加载特效"></a>pace实现加载特效</h2><p>由于网页不可能一直都秒进，总会等待一段时间的，所以可以设置顶部加载条。Next 已经集成了很多加载特效，可以在下面选项中在线调试测试一下。</p>
-<p>搜索<code>pace</code>，找到如下代码：</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"># 页面顶部加载条</span><br><span class="line"># Progress bar in the <span class="attribute">top</span> during page loading.</span><br><span class="line">pace: true</span><br><span class="line"># Themes list:</span><br><span class="line">#pace-theme-big-counter</span><br><span class="line">#pace-theme-bounce</span><br><span class="line">#pace-theme-barber-shop</span><br><span class="line">#pace-theme-center-atom</span><br><span class="line">#pace-theme-center-circle</span><br><span class="line">#pace-theme-center-radar</span><br><span class="line">#pace-theme-center-simple</span><br><span class="line">#pace-theme-corner-indicator</span><br><span class="line">#pace-theme-fill-left</span><br><span class="line">#pace-theme-flash</span><br><span class="line">#pace-theme-loading-bar</span><br><span class="line">#pace-theme-mac-osx</span><br><span class="line">#pace-theme-minimal</span><br><span class="line"># For example</span><br><span class="line"># pace_theme: pace-theme-center-simple</span><br><span class="line">pace_theme: pace-theme-minimal  # 默认设置，可以修改为上述任何一个</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="加载图片"><a href="#加载图片" class="headerlink" title="加载图片"></a>加载图片</h2><ul>
-<li><p>装插件</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install hexo-renderer-marked</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在全局配置文件<code>_config.yml</code>中</p>
-<ol>
-<li><p>修改是否生成资源文件夹</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">post_asset_folder: true</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>添加标记</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">marked:</span><br><span class="line">  prependRoot: true</span><br><span class="line">  postAsset: true</span><br></pre></td></tr></table></figure></li>
-</ol>
-</li>
-<li><p>此时通过<code>hexo new &#39;title&#39;</code>可以在<code>_posts</code>中生成<code>title.md</code>和同名资源文件夹<code>title</code></p>
-<blockquote>
-<p>都是可移动的，但资源文件夹和原文件要同时移动</p>
-</blockquote>
-</li>
-<li><p>修改<code>typora</code>图片偏好为相对路径优先</p>
-</li>
-<li><p>进入相对路径后注意只有一个图片名（在对应的资源文件夹下）</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">![name](name.<span class="property">png</span>)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>当缩放时<code>src</code>也只能有图片名</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;brop_stop_gadgets.png&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;brop_stop_gadgets&quot;</span> <span class="attr">style</span>=<span class="string">&quot;zoom:38%;&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-]]></content>
-      <categories>
-        <category>hexo</category>
-      </categories>
-      <tags>
-        <tag>hexo</tag>
-        <tag>next theme</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>blind ROP</title>
     <url>/2022/06/16/pwn/brop/</url>
     <content><![CDATA[<h1 id="Blind-ROP"><a href="#Blind-ROP" class="headerlink" title="Blind ROP"></a>Blind ROP</h1><hr>
@@ -2141,6 +2079,150 @@
 <li><a href="http://kerneltravel.net/blog/2021/debug_kernel_szp/">http://kerneltravel.net/blog/2021/debug_kernel_szp/</a></li>
 <li><a href="https://www.anquanke.com/post/id/258874">https://www.anquanke.com/post/id/258874</a></li>
 </ul>
+</li>
+<li></li>
+</ul>
+]]></content>
+      <categories>
+        <category>system</category>
+      </categories>
+      <tags>
+        <tag>operating system</tag>
+        <tag>system</tag>
+        <tag>pwn</tag>
+        <tag>Linux kernel</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>next定制</title>
+    <url>/2022/06/16/configure/next%20tips/</url>
+    <content><![CDATA[<h2 id="js脚本实现自定义menu页"><a href="#js脚本实现自定义menu页" class="headerlink" title="js脚本实现自定义menu页"></a>js脚本实现自定义menu页</h2><blockquote>
+<p>操作对象：blog&#x2F;theme&#x2F;next&#x2F;文件夹下</p>
+</blockquote>
+<ul>
+<li><p>在主题配置文件<code>_config.yml</code>中<code>menu</code>栏下添加新的标签页，并在<code>blog/source</code>文件夹下添加同样的文件夹，<code>||</code>右侧是图标，采用的是<code>Font Awesome</code>中的图标位置，不过推荐用<code>fa-solid</code>类型的<code>icon</code>，因为其他的好像显示失败。注意在如<code>/source/pwn</code>中的<code>index.md</code>中不需要写<code>type</code>和<code>layout</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">menu:</span><br><span class="line">  home: / || fa fa-home</span><br><span class="line">  about: /about/ || fa fa-user</span><br><span class="line">  tags: /tags/ || fa fa-tags</span><br><span class="line">  categories: /categories/ || fa fa-th</span><br><span class="line">  archives: /archives/ || fa fa-archive</span><br><span class="line">  pwn: /pwn/ || fas fa-flag-checkered</span><br><span class="line">  system: /system/ || fas fa-laptop-code</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在<code>/theme/next/scripts</code>下新建一个<code>pwn.js</code>文件来控制新的<code>pwn</code>菜单栏的内容</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> pagination = <span class="built_in">require</span>(<span class="string">&#x27;hexo-pagination&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> filteredCategory = <span class="string">&#x27;pwn&#x27;</span>;</span><br><span class="line"></span><br><span class="line">hexo.<span class="property">extend</span>.<span class="property">generator</span>.<span class="title function_">register</span>(<span class="string">&#x27;pwn&#x27;</span>, <span class="keyword">function</span>(<span class="params">locals</span>)&#123;</span><br><span class="line">  <span class="keyword">var</span> pwnPosts = locals.<span class="property">posts</span>.<span class="title function_">filter</span>(<span class="keyword">function</span>(<span class="params">x</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> x.<span class="property">categories</span>.<span class="property">data</span>[<span class="number">0</span>].<span class="property">name</span> == filteredCategory;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">pagination</span>(<span class="string">&#x27;pwn&#x27;</span>, pwnPosts, &#123;</span><br><span class="line">    <span class="attr">perPage</span>: <span class="number">12</span>,</span><br><span class="line">    <span class="attr">layout</span>: [<span class="string">&#x27;archive&#x27;</span>]</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注意最后一个<code>layout</code>可以用<code>&#39;archive&#39;</code>来呈现时间轴的效果，不必再自定义了（报错麻烦）</li>
+<li>这段代码的功能就是把所有文章按照<code>category</code>过滤，属于<code>pwn</code>的显示出来</li>
+</ul>
+</li>
+<li><p>执行生效即可</p>
+</li>
+</ul>
+<h2 id="pace实现加载特效"><a href="#pace实现加载特效" class="headerlink" title="pace实现加载特效"></a>pace实现加载特效</h2><p>由于网页不可能一直都秒进，总会等待一段时间的，所以可以设置顶部加载条。Next 已经集成了很多加载特效，可以在下面选项中在线调试测试一下。</p>
+<p>搜索<code>pace</code>，找到如下代码：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"># 页面顶部加载条</span><br><span class="line"># Progress bar in the <span class="attribute">top</span> during page loading.</span><br><span class="line">pace: true</span><br><span class="line"># Themes list:</span><br><span class="line">#pace-theme-big-counter</span><br><span class="line">#pace-theme-bounce</span><br><span class="line">#pace-theme-barber-shop</span><br><span class="line">#pace-theme-center-atom</span><br><span class="line">#pace-theme-center-circle</span><br><span class="line">#pace-theme-center-radar</span><br><span class="line">#pace-theme-center-simple</span><br><span class="line">#pace-theme-corner-indicator</span><br><span class="line">#pace-theme-fill-left</span><br><span class="line">#pace-theme-flash</span><br><span class="line">#pace-theme-loading-bar</span><br><span class="line">#pace-theme-mac-osx</span><br><span class="line">#pace-theme-minimal</span><br><span class="line"># For example</span><br><span class="line"># pace_theme: pace-theme-center-simple</span><br><span class="line">pace_theme: pace-theme-minimal  # 默认设置，可以修改为上述任何一个</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="加载图片"><a href="#加载图片" class="headerlink" title="加载图片"></a>加载图片</h2><ul>
+<li><p>装插件</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install hexo-renderer-marked</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在全局配置文件<code>_config.yml</code>中</p>
+<ol>
+<li><p>修改是否生成资源文件夹</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">post_asset_folder: true</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>添加标记</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">marked:</span><br><span class="line">  prependRoot: true</span><br><span class="line">  postAsset: true</span><br></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><p>此时通过<code>hexo new &#39;title&#39;</code>可以在<code>_posts</code>中生成<code>title.md</code>和同名资源文件夹<code>title</code></p>
+<blockquote>
+<p>都是可移动的，但资源文件夹和原文件要同时移动</p>
+</blockquote>
+</li>
+<li><p>修改<code>typora</code>图片偏好为相对路径优先</p>
+</li>
+<li><p>进入相对路径后注意只有一个图片名（在对应的资源文件夹下）</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">![name](name.<span class="property">png</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>当缩放时<code>src</code>也只能有图片名</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;brop_stop_gadgets.png&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;brop_stop_gadgets&quot;</span> <span class="attr">style</span>=<span class="string">&quot;zoom:38%;&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+]]></content>
+      <categories>
+        <category>configure</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+        <tag>next theme</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>解决vscode连接本地vmware失败问题</title>
+    <url>/2022/07/10/configure/configure-001-vscode-connect-vmware/</url>
+    <content><![CDATA[<h3 id="在本地虚拟机vmware中安装ssh"><a href="#在本地虚拟机vmware中安装ssh" class="headerlink" title="在本地虚拟机vmware中安装ssh"></a>在本地虚拟机vmware中安装ssh</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install -y openssh-server</span><br></pre></td></tr></table></figure>
+
+<p>开启服务</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo /etc/init.d/ssh start</span><br></pre></td></tr></table></figure>
+
+<p>查看进程中是否有开启该服务</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ps -e | grep ssh</span><br><span class="line">   1616 ?        00:00:00 ssh-agent</span><br><span class="line">   4892 ?        00:00:00 sshd</span><br><span class="line">   6339 ?        00:00:00 sshd</span><br><span class="line">   6417 ?        00:00:00 sshd</span><br></pre></td></tr></table></figure>
+
+<p>在<code>vscode</code>上配置即可</p>
+]]></content>
+      <categories>
+        <category>configure</category>
+      </categories>
+      <tags>
+        <tag>vscode</tag>
+        <tag>Virtual Machine</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux Kernel ：Basic Knowledge</title>
+    <url>/2022/07/10/system/kernel-pwn-1/</url>
+    <content><![CDATA[<h1 id="Basic-Knowledge-for-linux-kernel-pwn"><a href="#Basic-Knowledge-for-linux-kernel-pwn" class="headerlink" title="Basic Knowledge for linux kernel pwn"></a>Basic Knowledge for linux kernel pwn</h1><hr>
+<h3 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h3><ul>
+<li><p><strong>系统调用表</strong></p>
+<ol>
+<li><p>所有的系统调用被声明于内核源码<code>arch/x86/entry/syscalls/syscall_64.tbl</code>中，在该表中声明了系统调用的标号、类型、名称、内核态函数名称</p>
+</li>
+<li><p>在内核中使用【系统调用表】<code>System Call Table</code>对系统调用进行索引，该表中储存了不同标号的系统调用函数的地址</p>
+</li>
+</ol>
+</li>
+<li><p><strong>进入系统调用</strong></p>
+<ol>
+<li><p>Linux 下进入系统调用有两种主要的方式：</p>
+<ul>
+<li><p>32位：执行 <code>int 0x80</code>汇编指令（80号中断）</p>
+</li>
+<li><p>64位：执行 <code>syscall</code> 汇编指令 &#x2F; 执行 <code>sysenter</code> 汇编指令（only intel）</p>
+</li>
+</ul>
+</li>
+<li><p>Linux 由用户态进入到内核态的流程</p>
+<blockquote>
+<p>Linux下的系统调用以<code>eax/rax</code>寄存器作为<strong>系统调用号</strong>，参数传递约束如下：</p>
+</blockquote>
+<ul>
+<li><p>32 位：<code>ebx、ecx、edx、esi、edi、ebp</code>作为第一个参数、第二个参数…进行参数传递</p>
+</li>
+<li><p>64 位：<code>rdi、rsi、rdx、rcx、r8、r9</code>作为第一个参数、第二个参数…进行参数传递</p>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p><strong>退出系统调用</strong></p>
+<ol>
+<li><p>内核执行完系统调用后退出系统调用也有对应的两种方式：</p>
+<ul>
+<li><p>执行<code>iret</code>汇编指令</p>
+</li>
+<li><p>执行 <code>sysret</code> 汇编指令 &#x2F; 执行<code>sysexit</code>汇编指令（only Intel）</p>
+</li>
+</ul>
+</li>
+</ol>
 </li>
 <li></li>
 </ul>
