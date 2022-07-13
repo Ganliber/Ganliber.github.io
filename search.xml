@@ -2039,7 +2039,22 @@
   <entry>
     <title>Linux Kernel ：Environment</title>
     <url>/2022/07/09/system/kernel-env/</url>
-    <content><![CDATA[<h1 id="Kernel环境搭建"><a href="#Kernel环境搭建" class="headerlink" title="Kernel环境搭建"></a>Kernel环境搭建</h1><h2 id="source-code"><a href="#source-code" class="headerlink" title="source code"></a>source code</h2><ul>
+    <content><![CDATA[<h1 id="Kernel环境搭建"><a href="#Kernel环境搭建" class="headerlink" title="Kernel环境搭建"></a>Kernel环境搭建</h1><h2 id="内核文件类型"><a href="#内核文件类型" class="headerlink" title="内核文件类型"></a>内核文件类型</h2><ul>
+<li><p><strong>bzImage</strong>：目前主流的 kernel 镜像格式，即 big zImage（即 bz 不是指 bzip2），适用于较大的（大于 512 KB） Kernel。这个镜像会被加载到内存的高地址，高于 1MB。bzImage 是用 gzip 压缩的，文件的开头部分有 gzip 解压缩的代码，所以我们不能用 gunzip 来解压缩。</p>
+</li>
+<li><p><strong>zImage</strong>：比较老的 kernel 镜像格式，适用于较小的（不大于 512KB） Kernel。启动时，这个镜像会被加载到内存的低地址，即内存的前 640 KB。zImage 也不能用 gunzip 来解压缩。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">zImage &amp;&amp; bzImage</span><br><span class="line">---------------- difference ------------------</span><br><span class="line">zImage—是vmlinux经过gzip压缩后的文件。</span><br><span class="line">bzImage—bz表示<span class="string">&quot;big zImage&quot;</span>,不是用bzip2压缩的，而是要偏移到一个位置，使用gzip压缩的。两者的不同之处在于，zImage解压缩内核到低端内存(第一个 640K)，bzImage解压缩内核到高端内存(1M以上)。如果内核比较小，那么采用zImage或bzImage都行，如果比较大应该用bzImage。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>vmlinuz</strong>：vmlinuz 不仅包含了压缩后的 vmlinux，还包含了 gzip 解压缩的代码。实际上就是 zImage 或者 bzImage 文件。该文件是 bootable 的。 bootable 是指它能够把内核加载到内存中。对于 Linux 系统而言，该文件位于 &#x2F;boot 目录下。该目录包含了启动系统时所需要的文件。</p>
+</li>
+<li><p><strong>vmlinux</strong>：静态链接的 Linux kernel，以可执行文件的形式存在，尚未经过压缩。该文件往往是在生成 vmlinuz 的过程中产生的。该文件适合于调试。但是该文件不是 bootable 的。</p>
+</li>
+<li><p><strong>vmlinux.bin</strong>：也是静态链接的 Linux kernel，只是以一个可启动的 (bootable) 二进制文件存在。所有的符号信息和重定位信息都被删除了。生成命令为：<code>objcopy -O binary vmlinux vmlinux.bin</code>。</p>
+</li>
+<li><p><strong>uImage</strong>：uImage 是 U-boot 专用的镜像文件，它是在 zImage 之前加上了一个长度为 0x40 的 tag 而构成的。这个 tag 说明了这个镜像文件的类型、加载位置、生成时间、大小等信息。</p>
+</li>
+</ul>
+<h2 id="source-code"><a href="#source-code" class="headerlink" title="source code"></a>source code</h2><ul>
 <li><p>查看当前内核版本</p>
 <blockquote>
 <p>注解：</p>
@@ -2119,7 +2134,6 @@
 <li><p>进入文件夹内【配置编译选项】</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">make menuconfig</span><br></pre></td></tr></table></figure>
 
-<p>注意要在虚拟机里做（不是<code>vscode</code>或<code>powershell</code>终端）</p>
 <p><img src="/2022/07/09/system/kernel-env/make_menuconfig.png" alt="make config"></p>
 <ul>
 <li><p>通过空格键进行【选择&#x2F;取消选择】</p>
@@ -2131,13 +2145,15 @@
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[<span class="number">1</span> 关闭KALSR(否则会导致打断点失败)]Processor <span class="built_in">type</span> <span class="keyword">and</span> features -&gt; Randomize the address of the kernel image (KASLR)</span><br></pre></td></tr></table></figure></li>
 </ul>
 </li>
+</ul>
+<h3 id="编译内核"><a href="#编译内核" class="headerlink" title="编译内核"></a>编译内核</h3><ul>
 <li><p>编译</p>
 <blockquote>
 <p><code>-j$(nproc)</code>是尽可能多线程的编译，可加速，且可以通过指令<code>nproc</code>查看当前系统所支持的所线程的数量</p>
 </blockquote>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">make -j$(<span class="built_in">nproc</span>)</span><br><span class="line">...</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 </li>
-<li><p>编译报错解决</p>
+<li><p>编译报错解决 1</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">No rule to make target <span class="string">&#x27;debian/canonical-certs.pem&#x27;</span>, needed by <span class="string">&#x27;certs/x509_certificate_list&#x27;</span>.  Stop.</span><br></pre></td></tr></table></figure>
 
 <p>编辑<code>.config</code>文件</p>
@@ -2146,6 +2162,15 @@
 <p>修改<code>CONFIG_SYSTEM_TRUSTED_KEYS</code>，将其置空。</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 原本内容</span><br><span class="line">CONFIG_SYSTEM_TRUSTED_KEYS=&quot;debian/canonical-certs.pem&quot;</span><br><span class="line"># 将该项原有内容删掉即可，如下</span><br><span class="line">CONFIG_SYSTEM_TRUSTED_KEYS=&quot;&quot;</span><br></pre></td></tr></table></figure>
 </li>
+<li><p>编译报错解决 2</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">BTF: .tmp_vmlinux.btf: pahole (pahole) <span class="keyword">is</span> <span class="keyword">not</span> available</span><br><span class="line">Failed to generate BTF <span class="keyword">for</span> vmlinux</span><br><span class="line">Try to disable CONFIG_DEBUG_INFO_BTF</span><br><span class="line">make: *** [Makefile:<span class="number">1165</span>: vmlinux] Error <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>系统缺少<code>dwarves</code>软件包</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install dwarves</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>此时得到的文件有</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">arch/x86/boot/bzImage --&gt; 压缩内核镜像</span><br><span class="line">vmlinux --&gt; 原始内核文件</span><br></pre></td></tr></table></figure>
+</li>
 <li><p>先用<code>qemu</code>测试一下（没有文件系统会<code>kernel panic</code>）</p>
 <blockquote>
 <p>这时候，qemu会卡住不动，因为现在还没有文件系统，电脑加电启动首先由bootloader加载内核，内核紧接着需要挂载内存根文件系统。</p>
@@ -2153,8 +2178,145 @@
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">qemu-system-x86_64 -kernel <span class="built_in">arch</span>/x86/boot/bzImage</span><br></pre></td></tr></table></figure></li>
 </ul>
 <h3 id="制作根文件系统"><a href="#制作根文件系统" class="headerlink" title="制作根文件系统"></a>制作根文件系统</h3><ul>
-<li>获取bu</li>
+<li><p>获取<code>buzybox</code>源码</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://busybox.net/downloads/busybox-1.33.0.tar.bz2</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编译选项</p>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> <code>Settings -&gt; Build static binary file (no shared lib)</code></li>
 </ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">make menuconfig</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编译</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">make -j$(<span class="built_in">nproc</span>) &amp;&amp; make install</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="构建根文件系统镜像"><a href="#构建根文件系统镜像" class="headerlink" title="构建根文件系统镜像"></a>构建根文件系统镜像</h3><p><strong>参考</strong>：<a href="https://consen.github.io/2018/01/17/debug-linux-kernel-with-qemu-and-gdb/">使用QEMU和GDB调试Linux内核 | Consen</a></p>
+<blockquote>
+<p>注意：</p>
+<ol>
+<li><code>rootfs</code>在目录<code>busybox-1.33.0</code>下</li>
+<li>最后生成的根文件镜像<code>rootfs.cpio</code>在<code>linux-5.11</code>下</li>
+</ol>
+</blockquote>
+<ul>
+<li><p>制作内存根文件系统镜像</p>
+<p>在目录<code>busybox-1.33.0</code>下</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> rootfs </span><br><span class="line"><span class="built_in">cd</span> rootfs </span><br><span class="line"><span class="built_in">cp</span> ../_install/* ./ -rf  <span class="comment"># 注意路径</span></span><br><span class="line"><span class="built_in">mkdir</span> dev proc sys home </span><br><span class="line">sudo <span class="built_in">cp</span> -a /dev/&#123;null,console,<span class="built_in">tty</span>,tty1,tty2,tty3,tty4&#125; dev/</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>准备<code>init</code>脚本文件放在根文件系统跟目录下<code>rootfs/init</code>，添加如下内容到<code>init</code>文件</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/sh</span> </span><br><span class="line">mount -t proc none /proc </span><br><span class="line">mount -t sysfs none /sys </span><br><span class="line">echo &quot;Wellcome to Linux!&quot; </span><br><span class="line">echo &quot;--------------------&quot; </span><br><span class="line">/bin/sh </span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用<code>chmod +x init</code>给init脚本添加可执行权限，然后执行下面的命令打包成内存根文件系统镜像</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">find . -print0 | cpio --null -ov --format=newc | gzip -9 &gt; ../rootfs.cpio </span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="qemu运行内核"><a href="#qemu运行内核" class="headerlink" title="qemu运行内核"></a>qemu运行内核</h3><ul>
+<li><p>将<code>rootfs.cpio</code>和<code>bzImage</code>放到一个目录下，并在该目录下创建脚本<code>boot.sh</code></p>
+</li>
+<li><p>测试脚本<code>boot.sh</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">qemu-system-x86_64 \</span><br><span class="line">    -m 128M \</span><br><span class="line">    -kernel ./bzImage \</span><br><span class="line">    -initrd  ./rootfs.cpio \</span><br><span class="line">    -monitor /dev/null \</span><br><span class="line">    -cpu kvm64,+smep \</span><br><span class="line">    -append <span class="string">&quot;console=ttyS0 loglevel=3 quiet nokaslr&quot;</span> \</span><br><span class="line">    -nographic \</span><br><span class="line">    -s</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>部分参数说明如下：</p>
+<ul>
+<li><p><code>-m</code>：虚拟机内存大小</p>
+</li>
+<li><p><code>-kernel</code>：内存镜像路径</p>
+</li>
+<li><p><code>-initrd</code>：磁盘镜像路径</p>
+</li>
+<li><p>&#96;&#96;&#96;<br>-append</p>
+<figure class="highlight autohotkey"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">    ：附加参数选项</span><br><span class="line"></span><br><span class="line">    - `nokalsr`：关闭内核地址随机化，方便我们进行调试</span><br><span class="line">    - `loglevel=<span class="number">3</span>` &amp; `quiet`：不输出log</span><br><span class="line">    - `console=ttyS0`：指定终端为`/dev/ttyS0`，这样一启动就能进入终端界面</span><br><span class="line"></span><br><span class="line">  - `-monitor`：将监视器重定向到主机设备`/dev/null`，这里重定向至null主要是防止CTF中被人给偷了qemu拿flag</span><br><span class="line"></span><br><span class="line">  - `-cpu`：设置CPU安全选项，在这里开启了smep保护</span><br><span class="line"></span><br><span class="line"><span class="title">  - `-s`：相当于`-gdb tcp::</span><span class="number">1234</span>`的简写（也可以直接这么写），后续我们可以通过gdb连接本地端口进行调试</span><br><span class="line"></span><br><span class="line">* 添加可执行权限并执行</span><br><span class="line"></span><br><span class="line">  ```bash</span><br><span class="line">  chmod +x ./boot.sh</span><br><span class="line">  ./boot.sh</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>如果存在<code>/etc/inittab</code>文件，<code>Busybox init</code> 程序解析它，然后按照他的指示创建各种子进程，否则使用默认的配置创建子进程.</p>
+<ul>
+<li>一般不搞这个</li>
+</ul>
+</li>
+</ul>
+<h4 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h4><blockquote>
+<p>Wonderful!</p>
+</blockquote>
+<p><img src="/2022/07/09/system/kernel-env/kernel_on_qemu.png" alt="kernel_on_qemu"></p>
+<h3 id="废弃-构建磁盘映像"><a href="#废弃-构建磁盘映像" class="headerlink" title="[废弃]构建磁盘映像"></a>[废弃]构建磁盘映像</h3><blockquote>
+<p>注意<code>busybox</code>文件在<code>linux-5.11</code>下</p>
+</blockquote>
+<h4 id="建立文件系统"><a href="#建立文件系统" class="headerlink" title="建立文件系统"></a>建立文件系统</h4><ul>
+<li><p>初始化文件系统</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> _install</span><br><span class="line">$ <span class="built_in">mkdir</span> -pv &#123;bin,sbin,etc,proc,sys,home,lib64,lib/x86_64-linux-gnu,usr/&#123;bin,sbin&#125;&#125;</span><br><span class="line">$ <span class="built_in">touch</span> etc/inittab</span><br><span class="line">$ <span class="built_in">mkdir</span> etc/init.d</span><br><span class="line">$ <span class="built_in">touch</span> etc/init.d/rcS</span><br><span class="line">$ <span class="built_in">chmod</span> +x ./etc/init.d/rcS</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置初始化脚本</p>
+<ol>
+<li><p>配置<code>etc/inittab</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">::sysinit:/etc/init.d/rcS</span><br><span class="line">::askfirst:/<span class="built_in">bin</span>/ash</span><br><span class="line">::ctrlaltdel:/sbin/reboot</span><br><span class="line">::shutdown:/sbin/swapoff -a</span><br><span class="line">::shutdown:/<span class="built_in">bin</span>/umount -a -r</span><br><span class="line">::restart:/sbin/init</span><br></pre></td></tr></table></figure>
+
+<p>在上面的文件中指定了系统初始化脚本，因此接下来配置<code>etc/init.d/rcS</code></p>
+</li>
+<li><p>配置<code>etc/init.d/rcS</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/sh</span></span><br><span class="line">mount -t proc none /proc</span><br><span class="line">mount -t sys none /sys</span><br><span class="line">/bin/mount -n -t sysfs none /sys</span><br><span class="line">/bin/mount -t ramfs none /dev</span><br><span class="line">/sbin/mdev -s</span><br></pre></td></tr></table></figure>
+
+<p>配置各种目录的挂载</p>
+<p>或者：</p>
+<p>根目录下创建<code>init</code>文件，写入如下内容</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/sh</span></span><br><span class="line"></span><br><span class="line">mount -t proc none /proc</span><br><span class="line">mount -t sysfs none /sys</span><br><span class="line">mount -t devtmpfs devtmpfs /dev</span><br><span class="line"></span><br><span class="line">exec 0&lt;/dev/console</span><br><span class="line">exec 1&gt;/dev/console</span><br><span class="line">exec 2&gt;/dev/console</span><br><span class="line"></span><br><span class="line">echo -e &quot;\nBoot took $(cut -d&#x27; &#x27; -f1 /proc/uptime) seconds\n&quot;</span><br><span class="line">setsid cttyhack setuidgid 1000 sh</span><br><span class="line"></span><br><span class="line">umount /proc</span><br><span class="line">umount /sys</span><br><span class="line">poweroff -d 0  -f</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置用户组</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">echo</span> <span class="string">&quot;root:x:0:0:root:/root:/bin/sh&quot;</span> &gt; etc/passwd</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">echo</span> <span class="string">&quot;ctf:x:1000:1000:ctf:/home/ctf:/bin/sh&quot;</span> &gt;&gt; etc/passwd</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">echo</span> <span class="string">&quot;root:x:0:&quot;</span> &gt; etc/group</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">echo</span> <span class="string">&quot;ctf:x:1000:&quot;</span> &gt;&gt; etc/group</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">echo</span> <span class="string">&quot;none /dev/pts devpts gid=5,mode=620 0 0&quot;</span> &gt; etc/fstab</span></span><br></pre></td></tr></table></figure>
+
+<p>在这里建立了两个用户组<code>root</code>和<code>ctf</code>，以及两个用户<code>root</code>和<code>ctf</code></p>
+</li>
+<li><p>配置<code>glibc</code>库</p>
+<blockquote>
+<p>略</p>
+</blockquote>
+</li>
+<li><p><strong>打包文件系统为镜像文件</strong></p>
+<p>在<code>busybox</code>下</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">find . | cpio -o -H newc &gt; ../core.cpio</span><br></pre></td></tr></table></figure>
+
+<p>（即在<code>linux-5.11</code>下编译出<code>core.cpio</code>根文件系统镜像）</p>
+<p>或者（只是名字不同）</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">find . | cpio -o --format=newc &gt; ../../rootfs.cpio</span><br></pre></td></tr></table></figure></li>
+</ol>
+</li>
+</ul>
+<h4 id="qemu运行内核-1"><a href="#qemu运行内核-1" class="headerlink" title="qemu运行内核"></a><code>qemu</code>运行内核</h4><ul>
+<li><p>将<code>bzImage</code>和<code>core</code>配置启动脚本</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">touch</span> boot.sh</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>注意两个文件</p>
+<figure class="highlight gams"><table><tr><td class="code"><pre><span class="line"><span class="symbol">$</span> <span class="keyword">file</span> bzImage    </span><br><span class="line">bzImage: Linux kernel x86 boot executable bzImage, version <span class="number">5.11</span><span class="number">.0</span> (ganliber@ganliber-virtual-machine) #<span class="number">2</span> SMP Mon Jul <span class="number">11</span> <span class="number">19</span>:<span class="number">16</span>:<span class="number">12</span> CST <span class="number">2022</span>, RO-rootFS, swap_dev <span class="number">0x9</span>, <span class="built_in">Normal</span> VGA</span><br><span class="line"><span class="symbol">$</span> <span class="keyword">file</span> rootfs.cpio</span><br><span class="line">rootfs.cpio: ASCII cpio archive (SVR4 with <span class="keyword">no</span> CRC)</span><br></pre></td></tr></table></figure>
+
+<p>放在同一个文件夹下</p>
+</li>
+<li><p>编写脚本<code>boot.sh</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/sh</span></span><br><span class="line">qemu-system-x86_64 \</span><br><span class="line">    -m 128M \</span><br><span class="line">    -kernel ./bzImage \</span><br><span class="line">    -initrd  ./rootfs.cpio \</span><br><span class="line">    -monitor /dev/null \</span><br><span class="line">    -append &quot;root=/dev/ram rdinit=/sbin/init console=ttyS0 oops=panic panic=1 loglevel=3 quiet nokaslr&quot; \</span><br><span class="line">    -cpu kvm64,+smep \</span><br><span class="line">    -smp cores=2,threads=1 \</span><br><span class="line">    -netdev user,id=t0, -device e1000,netdev=t0,id=nic0 \</span><br><span class="line">    -nographic \</span><br><span class="line">    -s</span><br></pre></td></tr></table></figure>
+
+<p>解释：</p>
+<p>部分参数说明如下：</p>
+<ul>
+<li><p><code>-m</code>：虚拟机内存大小</p>
+</li>
+<li><p><code>-kernel</code>：内存镜像路径</p>
+</li>
+<li><p><code>-initrd</code>：磁盘镜像路径</p>
+</li>
+<li><p>&#96;&#96;&#96;<br>-append</p>
+<figure class="highlight autohotkey"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">    ：附加参数选项</span><br><span class="line"></span><br><span class="line">    - `nokalsr`：关闭内核地址随机化，方便我们进行调试</span><br><span class="line">    - `rdinit`：指定初始启动进程，`/sbin/init`进程会默认以`/etc/init.d/rcS`作为启动脚本</span><br><span class="line">    - `loglevel=<span class="number">3</span>` &amp; `quiet`：不输出log</span><br><span class="line">    - `console=ttyS0`：指定终端为`/dev/ttyS0`，这样一启动就能进入终端界面</span><br><span class="line"></span><br><span class="line">  - `-monitor`：将监视器重定向到主机设备`/dev/null`，这里重定向至null主要是防止CTF中被人给偷了qemu拿flag</span><br><span class="line"></span><br><span class="line">  - `-cpu`：设置CPU安全选项，在这里开启了smep保护</span><br><span class="line"></span><br><span class="line"><span class="title">  - `-s`：相当于`-gdb tcp::</span><span class="number">1234</span>`的简写（也可以直接这么写），后续我们可以通过gdb连接本地端口进行调试</span><br><span class="line"></span><br><span class="line">* 或者</span><br><span class="line"></span><br><span class="line">  ```bash</span><br><span class="line">  qemu-system-x86_64 -kernel ./bzImage -initrd ./rootfs.cpio -S -s</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>解释：</p>
+<ul>
+<li><code>-s</code>：一个是-s，在TCP 1234端口上创建了一个gdb-server</li>
+<li><code>-S</code>：-S代表启动时暂停虚拟机，等待 gdb 执行 continue指令（可以简写为c）</li>
+</ul>
+</li>
+</ul>
+<h3 id="下载现有的镜像"><a href="#下载现有的镜像" class="headerlink" title="下载现有的镜像"></a>下载现有的镜像</h3><p>列出可下载的镜像</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt search linux-image-</span><br></pre></td></tr></table></figure>
+
+<p>拉取<code>5.11</code>版本（例）</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt download linux-image-5.11.0-43-generic</span><br><span class="line">dpkg -X ./linux-image-5.11.0-43-generic_5.11.0-43.47~20.04.2_amd64.deb extract</span><br></pre></td></tr></table></figure>
+
+<p>其中的<code>./extract/boot/vmlinuz-5.11.0-43-generic</code>便是<code>bzImage</code>内核镜像文件</p>
 ]]></content>
       <categories>
         <category>system</category>
@@ -2497,6 +2659,22 @@
         <tag>system</tag>
         <tag>pwn</tag>
         <tag>Linux kernel</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>解决qemu在ubuntu20.04安装找不到命令问题</title>
+    <url>/2022/07/11/configure/configure-002-qemu-ubuntu/</url>
+    <content><![CDATA[<h3 id="qemu找不到命令"><a href="#qemu找不到命令" class="headerlink" title="qemu找不到命令"></a>qemu找不到命令</h3><ul>
+<li><p>更改命令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install qemu-system</span><br></pre></td></tr></table></figure></li>
+</ul>
+]]></content>
+      <categories>
+        <category>configure</category>
+      </categories>
+      <tags>
+        <tag>Virtual Machine</tag>
+        <tag>qemu</tag>
       </tags>
   </entry>
 </search>
