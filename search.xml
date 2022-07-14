@@ -2691,4 +2691,159 @@
         <tag>qemu</tag>
       </tags>
   </entry>
+  <entry>
+    <title>How to submit a Linux kernel patch</title>
+    <url>/2022/07/14/system/kernel-patch/</url>
+    <content><![CDATA[<p>​	</p>
+<h1 id="Patch-Submitting"><a href="#Patch-Submitting" class="headerlink" title="Patch Submitting"></a>Patch Submitting</h1><hr>
+<blockquote>
+<p>Reference : </p>
+<p>[1] configure: <a href="https://mudongliang.github.io/2018/03/20/setting-up-git-send-email-with-gmail-to-send-linux-kernel-patch.html">Setting up git send-email with gmail to send Linux kernel patch (mudongliang.github.io)</a></p>
+<p>[2] practice: <a href="https://mudongliang.github.io/2018/03/20/one-simple-patch-to-linux-kernel.html">One failed kernel patch (mudongliang.github.io)</a></p>
+<p>[3] demo: <a href="http://blog.chinaunix.net/uid-28453894-id-3552774.html">git send-mail to commit Linux kernel patch</a></p>
+</blockquote>
+<h2 id="Environment-Preparation"><a href="#Environment-Preparation" class="headerlink" title="Environment Preparation"></a>Environment Preparation</h2><ul>
+<li><p>Download send-email and git-core</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt install git-email git-core</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Download msmtp</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install msmtp msmtp-mta</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Configure the environment for send-emaila</p>
+<blockquote>
+<p>set the client of local email by using msmtp (originally file ‘~&#x2F;.msmtprc’ is not existent)</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vim ~/.msmtprc</span><br></pre></td></tr></table></figure>
+
+<p>In ~&#x2F;.msmtprc</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Default settings</span></span><br><span class="line"></span><br><span class="line">account gmail</span><br><span class="line">protocol smtp</span><br><span class="line">host smtp.gmail.com</span><br><span class="line">from u202011061@gmail.com</span><br><span class="line">auth on</span><br><span class="line">user u202011061@gmail.com</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">password ?????????</span></span><br><span class="line"></span><br><span class="line">defaults</span><br><span class="line">port 587</span><br><span class="line">tls on</span><br><span class="line">tls_trust_file /etc/ssl/certs/ca-certificates.crt</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">set</span> a default account</span></span><br><span class="line">account default : gmail</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>密码是<strong>授权密码</strong>而非<strong>登录密码</strong></p>
+</li>
+<li><p>解决办法：</p>
+<ol>
+<li><a href="https://support.huaweicloud.com/usermanual-welink/welink_appuse_13_8.html#:~:text=1.%20%E7%99%BB%E5%BD%95%E8%B0%B7%E6%AD%8CGmail%E9%82%AE%E7%AE%B1,Gmail%E9%82%AE%E7%AE%B1%E5%8D%B3%E5%8F%AF%E4%BD%BF%E7%94%A8%E3%80%82">Gmail 授权码</a></li>
+<li><a href="http://xiaqunfeng.cc/2017/01/11/ubuntu-email-send/">ubuntu configure sendmail</a></li>
+</ol>
+</li>
+<li><p>进入Gmail，开启<code>POP</code>和<code>IMAP</code></p>
+</li>
+<li><p>进入Google Account，如果没有App password需要先两步验证（开通收取国际短信功能），选择应用为<strong>邮件</strong>，设备名可以自定义，即可得到16个字符组成的密码</p>
+</li>
+<li><p>注意password（授权密码）是明文，因此你需要修改该文件访问权限</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span> 600 ~/.msmtprc</span><br></pre></td></tr></table></figure>
+
+<p>查看权限</p>
+<p><img src="/2022/07/14/system/kernel-patch/limit_of_authority_of_msmtprc_config.png" alt="limit_of_authority_of_msmtprc_config"></p>
+</li>
+<li><p>还可创建日志文件</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">touch</span> ~/.msmtp.log</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>Configure personal info in file “~&#x2F;.gitconfig.”(append)</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[sendemail]</span><br><span class="line">        from = Gencen Gan &lt;u202011061@gmail.com&gt;</span><br><span class="line">        smtpserver = smtp.gmail.com</span><br><span class="line">        smtpuser = u202011061@gmail.com</span><br><span class="line">        smtpserverport = 587</span><br><span class="line">        chainreplyto = false</span><br><span class="line">        smtpencryption = tls</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="step-1"><a href="#step-1" class="headerlink" title="step 1"></a>step 1</h2><blockquote>
+<p>Obtain a current source tree</p>
+</blockquote>
+<ul>
+<li>Link : <a href="https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/">https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/</a></li>
+</ul>
+<p>Get the latest version of linux kernel from the mainline :  </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git (Too slowly)</span><br><span class="line">git <span class="built_in">clone</span> https://kernel.googlesource.com/pub/scm/linux/kernel/git/torvalds/linux (Recommended!)</span><br></pre></td></tr></table></figure>
+
+<p>![git_clone_mainline](..&#x2F;..&#x2F;..&#x2F;..&#x2F;backport_research&#x2F;step 1&#x2F;images for notes&#x2F;git_clone_mainline.png)</p>
+<h2 id="step-2"><a href="#step-2" class="headerlink" title="step 2"></a>step 2</h2><p>[增量编译]</p>
+<blockquote>
+<p>Compile the kernel</p>
+</blockquote>
+<h2 id="step-3"><a href="#step-3" class="headerlink" title="step 3"></a>step 3</h2><blockquote>
+<p>Do some changes:</p>
+</blockquote>
+<ol>
+<li><p>Create a branch in the repo</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git checkout -b fix</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Follow the kernel code style</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git pull</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Git Add</p>
+<blockquote>
+<p>If you changed the file auth_null.c, you should add this file instead of add “.”</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git add net/sunrpc/auth_null.c</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="step-4"><a href="#step-4" class="headerlink" title="step 4"></a>step 4</h2><blockquote>
+<p>Git commit and format your patch</p>
+</blockquote>
+<ol>
+<li><p>After finishing changes, commit changes by:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git commit -a -s -v -m<span class="string">&quot;explanation&quot;</span> <span class="comment">#-e</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>-a : all</li>
+<li>-s : add signed-off-by line in *.patch</li>
+<li>-e : use default editor  <code>nano</code> of git to edit the info of commitment</li>
+<li>-v : display your changes under the information of your commits</li>
+</ul>
+</li>
+<li><p>For the commit file, commit message you can check the commits on the same file</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git format-patch -1</span><br></pre></td></tr></table></figure>
+
+<p>This will generate a patch file for only your previous commit</p>
+</li>
+<li><p>If you do N commits, and would like to format those as a patchset:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git format-patch -3</span><br></pre></td></tr></table></figure>
+
+<p>In fact, the parameter is ‘-N’</p>
+</li>
+<li><p>After you generate the patch file, you should add some information in it.</p>
+<ul>
+<li><p>vim *.patch, you will get the contents in *.patch like the following:</p>
+<p><img src="/2022/07/14/system/kernel-patch/patch_original.png" alt="patch_original"></p>
+</li>
+<li><p>You should add some description between <code>Subject</code> and <code>Signed-off-by</code></p>
+<p><img src="/2022/07/14/system/kernel-patch/patch_modified.png" alt="patch_modified"></p>
+</li>
+<li><p>Now there is no error and no warning.</p>
+<p><img src="/2022/07/14/system/kernel-patch/No_error_and_no_warning.png" alt="No_error_and_no_warning"></p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="step-5"><a href="#step-5" class="headerlink" title="step 5"></a>step 5</h2><blockquote>
+<p>Check and send your patch file</p>
+</blockquote>
+<ol>
+<li><p>Check the style issue of the patch file</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./scripts/checkpatch.pl 0001-net-sunrpc-auth_null-modified-test.patch</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Get the maintainers of your changed file</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./scripts/get_maintainer.pl net/sunrpc/auth_null.c -f</span><br></pre></td></tr></table></figure>
+
+<p>And you will get concerning maintainers about this module</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">Chuck Lever &lt;chuck.lever@oracle.com&gt; (supporter:KERNEL NFSD, SUNRPC, AND LOCKD SERVERS)</span><br><span class="line">Jeff Layton &lt;jlayton@kernel.org&gt; (supporter:KERNEL NFSD, SUNRPC, AND LOCKD SERVERS)</span><br><span class="line">Trond Myklebust &lt;trond.myklebust@hammerspace.com&gt; (maintainer:NFS, SUNRPC, AND LOCKD CLIENTS)</span><br><span class="line">Anna Schumaker &lt;anna@kernel.org&gt; (maintainer:NFS, SUNRPC, AND LOCKD CLIENTS)</span><br><span class="line"><span class="string">&quot;David S. Miller&quot;</span> &lt;davem@davemloft.net&gt; (maintainer:NETWORKING [GENERAL])</span><br><span class="line">Eric Dumazet &lt;edumazet@google.com&gt; (maintainer:NETWORKING [GENERAL])</span><br><span class="line">Jakub Kicinski &lt;kuba@kernel.org&gt; (maintainer:NETWORKING [GENERAL])</span><br><span class="line">Paolo Abeni &lt;pabeni@redhat.com&gt; (maintainer:NETWORKING [GENERAL])</span><br><span class="line">linux-nfs@vger.kernel.org (<span class="built_in">open</span> <span class="built_in">list</span>:KERNEL NFSD, SUNRPC, AND LOCKD SERVERS)</span><br><span class="line">netdev@vger.kernel.org (<span class="built_in">open</span> <span class="built_in">list</span>:NETWORKING [GENERAL])</span><br><span class="line">linux-kernel@vger.kernel.org (<span class="built_in">open</span> <span class="built_in">list</span>)</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>Send mail and cc to kernel maintainers and mailing list</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git send-email </span><br><span class="line">	<span class="comment"># --subject-prefix=&quot;PATCH v2&quot;  </span></span><br><span class="line">	--smtp-server /usr/bin/msmtp </span><br><span class="line">	--to davem@davemloft.net</span><br><span class="line">	--to kuba@kernel.org</span><br><span class="line">	--to edumazet@google.com</span><br><span class="line">	--to chuck.lever@oracle.com</span><br><span class="line">	--to u202011061@gmail.com <span class="comment"># &lt;------ to yourself</span></span><br><span class="line">	-cc linux-nfs@vger.kernel.org</span><br><span class="line">	-cc netdev@vger.kernel.org</span><br><span class="line">	-cc linux-kernel@vger.kernel.org </span><br><span class="line">	0001-net-sunrpc-auth_null-modified-test.patch</span><br></pre></td></tr></table></figure>
+
+<p>For test, you can just send it to yourself.</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git send-email --smtp-server /usr/bin/msmtp --to u202011061@gmail.com --cc Gecenliber@outlook.com 0001-net-sunrpc-auth_null-modified-test.patch</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="Succeed"><a href="#Succeed" class="headerlink" title="Succeed"></a>Succeed</h2><blockquote>
+<p>Happy~</p>
+</blockquote>
+<p><img src="/2022/07/14/system/kernel-patch/send_patch_success.png" alt="send_patch_success"></p>
+]]></content>
+      <categories>
+        <category>system</category>
+      </categories>
+      <tags>
+        <tag>operating system</tag>
+        <tag>Linux kernel</tag>
+      </tags>
+  </entry>
 </search>
