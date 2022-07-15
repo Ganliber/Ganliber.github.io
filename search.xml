@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>PR-1 [kernel REPT]</title>
+    <url>/2022/07/07/paper/PR0001-kernel-REPT/</url>
+    <content><![CDATA[<h1 id="PR-Reverse-Debugging-of-Kernel-Failures-in-Deployed-Systems"><a href="#PR-Reverse-Debugging-of-Kernel-Failures-in-Deployed-Systems" class="headerlink" title="PR : Reverse Debugging of Kernel Failures in Deployed Systems"></a>PR : Reverse Debugging of Kernel Failures in Deployed Systems</h1><hr>
+<blockquote>
+<p>论文地址：<a href="https://www.usenix.org/conference/atc20/presentation/ge">https://www.usenix.org/conference/atc20/presentation/ge</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>paper</category>
+      </categories>
+      <tags>
+        <tag>operating system</tag>
+        <tag>system</tag>
+        <tag>paper reading</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>解决vscode连接本地vmware失败问题</title>
     <url>/2022/07/10/configure/configure-001-vscode-connect-vmware/</url>
     <content><![CDATA[<h3 id="在本地虚拟机vmware中安装ssh"><a href="#在本地虚拟机vmware中安装ssh" class="headerlink" title="在本地虚拟机vmware中安装ssh"></a>在本地虚拟机vmware中安装ssh</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install -y openssh-server</span><br></pre></td></tr></table></figure>
@@ -89,23 +106,6 @@
       </tags>
   </entry>
   <entry>
-    <title>PR-1 [kernel REPT]</title>
-    <url>/2022/07/07/paper/PR0001-kernel-REPT/</url>
-    <content><![CDATA[<h1 id="PR-Reverse-Debugging-of-Kernel-Failures-in-Deployed-Systems"><a href="#PR-Reverse-Debugging-of-Kernel-Failures-in-Deployed-Systems" class="headerlink" title="PR : Reverse Debugging of Kernel Failures in Deployed Systems"></a>PR : Reverse Debugging of Kernel Failures in Deployed Systems</h1><hr>
-<blockquote>
-<p>论文地址：<a href="https://www.usenix.org/conference/atc20/presentation/ge">https://www.usenix.org/conference/atc20/presentation/ge</a></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>paper</category>
-      </categories>
-      <tags>
-        <tag>operating system</tag>
-        <tag>system</tag>
-        <tag>paper reading</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>解决qemu在ubuntu20.04安装找不到命令问题</title>
     <url>/2022/07/11/configure/configure-002-qemu-ubuntu/</url>
     <content><![CDATA[<h3 id="qemu找不到命令"><a href="#qemu找不到命令" class="headerlink" title="qemu找不到命令"></a>qemu找不到命令</h3><ul>
@@ -119,6 +119,32 @@
       <tags>
         <tag>Virtual Machine</tag>
         <tag>qemu</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>heap 1</title>
+    <url>/2022/06/16/pwn/heap-1/</url>
+    <content><![CDATA[<h1 id="堆利用基础"><a href="#堆利用基础" class="headerlink" title="堆利用基础"></a>堆利用基础</h1><h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p><img src="/2022/06/16/pwn/heap-1/program_virtual_address_memory_space.png" alt="program_virtual_address_memory_space"></p>
+]]></content>
+      <categories>
+        <category>pwn</category>
+      </categories>
+      <tags>
+        <tag>pwn</tag>
+        <tag>heap</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>heap 2</title>
+    <url>/2022/06/17/pwn/heap-2/</url>
+    <content><![CDATA[<p><img src="/2022/06/17/pwn/heap-2/program_virtual_address_memory_space.png" alt="program_virtual_address_memory_space"></p>
+]]></content>
+      <categories>
+        <category>pwn</category>
+      </categories>
+      <tags>
+        <tag>pwn</tag>
+        <tag>heap</tag>
       </tags>
   </entry>
   <entry>
@@ -568,32 +594,6 @@
       <tags>
         <tag>pwn</tag>
         <tag>stack</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>heap 1</title>
-    <url>/2022/06/16/pwn/heap-1/</url>
-    <content><![CDATA[<h1 id="堆利用基础"><a href="#堆利用基础" class="headerlink" title="堆利用基础"></a>堆利用基础</h1><h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p><img src="/2022/06/16/pwn/heap-1/program_virtual_address_memory_space.png" alt="program_virtual_address_memory_space"></p>
-]]></content>
-      <categories>
-        <category>pwn</category>
-      </categories>
-      <tags>
-        <tag>pwn</tag>
-        <tag>heap</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>heap 2</title>
-    <url>/2022/06/17/pwn/heap-2/</url>
-    <content><![CDATA[<p><img src="/2022/06/17/pwn/heap-2/program_virtual_address_memory_space.png" alt="program_virtual_address_memory_space"></p>
-]]></content>
-      <categories>
-        <category>pwn</category>
-      </categories>
-      <tags>
-        <tag>pwn</tag>
-        <tag>heap</tag>
       </tags>
   </entry>
   <entry>
