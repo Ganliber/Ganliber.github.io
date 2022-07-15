@@ -21,7 +21,6 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"ganliber.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
-
   <meta name="description" content="自定义menu, 并和categories结合">
 <meta property="og:type" content="article">
 <meta property="og:title" content="next定制">
@@ -30,7 +29,7 @@
 <meta property="og:description" content="自定义menu, 并和categories结合">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-06-16T14:59:09.000Z">
-<meta property="article:modified_time" content="2022-07-10T12:23:24.435Z">
+<meta property="article:modified_time" content="2022-07-15T10:18:13.279Z">
 <meta property="article:author" content="Gan Gecen">
 <meta property="article:tag" content="hexo">
 <meta property="article:tag" content="next theme">
@@ -80,7 +79,7 @@
   </style>
 </noscript>
 
-</head>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
   <div class="container use-motion">
@@ -247,7 +246,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-07-10 20:23:24" itemprop="dateModified" datetime="2022-07-10T20:23:24+08:00">2022-07-10</time>
+                <time title="Modified: 2022-07-15 18:18:13" itemprop="dateModified" datetime="2022-07-15T18:18:13+08:00">2022-07-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -290,10 +289,10 @@
 </blockquote>
 <ul>
 <li><p>在主题配置文件<code>_config.yml</code>中<code>menu</code>栏下添加新的标签页，并在<code>blog/source</code>文件夹下添加同样的文件夹，<code>||</code>右侧是图标，采用的是<code>Font Awesome</code>中的图标位置，不过推荐用<code>fa-solid</code>类型的<code>icon</code>，因为其他的好像显示失败。注意在如<code>/source/pwn</code>中的<code>index.md</code>中不需要写<code>type</code>和<code>layout</code></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python">menu:<br>  home: / || fa fa-home<br>  about: /about/ || fa fa-user<br>  tags: /tags/ || fa fa-tags<br>  categories: /categories/ || fa fa-th<br>  archives: /archives/ || fa fa-archive<br>  pwn: /pwn/ || fas fa-flag-checkered<br>  system: /system/ || fas fa-laptop-code<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">menu:</span><br><span class="line">  home: / || fa fa-home</span><br><span class="line">  about: /about/ || fa fa-user</span><br><span class="line">  tags: /tags/ || fa fa-tags</span><br><span class="line">  categories: /categories/ || fa fa-th</span><br><span class="line">  archives: /archives/ || fa fa-archive</span><br><span class="line">  pwn: /pwn/ || fas fa-flag-checkered</span><br><span class="line">  system: /system/ || fas fa-laptop-code</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>在<code>/theme/next/scripts</code>下新建一个<code>pwn.js</code>文件来控制新的<code>pwn</code>菜单栏的内容</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> pagination = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;hexo-pagination&#x27;</span>);<br><br><span class="hljs-keyword">const</span> filteredCategory = <span class="hljs-string">&#x27;pwn&#x27;</span>;<br><br>hexo.<span class="hljs-property">extend</span>.<span class="hljs-property">generator</span>.<span class="hljs-title function_">register</span>(<span class="hljs-string">&#x27;pwn&#x27;</span>, <span class="hljs-keyword">function</span>(<span class="hljs-params">locals</span>)&#123;<br>  <span class="hljs-keyword">var</span> pwnPosts = locals.<span class="hljs-property">posts</span>.<span class="hljs-title function_">filter</span>(<span class="hljs-keyword">function</span>(<span class="hljs-params">x</span>) &#123;<br>    <span class="hljs-keyword">return</span> x.<span class="hljs-property">categories</span>.<span class="hljs-property">data</span>[<span class="hljs-number">0</span>].<span class="hljs-property">name</span> == filteredCategory;<br>  &#125;);<br><br>  <span class="hljs-keyword">return</span> <span class="hljs-title function_">pagination</span>(<span class="hljs-string">&#x27;pwn&#x27;</span>, pwnPosts, &#123;<br>    <span class="hljs-attr">perPage</span>: <span class="hljs-number">12</span>,<br>    <span class="hljs-attr">layout</span>: [<span class="hljs-string">&#x27;archive&#x27;</span>]<br>  &#125;)<br>&#125;);<br></code></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> pagination = <span class="built_in">require</span>(<span class="string">&#x27;hexo-pagination&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> filteredCategory = <span class="string">&#x27;pwn&#x27;</span>;</span><br><span class="line"></span><br><span class="line">hexo.<span class="property">extend</span>.<span class="property">generator</span>.<span class="title function_">register</span>(<span class="string">&#x27;pwn&#x27;</span>, <span class="keyword">function</span>(<span class="params">locals</span>)&#123;</span><br><span class="line">  <span class="keyword">var</span> pwnPosts = locals.<span class="property">posts</span>.<span class="title function_">filter</span>(<span class="keyword">function</span>(<span class="params">x</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> x.<span class="property">categories</span>.<span class="property">data</span>[<span class="number">0</span>].<span class="property">name</span> == filteredCategory;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">pagination</span>(<span class="string">&#x27;pwn&#x27;</span>, pwnPosts, &#123;</span><br><span class="line">    <span class="attr">perPage</span>: <span class="number">12</span>,</span><br><span class="line">    <span class="attr">layout</span>: [<span class="string">&#x27;archive&#x27;</span>]</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>注意最后一个<code>layout</code>可以用<code>&#39;archive&#39;</code>来呈现时间轴的效果，不必再自定义了（报错麻烦）</li>
@@ -305,21 +304,23 @@
 </ul>
 <h2 id="pace实现加载特效"><a href="#pace实现加载特效" class="headerlink" title="pace实现加载特效"></a>pace实现加载特效</h2><p>由于网页不可能一直都秒进，总会等待一段时间的，所以可以设置顶部加载条。Next 已经集成了很多加载特效，可以在下面选项中在线调试测试一下。</p>
 <p>搜索<code>pace</code>，找到如下代码：</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs css"># 页面顶部加载条<br># Progress bar in the <span class="hljs-attribute">top</span> during page loading.<br>pace: true<br># Themes list:<br>#pace-theme-big-counter<br>#pace-theme-bounce<br>#pace-theme-barber-shop<br>#pace-theme-center-atom<br>#pace-theme-center-circle<br>#pace-theme-center-radar<br>#pace-theme-center-simple<br>#pace-theme-corner-indicator<br>#pace-theme-fill-left<br>#pace-theme-flash<br>#pace-theme-loading-bar<br>#pace-theme-mac-osx<br>#pace-theme-minimal<br># For example<br># pace_theme: pace-theme-center-simple<br>pace_theme: pace-theme-minimal  # 默认设置，可以修改为上述任何一个<br><br></code></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"># 页面顶部加载条</span><br><span class="line"># Progress bar in the <span class="attribute">top</span> during page loading.</span><br><span class="line">pace: true</span><br><span class="line"># Themes list:</span><br><span class="line">#pace-theme-big-counter</span><br><span class="line">#pace-theme-bounce</span><br><span class="line">#pace-theme-barber-shop</span><br><span class="line">#pace-theme-center-atom</span><br><span class="line">#pace-theme-center-circle</span><br><span class="line">#pace-theme-center-radar</span><br><span class="line">#pace-theme-center-simple</span><br><span class="line">#pace-theme-corner-indicator</span><br><span class="line">#pace-theme-fill-left</span><br><span class="line">#pace-theme-flash</span><br><span class="line">#pace-theme-loading-bar</span><br><span class="line">#pace-theme-mac-osx</span><br><span class="line">#pace-theme-minimal</span><br><span class="line"># For example</span><br><span class="line"># pace_theme: pace-theme-center-simple</span><br><span class="line">pace_theme: pace-theme-minimal  # 默认设置，可以修改为上述任何一个</span><br></pre></td></tr></table></figure>
+
+
 
 
 
 <h2 id="加载图片"><a href="#加载图片" class="headerlink" title="加载图片"></a>加载图片</h2><ul>
 <li><p>装插件</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">npm install hexo-renderer-marked<br></code></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-renderer-marked</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>在全局配置文件<code>_config.yml</code>中</p>
 <ol>
 <li><p>修改是否生成资源文件夹</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css">post_asset_folder: true<br></code></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">post_asset_folder: true</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>添加标记</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs css">marked:<br>  prependRoot: true<br>  postAsset: true<br></code></pre></td></tr></table></figure></li>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">marked:</span><br><span class="line">  prependRoot: true</span><br><span class="line">  postAsset: true</span><br></pre></td></tr></table></figure></li>
 </ol>
 </li>
 <li><p>此时通过<code>hexo new &#39;title&#39;</code>可以在<code>_posts</code>中生成<code>title.md</code>和同名资源文件夹<code>title</code></p>
@@ -330,11 +331,14 @@
 <li><p>修改<code>typora</code>图片偏好为相对路径优先</p>
 </li>
 <li><p>进入相对路径后注意只有一个图片名（在对应的资源文件夹下）</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs js">![name](name.<span class="hljs-property">png</span>)<br></code></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">![name](name.<span class="property">png</span>)</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>当缩放时<code>src</code>也只能有图片名</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;brop_stop_gadgets.png&quot;</span> <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;brop_stop_gadgets&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;zoom:38%;&quot;</span> /&gt;</span><br></code></pre></td></tr></table></figure></li>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;brop_stop_gadgets.png&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;brop_stop_gadgets&quot;</span> <span class="attr">style</span>=<span class="string">&quot;zoom:38%;&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure></li>
 </ul>
+<h2 id="圆角与背景"><a href="#圆角与背景" class="headerlink" title="圆角与背景"></a>圆角与背景</h2><blockquote>
+<p>Link : <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/280784973">https://zhuanlan.zhihu.com/p/280784973</a></p>
+</blockquote>
 
     </div>
 
@@ -443,7 +447,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#js%E8%84%9A%E6%9C%AC%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%AE%9A%E4%B9%89menu%E9%A1%B5"><span class="nav-number">1.</span> <span class="nav-text">js脚本实现自定义menu页</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pace%E5%AE%9E%E7%8E%B0%E5%8A%A0%E8%BD%BD%E7%89%B9%E6%95%88"><span class="nav-number">2.</span> <span class="nav-text">pace实现加载特效</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A0%E8%BD%BD%E5%9B%BE%E7%89%87"><span class="nav-number">3.</span> <span class="nav-text">加载图片</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#js%E8%84%9A%E6%9C%AC%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%AE%9A%E4%B9%89menu%E9%A1%B5"><span class="nav-number">1.</span> <span class="nav-text">js脚本实现自定义menu页</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pace%E5%AE%9E%E7%8E%B0%E5%8A%A0%E8%BD%BD%E7%89%B9%E6%95%88"><span class="nav-number">2.</span> <span class="nav-text">pace实现加载特效</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A0%E8%BD%BD%E5%9B%BE%E7%89%87"><span class="nav-number">3.</span> <span class="nav-text">加载图片</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%86%E8%A7%92%E4%B8%8E%E8%83%8C%E6%99%AF"><span class="nav-number">4.</span> <span class="nav-text">圆角与背景</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
