@@ -21,18 +21,22 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"ganliber.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
-  <meta name="description" content="An information security practitioner, focusing on system, Linux and pwn">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Ganliber&#39;s Home">
-<meta property="og:url" content="https://ganliber.github.io/archives/2022/06/index.html">
+  <meta name="description" content="(USENIX 2020) Reverse Debugging of Kernel Failures in Deployed Systems">
+<meta property="og:type" content="article">
+<meta property="og:title" content="paper readingkernel REPT">
+<meta property="og:url" content="https://ganliber.github.io/2022/07/07/paper/PR0001-kernel-REPT/index.html">
 <meta property="og:site_name" content="Ganliber&#39;s Home">
-<meta property="og:description" content="An information security practitioner, focusing on system, Linux and pwn">
+<meta property="og:description" content="(USENIX 2020) Reverse Debugging of Kernel Failures in Deployed Systems">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-07-07T05:04:43.000Z">
+<meta property="article:modified_time" content="2022-07-15T15:20:22.595Z">
 <meta property="article:author" content="Gan Gecen">
-<meta property="article:tag" content="OS, pwn, Linux, Security, Blockchain">
+<meta property="article:tag" content="operating system">
+<meta property="article:tag" content="system">
+<meta property="article:tag" content="paper reading">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://ganliber.github.io/archives/2022/06/">
+<link rel="canonical" href="https://ganliber.github.io/2022/07/07/paper/PR0001-kernel-REPT/">
 
 
 <script id="page-configurations">
@@ -40,12 +44,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'en'
   };
 </script>
 
-  <title>Archive | Ganliber's Home</title>
+  <title>paper readingkernel REPT | Ganliber's Home</title>
   
 
 
@@ -206,136 +210,149 @@
         <div class="content-wrap">
           
 
-          <div class="content archive">
+          <div class="content post posts-expand">
             
 
+    
   
   
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://ganliber.github.io/2022/07/07/paper/PR0001-kernel-REPT/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Gan Gecen">
+      <meta itemprop="description" content="An information security practitioner, focusing on system, Linux and pwn">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ganliber's Home">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          paper readingkernel REPT
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-07-07 13:04:43" itemprop="dateCreated datePublished" datetime="2022-07-07T13:04:43+08:00">2022-07-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-07-15 23:20:22" itemprop="dateModified" datetime="2022-07-15T23:20:22+08:00">2022-07-15</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/paper/" itemprop="url" rel="index"><span itemprop="name">paper</span></a>
+                </span>
+            </span>
+
+          
   
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <span class="collection-header">Um..! 13 posts in total. Keep on posting.</span>
-      </div>
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/2022/07/07/paper/PR0001-kernel-REPT/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/07/07/paper/PR0001-kernel-REPT/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+            <div class="post-description"> (USENIX 2020) Reverse Debugging of Kernel Failures in Deployed Systems </div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <span class="collection-header">2022</span>
-    </div>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2022-06-27T22:31:04+08:00"
-              content="2022-06-27">
-          06-27
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/06/27/system/os-notes-first/" itemprop="url">
-            <span itemprop="name">OS Notes Part(I)</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2022-06-17T15:11:22+08:00"
-              content="2022-06-17">
-          06-17
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/06/17/pwn/heap-2/" itemprop="url">
-            <span itemprop="name">heap 2</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2022-06-16T22:59:09+08:00"
-              content="2022-06-16">
-          06-16
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/06/16/configure/next%20tips/" itemprop="url">
-            <span itemprop="name">Customize NexT</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2022-06-16T17:47:30+08:00"
-              content="2022-06-16">
-          06-16
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/06/16/pwn/heap-1/" itemprop="url">
-            <span itemprop="name">heap 1</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2022-06-16T16:47:30+08:00"
-              content="2022-06-16">
-          06-16
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/06/16/pwn/brop/" itemprop="url">
-            <span itemprop="name">blind ROP</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
+        <h1 id="Paper-Reading-Reverse-Debugging-of-Kernel-Failures-in-Deployed-Systems"><a href="#Paper-Reading-Reverse-Debugging-of-Kernel-Failures-in-Deployed-Systems" class="headerlink" title="Paper Reading : Reverse Debugging of Kernel Failures in Deployed Systems"></a>Paper Reading : Reverse Debugging of Kernel Failures in Deployed Systems</h1><hr>
+<blockquote>
+<p>Title : Reverse Debugging of Kernel Failures in Deployed Systems</p>
+<p>Link : <a target="_blank" rel="noopener" href="https://www.usenix.org/conference/atc20/presentation/ge">https://www.usenix.org/conference/atc20/presentation/ge</a></p>
+</blockquote>
 
     </div>
-  </div>
-  
-  
-  
 
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Gan Gecen
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://ganliber.github.io/2022/07/07/paper/PR0001-kernel-REPT/" title="paper readingkernel REPT">https://ganliber.github.io/2022/07/07/paper/PR0001-kernel-REPT/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/operating-system/" rel="tag"># operating system</a>
+              <a href="/tags/system/" rel="tag"># system</a>
+              <a href="/tags/paper-reading/" rel="tag"># paper reading</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/07/07/system/os-notes-second/" rel="prev" title="OS Notes Part(II)">
+      <i class="fa fa-chevron-left"></i> OS Notes Part(II)
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/07/07/system/os-notes-third/" rel="next" title="OS Notes Part(III)">
+      OS Notes Part(III) <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
   
 
 
 
           </div>
           
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -382,6 +399,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Paper-Reading-Reverse-Debugging-of-Kernel-Failures-in-Deployed-Systems"><span class="nav-number">1.</span> <span class="nav-text">Paper Reading : Reverse Debugging of Kernel Failures in Deployed Systems</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -539,6 +557,26 @@
   }
   // defer loading until the whole page loading is completed
   window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://ganliber.github.io/2022/07/07/paper/PR0001-kernel-REPT/";
+    this.page.identifier = "2022/07/07/paper/PR0001-kernel-REPT/";
+    this.page.title = "paper readingkernel REPT";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://Ganliber.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
 </script>
 
 </body>
