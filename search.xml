@@ -751,7 +751,7 @@
 <p>Get the latest version of linux kernel from the mainline :  </p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git (Too slowly)</span><br><span class="line">git <span class="built_in">clone</span> https://kernel.googlesource.com/pub/scm/linux/kernel/git/torvalds/linux (Recommended!)</span><br></pre></td></tr></table></figure>
 
-<p>![git_clone_mainline](..&#x2F;..&#x2F;..&#x2F;..&#x2F;backport_research&#x2F;step 1&#x2F;images for notes&#x2F;git_clone_mainline.png)</p>
+<p><img src="/git_clone_mainline.png" alt="git_clone_mainline"></p>
 <h2 id="step-2"><a href="#step-2" class="headerlink" title="step 2"></a>step 2</h2><p>[增量编译]</p>
 <blockquote>
 <p>Compile the kernel</p>
