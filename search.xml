@@ -2866,4 +2866,56 @@
         <tag>system</tag>
       </tags>
   </entry>
+  <entry>
+    <title>ish configure</title>
+    <url>/2022/07/21/configure/ish-configure/</url>
+    <content><![CDATA[<h1 id="ish-configure"><a href="#ish-configure" class="headerlink" title="ish configure"></a>ish configure</h1><hr>
+<blockquote>
+<p>iSH是一个模拟器，用来在ARM架构的iOS设备上模拟x86架构，让iOS设备在本地运行Linux Shell环境。iSH使用的Linux系统镜像是Alpine Linux，<strong>Alpine Linux</strong>是一个由社区开发的<a href="https://link.zhihu.com/?target=https://zh.wikipedia.org/wiki/Linux%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F">Linux操作系统</a>，该操作系统以安全为理念，面向x86<a href="https://link.zhihu.com/?target=https://zh.wikipedia.org/wiki/%E8%B7%AF%E7%94%B1%E5%99%A8">路由器</a>、<a href="https://link.zhihu.com/?target=https://zh.wikipedia.org/wiki/%E9%98%B2%E7%81%AB%E5%A2%99">防火墙</a>、<a href="https://link.zhihu.com/?target=https://zh.wikipedia.org/wiki/%E8%99%9A%E6%8B%9F%E4%B8%93%E7%94%A8%E7%BD%91">虚拟专用网</a>、IP电话盒及<a href="https://link.zhihu.com/?target=https://zh.wikipedia.org/wiki/%E6%9C%8D%E5%8A%A1%E5%99%A8">服务器</a>而设计。</p>
+</blockquote>
+<p>Download ssh</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">apk add openssh</span><br></pre></td></tr></table></figure>
+
+
+<p>Generate all kinds of Keypair</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ssh-keygen -A</span><br></pre></td></tr></table></figure>
+
+<p>Run sshd</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/usr/sbin/sshd</span><br></pre></td></tr></table></figure>
+
+<p>Download some common tools for Alpine Linux</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">apk add zsh git neofetch curl neovim</span><br></pre></td></tr></table></figure>
+
+<p>Switch to Tsinghua Source</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sed -i <span class="string">&#x27;s/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g&#x27;</span> /etc/apk/repositories</span><br></pre></td></tr></table></figure>
+
+<p>Update apk</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">apk update</span><br></pre></td></tr></table></figure>
+
+<p>ssh connection</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ssh userName@xxx.xxx.xxx.xxx -p port</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+]]></content>
+      <categories>
+        <category>configure</category>
+      </categories>
+      <tags>
+        <tag>ARM</tag>
+        <tag>ipad</tag>
+      </tags>
+  </entry>
 </search>
