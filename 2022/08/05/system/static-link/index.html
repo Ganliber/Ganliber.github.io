@@ -21,18 +21,21 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"ganliber.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
-  <meta name="description" content="An information security practitioner, focusing on system, Linux and pwn">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Ganliber&#39;s Home">
-<meta property="og:url" content="https://ganliber.github.io/categories/pwn/index.html">
+  <meta name="description" content="静态链接">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Static Linking">
+<meta property="og:url" content="https://ganliber.github.io/2022/08/05/system/static-link/index.html">
 <meta property="og:site_name" content="Ganliber&#39;s Home">
-<meta property="og:description" content="An information security practitioner, focusing on system, Linux and pwn">
+<meta property="og:description" content="静态链接">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-08-05T07:09:27.000Z">
+<meta property="article:modified_time" content="2022-08-05T17:58:45.207Z">
 <meta property="article:author" content="Gan Gecen">
-<meta property="article:tag" content="OS, pwn, Linux, Security, Blockchain">
+<meta property="article:tag" content="static linking">
+<meta property="article:tag" content="linker">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://ganliber.github.io/categories/pwn/">
+<link rel="canonical" href="https://ganliber.github.io/2022/08/05/system/static-link/">
 
 
 <script id="page-configurations">
@@ -40,12 +43,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'en'
   };
 </script>
 
-  <title>Category: pwn | Ganliber's Home</title>
+  <title>Static Linking | Ganliber's Home</title>
   
 
 
@@ -206,97 +209,207 @@
         <div class="content-wrap">
           
 
-          <div class="content category">
+          <div class="content post posts-expand">
             
 
+    
   
   
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://ganliber.github.io/2022/08/05/system/static-link/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Gan Gecen">
+      <meta itemprop="description" content="An information security practitioner, focusing on system, Linux and pwn">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ganliber's Home">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Static Linking
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-08-05 15:09:27" itemprop="dateCreated datePublished" datetime="2022-08-05T15:09:27+08:00">2022-08-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-08-06 01:58:45" itemprop="dateModified" datetime="2022-08-06T01:58:45+08:00">2022-08-06</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/system/" itemprop="url" rel="index"><span itemprop="name">system</span></a>
+                </span>
+            </span>
+
+          
   
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <h2 class="collection-header">pwn
-          <small>Category</small>
-        </h2>
-      </div>
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/2022/08/05/system/static-link/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/08/05/system/static-link/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+            <div class="post-description"> 静态链接 </div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <span class="collection-header">2022</span>
+        <h1 id="编译和链接"><a href="#编译和链接" class="headerlink" title="编译和链接"></a>编译和链接</h1><hr>
+<h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><ul>
+<li><p>编译：扫描 -&gt; 语法分析 -&gt; 语义分析 -&gt; 源代码优化 -&gt; 代码生成 -&gt; 目标代码优化</p>
+</li>
+<li><p>下图为从源代码<code>Source Code</code>到最终目标代码<code>Final Target Code</code>的过程</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">flowchart</span><br><span class="line">	A(Source Code) --&gt; |Scanner| B(Tokens)</span><br><span class="line">	B --&gt; |Parser| C(Syntax Tree)</span><br><span class="line">    C --&gt; |Semantic Analyzer| D(Commented Syntax Tree)</span><br><span class="line">    D --&gt; |Source Code Optimizer| E(Intermediate Representation)</span><br><span class="line">    E --&gt; |Code Generator| F(Target Code)</span><br><span class="line">    F --&gt; |Code Optimizer| G(Final Target Code)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="词法分析"><a href="#词法分析" class="headerlink" title="词法分析"></a>词法分析</h3><blockquote>
+<p>Lexical Analysis</p>
+</blockquote>
+<ul>
+<li>扫描器<code>scanner</code></li>
+<li>有限状态机<code>FSM (Finite State Machine)</code>算法：将源代码的字符分割成一系列的记号<code>Token</code></li>
+<li><code>lex</code>：按照用户描述好的词法规则将输入的字符串分割成一个个记号</li>
+</ul>
+<h3 id="语法分析"><a href="#语法分析" class="headerlink" title="语法分析"></a>语法分析</h3><blockquote>
+<p>Syntax Analysis</p>
+</blockquote>
+<ul>
+<li>语法分析器<code>Grammar Parser</code></li>
+<li>语法树<code>Syntax Tree</code></li>
+<li>上下文无关语法<code>Context-free Grammar</code></li>
+<li><code>yacc</code>：Yet Another Compiler Compiler，根据用户给定的语法规则对输入记号序列进行解析，从而构建出一颗语法树</li>
+</ul>
+<h3 id="语义分析"><a href="#语义分析" class="headerlink" title="语义分析"></a>语义分析</h3><blockquote>
+<p>Semantic Analysis</p>
+</blockquote>
+<ul>
+<li>语义分析器<code>Semantic Analyzer</code></li>
+<li>编译器能分析的是静态语义<code>Static Semantic</code>：静态语义通常包括声明和类型的匹配，类型的转换</li>
+</ul>
+<h3 id="中间语言生成"><a href="#中间语言生成" class="headerlink" title="中间语言生成"></a>中间语言生成</h3><ul>
+<li><p>源码级优化器<code>Source Code Optimizer</code></p>
+</li>
+<li><p>中间代码<code>Intermediate Code</code></p>
+<blockquote>
+<p>使得编译器分为前端和后端，前端负责产生机器无关的中间代码，后端负责将中间代码转换为目标机器代码</p>
+</blockquote>
+<ul>
+<li><p>三地址码<code>Three-address Code</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x = y op z</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>P-代码<code>P-Code</code></p>
+</li>
+</ul>
+</li>
+<li><p>编译器后端</p>
+<ul>
+<li><p>代码生成器<code>Code Generator</code></p>
+</li>
+<li><p>目标代码生成器<code>Target Code Optimizer</code></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="链接器"><a href="#链接器" class="headerlink" title="链接器"></a>链接器</h2><ul>
+<li>符号<code>Symbol</code>：表示一个地址，可能是一段子程序（函数）的地址，也可能是一个变量的起始地址</li>
+<li>模块间通信方式：符号引用</li>
+<li>链接<code>Linking</code>：<ul>
+<li>地址和空间分配<code>Address and Storage Allocation</code></li>
+<li>符号决议<code>Symbol Resolution</code>（or Symbol Binding, Name Binding, Name Resolution, Address Binding, Instruction Binding）</li>
+<li>重定位<code>Relocation</code></li>
+</ul>
+</li>
+<li>运行时库<code>Runtime Library</code>：支持程序运行的基本函数的集合</li>
+<li></li>
+</ul>
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+    
+    
+    
+        
 
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2022-06-17T15:11:22+08:00"
-              content="2022-06-17">
-          06-17
-        </time>
-      </div>
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Gan Gecen
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://ganliber.github.io/2022/08/05/system/static-link/" title="Static Linking">https://ganliber.github.io/2022/08/05/system/static-link/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/06/17/pwn/heap-2/" itemprop="url">
-            <span itemprop="name">heap 2</span>
-          </a>
-      </div>
 
-    </header>
-  </article>
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/static-linking/" rel="tag"># static linking</a>
+              <a href="/tags/linker/" rel="tag"># linker</a>
+          </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+        
 
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2022-06-16T17:47:30+08:00"
-              content="2022-06-16">
-          06-16
-        </time>
-      </div>
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/06/16/pwn/heap-1/" itemprop="url">
-            <span itemprop="name">heap 1</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2022-06-16T16:47:30+08:00"
-              content="2022-06-16">
-          06-16
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/06/16/pwn/brop/" itemprop="url">
-            <span itemprop="name">blind ROP</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/07/22/system/python-spider-1/" rel="prev" title="python spider">
+      <i class="fa fa-chevron-left"></i> python spider
+    </a></div>
+      <div class="post-nav-item"></div>
     </div>
-  </div>
+      </footer>
+    
+  </article>
   
   
-  
-
   
 
 
 
           </div>
           
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -343,6 +456,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%92%8C%E9%93%BE%E6%8E%A5"><span class="nav-number">1.</span> <span class="nav-text">编译和链接</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91"><span class="nav-number">1.1.</span> <span class="nav-text">编译</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90"><span class="nav-number">1.1.1.</span> <span class="nav-text">词法分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90"><span class="nav-number">1.1.2.</span> <span class="nav-text">语法分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E4%B9%89%E5%88%86%E6%9E%90"><span class="nav-number">1.1.3.</span> <span class="nav-text">语义分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E8%AF%AD%E8%A8%80%E7%94%9F%E6%88%90"><span class="nav-number">1.1.4.</span> <span class="nav-text">中间语言生成</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%93%BE%E6%8E%A5%E5%99%A8"><span class="nav-number">1.2.</span> <span class="nav-text">链接器</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -500,6 +614,26 @@
   }
   // defer loading until the whole page loading is completed
   window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://ganliber.github.io/2022/08/05/system/static-link/";
+    this.page.identifier = "2022/08/05/system/static-link/";
+    this.page.title = "Static Linking";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://Ganliber.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
 </script>
 
 </body>
