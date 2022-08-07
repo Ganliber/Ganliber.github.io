@@ -29,7 +29,7 @@
 <meta property="og:description" content="静态链接">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-08-05T07:09:27.000Z">
-<meta property="article:modified_time" content="2022-08-06T16:02:21.730Z">
+<meta property="article:modified_time" content="2022-08-07T10:26:55.288Z">
 <meta property="article:author" content="Gan Gecen">
 <meta property="article:tag" content="static linking">
 <meta property="article:tag" content="linker">
@@ -246,7 +246,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-08-07 00:02:21" itemprop="dateModified" datetime="2022-08-07T00:02:21+08:00">2022-08-07</time>
+                <time title="Modified: 2022-08-07 18:26:55" itemprop="dateModified" datetime="2022-08-07T18:26:55+08:00">2022-08-07</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -289,7 +289,7 @@
 <li><p>编译：扫描 -&gt; 语法分析 -&gt; 语义分析 -&gt; 源代码优化 -&gt; 代码生成 -&gt; 目标代码优化</p>
 </li>
 <li><p>下图为从源代码<code>Source Code</code>到最终目标代码<code>Final Target Code</code>的过程</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">flowchart</span><br><span class="line">	A(Source Code) --&gt; |Scanner| B(Tokens)</span><br><span class="line">	B --&gt; |Parser| C(Syntax Tree)</span><br><span class="line">    C --&gt; |Semantic Analyzer| D(Commented Syntax Tree)</span><br><span class="line">    D --&gt; |Source Code Optimizer| E(Intermediate Representation)</span><br><span class="line">    E --&gt; |Code Generator| F(Target Code)</span><br><span class="line">    F --&gt; |Code Optimizer| G(Final Target Code)</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">flowchart</span><br><span class="line">	A(Source Code) --&gt; |Scanner| B(Tokens)</span><br><span class="line">	B --&gt; |Parser| C(Syntax Tree)</span><br><span class="line">	C --&gt; |Semantic Analyzer| D(Commented Syntax Tree)</span><br><span class="line">	D --&gt; |Source Code Optimizer| E(Intermediate Representation)</span><br><span class="line">	E --&gt; |Code Generator| F(Target Code)</span><br><span class="line">	F --&gt; |Code Optimizer| G(Final Target Code)</span><br></pre></td></tr></table></figure></li>
 </ul>
 <h3 id="词法分析"><a href="#词法分析" class="headerlink" title="词法分析"></a>词法分析</h3><blockquote>
 <p>Lexical Analysis</p>
@@ -313,14 +313,14 @@
 </blockquote>
 <ul>
 <li>语义分析器<code>Semantic Analyzer</code></li>
-<li>编译器能分析的是静态语义<code>Static Semantic</code>：静态语义通常包括声明和类型的匹配，类型的转换</li>
+<li>编译器能分析的是静态语义<code>Static Semantic</code>：静态语义通常包括<strong>声明</strong>和<strong>类型</strong>的匹配，<strong>类型的转换</strong></li>
 </ul>
 <h3 id="中间语言生成"><a href="#中间语言生成" class="headerlink" title="中间语言生成"></a>中间语言生成</h3><ul>
 <li><p>源码级优化器<code>Source Code Optimizer</code></p>
 </li>
 <li><p>中间代码<code>Intermediate Code</code></p>
 <blockquote>
-<p>使得编译器分为前端和后端，前端负责产生机器无关的中间代码，后端负责将中间代码转换为目标机器代码</p>
+<p>使得编译器分为前端和后端，前端负责产生机器无关的中间代码，后端负责将中间代码转换为目标机器代码，通常同一个前端可以通过组合不同的后端适配不同的平台</p>
 </blockquote>
 <ul>
 <li><p>三地址码<code>Three-address Code</code></p>
@@ -350,7 +350,11 @@
 </li>
 <li>运行时库<code>Runtime Library</code>：支持程序运行的基本函数的集合</li>
 <li>重定位入口<code>Relocation Entry</code></li>
-<li></li>
+</ul>
+<h1 id="目标文件"><a href="#目标文件" class="headerlink" title="目标文件"></a>目标文件</h1><h2 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h2><ul>
+<li>COFF：Common file format –&gt; .obj (windows) &amp; .o (Linux)</li>
+<li>动态链接库 (Dynamic Linking Library)：.dll (windows) &amp; .so (Linux)</li>
+<li>静态链接库 (Static Linking Library)：.lib(windows) &amp; .a(linux)</li>
 </ul>
 
     </div>
@@ -460,7 +464,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%92%8C%E9%93%BE%E6%8E%A5"><span class="nav-number">1.</span> <span class="nav-text">编译和链接</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91"><span class="nav-number">1.1.</span> <span class="nav-text">编译</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90"><span class="nav-number">1.1.1.</span> <span class="nav-text">词法分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90"><span class="nav-number">1.1.2.</span> <span class="nav-text">语法分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E4%B9%89%E5%88%86%E6%9E%90"><span class="nav-number">1.1.3.</span> <span class="nav-text">语义分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E8%AF%AD%E8%A8%80%E7%94%9F%E6%88%90"><span class="nav-number">1.1.4.</span> <span class="nav-text">中间语言生成</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%93%BE%E6%8E%A5%E5%99%A8"><span class="nav-number">1.2.</span> <span class="nav-text">链接器</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%92%8C%E9%93%BE%E6%8E%A5"><span class="nav-number">1.</span> <span class="nav-text">编译和链接</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91"><span class="nav-number">1.1.</span> <span class="nav-text">编译</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90"><span class="nav-number">1.1.1.</span> <span class="nav-text">词法分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90"><span class="nav-number">1.1.2.</span> <span class="nav-text">语法分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E4%B9%89%E5%88%86%E6%9E%90"><span class="nav-number">1.1.3.</span> <span class="nav-text">语义分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E8%AF%AD%E8%A8%80%E7%94%9F%E6%88%90"><span class="nav-number">1.1.4.</span> <span class="nav-text">中间语言生成</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%93%BE%E6%8E%A5%E5%99%A8"><span class="nav-number">1.2.</span> <span class="nav-text">链接器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9B%AE%E6%A0%87%E6%96%87%E4%BB%B6"><span class="nav-number">2.</span> <span class="nav-text">目标文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%BC%E5%BC%8F"><span class="nav-number">2.1.</span> <span class="nav-text">格式</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

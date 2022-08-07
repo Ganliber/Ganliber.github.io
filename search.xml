@@ -22,22 +22,6 @@
       </tags>
   </entry>
   <entry>
-    <title>解决qemu在ubuntu20.04安装找不到命令问题</title>
-    <url>/2022/07/11/configure/configure-002-qemu-ubuntu/</url>
-    <content><![CDATA[<h3 id="qemu找不到命令"><a href="#qemu找不到命令" class="headerlink" title="qemu找不到命令"></a>qemu找不到命令</h3><ul>
-<li><p>更改命令</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install qemu-system</span><br></pre></td></tr></table></figure></li>
-</ul>
-]]></content>
-      <categories>
-        <category>configure</category>
-      </categories>
-      <tags>
-        <tag>Virtual Machine</tag>
-        <tag>qemu</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>ish configure</title>
     <url>/2022/07/21/configure/ish-configure/</url>
     <content><![CDATA[<h1 id="ish-configure"><a href="#ish-configure" class="headerlink" title="ish configure"></a>ish configure</h1><hr>
@@ -90,27 +74,19 @@
       </tags>
   </entry>
   <entry>
-    <title>questions-config-collection-1</title>
-    <url>/2022/08/07/configure/questions-config-collection-1/</url>
-    <content><![CDATA[<h2 id="22-x2F-8-x2F-7-Github-connection-confused"><a href="#22-x2F-8-x2F-7-Github-connection-confused" class="headerlink" title="22&#x2F;8&#x2F;7 Github connection confused"></a>22&#x2F;8&#x2F;7 Github connection confused</h2><hr>
-<h3 id="Description"><a href="#Description" class="headerlink" title="Description"></a>Description</h3><blockquote>
-<p>ssh: connect to host github.com port 22: Connection refused</p>
-</blockquote>
-<h3 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h3><ol>
-<li><p>22 port 被屏蔽，尝试连接Github 443端口</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ vim ~/.ssh/config</span><br><span class="line"><span class="comment"># Add section below to it</span></span><br><span class="line">Host github.com</span><br><span class="line">  Hostname ssh.github.com</span><br><span class="line">  Port 443</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>https &#x2F; ssh 两种方式切换</p>
-</li>
-</ol>
-<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p><a href="https://segmentfault.com/a/1190000041909858">Variable Methods solving connection confusion</a></p>
+    <title>解决qemu在ubuntu20.04安装找不到命令问题</title>
+    <url>/2022/07/11/configure/configure-002-qemu-ubuntu/</url>
+    <content><![CDATA[<h3 id="qemu找不到命令"><a href="#qemu找不到命令" class="headerlink" title="qemu找不到命令"></a>qemu找不到命令</h3><ul>
+<li><p>更改命令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install qemu-system</span><br></pre></td></tr></table></figure></li>
+</ul>
 ]]></content>
       <categories>
         <category>configure</category>
       </categories>
       <tags>
-        <tag>configure</tag>
-        <tag>collection</tag>
+        <tag>Virtual Machine</tag>
+        <tag>qemu</tag>
       </tags>
   </entry>
   <entry>
@@ -213,6 +189,30 @@
         <tag>operating system</tag>
         <tag>system</tag>
         <tag>paper reading</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>questions-config-collection-1</title>
+    <url>/2022/08/07/configure/questions-config-collection-1/</url>
+    <content><![CDATA[<h2 id="22-x2F-8-x2F-7-Github-connection-confused"><a href="#22-x2F-8-x2F-7-Github-connection-confused" class="headerlink" title="22&#x2F;8&#x2F;7 Github connection confused"></a>22&#x2F;8&#x2F;7 Github connection confused</h2><hr>
+<h3 id="Description"><a href="#Description" class="headerlink" title="Description"></a>Description</h3><blockquote>
+<p>ssh: connect to host github.com port 22: Connection refused</p>
+</blockquote>
+<h3 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h3><ol>
+<li><p>22 port 被屏蔽，尝试连接Github 443端口</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ vim ~/.ssh/config</span><br><span class="line"><span class="comment"># Add section below to it</span></span><br><span class="line">Host github.com</span><br><span class="line">  Hostname ssh.github.com</span><br><span class="line">  Port 443</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>https &#x2F; ssh 两种方式切换</p>
+</li>
+</ol>
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p><a href="https://segmentfault.com/a/1190000041909858">Variable Methods solving connection confusion</a></p>
+]]></content>
+      <categories>
+        <category>configure</category>
+      </categories>
+      <tags>
+        <tag>configure</tag>
+        <tag>collection</tag>
       </tags>
   </entry>
   <entry>
@@ -2984,7 +2984,7 @@
 <li><p>编译：扫描 -&gt; 语法分析 -&gt; 语义分析 -&gt; 源代码优化 -&gt; 代码生成 -&gt; 目标代码优化</p>
 </li>
 <li><p>下图为从源代码<code>Source Code</code>到最终目标代码<code>Final Target Code</code>的过程</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flowchart</span><br><span class="line">	A(Source Code) --&gt; |Scanner| B(Tokens)</span><br><span class="line">	B --&gt; |Parser| C(Syntax Tree)</span><br><span class="line">    C --&gt; |Semantic Analyzer| D(Commented Syntax Tree)</span><br><span class="line">    D --&gt; |Source Code Optimizer| E(Intermediate Representation)</span><br><span class="line">    E --&gt; |Code Generator| F(Target Code)</span><br><span class="line">    F --&gt; |Code Optimizer| G(Final Target Code)</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flowchart</span><br><span class="line">	A(Source Code) --&gt; |Scanner| B(Tokens)</span><br><span class="line">	B --&gt; |Parser| C(Syntax Tree)</span><br><span class="line">	C --&gt; |Semantic Analyzer| D(Commented Syntax Tree)</span><br><span class="line">	D --&gt; |Source Code Optimizer| E(Intermediate Representation)</span><br><span class="line">	E --&gt; |Code Generator| F(Target Code)</span><br><span class="line">	F --&gt; |Code Optimizer| G(Final Target Code)</span><br></pre></td></tr></table></figure></li>
 </ul>
 <h3 id="词法分析"><a href="#词法分析" class="headerlink" title="词法分析"></a>词法分析</h3><blockquote>
 <p>Lexical Analysis</p>
@@ -3008,14 +3008,14 @@
 </blockquote>
 <ul>
 <li>语义分析器<code>Semantic Analyzer</code></li>
-<li>编译器能分析的是静态语义<code>Static Semantic</code>：静态语义通常包括声明和类型的匹配，类型的转换</li>
+<li>编译器能分析的是静态语义<code>Static Semantic</code>：静态语义通常包括<strong>声明</strong>和<strong>类型</strong>的匹配，<strong>类型的转换</strong></li>
 </ul>
 <h3 id="中间语言生成"><a href="#中间语言生成" class="headerlink" title="中间语言生成"></a>中间语言生成</h3><ul>
 <li><p>源码级优化器<code>Source Code Optimizer</code></p>
 </li>
 <li><p>中间代码<code>Intermediate Code</code></p>
 <blockquote>
-<p>使得编译器分为前端和后端，前端负责产生机器无关的中间代码，后端负责将中间代码转换为目标机器代码</p>
+<p>使得编译器分为前端和后端，前端负责产生机器无关的中间代码，后端负责将中间代码转换为目标机器代码，通常同一个前端可以通过组合不同的后端适配不同的平台</p>
 </blockquote>
 <ul>
 <li><p>三地址码<code>Three-address Code</code></p>
@@ -3045,7 +3045,11 @@
 </li>
 <li>运行时库<code>Runtime Library</code>：支持程序运行的基本函数的集合</li>
 <li>重定位入口<code>Relocation Entry</code></li>
-<li></li>
+</ul>
+<h1 id="目标文件"><a href="#目标文件" class="headerlink" title="目标文件"></a>目标文件</h1><h2 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h2><ul>
+<li>COFF：Common file format –&gt; .obj (windows) &amp; .o (Linux)</li>
+<li>动态链接库 (Dynamic Linking Library)：.dll (windows) &amp; .so (Linux)</li>
+<li>静态链接库 (Static Linking Library)：.lib(windows) &amp; .a(linux)</li>
 </ul>
 ]]></content>
       <categories>
