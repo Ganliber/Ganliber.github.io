@@ -2984,7 +2984,7 @@
 <li><p>编译：扫描 -&gt; 语法分析 -&gt; 语义分析 -&gt; 源代码优化 -&gt; 代码生成 -&gt; 目标代码优化</p>
 </li>
 <li><p>下图为从源代码<code>Source Code</code>到最终目标代码<code>Final Target Code</code>的过程</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flowchart</span><br><span class="line">	A(Source Code) --&gt; |Scanner| B(Tokens)</span><br><span class="line">	B --&gt; |Parser| C(Syntax Tree)</span><br><span class="line">	C --&gt; |Semantic Analyzer| D(Commented Syntax Tree)</span><br><span class="line">	D --&gt; |Source Code Optimizer| E(Intermediate Representation)</span><br><span class="line">	E --&gt; |Code Generator| F(Target Code)</span><br><span class="line">	F --&gt; |Code Optimizer| G(Final Target Code)</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flowchart TD</span><br><span class="line">	A(Source Code) --&gt; |Scanner| B(Tokens)</span><br><span class="line">	B --&gt; |Parser| C(Syntax Tree)</span><br><span class="line">	C --&gt; |Semantic Analyzer| D(Commented Syntax Tree)</span><br><span class="line">	D --&gt; |Source Code Optimizer| E(Intermediate Representation)</span><br><span class="line">	E --&gt; |Code Generator| F(Target Code)</span><br><span class="line">	F --&gt; |Code Optimizer| G(Final Target Code)</span><br></pre></td></tr></table></figure></li>
 </ul>
 <h3 id="词法分析"><a href="#词法分析" class="headerlink" title="词法分析"></a>词法分析</h3><blockquote>
 <p>Lexical Analysis</p>
