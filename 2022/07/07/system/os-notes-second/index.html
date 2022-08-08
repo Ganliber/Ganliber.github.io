@@ -836,7 +836,11 @@
 <p>APP可以通过打开文件时附带<code>O_DIRECT</code>标志，提示文件系统<strong>不要使用页缓存</strong>  –&gt; <strong>直接I&#x2F;O</strong></p>
 <p>页缓存 –&gt; <strong>缓存I&#x2F;O</strong></p>
 </blockquote>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">flowchart </span><br><span class="line">		meta1(从存储设备中读取数据\n创建新的缓存页) --&gt; clean_page((干净页))</span><br><span class="line">		meta2(缓存页被回收) --- clean_page</span><br><span class="line">		clean_page --&gt;|修改缓存页中的数据| dirty_page((脏页))</span><br><span class="line">		dirty_page --&gt;|页中数据被写会存储设备| clean_page</span><br></pre></td></tr></table></figure>
+<pre class="mermaid">    flowchart 
+        meta1(从存储设备中读取数据\n创建新的缓存页) --> clean_page((干净页))
+        meta2(缓存页被回收) --- clean_page
+        clean_page -->|修改缓存页中的数据| dirty_page((脏页))
+        dirty_page -->|页中数据被写会存储设备| clean_page</pre>
 </li>
 <li><p>Linux 在页缓存的基础上实现了文件的<strong>内存映射机制</strong></p>
 </li>
@@ -1140,6 +1144,19 @@
 
 
 
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
 
 
   

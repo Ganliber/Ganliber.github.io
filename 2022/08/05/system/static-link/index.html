@@ -29,7 +29,7 @@
 <meta property="og:description" content="静态链接">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-08-05T07:09:27.000Z">
-<meta property="article:modified_time" content="2022-08-07T17:24:40.670Z">
+<meta property="article:modified_time" content="2022-08-08T13:05:29.513Z">
 <meta property="article:author" content="Gan Gecen">
 <meta property="article:tag" content="static linking">
 <meta property="article:tag" content="linker">
@@ -246,7 +246,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-08-08 01:24:40" itemprop="dateModified" datetime="2022-08-08T01:24:40+08:00">2022-08-08</time>
+                <time title="Modified: 2022-08-08 21:05:29" itemprop="dateModified" datetime="2022-08-08T21:05:29+08:00">2022-08-08</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -289,7 +289,13 @@
 <li><p>编译：扫描 -&gt; 语法分析 -&gt; 语义分析 -&gt; 源代码优化 -&gt; 代码生成 -&gt; 目标代码优化</p>
 </li>
 <li><p>下图为从源代码<code>Source Code</code>到最终目标代码<code>Final Target Code</code>的过程</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">flowchart TD</span><br><span class="line">	A(Source Code) --&gt; |Scanner| B(Tokens)</span><br><span class="line">	B --&gt; |Parser| C(Syntax Tree)</span><br><span class="line">	C --&gt; |Semantic Analyzer| D(Commented Syntax Tree)</span><br><span class="line">	D --&gt; |Source Code Optimizer| E(Intermediate Representation)</span><br><span class="line">	E --&gt; |Code Generator| F(Target Code)</span><br><span class="line">	F --&gt; |Code Optimizer| G(Final Target Code)</span><br></pre></td></tr></table></figure></li>
+<pre class="mermaid">  flowchart TD
+    A(Source Code) --> |Scanner| B(Tokens)
+    B --> |Parser| C(Syntax Tree)
+    C --> |Semantic Analyzer| D(Commented Syntax Tree)
+    D --> |Source Code Optimizer| E(Intermediate Representation)
+    E --> |Code Generator| F(Target Code)
+    F --> |Code Optimizer| G(Final Target Code)</pre></li>
 </ul>
 <h3 id="词法分析"><a href="#词法分析" class="headerlink" title="词法分析"></a>词法分析</h3><blockquote>
 <p>Lexical Analysis</p>
@@ -607,6 +613,19 @@
 
 
 
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
 
 
   

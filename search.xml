@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>paper reading：kernel REPT</title>
+    <url>/2022/07/07/paper/PR0001-kernel-REPT/</url>
+    <content><![CDATA[<h1 id="Paper-Reading-Reverse-Debugging-of-Kernel-Failures-in-Deployed-Systems"><a href="#Paper-Reading-Reverse-Debugging-of-Kernel-Failures-in-Deployed-Systems" class="headerlink" title="Paper Reading : Reverse Debugging of Kernel Failures in Deployed Systems"></a>Paper Reading : Reverse Debugging of Kernel Failures in Deployed Systems</h1><hr>
+<blockquote>
+<p>Title : Reverse Debugging of Kernel Failures in Deployed Systems</p>
+<p>Link : <a href="https://www.usenix.org/conference/atc20/presentation/ge">https://www.usenix.org/conference/atc20/presentation/ge</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>paper</category>
+      </categories>
+      <tags>
+        <tag>operating system</tag>
+        <tag>system</tag>
+        <tag>paper reading</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>解决vscode连接本地vmware失败问题</title>
     <url>/2022/07/10/configure/configure-001-vscode-connect-vmware/</url>
     <content><![CDATA[<h3 id="在本地虚拟机vmware中安装ssh"><a href="#在本地虚拟机vmware中安装ssh" class="headerlink" title="在本地虚拟机vmware中安装ssh"></a>在本地虚拟机vmware中安装ssh</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install -y openssh-server</span><br></pre></td></tr></table></figure>
@@ -87,108 +105,6 @@
       <tags>
         <tag>Virtual Machine</tag>
         <tag>qemu</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Customize NexT</title>
-    <url>/2022/06/16/configure/next%20tips/</url>
-    <content><![CDATA[<h1 id="NexT-in-Hexo-Customized"><a href="#NexT-in-Hexo-Customized" class="headerlink" title="NexT in Hexo Customized"></a>NexT in Hexo Customized</h1><hr>
-<h2 id="js脚本实现自定义menu页"><a href="#js脚本实现自定义menu页" class="headerlink" title="js脚本实现自定义menu页"></a>js脚本实现自定义menu页</h2><blockquote>
-<p>操作对象：blog&#x2F;theme&#x2F;next&#x2F;文件夹下</p>
-</blockquote>
-<ul>
-<li><p>在主题配置文件<code>_config.yml</code>中<code>menu</code>栏下添加新的标签页，并在<code>blog/source</code>文件夹下添加同样的文件夹，<code>||</code>右侧是图标，采用的是<code>Font Awesome</code>中的图标位置，不过推荐用<code>fa-solid</code>类型的<code>icon</code>，因为其他的好像显示失败。注意在如<code>/source/pwn</code>中的<code>index.md</code>中不需要写<code>type</code>和<code>layout</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">menu:</span><br><span class="line">  home: / || fa fa-home</span><br><span class="line">  about: /about/ || fa fa-user</span><br><span class="line">  tags: /tags/ || fa fa-tags</span><br><span class="line">  categories: /categories/ || fa fa-th</span><br><span class="line">  archives: /archives/ || fa fa-archive</span><br><span class="line">  pwn: /pwn/ || fas fa-flag-checkered</span><br><span class="line">  system: /system/ || fas fa-laptop-code</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在<code>/theme/next/scripts</code>下新建一个<code>pwn.js</code>文件来控制新的<code>pwn</code>菜单栏的内容</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> pagination = <span class="built_in">require</span>(<span class="string">&#x27;hexo-pagination&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> filteredCategory = <span class="string">&#x27;pwn&#x27;</span>;</span><br><span class="line"></span><br><span class="line">hexo.<span class="property">extend</span>.<span class="property">generator</span>.<span class="title function_">register</span>(<span class="string">&#x27;pwn&#x27;</span>, <span class="keyword">function</span>(<span class="params">locals</span>)&#123;</span><br><span class="line">  <span class="keyword">var</span> pwnPosts = locals.<span class="property">posts</span>.<span class="title function_">filter</span>(<span class="keyword">function</span>(<span class="params">x</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> x.<span class="property">categories</span>.<span class="property">data</span>[<span class="number">0</span>].<span class="property">name</span> == filteredCategory;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">pagination</span>(<span class="string">&#x27;pwn&#x27;</span>, pwnPosts, &#123;</span><br><span class="line">    <span class="attr">perPage</span>: <span class="number">12</span>,</span><br><span class="line">    <span class="attr">layout</span>: [<span class="string">&#x27;archive&#x27;</span>]</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>注意最后一个<code>layout</code>可以用<code>&#39;archive&#39;</code>来呈现时间轴的效果，不必再自定义了（报错麻烦）</li>
-<li>这段代码的功能就是把所有文章按照<code>category</code>过滤，属于<code>pwn</code>的显示出来</li>
-</ul>
-</li>
-<li><p>执行生效即可</p>
-</li>
-</ul>
-<h2 id="pace实现加载特效"><a href="#pace实现加载特效" class="headerlink" title="pace实现加载特效"></a>pace实现加载特效</h2><p>由于网页不可能一直都秒进，总会等待一段时间的，所以可以设置顶部加载条。Next 已经集成了很多加载特效，可以在下面选项中在线调试测试一下。</p>
-<p>搜索<code>pace</code>，找到如下代码：</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"># 页面顶部加载条</span><br><span class="line"># Progress bar in the <span class="attribute">top</span> during page loading.</span><br><span class="line">pace: true</span><br><span class="line"># Themes list:</span><br><span class="line">#pace-theme-big-counter</span><br><span class="line">#pace-theme-bounce</span><br><span class="line">#pace-theme-barber-shop</span><br><span class="line">#pace-theme-center-atom</span><br><span class="line">#pace-theme-center-circle</span><br><span class="line">#pace-theme-center-radar</span><br><span class="line">#pace-theme-center-simple</span><br><span class="line">#pace-theme-corner-indicator</span><br><span class="line">#pace-theme-fill-left</span><br><span class="line">#pace-theme-flash</span><br><span class="line">#pace-theme-loading-bar</span><br><span class="line">#pace-theme-mac-osx</span><br><span class="line">#pace-theme-minimal</span><br><span class="line"># For example</span><br><span class="line"># pace_theme: pace-theme-center-simple</span><br><span class="line">pace_theme: pace-theme-minimal  # 默认设置，可以修改为上述任何一个</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h2 id="加载图片"><a href="#加载图片" class="headerlink" title="加载图片"></a>加载图片</h2><ul>
-<li><p>装插件</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install hexo-renderer-marked</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在全局配置文件<code>_config.yml</code>中</p>
-<ol>
-<li><p>修改是否生成资源文件夹</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">post_asset_folder: true</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>添加标记</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">marked:</span><br><span class="line">  prependRoot: true</span><br><span class="line">  postAsset: true</span><br></pre></td></tr></table></figure></li>
-</ol>
-</li>
-<li><p>此时通过<code>hexo new &#39;title&#39;</code>可以在<code>_posts</code>中生成<code>title.md</code>和同名资源文件夹<code>title</code></p>
-<blockquote>
-<p>都是可移动的，但资源文件夹和原文件要同时移动</p>
-</blockquote>
-</li>
-<li><p>修改<code>typora</code>图片偏好为相对路径优先</p>
-</li>
-<li><p>进入相对路径后注意只有一个图片名（在对应的资源文件夹下）</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">![name](name.<span class="property">png</span>)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>当缩放时<code>src</code>也只能有图片名</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;brop_stop_gadgets.png&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;brop_stop_gadgets&quot;</span> <span class="attr">style</span>=<span class="string">&quot;zoom:38%;&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="圆角-amp-背景-amp-行内代码块"><a href="#圆角-amp-背景-amp-行内代码块" class="headerlink" title="圆角&amp;背景&amp;行内代码块"></a>圆角&amp;背景&amp;行内代码块</h2><blockquote>
-<p>Link : <a href="https://zhuanlan.zhihu.com/p/280784973">https://zhuanlan.zhihu.com/p/280784973</a></p>
-</blockquote>
-<ul>
-<li><p>在根目录下的source folder中（即存放blogs的markdown文档的地方）创建文件夹<code>_data</code>，在该文件夹下创建文件<code>style.styl</code>和<code>variables.style</code></p>
-</li>
-<li><p>在next主题配置文件中找到<code>custom_file_path</code>并添加&#x2F;取消注释以下两个选项</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">custom_file_path:</span><br><span class="line">	variable: source/_data/variables.styl</span><br><span class="line">	style: source/_data/styles.styl</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>In file <code>style.styl</code></p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">//背景图片设置</span><br><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">    <span class="attribute">background-image</span>: <span class="built_in">url</span>(<span class="string">/images/wallhaven-dpr2mo.jpg</span>);</span><br><span class="line">    <span class="attribute">background-repeat</span>: no-repeat;</span><br><span class="line">    <span class="attribute">background-attachment</span>: fixed;</span><br><span class="line">    <span class="attribute">background-size</span>: <span class="number">100%</span> <span class="number">100%</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//文章内容的透明度设置</span><br><span class="line"><span class="selector-class">.content-wrap</span> &#123;</span><br><span class="line">  <span class="attribute">opacity</span>: <span class="number">0.95</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//侧边框的透明度设置</span><br><span class="line"><span class="selector-class">.sidebar</span> &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: transparent;</span><br><span class="line">  <span class="attribute">opacity</span>: <span class="number">0.85</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//菜单栏的透明度设置</span><br><span class="line"><span class="selector-class">.header-inner</span> &#123;</span><br><span class="line">  <span class="attribute">background</span>: <span class="built_in">rgba</span>(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">0.85</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// Custom styles.</span><br><span class="line">// 行内代码块的模式: 变为红色字体</span><br><span class="line">code &#123;</span><br><span class="line">    <span class="attribute">color</span>: <span class="number">#F71735</span>;</span><br><span class="line">    <span class="attribute">background</span>: <span class="number">#fbf7f8</span>;</span><br><span class="line">    <span class="attribute">margin</span>: <span class="number">2px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>圆角设置在<code>variables.styl</code></p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">$<span class="attribute">border-radius</span>-inner     = <span class="number">20px</span> <span class="number">20px</span> <span class="number">20px</span> <span class="number">20px</span>;</span><br><span class="line">$<span class="attribute">border-radius</span>           = <span class="number">20px</span>;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="代码块风格"><a href="#代码块风格" class="headerlink" title="代码块风格"></a>代码块风格</h2><ul>
-<li><p>在<code>nexT</code>主题配置文件搜索<code>codeblock</code>，修改<code>copy_button</code>下的<code>style</code>为<code>mac</code></p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">copy_button<span class="punctuation">:</span></span><br><span class="line">   enable<span class="punctuation">:</span> <span class="keyword">true</span></span><br><span class="line">   # Show text copy result.</span><br><span class="line">   show_result<span class="punctuation">:</span> <span class="keyword">true</span> # 是否显示复制成功信息</span><br><span class="line">   # Available values<span class="punctuation">:</span> default | flat | mac</span><br><span class="line">   style<span class="punctuation">:</span> mac # 代码块mac风格</span><br></pre></td></tr></table></figure></li>
-</ul>
-]]></content>
-      <categories>
-        <category>configure</category>
-      </categories>
-      <tags>
-        <tag>hexo</tag>
-        <tag>next theme</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>paper reading：kernel REPT</title>
-    <url>/2022/07/07/paper/PR0001-kernel-REPT/</url>
-    <content><![CDATA[<h1 id="Paper-Reading-Reverse-Debugging-of-Kernel-Failures-in-Deployed-Systems"><a href="#Paper-Reading-Reverse-Debugging-of-Kernel-Failures-in-Deployed-Systems" class="headerlink" title="Paper Reading : Reverse Debugging of Kernel Failures in Deployed Systems"></a>Paper Reading : Reverse Debugging of Kernel Failures in Deployed Systems</h1><hr>
-<blockquote>
-<p>Title : Reverse Debugging of Kernel Failures in Deployed Systems</p>
-<p>Link : <a href="https://www.usenix.org/conference/atc20/presentation/ge">https://www.usenix.org/conference/atc20/presentation/ge</a></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>paper</category>
-      </categories>
-      <tags>
-        <tag>operating system</tag>
-        <tag>system</tag>
-        <tag>paper reading</tag>
       </tags>
   </entry>
   <entry>
@@ -691,6 +607,103 @@
       </tags>
   </entry>
   <entry>
+    <title>Customize NexT</title>
+    <url>/2022/06/16/configure/next%20tips/</url>
+    <content><![CDATA[<h1 id="NexT-in-Hexo-Customized"><a href="#NexT-in-Hexo-Customized" class="headerlink" title="NexT in Hexo Customized"></a>NexT in Hexo Customized</h1><hr>
+<h2 id="js脚本实现自定义menu页"><a href="#js脚本实现自定义menu页" class="headerlink" title="js脚本实现自定义menu页"></a>js脚本实现自定义menu页</h2><blockquote>
+<p>操作对象：blog&#x2F;theme&#x2F;next&#x2F;文件夹下</p>
+</blockquote>
+<ul>
+<li><p>在主题配置文件<code>_config.yml</code>中<code>menu</code>栏下添加新的标签页，并在<code>blog/source</code>文件夹下添加同样的文件夹，<code>||</code>右侧是图标，采用的是<code>Font Awesome</code>中的图标位置，不过推荐用<code>fa-solid</code>类型的<code>icon</code>，因为其他的好像显示失败。注意在如<code>/source/pwn</code>中的<code>index.md</code>中不需要写<code>type</code>和<code>layout</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">menu:</span><br><span class="line">  home: / || fa fa-home</span><br><span class="line">  about: /about/ || fa fa-user</span><br><span class="line">  tags: /tags/ || fa fa-tags</span><br><span class="line">  categories: /categories/ || fa fa-th</span><br><span class="line">  archives: /archives/ || fa fa-archive</span><br><span class="line">  pwn: /pwn/ || fas fa-flag-checkered</span><br><span class="line">  system: /system/ || fas fa-laptop-code</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在<code>/theme/next/scripts</code>下新建一个<code>pwn.js</code>文件来控制新的<code>pwn</code>菜单栏的内容</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> pagination = <span class="built_in">require</span>(<span class="string">&#x27;hexo-pagination&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> filteredCategory = <span class="string">&#x27;pwn&#x27;</span>;</span><br><span class="line"></span><br><span class="line">hexo.<span class="property">extend</span>.<span class="property">generator</span>.<span class="title function_">register</span>(<span class="string">&#x27;pwn&#x27;</span>, <span class="keyword">function</span>(<span class="params">locals</span>)&#123;</span><br><span class="line">  <span class="keyword">var</span> pwnPosts = locals.<span class="property">posts</span>.<span class="title function_">filter</span>(<span class="keyword">function</span>(<span class="params">x</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> x.<span class="property">categories</span>.<span class="property">data</span>[<span class="number">0</span>].<span class="property">name</span> == filteredCategory;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">pagination</span>(<span class="string">&#x27;pwn&#x27;</span>, pwnPosts, &#123;</span><br><span class="line">    <span class="attr">perPage</span>: <span class="number">12</span>,</span><br><span class="line">    <span class="attr">layout</span>: [<span class="string">&#x27;archive&#x27;</span>]</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注意最后一个<code>layout</code>可以用<code>&#39;archive&#39;</code>来呈现时间轴的效果，不必再自定义了（报错麻烦）</li>
+<li>这段代码的功能就是把所有文章按照<code>category</code>过滤，属于<code>pwn</code>的显示出来</li>
+</ul>
+</li>
+<li><p>执行生效即可</p>
+</li>
+</ul>
+<h2 id="pace实现加载特效"><a href="#pace实现加载特效" class="headerlink" title="pace实现加载特效"></a>pace实现加载特效</h2><p>由于网页不可能一直都秒进，总会等待一段时间的，所以可以设置顶部加载条。Next 已经集成了很多加载特效，可以在下面选项中在线调试测试一下。</p>
+<p>搜索<code>pace</code>，找到如下代码：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"># 页面顶部加载条</span><br><span class="line"># Progress bar in the <span class="attribute">top</span> during page loading.</span><br><span class="line">pace: true</span><br><span class="line"># Themes list:</span><br><span class="line">#pace-theme-big-counter</span><br><span class="line">#pace-theme-bounce</span><br><span class="line">#pace-theme-barber-shop</span><br><span class="line">#pace-theme-center-atom</span><br><span class="line">#pace-theme-center-circle</span><br><span class="line">#pace-theme-center-radar</span><br><span class="line">#pace-theme-center-simple</span><br><span class="line">#pace-theme-corner-indicator</span><br><span class="line">#pace-theme-fill-left</span><br><span class="line">#pace-theme-flash</span><br><span class="line">#pace-theme-loading-bar</span><br><span class="line">#pace-theme-mac-osx</span><br><span class="line">#pace-theme-minimal</span><br><span class="line"># For example</span><br><span class="line"># pace_theme: pace-theme-center-simple</span><br><span class="line">pace_theme: pace-theme-minimal  # 默认设置，可以修改为上述任何一个</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="加载图片"><a href="#加载图片" class="headerlink" title="加载图片"></a>加载图片</h2><ul>
+<li><p>装插件</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm install hexo-renderer-marked</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在全局配置文件<code>_config.yml</code>中</p>
+<ol>
+<li><p>修改是否生成资源文件夹</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">post_asset_folder: true</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>添加标记</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">marked:</span><br><span class="line">  prependRoot: true</span><br><span class="line">  postAsset: true</span><br></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><p>此时通过<code>hexo new &#39;title&#39;</code>可以在<code>_posts</code>中生成<code>title.md</code>和同名资源文件夹<code>title</code></p>
+<blockquote>
+<p>都是可移动的，但资源文件夹和原文件要同时移动</p>
+</blockquote>
+</li>
+<li><p>修改<code>typora</code>图片偏好为相对路径优先</p>
+</li>
+<li><p>进入相对路径后注意只有一个图片名（在对应的资源文件夹下）</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">![name](name.<span class="property">png</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>当缩放时<code>src</code>也只能有图片名</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;brop_stop_gadgets.png&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;brop_stop_gadgets&quot;</span> <span class="attr">style</span>=<span class="string">&quot;zoom:38%;&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="圆角-amp-背景-amp-行内代码块"><a href="#圆角-amp-背景-amp-行内代码块" class="headerlink" title="圆角&amp;背景&amp;行内代码块"></a>圆角&amp;背景&amp;行内代码块</h2><blockquote>
+<p>Link : <a href="https://zhuanlan.zhihu.com/p/280784973">https://zhuanlan.zhihu.com/p/280784973</a></p>
+</blockquote>
+<ul>
+<li><p>在根目录下的source folder中（即存放blogs的markdown文档的地方）创建文件夹<code>_data</code>，在该文件夹下创建文件<code>style.styl</code>和<code>variables.style</code></p>
+</li>
+<li><p>在next主题配置文件中找到<code>custom_file_path</code>并添加&#x2F;取消注释以下两个选项</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">custom_file_path:</span><br><span class="line">	variable: source/_data/variables.styl</span><br><span class="line">	style: source/_data/styles.styl</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>In file <code>style.styl</code></p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">//背景图片设置</span><br><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">    <span class="attribute">background-image</span>: <span class="built_in">url</span>(<span class="string">/images/wallhaven-dpr2mo.jpg</span>);</span><br><span class="line">    <span class="attribute">background-repeat</span>: no-repeat;</span><br><span class="line">    <span class="attribute">background-attachment</span>: fixed;</span><br><span class="line">    <span class="attribute">background-size</span>: <span class="number">100%</span> <span class="number">100%</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//文章内容的透明度设置</span><br><span class="line"><span class="selector-class">.content-wrap</span> &#123;</span><br><span class="line">  <span class="attribute">opacity</span>: <span class="number">0.95</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//侧边框的透明度设置</span><br><span class="line"><span class="selector-class">.sidebar</span> &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: transparent;</span><br><span class="line">  <span class="attribute">opacity</span>: <span class="number">0.85</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//菜单栏的透明度设置</span><br><span class="line"><span class="selector-class">.header-inner</span> &#123;</span><br><span class="line">  <span class="attribute">background</span>: <span class="built_in">rgba</span>(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">0.85</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// Custom styles.</span><br><span class="line">// 行内代码块的模式: 变为红色字体</span><br><span class="line">code &#123;</span><br><span class="line">    <span class="attribute">color</span>: <span class="number">#F71735</span>;</span><br><span class="line">    <span class="attribute">background</span>: <span class="number">#fbf7f8</span>;</span><br><span class="line">    <span class="attribute">margin</span>: <span class="number">2px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>圆角设置在<code>variables.styl</code></p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line">$<span class="attribute">border-radius</span>-inner     = <span class="number">20px</span> <span class="number">20px</span> <span class="number">20px</span> <span class="number">20px</span>;</span><br><span class="line">$<span class="attribute">border-radius</span>           = <span class="number">20px</span>;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="代码块风格"><a href="#代码块风格" class="headerlink" title="代码块风格"></a>代码块风格</h2><ul>
+<li><p>在<code>nexT</code>主题配置文件搜索<code>codeblock</code>，修改<code>copy_button</code>下的<code>style</code>为<code>mac</code></p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">copy_button<span class="punctuation">:</span></span><br><span class="line">   enable<span class="punctuation">:</span> <span class="keyword">true</span></span><br><span class="line">   # Show text copy result.</span><br><span class="line">   show_result<span class="punctuation">:</span> <span class="keyword">true</span> # 是否显示复制成功信息</span><br><span class="line">   # Available values<span class="punctuation">:</span> default | flat | mac</span><br><span class="line">   style<span class="punctuation">:</span> mac # 代码块mac风格</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="增加对mermaid的支持"><a href="#增加对mermaid的支持" class="headerlink" title="增加对mermaid的支持"></a>增加对mermaid的支持</h2><blockquote>
+<p>Official : <a href="https://github.com/webappdevelp/hexo-filter-mermaid-diagrams">https://github.com/webappdevelp/hexo-filter-mermaid-diagrams</a></p>
+</blockquote>
+<ul>
+<li><p>进入blog目录，安装插件<code>hexo-filter-mermaid-diagrams</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-filter-mermaid-diagrams --save</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改根目录下的主配置文件</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># mermaid chart</span></span><br><span class="line"><span class="attr">mermaid:</span> <span class="comment">## mermaid url https://github.com/knsv/mermaid</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span>  <span class="comment"># default true</span></span><br><span class="line">  <span class="attr">version:</span> <span class="string">&quot;9.1.4&quot;</span> <span class="comment"># latest</span></span><br><span class="line">  <span class="attr">options:</span>  <span class="comment"># find more api options from https://github.com/knsv/mermaid/blob/master/src/mermaidAPI.js</span></span><br><span class="line">    <span class="comment">#startOnload: true  // default true</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>进入主题文件夹<code>next</code>下，打开<code>layout</code></p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>configure</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+        <tag>next theme</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Linux Kernel ：Environment</title>
     <url>/2022/07/09/system/kernel-env/</url>
     <content><![CDATA[<h1 id="Kernel环境搭建"><a href="#Kernel环境搭建" class="headerlink" title="Kernel环境搭建"></a>Kernel环境搭建</h1><h2 id="内核文件类型"><a href="#内核文件类型" class="headerlink" title="内核文件类型"></a>内核文件类型</h2><ul>
@@ -1145,822 +1158,6 @@
       </categories>
       <tags>
         <tag>operating system</tag>
-        <tag>Linux kernel</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>OS Notes Part(I)</title>
-    <url>/2022/06/27/system/os-notes-first/</url>
-    <content><![CDATA[<h1 id="Modern-Operating-System-I"><a href="#Modern-Operating-System-I" class="headerlink" title="Modern Operating System (I)"></a>Modern Operating System (I)</h1><blockquote>
-<p>前几章内容暂省略</p>
-<ul>
-<li><input checked="" disabled="" type="checkbox"> 内存管理</li>
-<li><input checked="" disabled="" type="checkbox"> 进程与线程</li>
-<li><input disabled="" type="checkbox"> 操作系统调度</li>
-<li><input checked="" disabled="" type="checkbox"> 进程间通信</li>
-</ul>
-</blockquote>
-<h2 id="4-内存管理"><a href="#4-内存管理" class="headerlink" title="4 内存管理"></a>4 内存管理</h2><hr>
-<ul>
-<li>转址旁路缓存<code>TLB (Translation Lookaside Buffer)</code><ul>
-<li>TLB命中：<code>TLB hit</code></li>
-<li>TLB未命中：<code>TLB miss</code></li>
-</ul>
-</li>
-<li><code>AArch64 (based on ARMv8.0)</code> 架构：4级页表<ul>
-<li>最小页：有<code>4KB</code>,<code>16KB</code>,<code>64KB</code>,可通过<code>TCR_EL1</code>进行配置</li>
-</ul>
-</li>
-<li>一种TLB刷新机制：为<code>TLB</code>缓存项打”标签”来减少程序切换时TLB刷新的开销<ul>
-<li><code>ASID (Address Space IDentifier)</code>：基于<code>aarch64</code></li>
-<li><code>PCID (Process Context IDentifier)</code>：基于<code>x86-64</code></li>
-</ul>
-</li>
-<li>换页<code>page swapping</code><ul>
-<li>换出<code>swap out</code></li>
-<li>换入<code>swap in</code></li>
-</ul>
-</li>
-<li>缺页异常<code>page fault</code></li>
-<li>预取<code>prefetching</code>机制：发生<code>swap in</code>时，预测还有哪些页即将被访问，提前将其换入物理内存，减少<code>page fault</code></li>
-<li>按需页分配<code>demand paging</code><ul>
-<li>未分配状态</li>
-<li>已分配但未映射至物理内存状态（初次访问时出发<code>page fault</code>）</li>
-<li>区分两种状态：<ul>
-<li>Linux中，程序的虚拟内存空间由多个虚拟内存区域构成，即<code>VMA (Virtual Memory Area)</code>：含<code>beginning VA</code>，<code>ending VA</code>，访问权限等信息。</li>
-<li>P -&gt; page fault<ul>
-<li>P属于VMA：已分配未映射</li>
-<li>P不属于VMA：未分配</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>页替换策略<ul>
-<li><code>MIN/OPT (Minimum / Optimal 最优策略)</code></li>
-<li><code>FIFO (First-In First-Out)</code></li>
-<li><code>Second Chance</code></li>
-<li><code>LRU (Least Recently Used)</code>：基于程序过去频繁访问的页后续也可能被访问</li>
-<li><code>MRU (Most Recently Used)</code>：基于程序不会反复访问相同地址情况</li>
-<li><code>clock algorithm</code>：时钟算法策略</li>
-</ul>
-</li>
-<li>工作集模型<code>working set model</code><ul>
-<li>基于：优先将非工作集中的页换出</li>
-<li>工作集时钟算法：<ul>
-<li>维护2个状态：<strong>上次使用时间</strong>和<strong>访问位</strong></li>
-<li>定期检查算时间间隔</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>共享内存<code>shared memory</code><ul>
-<li>写时拷贝<code>copy-on-write</code></li>
-<li>内存去重<code>memory deduplication</code><ul>
-<li>定期扫描相同内容的物理页，找到映射对应的虚拟页，保留一个物理页，其余通过<code>copy-on-write</code>映射到该物理页，释放其他物理页。</li>
-<li>如Linux的<code>KSM (Kernel Same-page Merging)</code>机制</li>
-<li>性能下降产生延迟，资源利用率提高</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>内存压缩<ul>
-<li>如Linux的<code>zswap</code>机制，<code>zswap</code>区域（仍属于内存区域）：为内存换页过程提供缓冲区</li>
-<li>更加高效的磁盘批量<code>I/O</code></li>
-</ul>
-</li>
-<li>大页<code>huge page</code><ul>
-<li>Linux提供透明大页<code>transparent huge page</code>机制：自动将一个应用程序中连续的4KB内存页合并成2MB的内存页</li>
-<li>提高效率（减少TLB项，提高TLB命中率），可能浪费物理内存资源</li>
-</ul>
-</li>
-<li>内存碎片<code>fragmentation</code><ul>
-<li>内部碎片<code>internal fragmentation</code></li>
-<li>外部碎片<code>external fragmentation</code></li>
-</ul>
-</li>
-<li>伙伴系统<code>buddy system</code><ul>
-<li>减少外部碎片</li>
-</ul>
-</li>
-<li><code>SLAB</code>分配器<ul>
-<li>减少内部碎片</li>
-<li>包括<code>SLAB</code>，<code>SLUB</code>，<code>SLOB</code></li>
-<li>linux-2.6.23之后内核默认采用<code>SLUB</code>分配器（依赖于伙伴系统）</li>
-</ul>
-</li>
-<li>常用空闲链表<ul>
-<li>隐式空闲链表<code>implicit free list</code></li>
-<li>显式空闲链表<code>explicit free list</code></li>
-<li>分离空闲链表<code>segregated free list</code></li>
-</ul>
-</li>
-</ul>
-<h2 id="5-进程与线程"><a href="#5-进程与线程" class="headerlink" title="5 进程与线程"></a>5 进程与线程</h2><hr>
-<h3 id="process"><a href="#process" class="headerlink" title="process"></a>process</h3><ul>
-<li><p>进程控制块<code>PCB (Process Control Block)</code></p>
-</li>
-<li><p>僵尸进程<code>zombie</code></p>
-</li>
-<li><p>进程管理：</p>
-<ul>
-<li><p>进程组<code>process group</code>：进程的集合 —&gt; 进程组标识符<code>tgid (In Linux PCB)</code></p>
-</li>
-<li><p>会话<code>session</code>：进程组的集合</p>
-<blockquote>
-<p>根据执行状态划分为：</p>
-</blockquote>
-<ul>
-<li>前台进程组<code>foreground thread group</code></li>
-<li>后台进程组<code>background thread group</code></li>
-</ul>
-</li>
-<li><p><code>process group</code>和<code>session</code>主要用于<code>shell</code>环境的中的进程管理</p>
-<ul>
-<li>进程id -&gt; <code>PID</code></li>
-<li>进程组id -&gt; <code>GID</code></li>
-<li>会话id -&gt; <code>SID</code></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>控制中断进程<code>controlling terminal</code></p>
-</li>
-</ul>
-<h3 id="thread"><a href="#thread" class="headerlink" title="thread"></a>thread</h3><ul>
-<li><p>用户态线程<code>user-level thread</code></p>
-</li>
-<li><p>内核态线程<code>kernel-level thread</code></p>
-</li>
-<li><p>多线程模型<code>multithreading model</code></p>
-</li>
-<li><p>线程控制块<code>Thread Control Block</code></p>
-</li>
-<li><p>NPTL<code>Native POSIX Thread Library</code>：自<code>Linux 2.6</code>引入的线程库，沿用至今</p>
-</li>
-</ul>
-<h3 id="fiber"><a href="#fiber" class="headerlink" title="fiber"></a>fiber</h3><blockquote>
-<p>完全在用户态下完成</p>
-</blockquote>
-<ul>
-<li>抢占式多任务处理<code>preemptive multitasking</code></li>
-<li>合作式多任务处理<code>cooperative multitasking</code></li>
-<li><code>(Windows) TLS(Fiber Local Storage)</code> ：纤程本地存储，用来为每个纤程保存同一变量的私有拷贝</li>
-<li>协程<code>coroutine</code>：为了便于与操作系统提供的纤程支持相区分，程序语言提供的纤程支持称为协程</li>
-</ul>
-<h2 id="6-操作系统调度"><a href="#6-操作系统调度" class="headerlink" title="6 操作系统调度"></a>6 操作系统调度</h2><hr>
-<ul>
-<li><p>优先级<code>priority</code></p>
-</li>
-<li><p>时间片<code>time slice</code></p>
-</li>
-<li><p>截止时间<code>deadline</code></p>
-</li>
-<li><p>任务调度&#x2F;CPU调度<code>task scheduling</code></p>
-</li>
-<li><p>线程<code>thread</code>是调度器的调度对象，又叫做<strong>任务</strong><code>task</code></p>
-<ul>
-<li>运行队列<code>run queue</code></li>
-<li><code>Linux</code>使用的调度器会用红黑树实现运行队列</li>
-</ul>
-</li>
-<li><p>确定调度指标<code>what</code> ——&gt; 做出调度决策<code>how</code></p>
-<ul>
-<li><p>调度指标</p>
-<ul>
-<li><p>分类</p>
-<ul>
-<li>性能相关指标<ul>
-<li>批处理任务<ul>
-<li><strong>吞吐量</strong>：单位时间内处理的任务数量</li>
-<li><strong>周转时间</strong>：任务从被发起直到执行结束所需的时间</li>
-</ul>
-</li>
-<li>交互式任务<ul>
-<li><strong>响应时间</strong>：任务从被发起直至第一次向用户返回输出以响应用户所需的时间</li>
-</ul>
-</li>
-<li>调度开销：做出决策的时间应该尽可能短</li>
-</ul>
-</li>
-<li>非性能指标：<strong>公平性</strong>、<strong>资源利用率</strong></li>
-<li>任务场景需求：<strong>实时性</strong>、<strong>能耗</strong></li>
-</ul>
-</li>
-<li><p>权衡</p>
-<ul>
-<li>调度开销和调度效果</li>
-<li>优先级和公平性</li>
-<li>性能与能耗</li>
-</ul>
-</li>
-<li><p>调度机制</p>
-<ul>
-<li><p>进程调度<code>process scheduling</code>机制</p>
-<ul>
-<li><p>长期调度<code>long-term scheduling/job scheduling</code></p>
-<blockquote>
-<p>限制系统中真正被用来进行短期调度管理的进程数量，避免短期调度的开销过大</p>
-<p>根据进程使用的资源类型，分类：计算密集型<code>CPU-bound</code>和<code>I/O</code>密集型<code>I/O-bound</code></p>
-</blockquote>
-</li>
-<li><p>短期调度<code>short-term scheduling/job scheduling</code></p>
-<blockquote>
-<p>实际做出调度决策的机制</p>
-<p>负责进程在 <strong>预备</strong>，<strong>运行</strong>，<strong>阻塞</strong> 状态间的转换 </p>
-</blockquote>
-</li>
-<li><p>中期调度<code>medium-term scheduling/job scheduling</code></p>
-<blockquote>
-<p>长短期调度 —&gt; based on CPU and I&#x2F;O resource</p>
-<p>中期调度 —&gt; based on memory</p>
-<p>中期调度也是换页机制的一部分，当<strong>系统中内存使用量过大</strong>，就会触发换页机制，挂起处于<strong>预备状态</strong>的&#x2F;<strong>阻碍状态</strong>的进程，置为<strong>挂起预备状态&#x2F;挂起阻塞状态</strong>并放入<strong>挂起运行队列&#x2F;挂起阻塞队列</strong></p>
-<p>引入无法被短期调度执行的两个状态</p>
-<ul>
-<li>挂起预备状态<code>suspended ready</code></li>
-<li>挂起阻塞状态<code>suspended blocking</code></li>
-</ul>
-</blockquote>
-</li>
-</ul>
-</li>
-<li><p>批处理队列<code>batch queue</code></p>
-</li>
-<li><p>阻塞队列<code>blocking queue</code></p>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>调度决策</p>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="7-进程间通信"><a href="#7-进程间通信" class="headerlink" title="7 进程间通信"></a>7 进程间通信</h2><hr>
-<ul>
-<li><p>进程间通信<code>Inter-Process Communication (IPC)</code></p>
-</li>
-<li><p>消息<code>message</code>：一种常见通信数据的抽象，包含一个头部<code>header</code>和一个数据段<code>payload</code></p>
-<ul>
-<li><code>header</code> : 魔数<code>magic number</code>，状态<code>state</code>，消息长度<code>message length</code>，验证码<code>verification code</code>等</li>
-<li><code>payload</code> : 纯数据（如字符串<code>string</code>），系统资源（如文件描述符<code>file descriptor</code>）</li>
-</ul>
-</li>
-<li><p>消息传递基本接口：</p>
-<ul>
-<li><code>Send(message)</code></li>
-<li><code>Recv(message)</code></li>
-<li><code>RPC(req_message, resp_message)</code>  —&gt; 远程过程调用：<code>Remote Procedure Call</code></li>
-<li><code>Reply(resp_message)</code></li>
-</ul>
-</li>
-<li><p>内存重映射<code>memory remapping</code></p>
-</li>
-<li><p><code>IPC Classification</code></p>
-<ul>
-<li>单向（管道，信号等）和双向（RPC）</li>
-<li>同步（阻塞进程直到该IPC操作完成）和异步（非阻塞的，进程发起一次操作即可返回，不需要等待其完成）<ul>
-<li><p>同步：被调用者<code>callee</code>处理请求时，调用者<code>caller</code>会处于<code>block</code>的状态，当<code>callee</code>执行完任务后，控制流会切回<code>caller</code></p>
-<ul>
-<li>一般是<strong>双向</strong><code>IPC</code>（或<code>RPC</code>）</li>
-</ul>
-</li>
-<li><p>异步：多个并行的控制流，异步<code>IPC</code>通常通过【轮询内存状态】或【注册回调函数】（如果<code>kernel</code>支持的话）来获取返回结果。</p>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>超时机制</p>
-<ul>
-<li>拒绝服务<code>denial-of-service</code></li>
-</ul>
-</li>
-<li><p>通信连接管理</p>
-<ul>
-<li>直接通信：通信的<code>process</code>一方需要<strong>显示</strong>地标识另一方</li>
-<li>间接通信：通过一个中间<strong>信箱</strong>完成通信，每一个信箱有一个唯一的标识符，共享信箱交换<code>message</code>，进程间连接的建立发生在共享一个<strong>信箱</strong>时候。（如管道）</li>
-</ul>
-</li>
-<li><p>权限检查机制</p>
-<ul>
-<li>微内核，如<code>seL4</code>等微内核系统的<code>Capability</code>机制</li>
-<li>宏内核，如<code>Linux</code>， 将【IPC安全检查机制】和【文件检查】结合在一起</li>
-</ul>
-</li>
-<li><p><code>System V</code>进程间通信：即【宏内核】下的三种进程间通信机制：</p>
-<ul>
-<li><code>System V</code>消息队列</li>
-<li><code>System V</code>信号量</li>
-<li><code>System V</code>共享内存</li>
-</ul>
-</li>
-<li><p><code>System V</code>通信的权限管理：在<code>Linux</code>等宏内核中是基于文件<code>File</code>的权限检查机制</p>
-<ul>
-<li><p>访问模式<code>mode</code></p>
-</li>
-<li><p>权限检查</p>
-<blockquote>
-<p><code>Linux</code>对<code>IPC</code>进行权限管理的<code>IPC_PERM</code>结构，类似文件的【<strong>访问模式</strong>】，权限检查机制确保安全性</p>
-</blockquote>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta"># uid 用户标识符</span></span><br><span class="line">  <span class="meta"># gid 用户组标识符</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">ipc_perm</span> &#123;</span></span><br><span class="line">    <span class="type">key_t</span> key; <span class="comment">// 进程可以根据key来索引到一个IPC对象</span></span><br><span class="line">    <span class="type">uid_t</span> uid; <span class="comment">// owner uid</span></span><br><span class="line">    <span class="type">gid_t</span> gid; <span class="comment">// owner gid</span></span><br><span class="line">    <span class="type">uid_t</span> cuid; <span class="comment">// creator uid</span></span><br><span class="line">    <span class="type">gid_t</span> cgid; <span class="comment">// creator gid</span></span><br><span class="line">    <span class="type">mode_t</span> mode; <span class="comment">// 访问模式</span></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>继承</p>
-<ul>
-<li>除了命名服务外的另外一种常见的【<strong>分发权限</strong>】的方式</li>
-</ul>
-</li>
-<li><p><code>Linux</code>中，<strong>匿名管道</strong> —&gt; 用于父子进程之间的通信，内核通过在<code>fork</code>时<strong>复制</strong><code>copy</code>文件描述符表<code>File Descriptor Table</code>来建立<strong>父子进程</strong>之间的连接</p>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="命名服务"><a href="#命名服务" class="headerlink" title="命名服务"></a>命名服务</h3><blockquote>
-<p><code>naming server</code></p>
-</blockquote>
-<ul>
-<li><p>【<strong>权限分发</strong>】通过一个用户态的服务——<strong>命名服务</strong>实现</p>
-</li>
-<li><p>过程：</p>
-<ol>
-<li>各个服务（如文件系统服务，数据库系统服务等）向<code>naming server</code>注册自己的服务名。</li>
-<li>客户端进程向<code>naming server</code>上查询当前服务，并选择所需要的<strong>服务</strong>去尝试获取权限。</li>
-<li>是否分发权限，是由<code>naming server</code>和对应的<strong>服务端进程</strong>（如文件系统进程，网络系统进程，数据库进程）根据特定的策略（如无条件，需要私钥签名的证书）来判断的。</li>
-</ol>
-</li>
-<li><p>优点：</p>
-<ul>
-<li>各个服务不再是<code>kernel</code>中的<code>ID</code>等抽象的表示，而是对应用更友好的<strong>名字<code>name</code></strong></li>
-</ul>
-</li>
-<li><p><code>naming server</code>一般在用户态</p>
-</li>
-</ul>
-<h3 id="宏内核IPC"><a href="#宏内核IPC" class="headerlink" title="宏内核IPC"></a>宏内核<code>IPC</code></h3><blockquote>
-<ul>
-<li><input checked="" disabled="" type="checkbox"> 管道<code>pipe</code></li>
-<li><input checked="" disabled="" type="checkbox"> <code>System V</code>：常指宏内核下三种具体的<code>IPC</code>机制<ul>
-<li><input checked="" disabled="" type="checkbox"> 消息队列</li>
-<li><input checked="" disabled="" type="checkbox"> 信号量</li>
-<li><input checked="" disabled="" type="checkbox"> 共享内存</li>
-</ul>
-</li>
-<li><input checked="" disabled="" type="checkbox"> <code>Linux</code>信号机制</li>
-<li><input checked="" disabled="" type="checkbox"> 套接字<code>socket</code>机制</li>
-</ul>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>IPC机制</th>
-<th>数据抽象</th>
-<th>参与者</th>
-<th>方向</th>
-<th>内核实现</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>管道<code>pipe</code></td>
-<td>字节流</td>
-<td>两个进程</td>
-<td>单向</td>
-<td>通常是<code>FIFO</code>缓冲区管理数据，分为<strong>匿名管道</strong>和<strong>命名管道</strong></td>
-</tr>
-<tr>
-<td>消息队列<code>MQ</code></td>
-<td>消息</td>
-<td>多进程</td>
-<td>单向双向</td>
-<td>队列的组织方式，通过【文件权限】管理对队列的访问</td>
-</tr>
-<tr>
-<td>信号量<code>semaphore</code></td>
-<td>计数器</td>
-<td>多进程</td>
-<td>单向双向</td>
-<td>内核<code>kernel</code>维护共享计数器，通过文件权限管理对计数器的访问</td>
-</tr>
-<tr>
-<td>共享内存<code>chm</code></td>
-<td>内存区间</td>
-<td>多进程</td>
-<td>单向双向</td>
-<td>内核维护共享内存的内存区间，通过文件的权限来管理对共享内存的访问</td>
-</tr>
-<tr>
-<td>信号<code>signal</code></td>
-<td>事件编号</td>
-<td>多进程</td>
-<td>单向</td>
-<td>为线程&#x2F;进程维护【信号等待队列】，通过用户 &#x2F; 组等的权限管理信号的操作</td>
-</tr>
-<tr>
-<td>套接字<code>socket</code></td>
-<td>数据报文</td>
-<td>两个进程</td>
-<td>单向双向</td>
-<td>有基于<code>IP + port</code>和基于<code>file path</code>的寻址方式，利用网络栈来管理通信</td>
-</tr>
-</tbody></table>
-<h4 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h4><ul>
-<li><p>匿名管道：通过<code>pipe</code>的系统调用创建</p>
-<blockquote>
-<p>父子进程</p>
-</blockquote>
-</li>
-<li><p>命名管道：通过<code>mkfifo</code>命令创建 —&gt; 指定一个全局文件名</p>
-<blockquote>
-<p>远距离进程（任意两个进程）</p>
-</blockquote>
-</li>
-</ul>
-<h4 id="System-V-消息队列"><a href="#System-V-消息队列" class="headerlink" title="System V 消息队列"></a><code>System V</code> 消息队列</h4><ul>
-<li><p>发送和接收<code>message</code>的接口是<code>kernel</code>提供的</p>
-</li>
-<li><p><code>kernel</code>从<code>system memory</code>中分配一个队列数据结构，作为消息<code>message</code>的内核对象</p>
-</li>
-<li><p><code>MQ</code>基本操作：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In Linux, the following operations are defined <span class="keyword">as</span> system call.</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><code>msgget</code>：允许进程获取已有消息队列的连接，或者创建一个新的消息队列</li>
-<li><code>msgsnd</code>：发消息</li>
-<li><code>msgrcv</code>：收消息</li>
-<li><code>msgctl</code>：可以控制和管理一个消息队列，如修改消息队列的权限信息，或删除消息队列</li>
-</ul>
-</li>
-<li><p>消息发送和消息接收一般是【<strong>非阻塞的</strong>】</p>
-</li>
-<li><p><code>Linux kernel</code>实现：</p>
-<ul>
-<li>【<strong>系统管理员</strong>】通常可以配置【<strong>单个消息</strong>】<code>single message</code>的最大空间、【<strong>单个消息队列</strong>】<code>single MQ</code>的最大空间、全系统的消息队列个数</li>
-<li>通常建议使用【<strong>共享内存机制</strong>】传递长消息，而非使用<code>MQ</code></li>
-<li>消息在用户态和内核态之间传递时，会有拷贝开销：<ul>
-<li><code>copy_from_user</code></li>
-<li><code>copy_to_user</code></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="System-V-信号量"><a href="#System-V-信号量" class="headerlink" title="System V 信号量"></a><code>System V</code> 信号量</h4><ul>
-<li>通过对信号量的<code>PV</code>操作限制可以保证执行顺序</li>
-<li>关键：封装一个计数器</li>
-</ul>
-<h4 id="System-V-共享内存"><a href="#System-V-共享内存" class="headerlink" title="System V 共享内存"></a><code>System V</code> 共享内存</h4><blockquote>
-<p>在<code>Linux</code>的系统设计中，将共享内存的机制封装在了一个特殊的文件系统中（即共享内存文件系统<code>shm 文件系统</code>），实际中使用<code>tmpfs</code>实现</p>
-</blockquote>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">	* kernel 为全局所有的共享内存维护一个全局队列结构,由结构体 [shmid_kernel] 组成</span><br><span class="line">	* IPC <span class="title function_">key</span> <span class="params">(全局唯一)</span> --&gt; <span class="keyword">struct</span> shmid_kernel</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> shmid_kernel &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">file</span> <span class="title">file</span>;</span>--&gt; VFS <span class="class"><span class="keyword">struct</span> <span class="title">inode</span> </span></span><br><span class="line"><span class="class">                     --&gt;</span> 一段共享物理内存页的集合(也就是共享内存对应的物理内存)</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[process1] and [process2]</span><br><span class="line">    * By <span class="title function_">shm_at</span> <span class="params">(kernel API)</span>---&gt; Reflect [shared memory] to [Virtual Address Space]</span><br><span class="line">    * kernel会为process1和process2分配两个<span class="title function_">VMA</span><span class="params">(Virtual Memory Area)</span>结构体,均指向file</span><br><span class="line">    * 两个VMA对应的虚拟地址可以不同, 只需要映射到相同的物理内存</span><br><span class="line">    * 支持任意数量的进程共享同一个共享内存区域, 只需要为它们分配[指向 <span class="keyword">struct</span> file 的VMA]即可</span><br><span class="line">    * 取消映射<span class="params">(detach操作)</span>只会影响当前进程的映射</span><br><span class="line"></span><br><span class="line">shm : shared memory</span><br><span class="line">shm_at: 建立对共享内存的映射的接口</span><br><span class="line">shm_dt: 取消共享内存和虚拟内存之间的映射的接口 </span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="信号IPC"><a href="#信号IPC" class="headerlink" title="信号IPC"></a>信号<code>IPC</code></h4><ul>
-<li><p>信号<code>signal</code>：具备【单向的事件通知】能力（信号量<code>semaphore</code>有通知能力，但需要进程主动查询计数器的状态或陷入阻塞状态等待通知）</p>
-</li>
-<li><p>信号传递信息很短，只有一个编号，且由<code>kernel</code>传递</p>
-</li>
-<li><p><code>Linux</code>早起使用信号有31（1~31号）个，后续<code>POSIX</code>标准引入了编号32~64的其他信号</p>
-<ul>
-<li>传统信号称为【常规信号】<ul>
-<li>进程多次收到，<code>kernel</code>只会记录一次</li>
-</ul>
-</li>
-<li><code>POSIX</code>引入称为【实时信号】<ul>
-<li>进程多次收到，<code>kernel</code>不会丢弃相同信号时间</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><code>Linux</code>：<code>kernel</code>会为每个进程和线程准备一个【信号事件等待队列】</p>
-<ul>
-<li>一个进程内的多个线程<ul>
-<li>共享该进程的【信号事件队列】</li>
-<li>拥有自己私有的【等待队列】</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><code>Linux</code>提供了一个专门的系统调用<code>sigprocmask</code>：允许用户程序设置对特定信号的阻塞<code>block</code>状态</p>
-<ul>
-<li>信号阻塞，<code>Linux</code>不会再触发该信号对应的<code>handler function</code>，直到该信号被解除<code>block</code>，信号阻塞不阻碍信号被添加到等待队列上</li>
-</ul>
-</li>
-<li><p><code>signal</code>既用于<code>IPC</code>也用于进程管理</p>
-</li>
-<li><p>内核对信号的处理</p>
-<ul>
-<li><p>时机：通常是<code>kernel</code>执行完<code>exception</code>, <code>interrupt</code>, <code>syscall</code>返回用户态的时刻</p>
-</li>
-<li><p>方式：</p>
-<ul>
-<li>忽略</li>
-<li>用户处理函数：调用【用户注册】的【信号处理函数】</li>
-<li>内核默认处理函数：调用【默认】的【内核处理函数】</li>
-</ul>
-</li>
-<li><p>Linux信号内核与用户态之间的切换</p>
-<blockquote>
-<p>步骤<code>2</code>Linux完成从内核到用户态的切换后（转向<code>handler</code>），就会把【相关栈状态】和【上下文】清空，所以为了避免执行完<code>handler</code>返回时无法恢复到当初系统调用时候用户态的上下文等，在切换到用户态执行<code>handler</code>时，<code>Linux</code>会将【<code>syscall</code>的返回值】和【此前的用户态的上下文（PC，register等）】保存在【用户栈】上。因此步骤<code>4</code>就会从用户栈上提取上下文等信息以恢复到当初系统调用时候的环境。</p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flowchart TD    </span><br><span class="line">    subgraph usr</span><br><span class="line">    B(调用syscall1)</span><br><span class="line">    C(handler) --&gt; D(sigreturn)</span><br><span class="line">    end</span><br><span class="line">    </span><br><span class="line">    subgraph kern</span><br><span class="line">    A1(syscall1) --&gt; A2(ret_to_user)</span><br><span class="line">    A3(sigreturn) --&gt; A4(ret_to_user)</span><br><span class="line">    end</span><br><span class="line">    </span><br><span class="line">    B --&gt;|1.用户态进程系统调用进入内核态| A1</span><br><span class="line">    A2 --&gt;|2.内核态处理完系统调用时,\n发现有signal,于是切换到\n用户态处理函数位置,让其处理信号事件| C</span><br><span class="line">    D --&gt; |3.信号处理完后,信号处理函数\n会通过系统调用sigreturn返回内核.\n该系统调用的主要作用即辅助内核\n恢复到被信号打断之前的上下文context|A3</span><br><span class="line">    A4 --&gt; |4.继续完成在系统调用被打断时的任务,\n即syscall返回时回到原用户态|B</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li><p>可重入<code>reentrant</code>函数：允许多个任务（☞对信号事件的响应和处理）并发使用，而不必担心【共享数据】的错误</p>
-<ul>
-<li>实现可重入函数的前提<ul>
-<li>不使用<code>static data</code>或者<code>static data</code>只读</li>
-<li>尽量只是用<code>local data</code></li>
-<li>在必须使用全局共享数据的时候，需要保护对全局数据的访问（防止死锁）</li>
-<li>避免在函数中修改自己的代码</li>
-<li>不调用【不可重入函数】，很多常见的库函数的实现（如<code>malloc</code>）都是不可重入的</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="套接字"><a href="#套接字" class="headerlink" title="套接字"></a>套接字</h4><ul>
-<li><p>客户端通过【地址】找到要调用的服务端进程</p>
-<ul>
-<li><code>IP + port</code>：通信双方通常使用【本地回环地址<code>127.0.0.1</code>】，然后各自绑定在不同的端口上，OS网络协议栈可以识别回环地址，将通信转发到目标端口对应的进程</li>
-<li><code>UNIX domain socket</code>：本地文件系统的一个路径</li>
-</ul>
-</li>
-<li><p>协议</p>
-<ul>
-<li>传输控制协议<code>TCP : Transmission Control Protocol</code><ul>
-<li>可靠性好</li>
-<li>（数据丢失情况下）数据重传</li>
-<li>（数据乱序到达情况下）数据顺序维护</li>
-</ul>
-</li>
-<li>用户数据报协议<code>UDP : User Datagram Protocol</code><ul>
-<li>简单</li>
-<li>传输性能较好</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><code>Linux</code>套接字</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">socket(<span class="type">int</span> domain, <span class="type">int</span> type, <span class="type">int</span> protocol);</span><br><span class="line">* domain: 寻址方式, [IP + port] or [local path];</span><br><span class="line">* type: 通信方式, [SOCK_STREAM](数据流,对应[TCP]) or [SOCK_DGRAM](数据报,对应[UDP])</span><br><span class="line">* protocol: 定义协议相关配置, [TCP] or [UDP];</span><br></pre></td></tr></table></figure></li>
-</ul>
-]]></content>
-      <categories>
-        <category>system</category>
-      </categories>
-      <tags>
-        <tag>operating system</tag>
-        <tag>system</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Linux Kernel ：Basic Knowledge</title>
-    <url>/2022/07/10/system/kernel-pwn-1/</url>
-    <content><![CDATA[<h1 id="Basic-Knowledge-for-linux-kernel-pwn"><a href="#Basic-Knowledge-for-linux-kernel-pwn" class="headerlink" title="Basic Knowledge for linux kernel pwn"></a>Basic Knowledge for linux kernel pwn</h1><hr>
-<h2 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h2><blockquote>
-<p>参考：<a href="https://www.anquanke.com/post/id/258874">https://www.anquanke.com/post/id/258874</a></p>
-</blockquote>
-<h3 id="系统调用"><a href="#系统调用" class="headerlink" title="系统调用"></a>系统调用</h3><ul>
-<li><p><strong>系统调用表</strong></p>
-<ol>
-<li><p>所有的系统调用被声明于内核源码<code>arch/x86/entry/syscalls/syscall_64.tbl</code>中，在该表中声明了系统调用的标号、类型、名称、内核态函数名称</p>
-</li>
-<li><p>在内核中使用【系统调用表】<code>System Call Table</code>对系统调用进行索引，该表中储存了不同标号的系统调用函数的地址</p>
-</li>
-</ol>
-</li>
-<li><p><strong>进入系统调用</strong></p>
-<ol>
-<li><p>Linux 下进入系统调用有两种主要的方式：</p>
-<ul>
-<li><p>32位：执行 <code>int 0x80</code>汇编指令（80号中断）</p>
-</li>
-<li><p>64位：执行 <code>syscall</code> 汇编指令 &#x2F; 执行 <code>sysenter</code> 汇编指令（only intel）</p>
-</li>
-</ul>
-</li>
-<li><p>Linux 由用户态进入到内核态的流程</p>
-<blockquote>
-<p>Linux下的系统调用以<code>eax/rax</code>寄存器作为<strong>系统调用号</strong>，参数传递约束如下：</p>
-</blockquote>
-<ul>
-<li><p>32 位：<code>ebx、ecx、edx、esi、edi、ebp</code>作为第一个参数、第二个参数…进行参数传递</p>
-</li>
-<li><p>64 位：<code>rdi、rsi、rdx、rcx、r8、r9</code>作为第一个参数、第二个参数…进行参数传递</p>
-</li>
-</ul>
-</li>
-</ol>
-</li>
-<li><p><strong>退出系统调用</strong></p>
-<ol>
-<li><p>内核执行完系统调用后退出系统调用也有对应的两种方式：</p>
-<ul>
-<li><p>执行<code>iret</code>汇编指令</p>
-</li>
-<li><p>执行 <code>sysret</code> 汇编指令 &#x2F; 执行<code>sysexit</code>汇编指令（only Intel）</p>
-</li>
-</ul>
-</li>
-</ol>
-</li>
-</ul>
-<h3 id="进程管理"><a href="#进程管理" class="headerlink" title="进程管理"></a>进程管理</h3><ul>
-<li><p>在内核中使用结构体 <code>task_struct</code> 表示一个进程，该结构体定义于内核源码<code>include/linux/sched.h</code>中</p>
-<p><img src="/2022/07/10/system/kernel-pwn-1/task_struct.png" alt="task_struct"></p>
-</li>
-<li><p>关于进程权限管理部分（注释部分更改了）</p>
-<blockquote>
-<ol>
-<li><p><strong>Process credentials</strong> 是 kernel 用以判断一个进程权限的凭证，在 kernel 中使用 <code>cred</code> 结构体进行标识，对于一个进程而言应当有三个 cred：</p>
-<ul>
-<li><p><strong>ptracer_cred：</strong>使用<code>ptrace</code>系统调用跟踪该进程的上级进程的cred（gdb调试便是使用了这个系统调用，常见的反调试机制的原理便是提前占用了这个位置）</p>
-</li>
-<li><p><strong>real_cred：</strong>即<strong>客体凭证</strong>（<strong>objective cred</strong>），通常是一个进程最初启动时所具有的权限</p>
-</li>
-<li><p><strong>cred：</strong>即<strong>主体凭证</strong>（<strong>subjective cred</strong>），该进程的有效cred，kernel以此作为进程权限的凭证</p>
-</li>
-</ul>
-</li>
-<li><p>当进程 A 向进程 B 发送消息时，A为主体，B为客体</p>
-</li>
-</ol>
-</blockquote>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">-&gt;Process credentials:</span><br><span class="line">	--&gt; Tracer<span class="number">&#x27;</span>s credentials at attach:</span><br><span class="line">	<span class="type">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">cred</span> __<span class="title">rcu</span>		*<span class="title">ptracer_cred</span>;</span></span><br><span class="line">	--&gt; Objective and real subjective task <span class="title function_">credentials</span> <span class="params">(COW)</span>:</span><br><span class="line">	<span class="type">const</span> <span class="keyword">struct</span> cred __rcu		*real_cred;</span><br><span class="line">	--&gt; Effective (overridable) subjective task <span class="title function_">credentials</span> <span class="params">(COW)</span>:</span><br><span class="line">	<span class="type">const</span> <span class="keyword">struct</span> cred __rcu		*cred;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h4 id="进程权限凭证-struct-cred"><a href="#进程权限凭证-struct-cred" class="headerlink" title="进程权限凭证 struct : cred"></a>进程权限凭证 struct : cred</h4><blockquote>
-<p>对于一个进程，在内核当中使用一个结构体<code>cred</code>管理其权限，该结构体定义于内核源码<code>include/linux/cred.h</code> 中</p>
-</blockquote>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">cred</span> &#123;</span></span><br><span class="line">	<span class="type">atomic_t</span>	usage;</span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> CONFIG_DEBUG_CREDENTIALS</span></span><br><span class="line">	<span class="type">atomic_t</span>	subscribers;	<span class="comment">/* number of processes subscribed */</span></span><br><span class="line">	<span class="type">void</span>		*put_addr;</span><br><span class="line">	<span class="type">unsigned</span>	magic;</span><br><span class="line"><span class="meta">#<span class="keyword">define</span> CRED_MAGIC	0x43736564</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> CRED_MAGIC_DEAD	0x44656144</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line">	<span class="type">kuid_t</span>		uid;		--&gt; real UID of the task */</span><br><span class="line">	<span class="type">kgid_t</span>		gid;		--&gt; real GID of the task */</span><br><span class="line">	<span class="type">kuid_t</span>		suid;		<span class="comment">/* saved UID of the task */</span></span><br><span class="line">	<span class="type">kgid_t</span>		sgid;		<span class="comment">/* saved GID of the task */</span></span><br><span class="line">	<span class="type">kuid_t</span>		euid;		<span class="comment">/* effective UID of the task */</span></span><br><span class="line">	<span class="type">kgid_t</span>		egid;		<span class="comment">/* effective GID of the task */</span></span><br><span class="line">	<span class="type">kuid_t</span>		fsuid;		<span class="comment">/* UID for VFS ops */</span></span><br><span class="line">	<span class="type">kgid_t</span>		fsgid;		<span class="comment">/* GID for VFS ops */</span></span><br><span class="line">	<span class="type">unsigned</span>	securebits;	<span class="comment">/* SUID-less security management */</span></span><br><span class="line">	<span class="type">kernel_cap_t</span>	cap_inheritable; <span class="comment">/* caps our children can inherit */</span></span><br><span class="line">	<span class="type">kernel_cap_t</span>	cap_permitted;	<span class="comment">/* caps we&#x27;re permitted */</span></span><br><span class="line">	<span class="type">kernel_cap_t</span>	cap_effective;	<span class="comment">/* caps we can actually use */</span></span><br><span class="line">	<span class="type">kernel_cap_t</span>	cap_bset;	<span class="comment">/* capability bounding set */</span></span><br><span class="line">	<span class="type">kernel_cap_t</span>	cap_ambient;	<span class="comment">/* Ambient capability set */</span></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> CONFIG_KEYS</span></span><br><span class="line">	<span class="type">unsigned</span> <span class="type">char</span>	jit_keyring;	<span class="comment">/* default keyring to attach requested</span></span><br><span class="line"><span class="comment">					 * keys to */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">key</span>	*<span class="title">session_keyring</span>;</span> <span class="comment">/* keyring inherited over fork */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">key</span>	*<span class="title">process_keyring</span>;</span> <span class="comment">/* keyring private to this process */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">key</span>	*<span class="title">thread_keyring</span>;</span> <span class="comment">/* keyring private to this thread */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">key</span>	*<span class="title">request_key_auth</span>;</span> <span class="comment">/* assumed request_key authority */</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> CONFIG_SECURITY</span></span><br><span class="line">	<span class="type">void</span>		*security;	<span class="comment">/* subjective LSM security */</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">user_struct</span> *<span class="title">user</span>;</span>	<span class="comment">/* real user ID subscription */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">user_namespace</span> *<span class="title">user_ns</span>;</span> <span class="comment">/* user_ns the caps and keyrings are relative to. */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">group_info</span> *<span class="title">group_info</span>;</span>	<span class="comment">/* supplementary groups for euid/fsgid */</span></span><br><span class="line">	<span class="comment">/* RCU deletion */</span></span><br><span class="line">	<span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">		<span class="type">int</span> non_rcu;			<span class="comment">/* Can we skip RCU deletion? */</span></span><br><span class="line">		<span class="class"><span class="keyword">struct</span> <span class="title">rcu_head</span>	<span class="title">rcu</span>;</span>		<span class="comment">/* RCU deletion hook */</span></span><br><span class="line">	&#125;;</span><br><span class="line">&#125; __randomize_layout;</span><br></pre></td></tr></table></figure>
-
-<p>一个cred结构体中记载了<strong>一个进程四种不同的用户ID</strong>：</p>
-<ul>
-<li><strong>真实用户ID</strong>（real UID）：标识一个进程<strong>启动时的用户ID</strong></li>
-<li><strong>保存用户ID</strong>（saved UID）：标识一个进程<strong>最初的有效用户ID</strong></li>
-<li><strong>有效用户ID</strong>（effective UID）：标识一个进程<strong>正在运行时所属的用户ID</strong>，一个进程在运行途中是可以改变自己所属用户的，因而权限机制也是通过有效用户ID进行认证的，内核通过 euid 来进行特权判断；为了防止用户一直使用高权限，当任务完成之后，euid 会与 suid 进行交换，恢复进程的有效权限</li>
-<li><strong>文件系统用户ID</strong>（UID for VFS ops）：标识一个进程<strong>创建文件时进行标识的用户ID</strong></li>
-</ul>
-<h4 id="进程权限改变"><a href="#进程权限改变" class="headerlink" title="进程权限改变"></a>进程权限改变</h4><ol>
-<li>只要改变一个进程的<code>cred</code>结构体，就能改变其执行权限</li>
-<li>在内核空间有如下两个函数，都位于<code>kernel/cred.c</code>中：<ul>
-<li><code>struct cred* prepare_kernel_cred(struct task_struct* daemon)</code>：该函数用以拷贝一个进程的cred结构体，并返回一个新的cred结构体，需要注意的是<code>daemon</code>参数应为<strong>有效的进程描述符地址或NULL</strong></li>
-<li><code>int commit_creds(struct cred *new)</code>：该函数用以将一个新的<code>cred</code>结构体应用到进程</li>
-</ul>
-</li>
-</ol>
-<h4 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h4><ul>
-<li><p>关于函数<code>prepare_kernel_cred</code></p>
-<ul>
-<li><p>注释</p>
-<figure class="highlight tex"><table><tr><td class="code"><pre><span class="line">/**</span><br><span class="line"> * prepare<span class="built_in">_</span>kernel<span class="built_in">_</span>cred - Prepare a set of credentials[凭据] for a kernel service</span><br><span class="line"> * @daemon: A userspace daemon to be used as a reference</span><br><span class="line"> *</span><br><span class="line"> * Prepare a set of credentials for a kernel service.  This can then be used to</span><br><span class="line"> * override a task&#x27;s own credentials so that work can be done on behalf of that</span><br><span class="line"> * task that requires a different subjective context.</span><br><span class="line"> *</span><br><span class="line"> * @daemon is used to provide a base for the security record, but can be NULL.   &lt;-----!!!</span><br><span class="line"> * If @daemon is supplied, then the security data will be derived from that;</span><br><span class="line"> * otherwise they&#x27;ll be set to 0 and no groups, full capabilities and no keys.</span><br><span class="line"> *</span><br><span class="line"> * The caller may change these controls afterwards if desired.</span><br><span class="line"> *</span><br><span class="line"> * Returns the new credentials or NULL if out of memory.</span><br><span class="line"> *</span><br><span class="line"> * Does not take, and does not return holding current-&gt;cred<span class="built_in">_</span>replace<span class="built_in">_</span>mutex.</span><br><span class="line"> */</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>声明<code>cred.h</code></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="keyword">struct</span> cred *<span class="title function_">prepare_kernel_cred</span><span class="params">(<span class="keyword">struct</span> task_struct *)</span>;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>定义<code>cred.c</code></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">struct</span> cred *<span class="title function_">prepare_kernel_cred</span><span class="params">(<span class="keyword">struct</span> task_struct *daemon)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">cred</span> *<span class="title">old</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">cred</span> *<span class="title">new</span>;</span></span><br><span class="line"></span><br><span class="line">	new = kmem_cache_alloc(cred_jar, GFP_KERNEL);</span><br><span class="line">	<span class="keyword">if</span> (!new)</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">	kdebug(<span class="string">&quot;prepare_kernel_cred() alloc %p&quot;</span>, new);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (daemon)</span><br><span class="line">		old = get_task_cred(daemon);</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		old = get_cred(&amp;init_cred); &lt;-- <span class="keyword">if</span> daemon is null</span><br><span class="line">...</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li><p>在<code>prepare_kernel_cred()</code>函数中，若传入的参数为<code>NULL</code>，则会缺省使用<code>init</code>进程的<code>cred</code>作为模板进行拷贝，【<strong>即可以直接获得一个标识着root权限的cred结构体</strong>】（这是由于<code>init</code>进程是<code>root</code>权限的）</p>
-<ul>
-<li><p>关于<code>init</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">init (the first process forked by kernel <span class="keyword">in</span> OS)</span><br><span class="line">	* pid : <span class="number">1</span> --&gt; 进程<span class="built_in">id</span></span><br><span class="line">	* gid : <span class="number">1</span> --&gt; 进程组<span class="built_in">id</span></span><br><span class="line">	* sid : <span class="number">1</span> --&gt; 会话<span class="built_in">id</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>init_cred</code>的声明位置：<code>linux-5.4.98/include/linux/init_task.h</code></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="class"><span class="keyword">struct</span> <span class="title">cred</span> <span class="title">init_cred</span>;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>定义位置：<code>linux-5.4.98/kernel/cred.c</code></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * The initial credentials for the initial task</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">cred</span> <span class="title">init_cred</span> =</span> &#123;</span><br><span class="line">	.usage			= ATOMIC_INIT(<span class="number">4</span>),</span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> CONFIG_DEBUG_CREDENTIALS</span></span><br><span class="line">	.subscribers		= ATOMIC_INIT(<span class="number">2</span>),</span><br><span class="line">	.magic			= CRED_MAGIC,</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line">	.uid			= GLOBAL_ROOT_UID,</span><br><span class="line">	.gid			= GLOBAL_ROOT_GID,</span><br><span class="line">	.suid			= GLOBAL_ROOT_UID,</span><br><span class="line">	.sgid			= GLOBAL_ROOT_GID,</span><br><span class="line">	.euid			= GLOBAL_ROOT_UID,</span><br><span class="line">	.egid			= GLOBAL_ROOT_GID,</span><br><span class="line">	.fsuid			= GLOBAL_ROOT_UID,</span><br><span class="line">	.fsgid			= GLOBAL_ROOT_GID,</span><br><span class="line">	.securebits		= SECUREBITS_DEFAULT,</span><br><span class="line">	.cap_inheritable	= CAP_EMPTY_SET,</span><br><span class="line">	.cap_permitted		= CAP_FULL_SET,</span><br><span class="line">	.cap_effective		= CAP_FULL_SET,</span><br><span class="line">	.cap_bset		= CAP_FULL_SET,</span><br><span class="line">	.user			= INIT_USER,</span><br><span class="line">	.user_ns		= &amp;init_user_ns,</span><br><span class="line">	.group_info		= &amp;init_groups,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-<h3 id="I-x2F-O"><a href="#I-x2F-O" class="headerlink" title="I&#x2F;O"></a>I&#x2F;O</h3><h4 id="一切皆文件"><a href="#一切皆文件" class="headerlink" title="一切皆文件"></a>一切皆文件</h4><ul>
-<li>在Linux系统的视角下，无论是文件、设备、管道，还是目录、进程，甚至是磁盘、套接字等等，<strong>一切都可以被抽象为文件，一切都可以使用访问文件的方式进行操作</strong>通过这样一种哲学，Linux予开发者以高层次抽象的统一性，提供了<code>操作的一致性</code>：<ul>
-<li><strong>所有的读取操作都可以通过read进行</strong></li>
-<li><strong>所有的更改操作都可以通过write进行</strong></li>
-</ul>
-</li>
-</ul>
-<h4 id="进程文件系统"><a href="#进程文件系统" class="headerlink" title="进程文件系统"></a>进程文件系统</h4><ul>
-<li>进程文件系统（<code>process file system</code>， 简写为<code>procfs</code>）用以描述一个进程，其中包括该进程所打开的文件描述符、堆栈内存布局、环境变量等等<ol>
-<li>进程文件系统本身是一个【<strong>伪文件系统</strong>】，通常被挂载到<code>/proc</code>目录下，并不真正占用储存空间，而是占用一定的内存</li>
-<li>当一个进程被建立起来时，其进程文件系统便会被挂载到<code>/proc/[PID]</code>下，我们可以在该目录下查看其相关信息</li>
-</ol>
-</li>
-</ul>
-<h4 id="文件描述符"><a href="#文件描述符" class="headerlink" title="文件描述符"></a>文件描述符</h4><ul>
-<li><p>进程通过<strong>文件描述符</strong>（<strong>file descriptor</strong>）来完成对文件的访问，其在形式上是一个非负整数，本质上是对文件的索引值，进程所有执行 I&#x2F;O 操作的系统调用都会通过文件描述符</p>
-</li>
-<li><p>每个进程都<strong>独立有着一个文件描述符表</strong>，存放着该进程所打开的文件索引，每当进程<strong>成功</strong>打开一个现有文件&#x2F;创建一个新文件时（通过系统调用open进行操作），<strong>内核会向进程返回一个文件描述符</strong></p>
-</li>
-<li><p>在kernel中有着一个文件表，由所有的进程共享</p>
-<blockquote>
-<p><strong>stdin、stdout、stderr</strong></p>
-</blockquote>
-<p>每个<code>*NIX</code>进程都应当有着三个标准的POSIX文件描述符，对应着三个标准文件流：</p>
-<table>
-<thead>
-<tr>
-<th>stdin</th>
-<th>标准输入</th>
-<th><strong>0</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>stdout</td>
-<td>标准输出</td>
-<td>1</td>
-</tr>
-<tr>
-<td>stderr</td>
-<td>标准错误</td>
-<td>2</td>
-</tr>
-</tbody></table>
-</li>
-<li><p>【<em><strong>此后打开的文件描述符应当从标号<code>3</code>起始</strong></em>】！！！</p>
-</li>
-</ul>
-<h4 id="syscall-ioctl"><a href="#syscall-ioctl" class="headerlink" title="syscall: ioctl"></a>syscall: ioctl</h4><blockquote>
-<p>在<code>*NIX</code>中一切都可以被视为文件，因而一切都可以以访问文件的方式进行操作，为了方便，Linux定义了系统调用<code>ioctl</code>供进程与设备之间进行通信</p>
-</blockquote>
-<p>系统调用<code>ioctl</code>是一个专用于设备输入输出操作的一个系统调用，其调用方式如下：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">ioctl</span><span class="params">(<span class="type">int</span> fd, <span class="type">unsigned</span> <span class="type">long</span> request, ...)</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>fd：设备的文件描述符</strong></li>
-<li><strong>request：请求码</strong></li>
-<li><strong>其他参数</strong></li>
-</ul>
-<p>对于一个提供了<code>ioctl</code>通信方式的设备而言，我们可以通过其文件描述符<code>fd</code>、使用不同的请求码及其他请求参数通过<code>ioctl</code>系统调用完成不同的对设备的<code>I/O</code>操作</p>
-<blockquote>
-<p>例如CD-ROM驱动程序弹出光驱的这一操作就对应着对“光驱设备”这一文件通过ioctl传递特定的请求码与请求参数完成</p>
-</blockquote>
-<h3 id="LKMs"><a href="#LKMs" class="headerlink" title="LKMs"></a>LKMs</h3><ul>
-<li><code>Loadable Kernel Modules(LKMs)</code>：<ul>
-<li>Linux Kernle采用的是宏内核架构，一切的系统服务都需要由内核来提供，虽然效率较高，但是：<ol>
-<li>缺乏可扩展性与可维护性</li>
-<li>内核需要装载很多可能用到的服务，但这些服务最终可能未必会用到，还会占据大量内存空间</li>
-<li>新服务的提供往往意味着要<strong>重新编译</strong>整个内核</li>
-</ol>
-</li>
-<li>综合以上考虑，<strong>可装载内核模块</strong><code>Loadable Kernel Modules</code>，简称<code>LKMs</code>，出现了，位于内核空间的LKMs可以提供<strong>新的系统调用</strong>或其他服务，</li>
-<li>LKMs可以像积木一样被装载入内核&#x2F;从内核中卸载，大大提高了kernel的可拓展性与可维护性</li>
-</ul>
-</li>
-<li>常见的外设驱动便是LKM的一种</li>
-<li>LKMs与用户态可执行文件一样都采用ELF格式，但是<strong>LKMs运行在内核空间，且无法脱离内核运行</strong></li>
-<li>通常与LKM相关的命令有以下三个：<ul>
-<li><code>lsmod</code>：列出现有的LKMs</li>
-<li><code>insmod</code>：装载新的LKM（需要root）</li>
-<li><code>rmmod</code>：从内核中移除LKM（需要root）</li>
-</ul>
-</li>
-</ul>
-<h3 id="保护机制"><a href="#保护机制" class="headerlink" title="保护机制"></a>保护机制</h3><h4 id="KASLR"><a href="#KASLR" class="headerlink" title="KASLR"></a>KASLR</h4><blockquote>
-<p>内核内存布局参考：<a href="https://elixir.bootlin.com/linux/latest/source/Documentation/x86/x86_64/mm.rst">多版本kernel内核内存布局</a></p>
-</blockquote>
-<ul>
-<li>KASLR即【内核空间地址随机化（<code>kernel address space layout randomize</code>）】，与用户态程序的ASLR相类似——在内核镜像映射到实际的地址空间时加上一个偏移值，但是内核内部的相对偏移其实还是不变的</li>
-<li>在未开启KASLR保护机制时，内核的基址为<code>0xffffffff81000000</code></li>
-</ul>
-<h4 id="FGKASLR"><a href="#FGKASLR" class="headerlink" title="FGKASLR"></a>FGKASLR</h4><blockquote>
-<p>KASLR 虽然在一定程度上能够缓解攻击，但是若是攻击者通过一些信息泄露漏洞获取到内核中的某个地址，仍能够直接得知内核加载地址偏移从而得知整个内核地址布局</p>
-</blockquote>
-<ul>
-<li>因此有研究者基于 KASLR 实现了 FGKASLR，<strong>以函数粒度重新排布内核代码</strong></li>
-</ul>
-<h4 id="Stack-Protector"><a href="#Stack-Protector" class="headerlink" title="Stack Protector"></a>Stack Protector</h4><blockquote>
-<p>类似于用户态程序的<code>canary</code>，通常又被称作是<code>stack cookie</code>，用以检测<strong>是否发生内核堆栈溢出</strong>，若是发生内核堆栈溢出则会产生<code>kernel panic</code></p>
-</blockquote>
-<ul>
-<li>内核中的<code>canary</code>的值通常取自<code>gs</code>段寄存器某个固定偏移处的值</li>
-</ul>
-<h4 id="SMAP-x2F-SMEP"><a href="#SMAP-x2F-SMEP" class="headerlink" title="SMAP&#x2F;SMEP"></a>SMAP&#x2F;SMEP</h4><ul>
-<li>SMAP：管理模式【<strong>访问</strong>】保护（<code>Supervisor Mode Access Prevention</code>）</li>
-<li>SMEP：管理模式【<strong>执行</strong>】保护（<code>Supervisor Mode Execution Prevention</code>）</li>
-<li>这两种保护通常是同时开启的，用以阻止<strong>内核空间直接访问&#x2F;执行用户空间的数据</strong>，完全地将内核空间与用户空间相分隔开，用以防范<code>ret2usr</code>（return-to-user，将内核空间的指令指针重定向至用户空间上构造好的提权代码）攻击</li>
-<li>SMEP保护的绕过有以下两种方式：<ul>
-<li>在设计中，为了使隔离的数据进行交换时具有更高的性能，隐性地址共享始终存在（VDSO &amp; VSYSCALL），<strong>用户态进程与内核共享同一块物理内存</strong>，因此通过隐性内存共享可以完整的绕过软件和硬件的隔离保护，这种攻击方式被称之为<code>ret2dir</code>（return-to-direct-mapped memory ）</li>
-<li>Intel下系统根据CR4控制寄存器的第20位标识是否开启SMEP保护（1为开启，0为关闭），若是能够通过kernel ROP改变CR4寄存器的值便能够关闭SMEP保护，完成SMEP-bypass，接下来就能够重新进行<code>ret2usr</code></li>
-</ul>
-</li>
-</ul>
-<h4 id="KPTI"><a href="#KPTI" class="headerlink" title="KPTI"></a>KPTI</h4><blockquote>
-<p>KPTI即<code>内核页表隔离</code>（Kernel page-table isolation），内核空间与用户空间分别使用两组不同的页表集，这对于内核的内存管理产生了根本性的变化</p>
-</blockquote>
-<ul>
-<li><strong>KPTI 机制的出现使得 ret2usr 彻底成为过去式</strong></li>
-</ul>
-]]></content>
-      <categories>
-        <category>system</category>
-      </categories>
-      <tags>
-        <tag>operating system</tag>
-        <tag>system</tag>
-        <tag>pwn</tag>
         <tag>Linux kernel</tag>
       </tags>
   </entry>
@@ -2525,7 +1722,11 @@
 <p>APP可以通过打开文件时附带<code>O_DIRECT</code>标志，提示文件系统<strong>不要使用页缓存</strong>  –&gt; <strong>直接I&#x2F;O</strong></p>
 <p>页缓存 –&gt; <strong>缓存I&#x2F;O</strong></p>
 </blockquote>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flowchart </span><br><span class="line">		meta1(从存储设备中读取数据\n创建新的缓存页) --&gt; clean_page((干净页))</span><br><span class="line">		meta2(缓存页被回收) --- clean_page</span><br><span class="line">		clean_page --&gt;|修改缓存页中的数据| dirty_page((脏页))</span><br><span class="line">		dirty_page --&gt;|页中数据被写会存储设备| clean_page</span><br></pre></td></tr></table></figure>
+<pre class="mermaid">    flowchart 
+        meta1(从存储设备中读取数据\n创建新的缓存页) --> clean_page((干净页))
+        meta2(缓存页被回收) --- clean_page
+        clean_page -->|修改缓存页中的数据| dirty_page((脏页))
+        dirty_page -->|页中数据被写会存储设备| clean_page</pre>
 </li>
 <li><p>Linux 在页缓存的基础上实现了文件的<strong>内存映射机制</strong></p>
 </li>
@@ -2585,6 +1786,870 @@
       <tags>
         <tag>operating system</tag>
         <tag>system</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>OS Notes Part(I)</title>
+    <url>/2022/06/27/system/os-notes-first/</url>
+    <content><![CDATA[<h1 id="Modern-Operating-System-I"><a href="#Modern-Operating-System-I" class="headerlink" title="Modern Operating System (I)"></a>Modern Operating System (I)</h1><blockquote>
+<p>前几章内容暂省略</p>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> 内存管理</li>
+<li><input checked="" disabled="" type="checkbox"> 进程与线程</li>
+<li><input disabled="" type="checkbox"> 操作系统调度</li>
+<li><input checked="" disabled="" type="checkbox"> 进程间通信</li>
+</ul>
+</blockquote>
+<h2 id="4-内存管理"><a href="#4-内存管理" class="headerlink" title="4 内存管理"></a>4 内存管理</h2><hr>
+<ul>
+<li>转址旁路缓存<code>TLB (Translation Lookaside Buffer)</code><ul>
+<li>TLB命中：<code>TLB hit</code></li>
+<li>TLB未命中：<code>TLB miss</code></li>
+</ul>
+</li>
+<li><code>AArch64 (based on ARMv8.0)</code> 架构：4级页表<ul>
+<li>最小页：有<code>4KB</code>,<code>16KB</code>,<code>64KB</code>,可通过<code>TCR_EL1</code>进行配置</li>
+</ul>
+</li>
+<li>一种TLB刷新机制：为<code>TLB</code>缓存项打”标签”来减少程序切换时TLB刷新的开销<ul>
+<li><code>ASID (Address Space IDentifier)</code>：基于<code>aarch64</code></li>
+<li><code>PCID (Process Context IDentifier)</code>：基于<code>x86-64</code></li>
+</ul>
+</li>
+<li>换页<code>page swapping</code><ul>
+<li>换出<code>swap out</code></li>
+<li>换入<code>swap in</code></li>
+</ul>
+</li>
+<li>缺页异常<code>page fault</code></li>
+<li>预取<code>prefetching</code>机制：发生<code>swap in</code>时，预测还有哪些页即将被访问，提前将其换入物理内存，减少<code>page fault</code></li>
+<li>按需页分配<code>demand paging</code><ul>
+<li>未分配状态</li>
+<li>已分配但未映射至物理内存状态（初次访问时出发<code>page fault</code>）</li>
+<li>区分两种状态：<ul>
+<li>Linux中，程序的虚拟内存空间由多个虚拟内存区域构成，即<code>VMA (Virtual Memory Area)</code>：含<code>beginning VA</code>，<code>ending VA</code>，访问权限等信息。</li>
+<li>P -&gt; page fault<ul>
+<li>P属于VMA：已分配未映射</li>
+<li>P不属于VMA：未分配</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>页替换策略<ul>
+<li><code>MIN/OPT (Minimum / Optimal 最优策略)</code></li>
+<li><code>FIFO (First-In First-Out)</code></li>
+<li><code>Second Chance</code></li>
+<li><code>LRU (Least Recently Used)</code>：基于程序过去频繁访问的页后续也可能被访问</li>
+<li><code>MRU (Most Recently Used)</code>：基于程序不会反复访问相同地址情况</li>
+<li><code>clock algorithm</code>：时钟算法策略</li>
+</ul>
+</li>
+<li>工作集模型<code>working set model</code><ul>
+<li>基于：优先将非工作集中的页换出</li>
+<li>工作集时钟算法：<ul>
+<li>维护2个状态：<strong>上次使用时间</strong>和<strong>访问位</strong></li>
+<li>定期检查算时间间隔</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>共享内存<code>shared memory</code><ul>
+<li>写时拷贝<code>copy-on-write</code></li>
+<li>内存去重<code>memory deduplication</code><ul>
+<li>定期扫描相同内容的物理页，找到映射对应的虚拟页，保留一个物理页，其余通过<code>copy-on-write</code>映射到该物理页，释放其他物理页。</li>
+<li>如Linux的<code>KSM (Kernel Same-page Merging)</code>机制</li>
+<li>性能下降产生延迟，资源利用率提高</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>内存压缩<ul>
+<li>如Linux的<code>zswap</code>机制，<code>zswap</code>区域（仍属于内存区域）：为内存换页过程提供缓冲区</li>
+<li>更加高效的磁盘批量<code>I/O</code></li>
+</ul>
+</li>
+<li>大页<code>huge page</code><ul>
+<li>Linux提供透明大页<code>transparent huge page</code>机制：自动将一个应用程序中连续的4KB内存页合并成2MB的内存页</li>
+<li>提高效率（减少TLB项，提高TLB命中率），可能浪费物理内存资源</li>
+</ul>
+</li>
+<li>内存碎片<code>fragmentation</code><ul>
+<li>内部碎片<code>internal fragmentation</code></li>
+<li>外部碎片<code>external fragmentation</code></li>
+</ul>
+</li>
+<li>伙伴系统<code>buddy system</code><ul>
+<li>减少外部碎片</li>
+</ul>
+</li>
+<li><code>SLAB</code>分配器<ul>
+<li>减少内部碎片</li>
+<li>包括<code>SLAB</code>，<code>SLUB</code>，<code>SLOB</code></li>
+<li>linux-2.6.23之后内核默认采用<code>SLUB</code>分配器（依赖于伙伴系统）</li>
+</ul>
+</li>
+<li>常用空闲链表<ul>
+<li>隐式空闲链表<code>implicit free list</code></li>
+<li>显式空闲链表<code>explicit free list</code></li>
+<li>分离空闲链表<code>segregated free list</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="5-进程与线程"><a href="#5-进程与线程" class="headerlink" title="5 进程与线程"></a>5 进程与线程</h2><hr>
+<h3 id="process"><a href="#process" class="headerlink" title="process"></a>process</h3><ul>
+<li><p>进程控制块<code>PCB (Process Control Block)</code></p>
+</li>
+<li><p>僵尸进程<code>zombie</code></p>
+</li>
+<li><p>进程管理：</p>
+<ul>
+<li><p>进程组<code>process group</code>：进程的集合 —&gt; 进程组标识符<code>tgid (In Linux PCB)</code></p>
+</li>
+<li><p>会话<code>session</code>：进程组的集合</p>
+<blockquote>
+<p>根据执行状态划分为：</p>
+</blockquote>
+<ul>
+<li>前台进程组<code>foreground thread group</code></li>
+<li>后台进程组<code>background thread group</code></li>
+</ul>
+</li>
+<li><p><code>process group</code>和<code>session</code>主要用于<code>shell</code>环境的中的进程管理</p>
+<ul>
+<li>进程id -&gt; <code>PID</code></li>
+<li>进程组id -&gt; <code>GID</code></li>
+<li>会话id -&gt; <code>SID</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>控制中断进程<code>controlling terminal</code></p>
+</li>
+</ul>
+<h3 id="thread"><a href="#thread" class="headerlink" title="thread"></a>thread</h3><ul>
+<li><p>用户态线程<code>user-level thread</code></p>
+</li>
+<li><p>内核态线程<code>kernel-level thread</code></p>
+</li>
+<li><p>多线程模型<code>multithreading model</code></p>
+</li>
+<li><p>线程控制块<code>Thread Control Block</code></p>
+</li>
+<li><p>NPTL<code>Native POSIX Thread Library</code>：自<code>Linux 2.6</code>引入的线程库，沿用至今</p>
+</li>
+</ul>
+<h3 id="fiber"><a href="#fiber" class="headerlink" title="fiber"></a>fiber</h3><blockquote>
+<p>完全在用户态下完成</p>
+</blockquote>
+<ul>
+<li>抢占式多任务处理<code>preemptive multitasking</code></li>
+<li>合作式多任务处理<code>cooperative multitasking</code></li>
+<li><code>(Windows) TLS(Fiber Local Storage)</code> ：纤程本地存储，用来为每个纤程保存同一变量的私有拷贝</li>
+<li>协程<code>coroutine</code>：为了便于与操作系统提供的纤程支持相区分，程序语言提供的纤程支持称为协程</li>
+</ul>
+<h2 id="6-操作系统调度"><a href="#6-操作系统调度" class="headerlink" title="6 操作系统调度"></a>6 操作系统调度</h2><hr>
+<ul>
+<li><p>优先级<code>priority</code></p>
+</li>
+<li><p>时间片<code>time slice</code></p>
+</li>
+<li><p>截止时间<code>deadline</code></p>
+</li>
+<li><p>任务调度&#x2F;CPU调度<code>task scheduling</code></p>
+</li>
+<li><p>线程<code>thread</code>是调度器的调度对象，又叫做<strong>任务</strong><code>task</code></p>
+<ul>
+<li>运行队列<code>run queue</code></li>
+<li><code>Linux</code>使用的调度器会用红黑树实现运行队列</li>
+</ul>
+</li>
+<li><p>确定调度指标<code>what</code> ——&gt; 做出调度决策<code>how</code></p>
+<ul>
+<li><p>调度指标</p>
+<ul>
+<li><p>分类</p>
+<ul>
+<li>性能相关指标<ul>
+<li>批处理任务<ul>
+<li><strong>吞吐量</strong>：单位时间内处理的任务数量</li>
+<li><strong>周转时间</strong>：任务从被发起直到执行结束所需的时间</li>
+</ul>
+</li>
+<li>交互式任务<ul>
+<li><strong>响应时间</strong>：任务从被发起直至第一次向用户返回输出以响应用户所需的时间</li>
+</ul>
+</li>
+<li>调度开销：做出决策的时间应该尽可能短</li>
+</ul>
+</li>
+<li>非性能指标：<strong>公平性</strong>、<strong>资源利用率</strong></li>
+<li>任务场景需求：<strong>实时性</strong>、<strong>能耗</strong></li>
+</ul>
+</li>
+<li><p>权衡</p>
+<ul>
+<li>调度开销和调度效果</li>
+<li>优先级和公平性</li>
+<li>性能与能耗</li>
+</ul>
+</li>
+<li><p>调度机制</p>
+<ul>
+<li><p>进程调度<code>process scheduling</code>机制</p>
+<ul>
+<li><p>长期调度<code>long-term scheduling/job scheduling</code></p>
+<blockquote>
+<p>限制系统中真正被用来进行短期调度管理的进程数量，避免短期调度的开销过大</p>
+<p>根据进程使用的资源类型，分类：计算密集型<code>CPU-bound</code>和<code>I/O</code>密集型<code>I/O-bound</code></p>
+</blockquote>
+</li>
+<li><p>短期调度<code>short-term scheduling/job scheduling</code></p>
+<blockquote>
+<p>实际做出调度决策的机制</p>
+<p>负责进程在 <strong>预备</strong>，<strong>运行</strong>，<strong>阻塞</strong> 状态间的转换 </p>
+</blockquote>
+</li>
+<li><p>中期调度<code>medium-term scheduling/job scheduling</code></p>
+<blockquote>
+<p>长短期调度 —&gt; based on CPU and I&#x2F;O resource</p>
+<p>中期调度 —&gt; based on memory</p>
+<p>中期调度也是换页机制的一部分，当<strong>系统中内存使用量过大</strong>，就会触发换页机制，挂起处于<strong>预备状态</strong>的&#x2F;<strong>阻碍状态</strong>的进程，置为<strong>挂起预备状态&#x2F;挂起阻塞状态</strong>并放入<strong>挂起运行队列&#x2F;挂起阻塞队列</strong></p>
+<p>引入无法被短期调度执行的两个状态</p>
+<ul>
+<li>挂起预备状态<code>suspended ready</code></li>
+<li>挂起阻塞状态<code>suspended blocking</code></li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>批处理队列<code>batch queue</code></p>
+</li>
+<li><p>阻塞队列<code>blocking queue</code></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>调度决策</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="7-进程间通信"><a href="#7-进程间通信" class="headerlink" title="7 进程间通信"></a>7 进程间通信</h2><hr>
+<ul>
+<li><p>进程间通信<code>Inter-Process Communication (IPC)</code></p>
+</li>
+<li><p>消息<code>message</code>：一种常见通信数据的抽象，包含一个头部<code>header</code>和一个数据段<code>payload</code></p>
+<ul>
+<li><code>header</code> : 魔数<code>magic number</code>，状态<code>state</code>，消息长度<code>message length</code>，验证码<code>verification code</code>等</li>
+<li><code>payload</code> : 纯数据（如字符串<code>string</code>），系统资源（如文件描述符<code>file descriptor</code>）</li>
+</ul>
+</li>
+<li><p>消息传递基本接口：</p>
+<ul>
+<li><code>Send(message)</code></li>
+<li><code>Recv(message)</code></li>
+<li><code>RPC(req_message, resp_message)</code>  —&gt; 远程过程调用：<code>Remote Procedure Call</code></li>
+<li><code>Reply(resp_message)</code></li>
+</ul>
+</li>
+<li><p>内存重映射<code>memory remapping</code></p>
+</li>
+<li><p><code>IPC Classification</code></p>
+<ul>
+<li>单向（管道，信号等）和双向（RPC）</li>
+<li>同步（阻塞进程直到该IPC操作完成）和异步（非阻塞的，进程发起一次操作即可返回，不需要等待其完成）<ul>
+<li><p>同步：被调用者<code>callee</code>处理请求时，调用者<code>caller</code>会处于<code>block</code>的状态，当<code>callee</code>执行完任务后，控制流会切回<code>caller</code></p>
+<ul>
+<li>一般是<strong>双向</strong><code>IPC</code>（或<code>RPC</code>）</li>
+</ul>
+</li>
+<li><p>异步：多个并行的控制流，异步<code>IPC</code>通常通过【轮询内存状态】或【注册回调函数】（如果<code>kernel</code>支持的话）来获取返回结果。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>超时机制</p>
+<ul>
+<li>拒绝服务<code>denial-of-service</code></li>
+</ul>
+</li>
+<li><p>通信连接管理</p>
+<ul>
+<li>直接通信：通信的<code>process</code>一方需要<strong>显示</strong>地标识另一方</li>
+<li>间接通信：通过一个中间<strong>信箱</strong>完成通信，每一个信箱有一个唯一的标识符，共享信箱交换<code>message</code>，进程间连接的建立发生在共享一个<strong>信箱</strong>时候。（如管道）</li>
+</ul>
+</li>
+<li><p>权限检查机制</p>
+<ul>
+<li>微内核，如<code>seL4</code>等微内核系统的<code>Capability</code>机制</li>
+<li>宏内核，如<code>Linux</code>， 将【IPC安全检查机制】和【文件检查】结合在一起</li>
+</ul>
+</li>
+<li><p><code>System V</code>进程间通信：即【宏内核】下的三种进程间通信机制：</p>
+<ul>
+<li><code>System V</code>消息队列</li>
+<li><code>System V</code>信号量</li>
+<li><code>System V</code>共享内存</li>
+</ul>
+</li>
+<li><p><code>System V</code>通信的权限管理：在<code>Linux</code>等宏内核中是基于文件<code>File</code>的权限检查机制</p>
+<ul>
+<li><p>访问模式<code>mode</code></p>
+</li>
+<li><p>权限检查</p>
+<blockquote>
+<p><code>Linux</code>对<code>IPC</code>进行权限管理的<code>IPC_PERM</code>结构，类似文件的【<strong>访问模式</strong>】，权限检查机制确保安全性</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta"># uid 用户标识符</span></span><br><span class="line">  <span class="meta"># gid 用户组标识符</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">ipc_perm</span> &#123;</span></span><br><span class="line">    <span class="type">key_t</span> key; <span class="comment">// 进程可以根据key来索引到一个IPC对象</span></span><br><span class="line">    <span class="type">uid_t</span> uid; <span class="comment">// owner uid</span></span><br><span class="line">    <span class="type">gid_t</span> gid; <span class="comment">// owner gid</span></span><br><span class="line">    <span class="type">uid_t</span> cuid; <span class="comment">// creator uid</span></span><br><span class="line">    <span class="type">gid_t</span> cgid; <span class="comment">// creator gid</span></span><br><span class="line">    <span class="type">mode_t</span> mode; <span class="comment">// 访问模式</span></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>继承</p>
+<ul>
+<li>除了命名服务外的另外一种常见的【<strong>分发权限</strong>】的方式</li>
+</ul>
+</li>
+<li><p><code>Linux</code>中，<strong>匿名管道</strong> —&gt; 用于父子进程之间的通信，内核通过在<code>fork</code>时<strong>复制</strong><code>copy</code>文件描述符表<code>File Descriptor Table</code>来建立<strong>父子进程</strong>之间的连接</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="命名服务"><a href="#命名服务" class="headerlink" title="命名服务"></a>命名服务</h3><blockquote>
+<p><code>naming server</code></p>
+</blockquote>
+<ul>
+<li><p>【<strong>权限分发</strong>】通过一个用户态的服务——<strong>命名服务</strong>实现</p>
+</li>
+<li><p>过程：</p>
+<ol>
+<li>各个服务（如文件系统服务，数据库系统服务等）向<code>naming server</code>注册自己的服务名。</li>
+<li>客户端进程向<code>naming server</code>上查询当前服务，并选择所需要的<strong>服务</strong>去尝试获取权限。</li>
+<li>是否分发权限，是由<code>naming server</code>和对应的<strong>服务端进程</strong>（如文件系统进程，网络系统进程，数据库进程）根据特定的策略（如无条件，需要私钥签名的证书）来判断的。</li>
+</ol>
+</li>
+<li><p>优点：</p>
+<ul>
+<li>各个服务不再是<code>kernel</code>中的<code>ID</code>等抽象的表示，而是对应用更友好的<strong>名字<code>name</code></strong></li>
+</ul>
+</li>
+<li><p><code>naming server</code>一般在用户态</p>
+</li>
+</ul>
+<h3 id="宏内核IPC"><a href="#宏内核IPC" class="headerlink" title="宏内核IPC"></a>宏内核<code>IPC</code></h3><blockquote>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> 管道<code>pipe</code></li>
+<li><input checked="" disabled="" type="checkbox"> <code>System V</code>：常指宏内核下三种具体的<code>IPC</code>机制<ul>
+<li><input checked="" disabled="" type="checkbox"> 消息队列</li>
+<li><input checked="" disabled="" type="checkbox"> 信号量</li>
+<li><input checked="" disabled="" type="checkbox"> 共享内存</li>
+</ul>
+</li>
+<li><input checked="" disabled="" type="checkbox"> <code>Linux</code>信号机制</li>
+<li><input checked="" disabled="" type="checkbox"> 套接字<code>socket</code>机制</li>
+</ul>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>IPC机制</th>
+<th>数据抽象</th>
+<th>参与者</th>
+<th>方向</th>
+<th>内核实现</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>管道<code>pipe</code></td>
+<td>字节流</td>
+<td>两个进程</td>
+<td>单向</td>
+<td>通常是<code>FIFO</code>缓冲区管理数据，分为<strong>匿名管道</strong>和<strong>命名管道</strong></td>
+</tr>
+<tr>
+<td>消息队列<code>MQ</code></td>
+<td>消息</td>
+<td>多进程</td>
+<td>单向双向</td>
+<td>队列的组织方式，通过【文件权限】管理对队列的访问</td>
+</tr>
+<tr>
+<td>信号量<code>semaphore</code></td>
+<td>计数器</td>
+<td>多进程</td>
+<td>单向双向</td>
+<td>内核<code>kernel</code>维护共享计数器，通过文件权限管理对计数器的访问</td>
+</tr>
+<tr>
+<td>共享内存<code>chm</code></td>
+<td>内存区间</td>
+<td>多进程</td>
+<td>单向双向</td>
+<td>内核维护共享内存的内存区间，通过文件的权限来管理对共享内存的访问</td>
+</tr>
+<tr>
+<td>信号<code>signal</code></td>
+<td>事件编号</td>
+<td>多进程</td>
+<td>单向</td>
+<td>为线程&#x2F;进程维护【信号等待队列】，通过用户 &#x2F; 组等的权限管理信号的操作</td>
+</tr>
+<tr>
+<td>套接字<code>socket</code></td>
+<td>数据报文</td>
+<td>两个进程</td>
+<td>单向双向</td>
+<td>有基于<code>IP + port</code>和基于<code>file path</code>的寻址方式，利用网络栈来管理通信</td>
+</tr>
+</tbody></table>
+<h4 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h4><ul>
+<li><p>匿名管道：通过<code>pipe</code>的系统调用创建</p>
+<blockquote>
+<p>父子进程</p>
+</blockquote>
+</li>
+<li><p>命名管道：通过<code>mkfifo</code>命令创建 —&gt; 指定一个全局文件名</p>
+<blockquote>
+<p>远距离进程（任意两个进程）</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="System-V-消息队列"><a href="#System-V-消息队列" class="headerlink" title="System V 消息队列"></a><code>System V</code> 消息队列</h4><ul>
+<li><p>发送和接收<code>message</code>的接口是<code>kernel</code>提供的</p>
+</li>
+<li><p><code>kernel</code>从<code>system memory</code>中分配一个队列数据结构，作为消息<code>message</code>的内核对象</p>
+</li>
+<li><p><code>MQ</code>基本操作：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In Linux, the following operations are defined <span class="keyword">as</span> system call.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>msgget</code>：允许进程获取已有消息队列的连接，或者创建一个新的消息队列</li>
+<li><code>msgsnd</code>：发消息</li>
+<li><code>msgrcv</code>：收消息</li>
+<li><code>msgctl</code>：可以控制和管理一个消息队列，如修改消息队列的权限信息，或删除消息队列</li>
+</ul>
+</li>
+<li><p>消息发送和消息接收一般是【<strong>非阻塞的</strong>】</p>
+</li>
+<li><p><code>Linux kernel</code>实现：</p>
+<ul>
+<li>【<strong>系统管理员</strong>】通常可以配置【<strong>单个消息</strong>】<code>single message</code>的最大空间、【<strong>单个消息队列</strong>】<code>single MQ</code>的最大空间、全系统的消息队列个数</li>
+<li>通常建议使用【<strong>共享内存机制</strong>】传递长消息，而非使用<code>MQ</code></li>
+<li>消息在用户态和内核态之间传递时，会有拷贝开销：<ul>
+<li><code>copy_from_user</code></li>
+<li><code>copy_to_user</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="System-V-信号量"><a href="#System-V-信号量" class="headerlink" title="System V 信号量"></a><code>System V</code> 信号量</h4><ul>
+<li>通过对信号量的<code>PV</code>操作限制可以保证执行顺序</li>
+<li>关键：封装一个计数器</li>
+</ul>
+<h4 id="System-V-共享内存"><a href="#System-V-共享内存" class="headerlink" title="System V 共享内存"></a><code>System V</code> 共享内存</h4><blockquote>
+<p>在<code>Linux</code>的系统设计中，将共享内存的机制封装在了一个特殊的文件系统中（即共享内存文件系统<code>shm 文件系统</code>），实际中使用<code>tmpfs</code>实现</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">	* kernel 为全局所有的共享内存维护一个全局队列结构,由结构体 [shmid_kernel] 组成</span><br><span class="line">	* IPC <span class="title function_">key</span> <span class="params">(全局唯一)</span> --&gt; <span class="keyword">struct</span> shmid_kernel</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> shmid_kernel &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">file</span> <span class="title">file</span>;</span>--&gt; VFS <span class="class"><span class="keyword">struct</span> <span class="title">inode</span> </span></span><br><span class="line"><span class="class">                     --&gt;</span> 一段共享物理内存页的集合(也就是共享内存对应的物理内存)</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[process1] and [process2]</span><br><span class="line">    * By <span class="title function_">shm_at</span> <span class="params">(kernel API)</span>---&gt; Reflect [shared memory] to [Virtual Address Space]</span><br><span class="line">    * kernel会为process1和process2分配两个<span class="title function_">VMA</span><span class="params">(Virtual Memory Area)</span>结构体,均指向file</span><br><span class="line">    * 两个VMA对应的虚拟地址可以不同, 只需要映射到相同的物理内存</span><br><span class="line">    * 支持任意数量的进程共享同一个共享内存区域, 只需要为它们分配[指向 <span class="keyword">struct</span> file 的VMA]即可</span><br><span class="line">    * 取消映射<span class="params">(detach操作)</span>只会影响当前进程的映射</span><br><span class="line"></span><br><span class="line">shm : shared memory</span><br><span class="line">shm_at: 建立对共享内存的映射的接口</span><br><span class="line">shm_dt: 取消共享内存和虚拟内存之间的映射的接口 </span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="信号IPC"><a href="#信号IPC" class="headerlink" title="信号IPC"></a>信号<code>IPC</code></h4><ul>
+<li><p>信号<code>signal</code>：具备【单向的事件通知】能力（信号量<code>semaphore</code>有通知能力，但需要进程主动查询计数器的状态或陷入阻塞状态等待通知）</p>
+</li>
+<li><p>信号传递信息很短，只有一个编号，且由<code>kernel</code>传递</p>
+</li>
+<li><p><code>Linux</code>早起使用信号有31（1~31号）个，后续<code>POSIX</code>标准引入了编号32~64的其他信号</p>
+<ul>
+<li>传统信号称为【常规信号】<ul>
+<li>进程多次收到，<code>kernel</code>只会记录一次</li>
+</ul>
+</li>
+<li><code>POSIX</code>引入称为【实时信号】<ul>
+<li>进程多次收到，<code>kernel</code>不会丢弃相同信号时间</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><code>Linux</code>：<code>kernel</code>会为每个进程和线程准备一个【信号事件等待队列】</p>
+<ul>
+<li>一个进程内的多个线程<ul>
+<li>共享该进程的【信号事件队列】</li>
+<li>拥有自己私有的【等待队列】</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><code>Linux</code>提供了一个专门的系统调用<code>sigprocmask</code>：允许用户程序设置对特定信号的阻塞<code>block</code>状态</p>
+<ul>
+<li>信号阻塞，<code>Linux</code>不会再触发该信号对应的<code>handler function</code>，直到该信号被解除<code>block</code>，信号阻塞不阻碍信号被添加到等待队列上</li>
+</ul>
+</li>
+<li><p><code>signal</code>既用于<code>IPC</code>也用于进程管理</p>
+</li>
+<li><p>内核对信号的处理</p>
+<ul>
+<li><p>时机：通常是<code>kernel</code>执行完<code>exception</code>, <code>interrupt</code>, <code>syscall</code>返回用户态的时刻</p>
+</li>
+<li><p>方式：</p>
+<ul>
+<li>忽略</li>
+<li>用户处理函数：调用【用户注册】的【信号处理函数】</li>
+<li>内核默认处理函数：调用【默认】的【内核处理函数】</li>
+</ul>
+</li>
+<li><p>Linux信号内核与用户态之间的切换</p>
+<blockquote>
+<p>步骤<code>2</code>Linux完成从内核到用户态的切换后（转向<code>handler</code>），就会把【相关栈状态】和【上下文】清空，所以为了避免执行完<code>handler</code>返回时无法恢复到当初系统调用时候用户态的上下文等，在切换到用户态执行<code>handler</code>时，<code>Linux</code>会将【<code>syscall</code>的返回值】和【此前的用户态的上下文（PC，register等）】保存在【用户栈】上。因此步骤<code>4</code>就会从用户栈上提取上下文等信息以恢复到当初系统调用时候的环境。</p>
+</blockquote>
+<pre class="mermaid">    flowchart TD    
+    subgraph usr
+    B(调用syscall1)
+    C(handler) --> D(sigreturn)
+    end
+    
+    subgraph kern
+    A1(syscall1) --> A2(ret_to_user)
+    A3(sigreturn) --> A4(ret_to_user)
+    end
+    
+    B -->|1.用户态进程系统调用进入内核态| A1
+    A2 -->|2.内核态处理完系统调用时,\n发现有signal,于是切换到\n用户态处理函数位置,让其处理信号事件| C
+    D --> |3.信号处理完后,信号处理函数\n会通过系统调用sigreturn返回内核.\n该系统调用的主要作用即辅助内核\n恢复到被信号打断之前的上下文context|A3
+    A4 --> |4.继续完成在系统调用被打断时的任务,\n即syscall返回时回到原用户态|B</pre></li>
+</ul>
+</li>
+<li><p>可重入<code>reentrant</code>函数：允许多个任务（☞对信号事件的响应和处理）并发使用，而不必担心【共享数据】的错误</p>
+<ul>
+<li>实现可重入函数的前提<ul>
+<li>不使用<code>static data</code>或者<code>static data</code>只读</li>
+<li>尽量只是用<code>local data</code></li>
+<li>在必须使用全局共享数据的时候，需要保护对全局数据的访问（防止死锁）</li>
+<li>避免在函数中修改自己的代码</li>
+<li>不调用【不可重入函数】，很多常见的库函数的实现（如<code>malloc</code>）都是不可重入的</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="套接字"><a href="#套接字" class="headerlink" title="套接字"></a>套接字</h4><ul>
+<li><p>客户端通过【地址】找到要调用的服务端进程</p>
+<ul>
+<li><code>IP + port</code>：通信双方通常使用【本地回环地址<code>127.0.0.1</code>】，然后各自绑定在不同的端口上，OS网络协议栈可以识别回环地址，将通信转发到目标端口对应的进程</li>
+<li><code>UNIX domain socket</code>：本地文件系统的一个路径</li>
+</ul>
+</li>
+<li><p>协议</p>
+<ul>
+<li>传输控制协议<code>TCP : Transmission Control Protocol</code><ul>
+<li>可靠性好</li>
+<li>（数据丢失情况下）数据重传</li>
+<li>（数据乱序到达情况下）数据顺序维护</li>
+</ul>
+</li>
+<li>用户数据报协议<code>UDP : User Datagram Protocol</code><ul>
+<li>简单</li>
+<li>传输性能较好</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><code>Linux</code>套接字</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">socket(<span class="type">int</span> domain, <span class="type">int</span> type, <span class="type">int</span> protocol);</span><br><span class="line">* domain: 寻址方式, [IP + port] or [local path];</span><br><span class="line">* type: 通信方式, [SOCK_STREAM](数据流,对应[TCP]) or [SOCK_DGRAM](数据报,对应[UDP])</span><br><span class="line">* protocol: 定义协议相关配置, [TCP] or [UDP];</span><br></pre></td></tr></table></figure></li>
+</ul>
+]]></content>
+      <categories>
+        <category>system</category>
+      </categories>
+      <tags>
+        <tag>operating system</tag>
+        <tag>system</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python spider</title>
+    <url>/2022/07/22/system/python-spider-1/</url>
+    <content><![CDATA[<h1 id="web-spider"><a href="#web-spider" class="headerlink" title="web spider"></a>web spider</h1><hr>
+<h2 id="Search-Engine"><a href="#Search-Engine" class="headerlink" title="Search Engine"></a>Search Engine</h2><h3 id="Crawl-the-web-page"><a href="#Crawl-the-web-page" class="headerlink" title="Crawl the web page"></a>Crawl the web page</h3><ul>
+<li>Robots协议（也叫爬虫协议、机器人协议等），全称是“网络爬虫排除标准”（Robots Exclusion Protocol），网站通过Robots协议告诉搜索引擎哪些页面可以抓取，哪些页面不能抓取</li>
+</ul>
+<h3 id="Data-storage"><a href="#Data-storage" class="headerlink" title="Data storage"></a>Data storage</h3><ul>
+<li>搜索引擎通过爬虫爬取到的网页，将数据存入原始页面数据库</li>
+<li>页面数据一般是HTML</li>
+</ul>
+<h3 id="Pre-processing"><a href="#Pre-processing" class="headerlink" title="Pre-processing"></a>Pre-processing</h3><ul>
+<li>搜索引擎将爬虫抓取回来的页面，进行各种步骤的预处理。<ul>
+<li>提取文字</li>
+<li>中文分词</li>
+<li>消除噪音（比如版权声明文字、导航条、广告等……）</li>
+<li>索引处理</li>
+<li>链接关系计算</li>
+<li>特殊文件处理</li>
+</ul>
+</li>
+<li>搜索引擎通常还能抓取HTML以外的和索引以文字为基础的多种文件类型，如 PDF、Word、WPS、XLS、PPT、TXT 文件等</li>
+<li>搜索引擎还不能处理图片、视频、Flash 这类非文字内容，也不能执行脚本和程序</li>
+</ul>
+<h3 id="Provide-search-services-and-website-ranking"><a href="#Provide-search-services-and-website-ranking" class="headerlink" title="Provide search services and website ranking"></a>Provide search services and website ranking</h3><p>* </p>
+]]></content>
+      <categories>
+        <category>system</category>
+      </categories>
+      <tags>
+        <tag>operating system</tag>
+        <tag>system</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux Kernel ：Basic Knowledge</title>
+    <url>/2022/07/10/system/kernel-pwn-1/</url>
+    <content><![CDATA[<h1 id="Basic-Knowledge-for-linux-kernel-pwn"><a href="#Basic-Knowledge-for-linux-kernel-pwn" class="headerlink" title="Basic Knowledge for linux kernel pwn"></a>Basic Knowledge for linux kernel pwn</h1><hr>
+<h2 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h2><blockquote>
+<p>参考：<a href="https://www.anquanke.com/post/id/258874">https://www.anquanke.com/post/id/258874</a></p>
+</blockquote>
+<h3 id="系统调用"><a href="#系统调用" class="headerlink" title="系统调用"></a>系统调用</h3><ul>
+<li><p><strong>系统调用表</strong></p>
+<ol>
+<li><p>所有的系统调用被声明于内核源码<code>arch/x86/entry/syscalls/syscall_64.tbl</code>中，在该表中声明了系统调用的标号、类型、名称、内核态函数名称</p>
+</li>
+<li><p>在内核中使用【系统调用表】<code>System Call Table</code>对系统调用进行索引，该表中储存了不同标号的系统调用函数的地址</p>
+</li>
+</ol>
+</li>
+<li><p><strong>进入系统调用</strong></p>
+<ol>
+<li><p>Linux 下进入系统调用有两种主要的方式：</p>
+<ul>
+<li><p>32位：执行 <code>int 0x80</code>汇编指令（80号中断）</p>
+</li>
+<li><p>64位：执行 <code>syscall</code> 汇编指令 &#x2F; 执行 <code>sysenter</code> 汇编指令（only intel）</p>
+</li>
+</ul>
+</li>
+<li><p>Linux 由用户态进入到内核态的流程</p>
+<blockquote>
+<p>Linux下的系统调用以<code>eax/rax</code>寄存器作为<strong>系统调用号</strong>，参数传递约束如下：</p>
+</blockquote>
+<ul>
+<li><p>32 位：<code>ebx、ecx、edx、esi、edi、ebp</code>作为第一个参数、第二个参数…进行参数传递</p>
+</li>
+<li><p>64 位：<code>rdi、rsi、rdx、rcx、r8、r9</code>作为第一个参数、第二个参数…进行参数传递</p>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p><strong>退出系统调用</strong></p>
+<ol>
+<li><p>内核执行完系统调用后退出系统调用也有对应的两种方式：</p>
+<ul>
+<li><p>执行<code>iret</code>汇编指令</p>
+</li>
+<li><p>执行 <code>sysret</code> 汇编指令 &#x2F; 执行<code>sysexit</code>汇编指令（only Intel）</p>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<h3 id="进程管理"><a href="#进程管理" class="headerlink" title="进程管理"></a>进程管理</h3><ul>
+<li><p>在内核中使用结构体 <code>task_struct</code> 表示一个进程，该结构体定义于内核源码<code>include/linux/sched.h</code>中</p>
+<p><img src="/2022/07/10/system/kernel-pwn-1/task_struct.png" alt="task_struct"></p>
+</li>
+<li><p>关于进程权限管理部分（注释部分更改了）</p>
+<blockquote>
+<ol>
+<li><p><strong>Process credentials</strong> 是 kernel 用以判断一个进程权限的凭证，在 kernel 中使用 <code>cred</code> 结构体进行标识，对于一个进程而言应当有三个 cred：</p>
+<ul>
+<li><p><strong>ptracer_cred：</strong>使用<code>ptrace</code>系统调用跟踪该进程的上级进程的cred（gdb调试便是使用了这个系统调用，常见的反调试机制的原理便是提前占用了这个位置）</p>
+</li>
+<li><p><strong>real_cred：</strong>即<strong>客体凭证</strong>（<strong>objective cred</strong>），通常是一个进程最初启动时所具有的权限</p>
+</li>
+<li><p><strong>cred：</strong>即<strong>主体凭证</strong>（<strong>subjective cred</strong>），该进程的有效cred，kernel以此作为进程权限的凭证</p>
+</li>
+</ul>
+</li>
+<li><p>当进程 A 向进程 B 发送消息时，A为主体，B为客体</p>
+</li>
+</ol>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">-&gt;Process credentials:</span><br><span class="line">	--&gt; Tracer<span class="number">&#x27;</span>s credentials at attach:</span><br><span class="line">	<span class="type">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">cred</span> __<span class="title">rcu</span>		*<span class="title">ptracer_cred</span>;</span></span><br><span class="line">	--&gt; Objective and real subjective task <span class="title function_">credentials</span> <span class="params">(COW)</span>:</span><br><span class="line">	<span class="type">const</span> <span class="keyword">struct</span> cred __rcu		*real_cred;</span><br><span class="line">	--&gt; Effective (overridable) subjective task <span class="title function_">credentials</span> <span class="params">(COW)</span>:</span><br><span class="line">	<span class="type">const</span> <span class="keyword">struct</span> cred __rcu		*cred;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="进程权限凭证-struct-cred"><a href="#进程权限凭证-struct-cred" class="headerlink" title="进程权限凭证 struct : cred"></a>进程权限凭证 struct : cred</h4><blockquote>
+<p>对于一个进程，在内核当中使用一个结构体<code>cred</code>管理其权限，该结构体定义于内核源码<code>include/linux/cred.h</code> 中</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">cred</span> &#123;</span></span><br><span class="line">	<span class="type">atomic_t</span>	usage;</span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> CONFIG_DEBUG_CREDENTIALS</span></span><br><span class="line">	<span class="type">atomic_t</span>	subscribers;	<span class="comment">/* number of processes subscribed */</span></span><br><span class="line">	<span class="type">void</span>		*put_addr;</span><br><span class="line">	<span class="type">unsigned</span>	magic;</span><br><span class="line"><span class="meta">#<span class="keyword">define</span> CRED_MAGIC	0x43736564</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> CRED_MAGIC_DEAD	0x44656144</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line">	<span class="type">kuid_t</span>		uid;		--&gt; real UID of the task */</span><br><span class="line">	<span class="type">kgid_t</span>		gid;		--&gt; real GID of the task */</span><br><span class="line">	<span class="type">kuid_t</span>		suid;		<span class="comment">/* saved UID of the task */</span></span><br><span class="line">	<span class="type">kgid_t</span>		sgid;		<span class="comment">/* saved GID of the task */</span></span><br><span class="line">	<span class="type">kuid_t</span>		euid;		<span class="comment">/* effective UID of the task */</span></span><br><span class="line">	<span class="type">kgid_t</span>		egid;		<span class="comment">/* effective GID of the task */</span></span><br><span class="line">	<span class="type">kuid_t</span>		fsuid;		<span class="comment">/* UID for VFS ops */</span></span><br><span class="line">	<span class="type">kgid_t</span>		fsgid;		<span class="comment">/* GID for VFS ops */</span></span><br><span class="line">	<span class="type">unsigned</span>	securebits;	<span class="comment">/* SUID-less security management */</span></span><br><span class="line">	<span class="type">kernel_cap_t</span>	cap_inheritable; <span class="comment">/* caps our children can inherit */</span></span><br><span class="line">	<span class="type">kernel_cap_t</span>	cap_permitted;	<span class="comment">/* caps we&#x27;re permitted */</span></span><br><span class="line">	<span class="type">kernel_cap_t</span>	cap_effective;	<span class="comment">/* caps we can actually use */</span></span><br><span class="line">	<span class="type">kernel_cap_t</span>	cap_bset;	<span class="comment">/* capability bounding set */</span></span><br><span class="line">	<span class="type">kernel_cap_t</span>	cap_ambient;	<span class="comment">/* Ambient capability set */</span></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> CONFIG_KEYS</span></span><br><span class="line">	<span class="type">unsigned</span> <span class="type">char</span>	jit_keyring;	<span class="comment">/* default keyring to attach requested</span></span><br><span class="line"><span class="comment">					 * keys to */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">key</span>	*<span class="title">session_keyring</span>;</span> <span class="comment">/* keyring inherited over fork */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">key</span>	*<span class="title">process_keyring</span>;</span> <span class="comment">/* keyring private to this process */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">key</span>	*<span class="title">thread_keyring</span>;</span> <span class="comment">/* keyring private to this thread */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">key</span>	*<span class="title">request_key_auth</span>;</span> <span class="comment">/* assumed request_key authority */</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> CONFIG_SECURITY</span></span><br><span class="line">	<span class="type">void</span>		*security;	<span class="comment">/* subjective LSM security */</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">user_struct</span> *<span class="title">user</span>;</span>	<span class="comment">/* real user ID subscription */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">user_namespace</span> *<span class="title">user_ns</span>;</span> <span class="comment">/* user_ns the caps and keyrings are relative to. */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">group_info</span> *<span class="title">group_info</span>;</span>	<span class="comment">/* supplementary groups for euid/fsgid */</span></span><br><span class="line">	<span class="comment">/* RCU deletion */</span></span><br><span class="line">	<span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">		<span class="type">int</span> non_rcu;			<span class="comment">/* Can we skip RCU deletion? */</span></span><br><span class="line">		<span class="class"><span class="keyword">struct</span> <span class="title">rcu_head</span>	<span class="title">rcu</span>;</span>		<span class="comment">/* RCU deletion hook */</span></span><br><span class="line">	&#125;;</span><br><span class="line">&#125; __randomize_layout;</span><br></pre></td></tr></table></figure>
+
+<p>一个cred结构体中记载了<strong>一个进程四种不同的用户ID</strong>：</p>
+<ul>
+<li><strong>真实用户ID</strong>（real UID）：标识一个进程<strong>启动时的用户ID</strong></li>
+<li><strong>保存用户ID</strong>（saved UID）：标识一个进程<strong>最初的有效用户ID</strong></li>
+<li><strong>有效用户ID</strong>（effective UID）：标识一个进程<strong>正在运行时所属的用户ID</strong>，一个进程在运行途中是可以改变自己所属用户的，因而权限机制也是通过有效用户ID进行认证的，内核通过 euid 来进行特权判断；为了防止用户一直使用高权限，当任务完成之后，euid 会与 suid 进行交换，恢复进程的有效权限</li>
+<li><strong>文件系统用户ID</strong>（UID for VFS ops）：标识一个进程<strong>创建文件时进行标识的用户ID</strong></li>
+</ul>
+<h4 id="进程权限改变"><a href="#进程权限改变" class="headerlink" title="进程权限改变"></a>进程权限改变</h4><ol>
+<li>只要改变一个进程的<code>cred</code>结构体，就能改变其执行权限</li>
+<li>在内核空间有如下两个函数，都位于<code>kernel/cred.c</code>中：<ul>
+<li><code>struct cred* prepare_kernel_cred(struct task_struct* daemon)</code>：该函数用以拷贝一个进程的cred结构体，并返回一个新的cred结构体，需要注意的是<code>daemon</code>参数应为<strong>有效的进程描述符地址或NULL</strong></li>
+<li><code>int commit_creds(struct cred *new)</code>：该函数用以将一个新的<code>cred</code>结构体应用到进程</li>
+</ul>
+</li>
+</ol>
+<h4 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h4><ul>
+<li><p>关于函数<code>prepare_kernel_cred</code></p>
+<ul>
+<li><p>注释</p>
+<figure class="highlight tex"><table><tr><td class="code"><pre><span class="line">/**</span><br><span class="line"> * prepare<span class="built_in">_</span>kernel<span class="built_in">_</span>cred - Prepare a set of credentials[凭据] for a kernel service</span><br><span class="line"> * @daemon: A userspace daemon to be used as a reference</span><br><span class="line"> *</span><br><span class="line"> * Prepare a set of credentials for a kernel service.  This can then be used to</span><br><span class="line"> * override a task&#x27;s own credentials so that work can be done on behalf of that</span><br><span class="line"> * task that requires a different subjective context.</span><br><span class="line"> *</span><br><span class="line"> * @daemon is used to provide a base for the security record, but can be NULL.   &lt;-----!!!</span><br><span class="line"> * If @daemon is supplied, then the security data will be derived from that;</span><br><span class="line"> * otherwise they&#x27;ll be set to 0 and no groups, full capabilities and no keys.</span><br><span class="line"> *</span><br><span class="line"> * The caller may change these controls afterwards if desired.</span><br><span class="line"> *</span><br><span class="line"> * Returns the new credentials or NULL if out of memory.</span><br><span class="line"> *</span><br><span class="line"> * Does not take, and does not return holding current-&gt;cred<span class="built_in">_</span>replace<span class="built_in">_</span>mutex.</span><br><span class="line"> */</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>声明<code>cred.h</code></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="keyword">struct</span> cred *<span class="title function_">prepare_kernel_cred</span><span class="params">(<span class="keyword">struct</span> task_struct *)</span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>定义<code>cred.c</code></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">struct</span> cred *<span class="title function_">prepare_kernel_cred</span><span class="params">(<span class="keyword">struct</span> task_struct *daemon)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">cred</span> *<span class="title">old</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">cred</span> *<span class="title">new</span>;</span></span><br><span class="line"></span><br><span class="line">	new = kmem_cache_alloc(cred_jar, GFP_KERNEL);</span><br><span class="line">	<span class="keyword">if</span> (!new)</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">	kdebug(<span class="string">&quot;prepare_kernel_cred() alloc %p&quot;</span>, new);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (daemon)</span><br><span class="line">		old = get_task_cred(daemon);</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		old = get_cred(&amp;init_cred); &lt;-- <span class="keyword">if</span> daemon is null</span><br><span class="line">...</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>在<code>prepare_kernel_cred()</code>函数中，若传入的参数为<code>NULL</code>，则会缺省使用<code>init</code>进程的<code>cred</code>作为模板进行拷贝，【<strong>即可以直接获得一个标识着root权限的cred结构体</strong>】（这是由于<code>init</code>进程是<code>root</code>权限的）</p>
+<ul>
+<li><p>关于<code>init</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">init (the first process forked by kernel <span class="keyword">in</span> OS)</span><br><span class="line">	* pid : <span class="number">1</span> --&gt; 进程<span class="built_in">id</span></span><br><span class="line">	* gid : <span class="number">1</span> --&gt; 进程组<span class="built_in">id</span></span><br><span class="line">	* sid : <span class="number">1</span> --&gt; 会话<span class="built_in">id</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>init_cred</code>的声明位置：<code>linux-5.4.98/include/linux/init_task.h</code></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="class"><span class="keyword">struct</span> <span class="title">cred</span> <span class="title">init_cred</span>;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>定义位置：<code>linux-5.4.98/kernel/cred.c</code></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * The initial credentials for the initial task</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">cred</span> <span class="title">init_cred</span> =</span> &#123;</span><br><span class="line">	.usage			= ATOMIC_INIT(<span class="number">4</span>),</span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> CONFIG_DEBUG_CREDENTIALS</span></span><br><span class="line">	.subscribers		= ATOMIC_INIT(<span class="number">2</span>),</span><br><span class="line">	.magic			= CRED_MAGIC,</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line">	.uid			= GLOBAL_ROOT_UID,</span><br><span class="line">	.gid			= GLOBAL_ROOT_GID,</span><br><span class="line">	.suid			= GLOBAL_ROOT_UID,</span><br><span class="line">	.sgid			= GLOBAL_ROOT_GID,</span><br><span class="line">	.euid			= GLOBAL_ROOT_UID,</span><br><span class="line">	.egid			= GLOBAL_ROOT_GID,</span><br><span class="line">	.fsuid			= GLOBAL_ROOT_UID,</span><br><span class="line">	.fsgid			= GLOBAL_ROOT_GID,</span><br><span class="line">	.securebits		= SECUREBITS_DEFAULT,</span><br><span class="line">	.cap_inheritable	= CAP_EMPTY_SET,</span><br><span class="line">	.cap_permitted		= CAP_FULL_SET,</span><br><span class="line">	.cap_effective		= CAP_FULL_SET,</span><br><span class="line">	.cap_bset		= CAP_FULL_SET,</span><br><span class="line">	.user			= INIT_USER,</span><br><span class="line">	.user_ns		= &amp;init_user_ns,</span><br><span class="line">	.group_info		= &amp;init_groups,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h3 id="I-x2F-O"><a href="#I-x2F-O" class="headerlink" title="I&#x2F;O"></a>I&#x2F;O</h3><h4 id="一切皆文件"><a href="#一切皆文件" class="headerlink" title="一切皆文件"></a>一切皆文件</h4><ul>
+<li>在Linux系统的视角下，无论是文件、设备、管道，还是目录、进程，甚至是磁盘、套接字等等，<strong>一切都可以被抽象为文件，一切都可以使用访问文件的方式进行操作</strong>通过这样一种哲学，Linux予开发者以高层次抽象的统一性，提供了<code>操作的一致性</code>：<ul>
+<li><strong>所有的读取操作都可以通过read进行</strong></li>
+<li><strong>所有的更改操作都可以通过write进行</strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="进程文件系统"><a href="#进程文件系统" class="headerlink" title="进程文件系统"></a>进程文件系统</h4><ul>
+<li>进程文件系统（<code>process file system</code>， 简写为<code>procfs</code>）用以描述一个进程，其中包括该进程所打开的文件描述符、堆栈内存布局、环境变量等等<ol>
+<li>进程文件系统本身是一个【<strong>伪文件系统</strong>】，通常被挂载到<code>/proc</code>目录下，并不真正占用储存空间，而是占用一定的内存</li>
+<li>当一个进程被建立起来时，其进程文件系统便会被挂载到<code>/proc/[PID]</code>下，我们可以在该目录下查看其相关信息</li>
+</ol>
+</li>
+</ul>
+<h4 id="文件描述符"><a href="#文件描述符" class="headerlink" title="文件描述符"></a>文件描述符</h4><ul>
+<li><p>进程通过<strong>文件描述符</strong>（<strong>file descriptor</strong>）来完成对文件的访问，其在形式上是一个非负整数，本质上是对文件的索引值，进程所有执行 I&#x2F;O 操作的系统调用都会通过文件描述符</p>
+</li>
+<li><p>每个进程都<strong>独立有着一个文件描述符表</strong>，存放着该进程所打开的文件索引，每当进程<strong>成功</strong>打开一个现有文件&#x2F;创建一个新文件时（通过系统调用open进行操作），<strong>内核会向进程返回一个文件描述符</strong></p>
+</li>
+<li><p>在kernel中有着一个文件表，由所有的进程共享</p>
+<blockquote>
+<p><strong>stdin、stdout、stderr</strong></p>
+</blockquote>
+<p>每个<code>*NIX</code>进程都应当有着三个标准的POSIX文件描述符，对应着三个标准文件流：</p>
+<table>
+<thead>
+<tr>
+<th>stdin</th>
+<th>标准输入</th>
+<th><strong>0</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>stdout</td>
+<td>标准输出</td>
+<td>1</td>
+</tr>
+<tr>
+<td>stderr</td>
+<td>标准错误</td>
+<td>2</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>【<em><strong>此后打开的文件描述符应当从标号<code>3</code>起始</strong></em>】！！！</p>
+</li>
+</ul>
+<h4 id="syscall-ioctl"><a href="#syscall-ioctl" class="headerlink" title="syscall: ioctl"></a>syscall: ioctl</h4><blockquote>
+<p>在<code>*NIX</code>中一切都可以被视为文件，因而一切都可以以访问文件的方式进行操作，为了方便，Linux定义了系统调用<code>ioctl</code>供进程与设备之间进行通信</p>
+</blockquote>
+<p>系统调用<code>ioctl</code>是一个专用于设备输入输出操作的一个系统调用，其调用方式如下：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">ioctl</span><span class="params">(<span class="type">int</span> fd, <span class="type">unsigned</span> <span class="type">long</span> request, ...)</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>fd：设备的文件描述符</strong></li>
+<li><strong>request：请求码</strong></li>
+<li><strong>其他参数</strong></li>
+</ul>
+<p>对于一个提供了<code>ioctl</code>通信方式的设备而言，我们可以通过其文件描述符<code>fd</code>、使用不同的请求码及其他请求参数通过<code>ioctl</code>系统调用完成不同的对设备的<code>I/O</code>操作</p>
+<blockquote>
+<p>例如CD-ROM驱动程序弹出光驱的这一操作就对应着对“光驱设备”这一文件通过ioctl传递特定的请求码与请求参数完成</p>
+</blockquote>
+<h3 id="LKMs"><a href="#LKMs" class="headerlink" title="LKMs"></a>LKMs</h3><ul>
+<li><code>Loadable Kernel Modules(LKMs)</code>：<ul>
+<li>Linux Kernle采用的是宏内核架构，一切的系统服务都需要由内核来提供，虽然效率较高，但是：<ol>
+<li>缺乏可扩展性与可维护性</li>
+<li>内核需要装载很多可能用到的服务，但这些服务最终可能未必会用到，还会占据大量内存空间</li>
+<li>新服务的提供往往意味着要<strong>重新编译</strong>整个内核</li>
+</ol>
+</li>
+<li>综合以上考虑，<strong>可装载内核模块</strong><code>Loadable Kernel Modules</code>，简称<code>LKMs</code>，出现了，位于内核空间的LKMs可以提供<strong>新的系统调用</strong>或其他服务，</li>
+<li>LKMs可以像积木一样被装载入内核&#x2F;从内核中卸载，大大提高了kernel的可拓展性与可维护性</li>
+</ul>
+</li>
+<li>常见的外设驱动便是LKM的一种</li>
+<li>LKMs与用户态可执行文件一样都采用ELF格式，但是<strong>LKMs运行在内核空间，且无法脱离内核运行</strong></li>
+<li>通常与LKM相关的命令有以下三个：<ul>
+<li><code>lsmod</code>：列出现有的LKMs</li>
+<li><code>insmod</code>：装载新的LKM（需要root）</li>
+<li><code>rmmod</code>：从内核中移除LKM（需要root）</li>
+</ul>
+</li>
+</ul>
+<h3 id="保护机制"><a href="#保护机制" class="headerlink" title="保护机制"></a>保护机制</h3><h4 id="KASLR"><a href="#KASLR" class="headerlink" title="KASLR"></a>KASLR</h4><blockquote>
+<p>内核内存布局参考：<a href="https://elixir.bootlin.com/linux/latest/source/Documentation/x86/x86_64/mm.rst">多版本kernel内核内存布局</a></p>
+</blockquote>
+<ul>
+<li>KASLR即【内核空间地址随机化（<code>kernel address space layout randomize</code>）】，与用户态程序的ASLR相类似——在内核镜像映射到实际的地址空间时加上一个偏移值，但是内核内部的相对偏移其实还是不变的</li>
+<li>在未开启KASLR保护机制时，内核的基址为<code>0xffffffff81000000</code></li>
+</ul>
+<h4 id="FGKASLR"><a href="#FGKASLR" class="headerlink" title="FGKASLR"></a>FGKASLR</h4><blockquote>
+<p>KASLR 虽然在一定程度上能够缓解攻击，但是若是攻击者通过一些信息泄露漏洞获取到内核中的某个地址，仍能够直接得知内核加载地址偏移从而得知整个内核地址布局</p>
+</blockquote>
+<ul>
+<li>因此有研究者基于 KASLR 实现了 FGKASLR，<strong>以函数粒度重新排布内核代码</strong></li>
+</ul>
+<h4 id="Stack-Protector"><a href="#Stack-Protector" class="headerlink" title="Stack Protector"></a>Stack Protector</h4><blockquote>
+<p>类似于用户态程序的<code>canary</code>，通常又被称作是<code>stack cookie</code>，用以检测<strong>是否发生内核堆栈溢出</strong>，若是发生内核堆栈溢出则会产生<code>kernel panic</code></p>
+</blockquote>
+<ul>
+<li>内核中的<code>canary</code>的值通常取自<code>gs</code>段寄存器某个固定偏移处的值</li>
+</ul>
+<h4 id="SMAP-x2F-SMEP"><a href="#SMAP-x2F-SMEP" class="headerlink" title="SMAP&#x2F;SMEP"></a>SMAP&#x2F;SMEP</h4><ul>
+<li>SMAP：管理模式【<strong>访问</strong>】保护（<code>Supervisor Mode Access Prevention</code>）</li>
+<li>SMEP：管理模式【<strong>执行</strong>】保护（<code>Supervisor Mode Execution Prevention</code>）</li>
+<li>这两种保护通常是同时开启的，用以阻止<strong>内核空间直接访问&#x2F;执行用户空间的数据</strong>，完全地将内核空间与用户空间相分隔开，用以防范<code>ret2usr</code>（return-to-user，将内核空间的指令指针重定向至用户空间上构造好的提权代码）攻击</li>
+<li>SMEP保护的绕过有以下两种方式：<ul>
+<li>在设计中，为了使隔离的数据进行交换时具有更高的性能，隐性地址共享始终存在（VDSO &amp; VSYSCALL），<strong>用户态进程与内核共享同一块物理内存</strong>，因此通过隐性内存共享可以完整的绕过软件和硬件的隔离保护，这种攻击方式被称之为<code>ret2dir</code>（return-to-direct-mapped memory ）</li>
+<li>Intel下系统根据CR4控制寄存器的第20位标识是否开启SMEP保护（1为开启，0为关闭），若是能够通过kernel ROP改变CR4寄存器的值便能够关闭SMEP保护，完成SMEP-bypass，接下来就能够重新进行<code>ret2usr</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="KPTI"><a href="#KPTI" class="headerlink" title="KPTI"></a>KPTI</h4><blockquote>
+<p>KPTI即<code>内核页表隔离</code>（Kernel page-table isolation），内核空间与用户空间分别使用两组不同的页表集，这对于内核的内存管理产生了根本性的变化</p>
+</blockquote>
+<ul>
+<li><strong>KPTI 机制的出现使得 ret2usr 彻底成为过去式</strong></li>
+</ul>
+]]></content>
+      <categories>
+        <category>system</category>
+      </categories>
+      <tags>
+        <tag>operating system</tag>
+        <tag>system</tag>
+        <tag>pwn</tag>
+        <tag>Linux kernel</tag>
       </tags>
   </entry>
   <entry>
@@ -2943,40 +3008,6 @@
       </tags>
   </entry>
   <entry>
-    <title>python spider</title>
-    <url>/2022/07/22/system/python-spider-1/</url>
-    <content><![CDATA[<h1 id="web-spider"><a href="#web-spider" class="headerlink" title="web spider"></a>web spider</h1><hr>
-<h2 id="Search-Engine"><a href="#Search-Engine" class="headerlink" title="Search Engine"></a>Search Engine</h2><h3 id="Crawl-the-web-page"><a href="#Crawl-the-web-page" class="headerlink" title="Crawl the web page"></a>Crawl the web page</h3><ul>
-<li>Robots协议（也叫爬虫协议、机器人协议等），全称是“网络爬虫排除标准”（Robots Exclusion Protocol），网站通过Robots协议告诉搜索引擎哪些页面可以抓取，哪些页面不能抓取</li>
-</ul>
-<h3 id="Data-storage"><a href="#Data-storage" class="headerlink" title="Data storage"></a>Data storage</h3><ul>
-<li>搜索引擎通过爬虫爬取到的网页，将数据存入原始页面数据库</li>
-<li>页面数据一般是HTML</li>
-</ul>
-<h3 id="Pre-processing"><a href="#Pre-processing" class="headerlink" title="Pre-processing"></a>Pre-processing</h3><ul>
-<li>搜索引擎将爬虫抓取回来的页面，进行各种步骤的预处理。<ul>
-<li>提取文字</li>
-<li>中文分词</li>
-<li>消除噪音（比如版权声明文字、导航条、广告等……）</li>
-<li>索引处理</li>
-<li>链接关系计算</li>
-<li>特殊文件处理</li>
-</ul>
-</li>
-<li>搜索引擎通常还能抓取HTML以外的和索引以文字为基础的多种文件类型，如 PDF、Word、WPS、XLS、PPT、TXT 文件等</li>
-<li>搜索引擎还不能处理图片、视频、Flash 这类非文字内容，也不能执行脚本和程序</li>
-</ul>
-<h3 id="Provide-search-services-and-website-ranking"><a href="#Provide-search-services-and-website-ranking" class="headerlink" title="Provide search services and website ranking"></a>Provide search services and website ranking</h3><p>* </p>
-]]></content>
-      <categories>
-        <category>system</category>
-      </categories>
-      <tags>
-        <tag>operating system</tag>
-        <tag>system</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Static Linking</title>
     <url>/2022/08/05/system/static-link/</url>
     <content><![CDATA[<h1 id="编译和链接"><a href="#编译和链接" class="headerlink" title="编译和链接"></a>编译和链接</h1><hr>
@@ -2984,7 +3015,13 @@
 <li><p>编译：扫描 -&gt; 语法分析 -&gt; 语义分析 -&gt; 源代码优化 -&gt; 代码生成 -&gt; 目标代码优化</p>
 </li>
 <li><p>下图为从源代码<code>Source Code</code>到最终目标代码<code>Final Target Code</code>的过程</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flowchart TD</span><br><span class="line">	A(Source Code) --&gt; |Scanner| B(Tokens)</span><br><span class="line">	B --&gt; |Parser| C(Syntax Tree)</span><br><span class="line">	C --&gt; |Semantic Analyzer| D(Commented Syntax Tree)</span><br><span class="line">	D --&gt; |Source Code Optimizer| E(Intermediate Representation)</span><br><span class="line">	E --&gt; |Code Generator| F(Target Code)</span><br><span class="line">	F --&gt; |Code Optimizer| G(Final Target Code)</span><br></pre></td></tr></table></figure></li>
+<pre class="mermaid">  flowchart TD
+    A(Source Code) --> |Scanner| B(Tokens)
+    B --> |Parser| C(Syntax Tree)
+    C --> |Semantic Analyzer| D(Commented Syntax Tree)
+    D --> |Source Code Optimizer| E(Intermediate Representation)
+    E --> |Code Generator| F(Target Code)
+    F --> |Code Optimizer| G(Final Target Code)</pre></li>
 </ul>
 <h3 id="词法分析"><a href="#词法分析" class="headerlink" title="词法分析"></a>词法分析</h3><blockquote>
 <p>Lexical Analysis</p>

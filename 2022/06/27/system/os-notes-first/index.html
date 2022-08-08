@@ -797,7 +797,21 @@
 <blockquote>
 <p>步骤<code>2</code>Linux完成从内核到用户态的切换后（转向<code>handler</code>），就会把【相关栈状态】和【上下文】清空，所以为了避免执行完<code>handler</code>返回时无法恢复到当初系统调用时候用户态的上下文等，在切换到用户态执行<code>handler</code>时，<code>Linux</code>会将【<code>syscall</code>的返回值】和【此前的用户态的上下文（PC，register等）】保存在【用户栈】上。因此步骤<code>4</code>就会从用户栈上提取上下文等信息以恢复到当初系统调用时候的环境。</p>
 </blockquote>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">flowchart TD    </span><br><span class="line">    subgraph usr</span><br><span class="line">    B(调用syscall1)</span><br><span class="line">    C(handler) --&gt; D(sigreturn)</span><br><span class="line">    end</span><br><span class="line">    </span><br><span class="line">    subgraph kern</span><br><span class="line">    A1(syscall1) --&gt; A2(ret_to_user)</span><br><span class="line">    A3(sigreturn) --&gt; A4(ret_to_user)</span><br><span class="line">    end</span><br><span class="line">    </span><br><span class="line">    B --&gt;|1.用户态进程系统调用进入内核态| A1</span><br><span class="line">    A2 --&gt;|2.内核态处理完系统调用时,\n发现有signal,于是切换到\n用户态处理函数位置,让其处理信号事件| C</span><br><span class="line">    D --&gt; |3.信号处理完后,信号处理函数\n会通过系统调用sigreturn返回内核.\n该系统调用的主要作用即辅助内核\n恢复到被信号打断之前的上下文context|A3</span><br><span class="line">    A4 --&gt; |4.继续完成在系统调用被打断时的任务,\n即syscall返回时回到原用户态|B</span><br></pre></td></tr></table></figure></li>
+<pre class="mermaid">    flowchart TD    
+    subgraph usr
+    B(调用syscall1)
+    C(handler) --> D(sigreturn)
+    end
+    
+    subgraph kern
+    A1(syscall1) --> A2(ret_to_user)
+    A3(sigreturn) --> A4(ret_to_user)
+    end
+    
+    B -->|1.用户态进程系统调用进入内核态| A1
+    A2 -->|2.内核态处理完系统调用时,\n发现有signal,于是切换到\n用户态处理函数位置,让其处理信号事件| C
+    D --> |3.信号处理完后,信号处理函数\n会通过系统调用sigreturn返回内核.\n该系统调用的主要作用即辅助内核\n恢复到被信号打断之前的上下文context|A3
+    A4 --> |4.继续完成在系统调用被打断时的任务,\n即syscall返回时回到原用户态|B</pre></li>
 </ul>
 </li>
 <li><p>可重入<code>reentrant</code>函数：允许多个任务（☞对信号事件的响应和处理）并发使用，而不必担心【共享数据】的错误</p>
@@ -1089,6 +1103,19 @@
 
 
 
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
 
 
   
