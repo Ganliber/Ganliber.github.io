@@ -108,7 +108,7 @@
       </tags>
   </entry>
   <entry>
-    <title>questions-config-collection-1</title>
+    <title>Configure Problem Collection I</title>
     <url>/2022/08/07/configure/questions-config-collection-1/</url>
     <content><![CDATA[<h2 id="22-x2F-8-x2F-7-Github-connection-confused"><a href="#22-x2F-8-x2F-7-Github-connection-confused" class="headerlink" title="22&#x2F;8&#x2F;7 Github connection confused"></a>22&#x2F;8&#x2F;7 Github connection confused</h2><hr>
 <h3 id="Description"><a href="#Description" class="headerlink" title="Description"></a>Description</h3><blockquote>
@@ -3083,7 +3083,8 @@
 <li>运行时库<code>Runtime Library</code>：支持程序运行的基本函数的集合</li>
 <li>重定位入口<code>Relocation Entry</code></li>
 </ul>
-<h1 id="目标文件"><a href="#目标文件" class="headerlink" title="目标文件"></a>目标文件</h1><h2 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h2><ul>
+<h1 id="目标文件"><a href="#目标文件" class="headerlink" title="目标文件"></a>目标文件</h1><hr>
+<h2 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h2><ul>
 <li>COFF：Common file format –&gt; .obj (windows) &amp; .o (Linux)</li>
 <li>动态链接库 (Dynamic Linking Library)：.dll (windows) &amp; .so (Linux)</li>
 <li>静态链接库 (Static Linking Library)：.lib(windows) &amp; .a(linux)</li>
