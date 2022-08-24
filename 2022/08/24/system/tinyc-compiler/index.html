@@ -21,21 +21,21 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"ganliber.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
-  <meta name="description" content="调试了一圈发现是因为虚拟机openssh服务没有安装开启的原因">
+  <meta name="description" content="Implementation of a tinyc-like compiler. About Tiny C Compiler : The Tiny C Compiler (a.k.a. TCC, tCc, or TinyCC) is an x86, X86-64 and ARM processor C compiler initially written by Fabrice Bellard.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="解决vscode连接本地vmware失败问题">
-<meta property="og:url" content="https://ganliber.github.io/2022/07/10/configure/configure-001-vscode-connect-vmware/index.html">
+<meta property="og:title" content="TinyC-like Compiler">
+<meta property="og:url" content="https://ganliber.github.io/2022/08/24/system/tinyc-compiler/index.html">
 <meta property="og:site_name" content="Ganliber&#39;s Home">
-<meta property="og:description" content="调试了一圈发现是因为虚拟机openssh服务没有安装开启的原因">
+<meta property="og:description" content="Implementation of a tinyc-like compiler. About Tiny C Compiler : The Tiny C Compiler (a.k.a. TCC, tCc, or TinyCC) is an x86, X86-64 and ARM processor C compiler initially written by Fabrice Bellard.">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2022-07-10T12:21:46.000Z">
-<meta property="article:modified_time" content="2022-07-10T12:28:11.715Z">
+<meta property="article:published_time" content="2022-08-24T07:09:01.000Z">
+<meta property="article:modified_time" content="2022-08-24T18:08:15.836Z">
 <meta property="article:author" content="Gan Gecen">
-<meta property="article:tag" content="vscode">
-<meta property="article:tag" content="Virtual Machine">
+<meta property="article:tag" content="system">
+<meta property="article:tag" content="compiler">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://ganliber.github.io/2022/07/10/configure/configure-001-vscode-connect-vmware/">
+<link rel="canonical" href="https://ganliber.github.io/2022/08/24/system/tinyc-compiler/">
 
 
 <script id="page-configurations">
@@ -48,7 +48,7 @@
   };
 </script>
 
-  <title>解决vscode连接本地vmware失败问题 | Ganliber's Home</title>
+  <title>TinyC-like Compiler | Ganliber's Home</title>
   
 
 
@@ -216,7 +216,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://ganliber.github.io/2022/07/10/configure/configure-001-vscode-connect-vmware/">
+    <link itemprop="mainEntityOfPage" href="https://ganliber.github.io/2022/08/24/system/tinyc-compiler/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -229,7 +229,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          解决vscode连接本地vmware失败问题
+          TinyC-like Compiler
         </h1>
 
         <div class="post-meta">
@@ -238,17 +238,23 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2022-07-10 20:21:46 / Modified: 20:28:11" itemprop="dateCreated datePublished" datetime="2022-07-10T20:21:46+08:00">2022-07-10</time>
+              <time title="Created: 2022-08-24 15:09:01" itemprop="dateCreated datePublished" datetime="2022-08-24T15:09:01+08:00">2022-08-24</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-08-25 02:08:15" itemprop="dateModified" datetime="2022-08-25T02:08:15+08:00">2022-08-25</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/configure/" itemprop="url" rel="index"><span itemprop="name">configure</span></a>
+                  <a href="/categories/system/" itemprop="url" rel="index"><span itemprop="name">system</span></a>
                 </span>
             </span>
 
@@ -261,13 +267,13 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/2022/07/10/configure/configure-001-vscode-connect-vmware/#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/07/10/configure/configure-001-vscode-connect-vmware/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2022/08/24/system/tinyc-compiler/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/08/24/system/tinyc-compiler/" itemprop="commentCount"></span>
     </a>
   </span>
   
   
-            <div class="post-description">调试了一圈发现是因为虚拟机openssh服务没有安装开启的原因</div>
+            <div class="post-description"> Implementation of a tinyc-like compiler. About Tiny C Compiler : The Tiny C Compiler (a.k.a. TCC, tCc, or TinyCC) is an x86, X86-64 and ARM processor C compiler initially written by Fabrice Bellard. It is designed to work for slow computers with little disk space (e.g. on rescue disks). Windows operating system support was added in version 0.9.23 (17 Jun 2005). TCC is distributed under the GNU Lesser General Public License. </div>
 
         </div>
       </header>
@@ -278,16 +284,24 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h3 id="在本地虚拟机vmware中安装ssh"><a href="#在本地虚拟机vmware中安装ssh" class="headerlink" title="在本地虚拟机vmware中安装ssh"></a>在本地虚拟机vmware中安装ssh</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install -y openssh-server</span><br></pre></td></tr></table></figure>
+        <h2 id="Frontend"><a href="#Frontend" class="headerlink" title="Frontend"></a>Frontend</h2><h3 id="Grammar-on-tools"><a href="#Grammar-on-tools" class="headerlink" title="Grammar on tools"></a>Grammar on tools</h3><hr>
+<h4 id="flex"><a href="#flex" class="headerlink" title="flex"></a>flex</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">%&#123;</span><br><span class="line">Declarations</span><br><span class="line">%&#125;</span><br><span class="line">Definitions</span><br><span class="line">%%</span><br><span class="line">Rules</span><br><span class="line">%%</span><br><span class="line">User subroutines</span><br></pre></td></tr></table></figure>
 
-<p>开启服务</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo /etc/init.d/ssh start</span><br></pre></td></tr></table></figure>
+<h4 id="bison"><a href="#bison" class="headerlink" title="bison"></a>bison</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">%&#123;</span><br><span class="line">Declarations</span><br><span class="line">%&#125;</span><br><span class="line">Definitions</span><br><span class="line">%%</span><br><span class="line">Productions</span><br><span class="line">%%</span><br><span class="line">User subroutines</span><br></pre></td></tr></table></figure>
 
-<p>查看进程中是否有开启该服务</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ps -e | grep ssh</span><br><span class="line">   1616 ?        00:00:00 ssh-agent</span><br><span class="line">   4892 ?        00:00:00 sshd</span><br><span class="line">   6339 ?        00:00:00 sshd</span><br><span class="line">   6417 ?        00:00:00 sshd</span><br></pre></td></tr></table></figure>
+<h3 id="Details"><a href="#Details" class="headerlink" title="Details"></a>Details</h3><hr>
+<h4 id="scanner-l"><a href="#scanner-l" class="headerlink" title="scanner.l"></a>scanner.l</h4><ol>
+<li><p>When I’m implementing <code>scanner.l</code>, I find that different order can lead to different results or even errors! For example, first order is like:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;int&quot;</span>           &#123; <span class="keyword">return</span> T_Int; &#125;</span><br><span class="line"><span class="string">&quot;print&quot;</span>         &#123; <span class="keyword">return</span> T_Print; &#125;</span><br><span class="line">...</span><br><span class="line">&#123;IDENTIFIER&#125;    &#123; _DUPTEXT; <span class="keyword">return</span> T_Identifier;        &#125;</span><br></pre></td></tr></table></figure>
 
-<p>在<code>vscode</code>上配置即可</p>
+<p>second order is like:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;IDENTIFIER&#125;    &#123; _DUPTEXT; <span class="keyword">return</span> T_Identifier;        &#125;</span><br><span class="line">...</span><br><span class="line"><span class="string">&quot;int&quot;</span>           &#123; <span class="keyword">return</span> T_Int; &#125;</span><br><span class="line"><span class="string">&quot;print&quot;</span>         &#123; <span class="keyword">return</span> T_Print; &#125;</span><br></pre></td></tr></table></figure>
 
+<p>the second one results in an error! Because compiler doesn’t know <code>int</code> is a keyword, instead, it treats <code>int</code> as an <code>identifier</code>! Therefore, you need to put all keyword rules before the identifier!!!</p>
+</li>
+<li></li>
+</ol>
+<h2 id="Backend"><a href="#Backend" class="headerlink" title="Backend"></a>Backend</h2>
     </div>
 
     
@@ -302,7 +316,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>Post link: </strong>
-    <a href="https://ganliber.github.io/2022/07/10/configure/configure-001-vscode-connect-vmware/" title="解决vscode连接本地vmware失败问题">https://ganliber.github.io/2022/07/10/configure/configure-001-vscode-connect-vmware/</a>
+    <a href="https://ganliber.github.io/2022/08/24/system/tinyc-compiler/" title="TinyC-like Compiler">https://ganliber.github.io/2022/08/24/system/tinyc-compiler/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
@@ -313,8 +327,8 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/vscode/" rel="tag"># vscode</a>
-              <a href="/tags/Virtual-Machine/" rel="tag"># Virtual Machine</a>
+              <a href="/tags/system/" rel="tag"># system</a>
+              <a href="/tags/compiler/" rel="tag"># compiler</a>
           </div>
 
         
@@ -323,13 +337,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/07/10/system/kernel-pwn-1/" rel="prev" title="Linux Kernel ：Basic Knowledge">
-      <i class="fa fa-chevron-left"></i> Linux Kernel ：Basic Knowledge
+    <a href="/2022/08/12/system/compiler-tinyc-lexical-flex/" rel="prev" title="Lexical Analysis Based on flex">
+      <i class="fa fa-chevron-left"></i> Lexical Analysis Based on flex
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2022/07/11/configure/configure-002-qemu-ubuntu/" rel="next" title="解决qemu在ubuntu20.04安装找不到命令问题">
-      解决qemu在ubuntu20.04安装找不到命令问题 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -395,7 +406,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E6%9C%AC%E5%9C%B0%E8%99%9A%E6%8B%9F%E6%9C%BAvmware%E4%B8%AD%E5%AE%89%E8%A3%85ssh"><span class="nav-number">1.</span> <span class="nav-text">在本地虚拟机vmware中安装ssh</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Frontend"><span class="nav-number">1.</span> <span class="nav-text">Frontend</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Grammar-on-tools"><span class="nav-number">1.1.</span> <span class="nav-text">Grammar on tools</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#flex"><span class="nav-number">1.1.1.</span> <span class="nav-text">flex</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bison"><span class="nav-number">1.1.2.</span> <span class="nav-text">bison</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Details"><span class="nav-number">1.2.</span> <span class="nav-text">Details</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#scanner-l"><span class="nav-number">1.2.1.</span> <span class="nav-text">scanner.l</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Backend"><span class="nav-number">2.</span> <span class="nav-text">Backend</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -569,9 +580,9 @@ if (document.querySelectorAll('pre.mermaid').length) {
 </script>
 <script>
   var disqus_config = function() {
-    this.page.url = "https://ganliber.github.io/2022/07/10/configure/configure-001-vscode-connect-vmware/";
-    this.page.identifier = "2022/07/10/configure/configure-001-vscode-connect-vmware/";
-    this.page.title = "解决vscode连接本地vmware失败问题";
+    this.page.url = "https://ganliber.github.io/2022/08/24/system/tinyc-compiler/";
+    this.page.identifier = "2022/08/24/system/tinyc-compiler/";
+    this.page.title = "TinyC-like Compiler";
     };
   NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
     if (window.DISQUS) {

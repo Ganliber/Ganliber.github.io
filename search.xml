@@ -3098,4 +3098,71 @@
         <tag>linker</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Lexical Analysis Based on flex</title>
+    <url>/2022/08/12/system/compiler-tinyc-lexical-flex/</url>
+    <content><![CDATA[<h2 id="TinyC-basics"><a href="#TinyC-basics" class="headerlink" title="TinyC basics"></a>TinyC basics</h2><hr>
+<h3 id="tokens-in-tinyC"><a href="#tokens-in-tinyC" class="headerlink" title="tokens in tinyC"></a>tokens in tinyC</h3><blockquote>
+<p>According to their lexical characteristics, the tokens in tinyC are divided into the following <code>three</code> categories.</p>
+</blockquote>
+<ol>
+<li><p>single char operator ( 15 kinds )</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">+ * - / % = , ; ! &lt; &gt; ( ) &#123; &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>double char operator ( 6 kinds ) and keywords ( 10 kinds )</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">&lt;= &gt;= == != &amp;&amp; ||</span><br><span class="line"><span class="type">void</span> <span class="type">int</span> <span class="keyword">while</span> <span class="keyword">if</span> <span class="keyword">else</span> <span class="keyword">return</span> <span class="keyword">break</span> <span class="keyword">continue</span> print readint</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>integer constant, string constant, identifier ( variable name and function name ), ( 3 kinds )</p>
+</li>
+</ol>
+<h3 id="numbering-principle"><a href="#numbering-principle" class="headerlink" title="numbering principle"></a>numbering principle</h3><ul>
+<li>single char op : the <code>token number</code> is the value of its character.</li>
+<li>others : the <code>token number</code> are numbered from 256</li>
+</ul>
+<h3 id="notes"><a href="#notes" class="headerlink" title="notes"></a>notes</h3><ul>
+<li><p>When you are writing the rule for <strong>single char op</strong>, please pay attention to the character ‘-‘ in RegExp :</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">(wrong) : &#123;OPERATOR&#125; &#123;[+-*/%=,;&lt;&gt;()&#123;&#125;]&#125; </span><br><span class="line">(right) : &#123;OPERATOR&#125; &#123;[+\-*/%=,;&lt;&gt;()&#123;&#125;]&#125; &lt;-- 正则表达式<span class="string">&#x27;-&#x27;</span>需要转义字符</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li>About parser : <a href="https://www.yinwang.org/blog-cn/2015/09/19/parser">Misunderstanding of Parser</a></li>
+<li>About Compiler for TinyC : <a href="https://pandolia.net/tinyc">hand-written compiler</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>system</category>
+      </categories>
+      <tags>
+        <tag>system</tag>
+        <tag>compiler</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>TinyC-like Compiler</title>
+    <url>/2022/08/24/system/tinyc-compiler/</url>
+    <content><![CDATA[<h2 id="Frontend"><a href="#Frontend" class="headerlink" title="Frontend"></a>Frontend</h2><h3 id="Grammar-on-tools"><a href="#Grammar-on-tools" class="headerlink" title="Grammar on tools"></a>Grammar on tools</h3><hr>
+<h4 id="flex"><a href="#flex" class="headerlink" title="flex"></a>flex</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">%&#123;</span><br><span class="line">Declarations</span><br><span class="line">%&#125;</span><br><span class="line">Definitions</span><br><span class="line">%%</span><br><span class="line">Rules</span><br><span class="line">%%</span><br><span class="line">User subroutines</span><br></pre></td></tr></table></figure>
+
+<h4 id="bison"><a href="#bison" class="headerlink" title="bison"></a>bison</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">%&#123;</span><br><span class="line">Declarations</span><br><span class="line">%&#125;</span><br><span class="line">Definitions</span><br><span class="line">%%</span><br><span class="line">Productions</span><br><span class="line">%%</span><br><span class="line">User subroutines</span><br></pre></td></tr></table></figure>
+
+<h3 id="Details"><a href="#Details" class="headerlink" title="Details"></a>Details</h3><hr>
+<h4 id="scanner-l"><a href="#scanner-l" class="headerlink" title="scanner.l"></a>scanner.l</h4><ol>
+<li><p>When I’m implementing <code>scanner.l</code>, I find that different order can lead to different results or even errors! For example, first order is like:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;int&quot;</span>           &#123; <span class="keyword">return</span> T_Int; &#125;</span><br><span class="line"><span class="string">&quot;print&quot;</span>         &#123; <span class="keyword">return</span> T_Print; &#125;</span><br><span class="line">...</span><br><span class="line">&#123;IDENTIFIER&#125;    &#123; _DUPTEXT; <span class="keyword">return</span> T_Identifier;        &#125;</span><br></pre></td></tr></table></figure>
+
+<p>second order is like:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">&#123;IDENTIFIER&#125;    &#123; _DUPTEXT; <span class="keyword">return</span> T_Identifier;        &#125;</span><br><span class="line">...</span><br><span class="line"><span class="string">&quot;int&quot;</span>           &#123; <span class="keyword">return</span> T_Int; &#125;</span><br><span class="line"><span class="string">&quot;print&quot;</span>         &#123; <span class="keyword">return</span> T_Print; &#125;</span><br></pre></td></tr></table></figure>
+
+<p>the second one results in an error! Because compiler doesn’t know <code>int</code> is a keyword, instead, it treats <code>int</code> as an <code>identifier</code>! Therefore, you need to put all keyword rules before the identifier!!!</p>
+</li>
+<li></li>
+</ol>
+<h2 id="Backend"><a href="#Backend" class="headerlink" title="Backend"></a>Backend</h2>]]></content>
+      <categories>
+        <category>system</category>
+      </categories>
+      <tags>
+        <tag>system</tag>
+        <tag>compiler</tag>
+      </tags>
+  </entry>
 </search>
