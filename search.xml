@@ -53,40 +53,6 @@
       </tags>
   </entry>
   <entry>
-    <title>解决qemu在ubuntu20.04安装找不到命令问题</title>
-    <url>/2022/07/11/configure/configure-002-qemu-ubuntu/</url>
-    <content><![CDATA[<h3 id="qemu找不到命令"><a href="#qemu找不到命令" class="headerlink" title="qemu找不到命令"></a>qemu找不到命令</h3><ul>
-<li><p>更改命令</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install qemu-system</span><br></pre></td></tr></table></figure></li>
-</ul>
-]]></content>
-      <categories>
-        <category>configure</category>
-      </categories>
-      <tags>
-        <tag>Virtual Machine</tag>
-        <tag>qemu</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>paper reading：kernel REPT</title>
-    <url>/2022/07/07/paper/PR0001-kernel-REPT/</url>
-    <content><![CDATA[<h1 id="Paper-Reading-Reverse-Debugging-of-Kernel-Failures-in-Deployed-Systems"><a href="#Paper-Reading-Reverse-Debugging-of-Kernel-Failures-in-Deployed-Systems" class="headerlink" title="Paper Reading : Reverse Debugging of Kernel Failures in Deployed Systems"></a>Paper Reading : Reverse Debugging of Kernel Failures in Deployed Systems</h1><hr>
-<blockquote>
-<p>Title : Reverse Debugging of Kernel Failures in Deployed Systems</p>
-<p>Link : <a href="https://www.usenix.org/conference/atc20/presentation/ge">https://www.usenix.org/conference/atc20/presentation/ge</a></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>paper</category>
-      </categories>
-      <tags>
-        <tag>operating system</tag>
-        <tag>system</tag>
-        <tag>paper reading</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>解决vscode连接本地vmware失败问题</title>
     <url>/2022/07/10/configure/configure-001-vscode-connect-vmware/</url>
     <content><![CDATA[<h3 id="在本地虚拟机vmware中安装ssh"><a href="#在本地虚拟机vmware中安装ssh" class="headerlink" title="在本地虚拟机vmware中安装ssh"></a>在本地虚拟机vmware中安装ssh</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install -y openssh-server</span><br></pre></td></tr></table></figure>
@@ -103,8 +69,24 @@
         <category>configure</category>
       </categories>
       <tags>
-        <tag>Virtual Machine</tag>
         <tag>vscode</tag>
+        <tag>Virtual Machine</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>解决qemu在ubuntu20.04安装找不到命令问题</title>
+    <url>/2022/07/11/configure/configure-002-qemu-ubuntu/</url>
+    <content><![CDATA[<h3 id="qemu找不到命令"><a href="#qemu找不到命令" class="headerlink" title="qemu找不到命令"></a>qemu找不到命令</h3><ul>
+<li><p>更改命令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install qemu-system</span><br></pre></td></tr></table></figure></li>
+</ul>
+]]></content>
+      <categories>
+        <category>configure</category>
+      </categories>
+      <tags>
+        <tag>Virtual Machine</tag>
+        <tag>qemu</tag>
       </tags>
   </entry>
   <entry>
@@ -229,309 +211,21 @@
       </tags>
   </entry>
   <entry>
-    <title>Linux Kernel ：Environment</title>
-    <url>/2022/07/09/system/kernel-env/</url>
-    <content><![CDATA[<h1 id="Kernel环境搭建"><a href="#Kernel环境搭建" class="headerlink" title="Kernel环境搭建"></a>Kernel环境搭建</h1><h2 id="内核文件类型"><a href="#内核文件类型" class="headerlink" title="内核文件类型"></a>内核文件类型</h2><ul>
-<li><p><strong>bzImage</strong>：目前主流的 kernel 镜像格式，即 big zImage（即 bz 不是指 bzip2），适用于较大的（大于 512 KB） Kernel。这个镜像会被加载到内存的高地址，高于 1MB。bzImage 是用 gzip 压缩的，文件的开头部分有 gzip 解压缩的代码，所以我们不能用 gunzip 来解压缩。</p>
-</li>
-<li><p><strong>zImage</strong>：比较老的 kernel 镜像格式，适用于较小的（不大于 512KB） Kernel。启动时，这个镜像会被加载到内存的低地址，即内存的前 640 KB。zImage 也不能用 gunzip 来解压缩。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">zImage &amp;&amp; bzImage</span><br><span class="line">---------------- difference ------------------</span><br><span class="line">zImage—是vmlinux经过gzip压缩后的文件。</span><br><span class="line">bzImage—bz表示<span class="string">&quot;big zImage&quot;</span>,不是用bzip2压缩的，而是要偏移到一个位置，使用gzip压缩的。两者的不同之处在于，zImage解压缩内核到低端内存(第一个 640K)，bzImage解压缩内核到高端内存(1M以上)。如果内核比较小，那么采用zImage或bzImage都行，如果比较大应该用bzImage。</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>vmlinuz</strong>：vmlinuz 不仅包含了压缩后的 vmlinux，还包含了 gzip 解压缩的代码。实际上就是 zImage 或者 bzImage 文件。该文件是 bootable 的。 bootable 是指它能够把内核加载到内存中。对于 Linux 系统而言，该文件位于 &#x2F;boot 目录下。该目录包含了启动系统时所需要的文件。</p>
-</li>
-<li><p><strong>vmlinux</strong>：静态链接的 Linux kernel，以可执行文件的形式存在，尚未经过压缩。该文件往往是在生成 vmlinuz 的过程中产生的。该文件适合于调试。但是该文件不是 bootable 的。</p>
-</li>
-<li><p><strong>vmlinux.bin</strong>：也是静态链接的 Linux kernel，只是以一个可启动的 (bootable) 二进制文件存在。所有的符号信息和重定位信息都被删除了。生成命令为：<code>objcopy -O binary vmlinux vmlinux.bin</code>。</p>
-</li>
-<li><p><strong>uImage</strong>：uImage 是 U-boot 专用的镜像文件，它是在 zImage 之前加上了一个长度为 0x40 的 tag 而构成的。这个 tag 说明了这个镜像文件的类型、加载位置、生成时间、大小等信息。</p>
-</li>
-</ul>
-<h2 id="source-code"><a href="#source-code" class="headerlink" title="source code"></a>source code</h2><ul>
-<li><p>查看当前内核版本</p>
+    <title>paper reading：kernel REPT</title>
+    <url>/2022/07/07/paper/PR0001-kernel-REPT/</url>
+    <content><![CDATA[<h1 id="Paper-Reading-Reverse-Debugging-of-Kernel-Failures-in-Deployed-Systems"><a href="#Paper-Reading-Reverse-Debugging-of-Kernel-Failures-in-Deployed-Systems" class="headerlink" title="Paper Reading : Reverse Debugging of Kernel Failures in Deployed Systems"></a>Paper Reading : Reverse Debugging of Kernel Failures in Deployed Systems</h1><hr>
 <blockquote>
-<p>注解：</p>
-<ol>
-<li><code>/proc</code>文件系统，它不是普通的文件系统，而是系统内核的映像</li>
-<li>该目录中的文件是存放在系统【内存】之中的，它以【文件系统】的方式为访问系统内核数据的操作提供接口。</li>
-<li>而我们使用命令<code>uname -a</code>的信息就是从该文件获取的，当然用方法二的命令直接查看它的内容也可以达到同等效果.另外，加上参数”a”是获得【详细信息】，如果不加参数为查看系统名称。</li>
-</ol>
+<p>Title : Reverse Debugging of Kernel Failures in Deployed Systems</p>
+<p>Link : <a href="https://www.usenix.org/conference/atc20/presentation/ge">https://www.usenix.org/conference/atc20/presentation/ge</a></p>
 </blockquote>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[Method 1] <span class="built_in">uname</span> -a</span><br><span class="line">[Method 2] <span class="built_in">cat</span> /proc/version</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>查看整个系统剩余磁盘空间</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">df</span> -hl</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>查看<code>[1]</code>当前目录【总大小】，<code>[2]</code>指定目录大小，<code>[3]</code>当前目录下各文件、文件夹的大小</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[1] <span class="built_in">du</span> -sh</span><br><span class="line">[2] <span class="built_in">du</span> -sh [目录名称]</span><br><span class="line">[3] <span class="built_in">du</span> -h --max-depth=1 *</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="recently-version"><a href="#recently-version" class="headerlink" title="recently version"></a>recently version</h3><ul>
-<li><p>清华源下载内核：<a href="https://mirrors.tuna.tsinghua.edu.cn/kernel/">https://mirrors.tuna.tsinghua.edu.cn/kernel/</a></p>
-</li>
-<li><p>下载某个版本的核</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -O -L https://mirrors.tuna.tsinghua.edu.cn/kernel/v5.x/linux-5.4.98.tar.xz</span><br><span class="line">unxz linux-5.4.98.tar.xz</span><br></pre></td></tr></table></figure>
-
-<p>此时得到的是<code>.tar</code>文件</p>
-</li>
-<li><p>签名验证</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -O -L https://mirrors.tuna.tsinghua.edu.cn/kernel/v5.x/linux-5.4.98.tar.sign</span><br></pre></td></tr></table></figure>
-
-<p>导入<code>Torvalds</code>的公钥</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --locate-keys torvalds@kernel.org gregkh@kernel.org</span><br></pre></td></tr></table></figure>
-
-<p>使用密钥（我们可以选择使用 TOFU 信任对应的密钥）并验证</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --tofu-policy good 647F28654894E3BD457199BE38DBBDC86092693E</span><br><span class="line">gpg --trust-model tofu --verify linux-5.4.98.tar.sign</span><br></pre></td></tr></table></figure>
-
-<p>最终得到验证结果</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg: assuming signed data <span class="keyword">in</span> <span class="string">&#x27;linux-5.4.98.tar&#x27;</span></span><br><span class="line">gpg: Signature made 2021年02月13日 星期六 20时54分47秒 CST</span><br><span class="line">gpg:                using RSA key 647F28654894E3BD457199BE38DBBDC86092693E</span><br><span class="line">gpg: Good signature from <span class="string">&quot;Greg Kroah-Hartman &lt;gregkh@kernel.org&gt;&quot;</span> [full]</span><br><span class="line">gpg: gregkh@kernel.org: Verified 1 signatures <span class="keyword">in</span> the past 0 seconds.  Encrypted</span><br><span class="line">     0 messages.</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>解压即可得到源码</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tar -xf linux-5.4.98.tar</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="old-version"><a href="#old-version" class="headerlink" title="old version"></a>old version</h3><ul>
-<li><p>赵炯博士维护的网站有早起<code>linux 0.11</code>和<code>linux 0.12</code>的源码：<a href="http://www.oldlinux.org/Linux.old/">http://www.oldlinux.org/Linux.old/</a></p>
-</li>
-<li><p>解压</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tar -zxvf linux-0.11.tar.gz</span><br><span class="line">tar -zxvf linux-0.12.tar.gz</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>旧版本环境搭建</p>
-<ul>
-<li>链接：<a href="https://blog.csdn.net/u011728480/article/details/114491022">https://blog.csdn.net/u011728480/article/details/114491022</a></li>
-</ul>
-</li>
-</ul>
-<h2 id="编译和调试"><a href="#编译和调试" class="headerlink" title="编译和调试"></a>编译和调试</h2><ul>
-<li>参考链接<ul>
-<li><input disabled="" type="checkbox"> <a href="http://kerneltravel.net/blog/2021/debug_kernel_szp/">http://kerneltravel.net/blog/2021/debug_kernel_szp/</a></li>
-<li><input disabled="" type="checkbox"> <a href="https://www.anquanke.com/post/id/258874">https://www.anquanke.com/post/id/258874</a></li>
-<li><input checked="" disabled="" type="checkbox"> <a href="https://www.jianshu.com/p/17b8261fe74e">https://www.jianshu.com/p/17b8261fe74e</a></li>
-</ul>
-</li>
-</ul>
-<h3 id="工具准备"><a href="#工具准备" class="headerlink" title="工具准备"></a>工具准备</h3><ul>
-<li><p>环境</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">ubuntu20<span class="number">.04</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>更新软件源</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>安装依赖</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install git fakeroot build-essential ncurses-dev xz-utils qemu flex libncurses5-dev fakeroot build-essential ncurses-dev xz-utils libssl-dev bc bison libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev libelf-dev</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>下载<code>linux-5.11.tar.xz</code></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.11.tar.xz</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>解压</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tar -xvf linux-5.11.tar.xz</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>进入文件夹内【配置编译选项】</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">make menuconfig</span><br></pre></td></tr></table></figure>
-
-<p><img src="/2022/07/09/system/kernel-env/make_menuconfig.png" alt="make config"></p>
-<ul>
-<li><p>通过空格键进行【选择&#x2F;取消选择】</p>
-</li>
-<li><p>开启的（一般已经默认开启了）</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[<span class="number">1</span> 调试] Kernel hacking —-&gt; Compile-time checks <span class="keyword">and</span> compiler options —-&gt; Compile the kernel <span class="keyword">with</span> debug info</span><br><span class="line">[<span class="number">2</span> KGDB调试内核] Kernel hacking —-&gt; <span class="type">Generic</span> Kernel Debugging Instruments —&gt; KGDB: kernel debugger</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>关闭的</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[<span class="number">1</span> 关闭KALSR(否则会导致打断点失败)]Processor <span class="built_in">type</span> <span class="keyword">and</span> features -&gt; Randomize the address of the kernel image (KASLR)</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-<h3 id="编译内核"><a href="#编译内核" class="headerlink" title="编译内核"></a>编译内核</h3><ul>
-<li><p>编译</p>
-<blockquote>
-<p><code>-j$(nproc)</code>是尽可能多线程的编译，可加速，且可以通过指令<code>nproc</code>查看当前系统所支持的所线程的数量</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">make -j$(<span class="built_in">nproc</span>)</span><br><span class="line">...</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>编译报错解决 1</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">No rule to make target <span class="string">&#x27;debian/canonical-certs.pem&#x27;</span>, needed by <span class="string">&#x27;certs/x509_certificate_list&#x27;</span>.  Stop.</span><br></pre></td></tr></table></figure>
-
-<p>编辑<code>.config</code>文件</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vim .config</span><br></pre></td></tr></table></figure>
-
-<p>修改<code>CONFIG_SYSTEM_TRUSTED_KEYS</code>，将其置空。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 原本内容</span><br><span class="line">CONFIG_SYSTEM_TRUSTED_KEYS=&quot;debian/canonical-certs.pem&quot;</span><br><span class="line"># 将该项原有内容删掉即可，如下</span><br><span class="line">CONFIG_SYSTEM_TRUSTED_KEYS=&quot;&quot;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>编译报错解决 2</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">BTF: .tmp_vmlinux.btf: pahole (pahole) <span class="keyword">is</span> <span class="keyword">not</span> available</span><br><span class="line">Failed to generate BTF <span class="keyword">for</span> vmlinux</span><br><span class="line">Try to disable CONFIG_DEBUG_INFO_BTF</span><br><span class="line">make: *** [Makefile:<span class="number">1165</span>: vmlinux] Error <span class="number">1</span></span><br></pre></td></tr></table></figure>
-
-<p>系统缺少<code>dwarves</code>软件包</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install dwarves</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>此时得到的文件有</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">arch/x86/boot/bzImage --&gt; 压缩内核镜像</span><br><span class="line">vmlinux --&gt; 原始内核文件</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>先用<code>qemu</code>测试一下（没有文件系统会<code>kernel panic</code>）</p>
-<blockquote>
-<p>这时候，qemu会卡住不动，因为现在还没有文件系统，电脑加电启动首先由bootloader加载内核，内核紧接着需要挂载内存根文件系统。</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">qemu-system-x86_64 -kernel <span class="built_in">arch</span>/x86/boot/bzImage</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="制作根文件系统"><a href="#制作根文件系统" class="headerlink" title="制作根文件系统"></a>制作根文件系统</h3><ul>
-<li><p>获取<code>buzybox</code>源码</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://busybox.net/downloads/busybox-1.33.0.tar.bz2</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>编译选项</p>
-<ul>
-<li><input checked="" disabled="" type="checkbox"> <code>Settings -&gt; Build static binary file (no shared lib)</code></li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">make menuconfig</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>编译</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">make -j$(<span class="built_in">nproc</span>) &amp;&amp; make install</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="构建根文件系统镜像"><a href="#构建根文件系统镜像" class="headerlink" title="构建根文件系统镜像"></a>构建根文件系统镜像</h3><p><strong>参考</strong>：<a href="https://consen.github.io/2018/01/17/debug-linux-kernel-with-qemu-and-gdb/">使用QEMU和GDB调试Linux内核 | Consen</a></p>
-<blockquote>
-<p>注意：</p>
-<ol>
-<li><code>rootfs</code>在目录<code>busybox-1.33.0</code>下</li>
-<li>最后生成的根文件镜像<code>rootfs.cpio</code>在<code>linux-5.11</code>下</li>
-</ol>
-</blockquote>
-<ul>
-<li><p>制作内存根文件系统镜像</p>
-<p>在目录<code>busybox-1.33.0</code>下</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> rootfs </span><br><span class="line"><span class="built_in">cd</span> rootfs </span><br><span class="line"><span class="built_in">cp</span> ../_install/* ./ -rf  <span class="comment"># 注意路径</span></span><br><span class="line"><span class="built_in">mkdir</span> dev proc sys home </span><br><span class="line">sudo <span class="built_in">cp</span> -a /dev/&#123;null,console,<span class="built_in">tty</span>,tty1,tty2,tty3,tty4&#125; dev/</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>准备<code>init</code>脚本文件放在根文件系统跟目录下<code>rootfs/init</code>，添加如下内容到<code>init</code>文件</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/sh</span> </span><br><span class="line">mount -t proc none /proc </span><br><span class="line">mount -t sysfs none /sys </span><br><span class="line">echo &quot;Wellcome to Linux!&quot; </span><br><span class="line">echo &quot;--------------------&quot; </span><br><span class="line">/bin/sh </span><br></pre></td></tr></table></figure>
-</li>
-<li><p>使用<code>chmod +x init</code>给init脚本添加可执行权限，然后执行下面的命令打包成内存根文件系统镜像</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">find . -print0 | cpio --null -ov --format=newc | gzip -9 &gt; ../rootfs.cpio </span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="qemu运行内核"><a href="#qemu运行内核" class="headerlink" title="qemu运行内核"></a>qemu运行内核</h3><ul>
-<li><p>将<code>rootfs.cpio</code>和<code>bzImage</code>放到一个目录下，并在该目录下创建脚本<code>boot.sh</code></p>
-</li>
-<li><p>测试脚本<code>boot.sh</code></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">qemu-system-x86_64 \</span><br><span class="line">    -m 128M \</span><br><span class="line">    -kernel ./bzImage \</span><br><span class="line">    -initrd  ./rootfs.cpio \</span><br><span class="line">    -monitor /dev/null \</span><br><span class="line">    -cpu kvm64,+smep \</span><br><span class="line">    -append <span class="string">&quot;console=ttyS0 loglevel=3 quiet nokaslr&quot;</span> \</span><br><span class="line">    -nographic \</span><br><span class="line">    -s</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>部分参数说明如下：</p>
-<ul>
-<li><p><code>-m</code>：虚拟机内存大小</p>
-</li>
-<li><p><code>-kernel</code>：内存镜像路径</p>
-</li>
-<li><p><code>-initrd</code>：磁盘镜像路径</p>
-</li>
-<li><p><code>-append</code>：附加参数选项</p>
-<ul>
-<li><code>nokalsr</code>：关闭内核地址随机化，方便我们进行调试</li>
-<li><code>loglevel=3</code> &amp; <code>quiet</code>：不输出log</li>
-<li><code>console=ttyS0</code>：指定终端为<code>/dev/ttyS0</code>，这样一启动就能进入终端界面</li>
-</ul>
-</li>
-<li><p><code>-monitor</code>：将监视器重定向到主机设备<code>/dev/null</code>，这里重定向至null主要是防止CTF中被人给偷了qemu拿flag</p>
-</li>
-<li><p><code>-cpu</code>：设置CPU安全选项，在这里开启了smep保护</p>
-</li>
-<li><p><code>-s</code>：相当于<code>-gdb tcp::1234</code>的简写（也可以直接这么写），后续我们可以通过gdb连接本地端口进行调试</p>
-</li>
-</ul>
-</li>
-<li><p>添加可执行权限并执行</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x ./boot.sh</span><br><span class="line">./boot.sh</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>如果存在<code>/etc/inittab</code>文件，<code>Busybox init</code> 程序解析它，然后按照他的指示创建各种子进程，否则使用默认的配置创建子进程.</p>
-<ul>
-<li>一般不搞这个</li>
-</ul>
-</li>
-</ul>
-<h4 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h4><blockquote>
-<p>Wonderful!</p>
-</blockquote>
-<p><img src="/2022/07/09/system/kernel-env/kernel_on_qemu.png" alt="kernel_on_qemu"></p>
-<h3 id="废弃-构建磁盘映像"><a href="#废弃-构建磁盘映像" class="headerlink" title="[废弃]构建磁盘映像"></a>[废弃]构建磁盘映像</h3><blockquote>
-<p>注意<code>busybox</code>文件在<code>linux-5.11</code>下</p>
-</blockquote>
-<h4 id="建立文件系统"><a href="#建立文件系统" class="headerlink" title="建立文件系统"></a>建立文件系统</h4><ul>
-<li><p>初始化文件系统</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> _install</span><br><span class="line">$ <span class="built_in">mkdir</span> -pv &#123;bin,sbin,etc,proc,sys,home,lib64,lib/x86_64-linux-gnu,usr/&#123;bin,sbin&#125;&#125;</span><br><span class="line">$ <span class="built_in">touch</span> etc/inittab</span><br><span class="line">$ <span class="built_in">mkdir</span> etc/init.d</span><br><span class="line">$ <span class="built_in">touch</span> etc/init.d/rcS</span><br><span class="line">$ <span class="built_in">chmod</span> +x ./etc/init.d/rcS</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>配置初始化脚本</p>
-<ol>
-<li><p>配置<code>etc/inittab</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">::sysinit:/etc/init.d/rcS</span><br><span class="line">::askfirst:/<span class="built_in">bin</span>/ash</span><br><span class="line">::ctrlaltdel:/sbin/reboot</span><br><span class="line">::shutdown:/sbin/swapoff -a</span><br><span class="line">::shutdown:/<span class="built_in">bin</span>/umount -a -r</span><br><span class="line">::restart:/sbin/init</span><br></pre></td></tr></table></figure>
-
-<p>在上面的文件中指定了系统初始化脚本，因此接下来配置<code>etc/init.d/rcS</code></p>
-</li>
-<li><p>配置<code>etc/init.d/rcS</code></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/sh</span></span><br><span class="line">mount -t proc none /proc</span><br><span class="line">mount -t sys none /sys</span><br><span class="line">/bin/mount -n -t sysfs none /sys</span><br><span class="line">/bin/mount -t ramfs none /dev</span><br><span class="line">/sbin/mdev -s</span><br></pre></td></tr></table></figure>
-
-<p>配置各种目录的挂载</p>
-<p>或者：</p>
-<p>根目录下创建<code>init</code>文件，写入如下内容</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/sh</span></span><br><span class="line"></span><br><span class="line">mount -t proc none /proc</span><br><span class="line">mount -t sysfs none /sys</span><br><span class="line">mount -t devtmpfs devtmpfs /dev</span><br><span class="line"></span><br><span class="line">exec 0&lt;/dev/console</span><br><span class="line">exec 1&gt;/dev/console</span><br><span class="line">exec 2&gt;/dev/console</span><br><span class="line"></span><br><span class="line">echo -e &quot;\nBoot took $(cut -d&#x27; &#x27; -f1 /proc/uptime) seconds\n&quot;</span><br><span class="line">setsid cttyhack setuidgid 1000 sh</span><br><span class="line"></span><br><span class="line">umount /proc</span><br><span class="line">umount /sys</span><br><span class="line">poweroff -d 0  -f</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>配置用户组</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">echo</span> <span class="string">&quot;root:x:0:0:root:/root:/bin/sh&quot;</span> &gt; etc/passwd</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">echo</span> <span class="string">&quot;ctf:x:1000:1000:ctf:/home/ctf:/bin/sh&quot;</span> &gt;&gt; etc/passwd</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">echo</span> <span class="string">&quot;root:x:0:&quot;</span> &gt; etc/group</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">echo</span> <span class="string">&quot;ctf:x:1000:&quot;</span> &gt;&gt; etc/group</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">echo</span> <span class="string">&quot;none /dev/pts devpts gid=5,mode=620 0 0&quot;</span> &gt; etc/fstab</span></span><br></pre></td></tr></table></figure>
-
-<p>在这里建立了两个用户组<code>root</code>和<code>ctf</code>，以及两个用户<code>root</code>和<code>ctf</code></p>
-</li>
-<li><p>配置<code>glibc</code>库</p>
-<blockquote>
-<p>略</p>
-</blockquote>
-</li>
-<li><p><strong>打包文件系统为镜像文件</strong></p>
-<p>在<code>busybox</code>下</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">find . | cpio -o -H newc &gt; ../core.cpio</span><br></pre></td></tr></table></figure>
-
-<p>（即在<code>linux-5.11</code>下编译出<code>core.cpio</code>根文件系统镜像）</p>
-<p>或者（只是名字不同）</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">find . | cpio -o --format=newc &gt; ../../rootfs.cpio</span><br></pre></td></tr></table></figure></li>
-</ol>
-</li>
-</ul>
-<h4 id="qemu运行内核-1"><a href="#qemu运行内核-1" class="headerlink" title="qemu运行内核"></a><code>qemu</code>运行内核</h4><ul>
-<li><p>将<code>bzImage</code>和<code>core</code>配置启动脚本</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">touch</span> boot.sh</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>注意两个文件</p>
-<figure class="highlight gams"><table><tr><td class="code"><pre><span class="line"><span class="symbol">$</span> <span class="keyword">file</span> bzImage    </span><br><span class="line">bzImage: Linux kernel x86 boot executable bzImage, version <span class="number">5.11</span><span class="number">.0</span> (ganliber@ganliber-virtual-machine) #<span class="number">2</span> SMP Mon Jul <span class="number">11</span> <span class="number">19</span>:<span class="number">16</span>:<span class="number">12</span> CST <span class="number">2022</span>, RO-rootFS, swap_dev <span class="number">0x9</span>, <span class="built_in">Normal</span> VGA</span><br><span class="line"><span class="symbol">$</span> <span class="keyword">file</span> rootfs.cpio</span><br><span class="line">rootfs.cpio: ASCII cpio archive (SVR4 with <span class="keyword">no</span> CRC)</span><br></pre></td></tr></table></figure>
-
-<p>放在同一个文件夹下</p>
-</li>
-<li><p>编写脚本<code>boot.sh</code></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/sh</span></span><br><span class="line">qemu-system-x86_64 \</span><br><span class="line">    -m 128M \</span><br><span class="line">    -kernel ./bzImage \</span><br><span class="line">    -initrd  ./rootfs.cpio \</span><br><span class="line">    -monitor /dev/null \</span><br><span class="line">    -append &quot;root=/dev/ram rdinit=/sbin/init console=ttyS0 oops=panic panic=1 loglevel=3 quiet nokaslr&quot; \</span><br><span class="line">    -cpu kvm64,+smep \</span><br><span class="line">    -smp cores=2,threads=1 \</span><br><span class="line">    -netdev user,id=t0, -device e1000,netdev=t0,id=nic0 \</span><br><span class="line">    -nographic \</span><br><span class="line">    -s</span><br></pre></td></tr></table></figure>
-
-<p>解释：</p>
-<p>部分参数说明如下：</p>
-<ul>
-<li><p><code>-m</code>：虚拟机内存大小</p>
-</li>
-<li><p><code>-kernel</code>：内存镜像路径</p>
-</li>
-<li><p><code>-initrd</code>：磁盘镜像路径</p>
-</li>
-<li><p>&#96;&#96;&#96;<br>-append</p>
-<figure class="highlight autohotkey"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">    ：附加参数选项</span><br><span class="line"></span><br><span class="line">    - `nokalsr`：关闭内核地址随机化，方便我们进行调试</span><br><span class="line">    - `rdinit`：指定初始启动进程，`/sbin/init`进程会默认以`/etc/init.d/rcS`作为启动脚本</span><br><span class="line">    - `loglevel=<span class="number">3</span>` &amp; `quiet`：不输出log</span><br><span class="line">    - `console=ttyS0`：指定终端为`/dev/ttyS0`，这样一启动就能进入终端界面</span><br><span class="line"></span><br><span class="line">  - `-monitor`：将监视器重定向到主机设备`/dev/null`，这里重定向至null主要是防止CTF中被人给偷了qemu拿flag</span><br><span class="line"></span><br><span class="line">  - `-cpu`：设置CPU安全选项，在这里开启了smep保护</span><br><span class="line"></span><br><span class="line"><span class="title">  - `-s`：相当于`-gdb tcp::</span><span class="number">1234</span>`的简写（也可以直接这么写），后续我们可以通过gdb连接本地端口进行调试</span><br><span class="line"></span><br><span class="line">* 或者</span><br><span class="line"></span><br><span class="line">  ```bash</span><br><span class="line">  qemu-system-x86_64 -kernel ./bzImage -initrd ./rootfs.cpio -S -s</span><br></pre></td></tr></table></figure></li>
-</ul>
-<p>解释：</p>
-<ul>
-<li><code>-s</code>：一个是-s，在TCP 1234端口上创建了一个gdb-server</li>
-<li><code>-S</code>：-S代表启动时暂停虚拟机，等待 gdb 执行 continue指令（可以简写为c）</li>
-</ul>
-</li>
-</ul>
-<h3 id="下载现有的镜像"><a href="#下载现有的镜像" class="headerlink" title="下载现有的镜像"></a>下载现有的镜像</h3><p>列出可下载的镜像</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt search linux-image-</span><br></pre></td></tr></table></figure>
-
-<p>拉取<code>5.11</code>版本（例）</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt download linux-image-5.11.0-43-generic</span><br><span class="line">dpkg -X ./linux-image-5.11.0-43-generic_5.11.0-43.47~20.04.2_amd64.deb extract</span><br></pre></td></tr></table></figure>
-
-<p>其中的<code>./extract/boot/vmlinuz-5.11.0-43-generic</code>便是<code>bzImage</code>内核镜像文件</p>
 ]]></content>
       <categories>
-        <category>system</category>
+        <category>paper</category>
       </categories>
       <tags>
         <tag>operating system</tag>
         <tag>system</tag>
-        <tag>pwn</tag>
-        <tag>Linux kernel</tag>
+        <tag>paper reading</tag>
       </tags>
   </entry>
   <entry>
@@ -984,6 +678,338 @@
       </tags>
   </entry>
   <entry>
+    <title>heap 1</title>
+    <url>/2022/06/16/pwn/heap-1/</url>
+    <content><![CDATA[<h1 id="堆利用基础"><a href="#堆利用基础" class="headerlink" title="堆利用基础"></a>堆利用基础</h1><h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p><img src="/2022/06/16/pwn/heap-1/program_virtual_address_memory_space.png" alt="program_virtual_address_memory_space"></p>
+]]></content>
+      <categories>
+        <category>pwn</category>
+      </categories>
+      <tags>
+        <tag>pwn</tag>
+        <tag>heap</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>heap 2</title>
+    <url>/2022/06/17/pwn/heap-2/</url>
+    <content><![CDATA[<p><img src="/2022/06/17/pwn/heap-2/program_virtual_address_memory_space.png" alt="program_virtual_address_memory_space"></p>
+]]></content>
+      <categories>
+        <category>pwn</category>
+      </categories>
+      <tags>
+        <tag>pwn</tag>
+        <tag>heap</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux Kernel ：Environment</title>
+    <url>/2022/07/09/system/kernel-env/</url>
+    <content><![CDATA[<h1 id="Kernel环境搭建"><a href="#Kernel环境搭建" class="headerlink" title="Kernel环境搭建"></a>Kernel环境搭建</h1><h2 id="内核文件类型"><a href="#内核文件类型" class="headerlink" title="内核文件类型"></a>内核文件类型</h2><ul>
+<li><p><strong>bzImage</strong>：目前主流的 kernel 镜像格式，即 big zImage（即 bz 不是指 bzip2），适用于较大的（大于 512 KB） Kernel。这个镜像会被加载到内存的高地址，高于 1MB。bzImage 是用 gzip 压缩的，文件的开头部分有 gzip 解压缩的代码，所以我们不能用 gunzip 来解压缩。</p>
+</li>
+<li><p><strong>zImage</strong>：比较老的 kernel 镜像格式，适用于较小的（不大于 512KB） Kernel。启动时，这个镜像会被加载到内存的低地址，即内存的前 640 KB。zImage 也不能用 gunzip 来解压缩。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">zImage &amp;&amp; bzImage</span><br><span class="line">---------------- difference ------------------</span><br><span class="line">zImage—是vmlinux经过gzip压缩后的文件。</span><br><span class="line">bzImage—bz表示<span class="string">&quot;big zImage&quot;</span>,不是用bzip2压缩的，而是要偏移到一个位置，使用gzip压缩的。两者的不同之处在于，zImage解压缩内核到低端内存(第一个 640K)，bzImage解压缩内核到高端内存(1M以上)。如果内核比较小，那么采用zImage或bzImage都行，如果比较大应该用bzImage。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>vmlinuz</strong>：vmlinuz 不仅包含了压缩后的 vmlinux，还包含了 gzip 解压缩的代码。实际上就是 zImage 或者 bzImage 文件。该文件是 bootable 的。 bootable 是指它能够把内核加载到内存中。对于 Linux 系统而言，该文件位于 &#x2F;boot 目录下。该目录包含了启动系统时所需要的文件。</p>
+</li>
+<li><p><strong>vmlinux</strong>：静态链接的 Linux kernel，以可执行文件的形式存在，尚未经过压缩。该文件往往是在生成 vmlinuz 的过程中产生的。该文件适合于调试。但是该文件不是 bootable 的。</p>
+</li>
+<li><p><strong>vmlinux.bin</strong>：也是静态链接的 Linux kernel，只是以一个可启动的 (bootable) 二进制文件存在。所有的符号信息和重定位信息都被删除了。生成命令为：<code>objcopy -O binary vmlinux vmlinux.bin</code>。</p>
+</li>
+<li><p><strong>uImage</strong>：uImage 是 U-boot 专用的镜像文件，它是在 zImage 之前加上了一个长度为 0x40 的 tag 而构成的。这个 tag 说明了这个镜像文件的类型、加载位置、生成时间、大小等信息。</p>
+</li>
+</ul>
+<h2 id="source-code"><a href="#source-code" class="headerlink" title="source code"></a>source code</h2><ul>
+<li><p>查看当前内核版本</p>
+<blockquote>
+<p>注解：</p>
+<ol>
+<li><code>/proc</code>文件系统，它不是普通的文件系统，而是系统内核的映像</li>
+<li>该目录中的文件是存放在系统【内存】之中的，它以【文件系统】的方式为访问系统内核数据的操作提供接口。</li>
+<li>而我们使用命令<code>uname -a</code>的信息就是从该文件获取的，当然用方法二的命令直接查看它的内容也可以达到同等效果.另外，加上参数”a”是获得【详细信息】，如果不加参数为查看系统名称。</li>
+</ol>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[Method 1] <span class="built_in">uname</span> -a</span><br><span class="line">[Method 2] <span class="built_in">cat</span> /proc/version</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看整个系统剩余磁盘空间</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">df</span> -hl</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看<code>[1]</code>当前目录【总大小】，<code>[2]</code>指定目录大小，<code>[3]</code>当前目录下各文件、文件夹的大小</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[1] <span class="built_in">du</span> -sh</span><br><span class="line">[2] <span class="built_in">du</span> -sh [目录名称]</span><br><span class="line">[3] <span class="built_in">du</span> -h --max-depth=1 *</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="recently-version"><a href="#recently-version" class="headerlink" title="recently version"></a>recently version</h3><ul>
+<li><p>清华源下载内核：<a href="https://mirrors.tuna.tsinghua.edu.cn/kernel/">https://mirrors.tuna.tsinghua.edu.cn/kernel/</a></p>
+</li>
+<li><p>下载某个版本的核</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -O -L https://mirrors.tuna.tsinghua.edu.cn/kernel/v5.x/linux-5.4.98.tar.xz</span><br><span class="line">unxz linux-5.4.98.tar.xz</span><br></pre></td></tr></table></figure>
+
+<p>此时得到的是<code>.tar</code>文件</p>
+</li>
+<li><p>签名验证</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -O -L https://mirrors.tuna.tsinghua.edu.cn/kernel/v5.x/linux-5.4.98.tar.sign</span><br></pre></td></tr></table></figure>
+
+<p>导入<code>Torvalds</code>的公钥</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --locate-keys torvalds@kernel.org gregkh@kernel.org</span><br></pre></td></tr></table></figure>
+
+<p>使用密钥（我们可以选择使用 TOFU 信任对应的密钥）并验证</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg --tofu-policy good 647F28654894E3BD457199BE38DBBDC86092693E</span><br><span class="line">gpg --trust-model tofu --verify linux-5.4.98.tar.sign</span><br></pre></td></tr></table></figure>
+
+<p>最终得到验证结果</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gpg: assuming signed data <span class="keyword">in</span> <span class="string">&#x27;linux-5.4.98.tar&#x27;</span></span><br><span class="line">gpg: Signature made 2021年02月13日 星期六 20时54分47秒 CST</span><br><span class="line">gpg:                using RSA key 647F28654894E3BD457199BE38DBBDC86092693E</span><br><span class="line">gpg: Good signature from <span class="string">&quot;Greg Kroah-Hartman &lt;gregkh@kernel.org&gt;&quot;</span> [full]</span><br><span class="line">gpg: gregkh@kernel.org: Verified 1 signatures <span class="keyword">in</span> the past 0 seconds.  Encrypted</span><br><span class="line">     0 messages.</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>解压即可得到源码</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tar -xf linux-5.4.98.tar</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="old-version"><a href="#old-version" class="headerlink" title="old version"></a>old version</h3><ul>
+<li><p>赵炯博士维护的网站有早起<code>linux 0.11</code>和<code>linux 0.12</code>的源码：<a href="http://www.oldlinux.org/Linux.old/">http://www.oldlinux.org/Linux.old/</a></p>
+</li>
+<li><p>解压</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tar -zxvf linux-0.11.tar.gz</span><br><span class="line">tar -zxvf linux-0.12.tar.gz</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>旧版本环境搭建</p>
+<ul>
+<li>链接：<a href="https://blog.csdn.net/u011728480/article/details/114491022">https://blog.csdn.net/u011728480/article/details/114491022</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="编译和调试"><a href="#编译和调试" class="headerlink" title="编译和调试"></a>编译和调试</h2><ul>
+<li>参考链接<ul>
+<li><input disabled="" type="checkbox"> <a href="http://kerneltravel.net/blog/2021/debug_kernel_szp/">http://kerneltravel.net/blog/2021/debug_kernel_szp/</a></li>
+<li><input disabled="" type="checkbox"> <a href="https://www.anquanke.com/post/id/258874">https://www.anquanke.com/post/id/258874</a></li>
+<li><input checked="" disabled="" type="checkbox"> <a href="https://www.jianshu.com/p/17b8261fe74e">https://www.jianshu.com/p/17b8261fe74e</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="工具准备"><a href="#工具准备" class="headerlink" title="工具准备"></a>工具准备</h3><ul>
+<li><p>环境</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">ubuntu20<span class="number">.04</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>更新软件源</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>安装依赖</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install git fakeroot build-essential ncurses-dev xz-utils qemu flex libncurses5-dev fakeroot build-essential ncurses-dev xz-utils libssl-dev bc bison libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev libelf-dev</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>下载<code>linux-5.11.tar.xz</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.11.tar.xz</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>解压</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tar -xvf linux-5.11.tar.xz</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>进入文件夹内【配置编译选项】</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">make menuconfig</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/07/09/system/kernel-env/make_menuconfig.png" alt="make config"></p>
+<ul>
+<li><p>通过空格键进行【选择&#x2F;取消选择】</p>
+</li>
+<li><p>开启的（一般已经默认开启了）</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[<span class="number">1</span> 调试] Kernel hacking —-&gt; Compile-time checks <span class="keyword">and</span> compiler options —-&gt; Compile the kernel <span class="keyword">with</span> debug info</span><br><span class="line">[<span class="number">2</span> KGDB调试内核] Kernel hacking —-&gt; <span class="type">Generic</span> Kernel Debugging Instruments —&gt; KGDB: kernel debugger</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>关闭的</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[<span class="number">1</span> 关闭KALSR(否则会导致打断点失败)]Processor <span class="built_in">type</span> <span class="keyword">and</span> features -&gt; Randomize the address of the kernel image (KASLR)</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h3 id="编译内核"><a href="#编译内核" class="headerlink" title="编译内核"></a>编译内核</h3><ul>
+<li><p>编译</p>
+<blockquote>
+<p><code>-j$(nproc)</code>是尽可能多线程的编译，可加速，且可以通过指令<code>nproc</code>查看当前系统所支持的所线程的数量</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">make -j$(<span class="built_in">nproc</span>)</span><br><span class="line">...</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编译报错解决 1</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">No rule to make target <span class="string">&#x27;debian/canonical-certs.pem&#x27;</span>, needed by <span class="string">&#x27;certs/x509_certificate_list&#x27;</span>.  Stop.</span><br></pre></td></tr></table></figure>
+
+<p>编辑<code>.config</code>文件</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vim .config</span><br></pre></td></tr></table></figure>
+
+<p>修改<code>CONFIG_SYSTEM_TRUSTED_KEYS</code>，将其置空。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 原本内容</span><br><span class="line">CONFIG_SYSTEM_TRUSTED_KEYS=&quot;debian/canonical-certs.pem&quot;</span><br><span class="line"># 将该项原有内容删掉即可，如下</span><br><span class="line">CONFIG_SYSTEM_TRUSTED_KEYS=&quot;&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编译报错解决 2</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">BTF: .tmp_vmlinux.btf: pahole (pahole) <span class="keyword">is</span> <span class="keyword">not</span> available</span><br><span class="line">Failed to generate BTF <span class="keyword">for</span> vmlinux</span><br><span class="line">Try to disable CONFIG_DEBUG_INFO_BTF</span><br><span class="line">make: *** [Makefile:<span class="number">1165</span>: vmlinux] Error <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>系统缺少<code>dwarves</code>软件包</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install dwarves</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>此时得到的文件有</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">arch/x86/boot/bzImage --&gt; 压缩内核镜像</span><br><span class="line">vmlinux --&gt; 原始内核文件</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>先用<code>qemu</code>测试一下（没有文件系统会<code>kernel panic</code>）</p>
+<blockquote>
+<p>这时候，qemu会卡住不动，因为现在还没有文件系统，电脑加电启动首先由bootloader加载内核，内核紧接着需要挂载内存根文件系统。</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">qemu-system-x86_64 -kernel <span class="built_in">arch</span>/x86/boot/bzImage</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="制作根文件系统"><a href="#制作根文件系统" class="headerlink" title="制作根文件系统"></a>制作根文件系统</h3><ul>
+<li><p>获取<code>buzybox</code>源码</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://busybox.net/downloads/busybox-1.33.0.tar.bz2</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编译选项</p>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> <code>Settings -&gt; Build static binary file (no shared lib)</code></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">make menuconfig</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编译</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">make -j$(<span class="built_in">nproc</span>) &amp;&amp; make install</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="构建根文件系统镜像"><a href="#构建根文件系统镜像" class="headerlink" title="构建根文件系统镜像"></a>构建根文件系统镜像</h3><p><strong>参考</strong>：<a href="https://consen.github.io/2018/01/17/debug-linux-kernel-with-qemu-and-gdb/">使用QEMU和GDB调试Linux内核 | Consen</a></p>
+<blockquote>
+<p>注意：</p>
+<ol>
+<li><code>rootfs</code>在目录<code>busybox-1.33.0</code>下</li>
+<li>最后生成的根文件镜像<code>rootfs.cpio</code>在<code>linux-5.11</code>下</li>
+</ol>
+</blockquote>
+<ul>
+<li><p>制作内存根文件系统镜像</p>
+<p>在目录<code>busybox-1.33.0</code>下</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> rootfs </span><br><span class="line"><span class="built_in">cd</span> rootfs </span><br><span class="line"><span class="built_in">cp</span> ../_install/* ./ -rf  <span class="comment"># 注意路径</span></span><br><span class="line"><span class="built_in">mkdir</span> dev proc sys home </span><br><span class="line">sudo <span class="built_in">cp</span> -a /dev/&#123;null,console,<span class="built_in">tty</span>,tty1,tty2,tty3,tty4&#125; dev/</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>准备<code>init</code>脚本文件放在根文件系统跟目录下<code>rootfs/init</code>，添加如下内容到<code>init</code>文件</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/sh</span> </span><br><span class="line">mount -t proc none /proc </span><br><span class="line">mount -t sysfs none /sys </span><br><span class="line">echo &quot;Wellcome to Linux!&quot; </span><br><span class="line">echo &quot;--------------------&quot; </span><br><span class="line">/bin/sh </span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用<code>chmod +x init</code>给init脚本添加可执行权限，然后执行下面的命令打包成内存根文件系统镜像</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">find . -print0 | cpio --null -ov --format=newc | gzip -9 &gt; ../rootfs.cpio </span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="qemu运行内核"><a href="#qemu运行内核" class="headerlink" title="qemu运行内核"></a>qemu运行内核</h3><ul>
+<li><p>将<code>rootfs.cpio</code>和<code>bzImage</code>放到一个目录下，并在该目录下创建脚本<code>boot.sh</code></p>
+</li>
+<li><p>测试脚本<code>boot.sh</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">qemu-system-x86_64 \</span><br><span class="line">    -m 128M \</span><br><span class="line">    -kernel ./bzImage \</span><br><span class="line">    -initrd  ./rootfs.cpio \</span><br><span class="line">    -monitor /dev/null \</span><br><span class="line">    -cpu kvm64,+smep \</span><br><span class="line">    -append <span class="string">&quot;console=ttyS0 loglevel=3 quiet nokaslr&quot;</span> \</span><br><span class="line">    -nographic \</span><br><span class="line">    -s</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>部分参数说明如下：</p>
+<ul>
+<li><p><code>-m</code>：虚拟机内存大小</p>
+</li>
+<li><p><code>-kernel</code>：内存镜像路径</p>
+</li>
+<li><p><code>-initrd</code>：磁盘镜像路径</p>
+</li>
+<li><p><code>-append</code>：附加参数选项</p>
+<ul>
+<li><code>nokalsr</code>：关闭内核地址随机化，方便我们进行调试</li>
+<li><code>loglevel=3</code> &amp; <code>quiet</code>：不输出log</li>
+<li><code>console=ttyS0</code>：指定终端为<code>/dev/ttyS0</code>，这样一启动就能进入终端界面</li>
+</ul>
+</li>
+<li><p><code>-monitor</code>：将监视器重定向到主机设备<code>/dev/null</code>，这里重定向至null主要是防止CTF中被人给偷了qemu拿flag</p>
+</li>
+<li><p><code>-cpu</code>：设置CPU安全选项，在这里开启了smep保护</p>
+</li>
+<li><p><code>-s</code>：相当于<code>-gdb tcp::1234</code>的简写（也可以直接这么写），后续我们可以通过gdb连接本地端口进行调试</p>
+</li>
+</ul>
+</li>
+<li><p>添加可执行权限并执行</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x ./boot.sh</span><br><span class="line">./boot.sh</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果存在<code>/etc/inittab</code>文件，<code>Busybox init</code> 程序解析它，然后按照他的指示创建各种子进程，否则使用默认的配置创建子进程.</p>
+<ul>
+<li>一般不搞这个</li>
+</ul>
+</li>
+</ul>
+<h4 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h4><blockquote>
+<p>Wonderful!</p>
+</blockquote>
+<p><img src="/2022/07/09/system/kernel-env/kernel_on_qemu.png" alt="kernel_on_qemu"></p>
+<h3 id="废弃-构建磁盘映像"><a href="#废弃-构建磁盘映像" class="headerlink" title="[废弃]构建磁盘映像"></a>[废弃]构建磁盘映像</h3><blockquote>
+<p>注意<code>busybox</code>文件在<code>linux-5.11</code>下</p>
+</blockquote>
+<h4 id="建立文件系统"><a href="#建立文件系统" class="headerlink" title="建立文件系统"></a>建立文件系统</h4><ul>
+<li><p>初始化文件系统</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> _install</span><br><span class="line">$ <span class="built_in">mkdir</span> -pv &#123;bin,sbin,etc,proc,sys,home,lib64,lib/x86_64-linux-gnu,usr/&#123;bin,sbin&#125;&#125;</span><br><span class="line">$ <span class="built_in">touch</span> etc/inittab</span><br><span class="line">$ <span class="built_in">mkdir</span> etc/init.d</span><br><span class="line">$ <span class="built_in">touch</span> etc/init.d/rcS</span><br><span class="line">$ <span class="built_in">chmod</span> +x ./etc/init.d/rcS</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置初始化脚本</p>
+<ol>
+<li><p>配置<code>etc/inittab</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">::sysinit:/etc/init.d/rcS</span><br><span class="line">::askfirst:/<span class="built_in">bin</span>/ash</span><br><span class="line">::ctrlaltdel:/sbin/reboot</span><br><span class="line">::shutdown:/sbin/swapoff -a</span><br><span class="line">::shutdown:/<span class="built_in">bin</span>/umount -a -r</span><br><span class="line">::restart:/sbin/init</span><br></pre></td></tr></table></figure>
+
+<p>在上面的文件中指定了系统初始化脚本，因此接下来配置<code>etc/init.d/rcS</code></p>
+</li>
+<li><p>配置<code>etc/init.d/rcS</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/sh</span></span><br><span class="line">mount -t proc none /proc</span><br><span class="line">mount -t sys none /sys</span><br><span class="line">/bin/mount -n -t sysfs none /sys</span><br><span class="line">/bin/mount -t ramfs none /dev</span><br><span class="line">/sbin/mdev -s</span><br></pre></td></tr></table></figure>
+
+<p>配置各种目录的挂载</p>
+<p>或者：</p>
+<p>根目录下创建<code>init</code>文件，写入如下内容</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/sh</span></span><br><span class="line"></span><br><span class="line">mount -t proc none /proc</span><br><span class="line">mount -t sysfs none /sys</span><br><span class="line">mount -t devtmpfs devtmpfs /dev</span><br><span class="line"></span><br><span class="line">exec 0&lt;/dev/console</span><br><span class="line">exec 1&gt;/dev/console</span><br><span class="line">exec 2&gt;/dev/console</span><br><span class="line"></span><br><span class="line">echo -e &quot;\nBoot took $(cut -d&#x27; &#x27; -f1 /proc/uptime) seconds\n&quot;</span><br><span class="line">setsid cttyhack setuidgid 1000 sh</span><br><span class="line"></span><br><span class="line">umount /proc</span><br><span class="line">umount /sys</span><br><span class="line">poweroff -d 0  -f</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置用户组</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">echo</span> <span class="string">&quot;root:x:0:0:root:/root:/bin/sh&quot;</span> &gt; etc/passwd</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">echo</span> <span class="string">&quot;ctf:x:1000:1000:ctf:/home/ctf:/bin/sh&quot;</span> &gt;&gt; etc/passwd</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">echo</span> <span class="string">&quot;root:x:0:&quot;</span> &gt; etc/group</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">echo</span> <span class="string">&quot;ctf:x:1000:&quot;</span> &gt;&gt; etc/group</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">echo</span> <span class="string">&quot;none /dev/pts devpts gid=5,mode=620 0 0&quot;</span> &gt; etc/fstab</span></span><br></pre></td></tr></table></figure>
+
+<p>在这里建立了两个用户组<code>root</code>和<code>ctf</code>，以及两个用户<code>root</code>和<code>ctf</code></p>
+</li>
+<li><p>配置<code>glibc</code>库</p>
+<blockquote>
+<p>略</p>
+</blockquote>
+</li>
+<li><p><strong>打包文件系统为镜像文件</strong></p>
+<p>在<code>busybox</code>下</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">find . | cpio -o -H newc &gt; ../core.cpio</span><br></pre></td></tr></table></figure>
+
+<p>（即在<code>linux-5.11</code>下编译出<code>core.cpio</code>根文件系统镜像）</p>
+<p>或者（只是名字不同）</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">find . | cpio -o --format=newc &gt; ../../rootfs.cpio</span><br></pre></td></tr></table></figure></li>
+</ol>
+</li>
+</ul>
+<h4 id="qemu运行内核-1"><a href="#qemu运行内核-1" class="headerlink" title="qemu运行内核"></a><code>qemu</code>运行内核</h4><ul>
+<li><p>将<code>bzImage</code>和<code>core</code>配置启动脚本</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">touch</span> boot.sh</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>注意两个文件</p>
+<figure class="highlight gams"><table><tr><td class="code"><pre><span class="line"><span class="symbol">$</span> <span class="keyword">file</span> bzImage    </span><br><span class="line">bzImage: Linux kernel x86 boot executable bzImage, version <span class="number">5.11</span><span class="number">.0</span> (ganliber@ganliber-virtual-machine) #<span class="number">2</span> SMP Mon Jul <span class="number">11</span> <span class="number">19</span>:<span class="number">16</span>:<span class="number">12</span> CST <span class="number">2022</span>, RO-rootFS, swap_dev <span class="number">0x9</span>, <span class="built_in">Normal</span> VGA</span><br><span class="line"><span class="symbol">$</span> <span class="keyword">file</span> rootfs.cpio</span><br><span class="line">rootfs.cpio: ASCII cpio archive (SVR4 with <span class="keyword">no</span> CRC)</span><br></pre></td></tr></table></figure>
+
+<p>放在同一个文件夹下</p>
+</li>
+<li><p>编写脚本<code>boot.sh</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/sh</span></span><br><span class="line">qemu-system-x86_64 \</span><br><span class="line">    -m 128M \</span><br><span class="line">    -kernel ./bzImage \</span><br><span class="line">    -initrd  ./rootfs.cpio \</span><br><span class="line">    -monitor /dev/null \</span><br><span class="line">    -append &quot;root=/dev/ram rdinit=/sbin/init console=ttyS0 oops=panic panic=1 loglevel=3 quiet nokaslr&quot; \</span><br><span class="line">    -cpu kvm64,+smep \</span><br><span class="line">    -smp cores=2,threads=1 \</span><br><span class="line">    -netdev user,id=t0, -device e1000,netdev=t0,id=nic0 \</span><br><span class="line">    -nographic \</span><br><span class="line">    -s</span><br></pre></td></tr></table></figure>
+
+<p>解释：</p>
+<p>部分参数说明如下：</p>
+<ul>
+<li><p><code>-m</code>：虚拟机内存大小</p>
+</li>
+<li><p><code>-kernel</code>：内存镜像路径</p>
+</li>
+<li><p><code>-initrd</code>：磁盘镜像路径</p>
+</li>
+<li><p>&#96;&#96;&#96;<br>-append</p>
+<figure class="highlight autohotkey"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">    ：附加参数选项</span><br><span class="line"></span><br><span class="line">    - `nokalsr`：关闭内核地址随机化，方便我们进行调试</span><br><span class="line">    - `rdinit`：指定初始启动进程，`/sbin/init`进程会默认以`/etc/init.d/rcS`作为启动脚本</span><br><span class="line">    - `loglevel=<span class="number">3</span>` &amp; `quiet`：不输出log</span><br><span class="line">    - `console=ttyS0`：指定终端为`/dev/ttyS0`，这样一启动就能进入终端界面</span><br><span class="line"></span><br><span class="line">  - `-monitor`：将监视器重定向到主机设备`/dev/null`，这里重定向至null主要是防止CTF中被人给偷了qemu拿flag</span><br><span class="line"></span><br><span class="line">  - `-cpu`：设置CPU安全选项，在这里开启了smep保护</span><br><span class="line"></span><br><span class="line"><span class="title">  - `-s`：相当于`-gdb tcp::</span><span class="number">1234</span>`的简写（也可以直接这么写），后续我们可以通过gdb连接本地端口进行调试</span><br><span class="line"></span><br><span class="line">* 或者</span><br><span class="line"></span><br><span class="line">  ```bash</span><br><span class="line">  qemu-system-x86_64 -kernel ./bzImage -initrd ./rootfs.cpio -S -s</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>解释：</p>
+<ul>
+<li><code>-s</code>：一个是-s，在TCP 1234端口上创建了一个gdb-server</li>
+<li><code>-S</code>：-S代表启动时暂停虚拟机，等待 gdb 执行 continue指令（可以简写为c）</li>
+</ul>
+</li>
+</ul>
+<h3 id="下载现有的镜像"><a href="#下载现有的镜像" class="headerlink" title="下载现有的镜像"></a>下载现有的镜像</h3><p>列出可下载的镜像</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt search linux-image-</span><br></pre></td></tr></table></figure>
+
+<p>拉取<code>5.11</code>版本（例）</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt download linux-image-5.11.0-43-generic</span><br><span class="line">dpkg -X ./linux-image-5.11.0-43-generic_5.11.0-43.47~20.04.2_amd64.deb extract</span><br></pre></td></tr></table></figure>
+
+<p>其中的<code>./extract/boot/vmlinuz-5.11.0-43-generic</code>便是<code>bzImage</code>内核镜像文件</p>
+]]></content>
+      <categories>
+        <category>system</category>
+      </categories>
+      <tags>
+        <tag>operating system</tag>
+        <tag>system</tag>
+        <tag>pwn</tag>
+        <tag>Linux kernel</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>How to submit a Linux kernel patch</title>
     <url>/2022/07/14/system/kernel-patch/</url>
     <content><![CDATA[<p>​	</p>
@@ -1383,1092 +1409,6 @@
         <tag>system</tag>
         <tag>pwn</tag>
         <tag>Linux kernel</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>heap 1</title>
-    <url>/2022/06/16/pwn/heap-1/</url>
-    <content><![CDATA[<h1 id="堆利用基础"><a href="#堆利用基础" class="headerlink" title="堆利用基础"></a>堆利用基础</h1><h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p><img src="/2022/06/16/pwn/heap-1/program_virtual_address_memory_space.png" alt="program_virtual_address_memory_space"></p>
-]]></content>
-      <categories>
-        <category>pwn</category>
-      </categories>
-      <tags>
-        <tag>pwn</tag>
-        <tag>heap</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>OS Notes Part(I)</title>
-    <url>/2022/06/27/system/os-notes-first/</url>
-    <content><![CDATA[<h1 id="Modern-Operating-System-I"><a href="#Modern-Operating-System-I" class="headerlink" title="Modern Operating System (I)"></a>Modern Operating System (I)</h1><blockquote>
-<p>前几章内容暂省略</p>
-<ul>
-<li><input checked="" disabled="" type="checkbox"> 内存管理</li>
-<li><input checked="" disabled="" type="checkbox"> 进程与线程</li>
-<li><input disabled="" type="checkbox"> 操作系统调度</li>
-<li><input checked="" disabled="" type="checkbox"> 进程间通信</li>
-</ul>
-</blockquote>
-<h2 id="4-内存管理"><a href="#4-内存管理" class="headerlink" title="4 内存管理"></a>4 内存管理</h2><hr>
-<ul>
-<li>转址旁路缓存<code>TLB (Translation Lookaside Buffer)</code><ul>
-<li>TLB命中：<code>TLB hit</code></li>
-<li>TLB未命中：<code>TLB miss</code></li>
-</ul>
-</li>
-<li><code>AArch64 (based on ARMv8.0)</code> 架构：4级页表<ul>
-<li>最小页：有<code>4KB</code>,<code>16KB</code>,<code>64KB</code>,可通过<code>TCR_EL1</code>进行配置</li>
-</ul>
-</li>
-<li>一种TLB刷新机制：为<code>TLB</code>缓存项打”标签”来减少程序切换时TLB刷新的开销<ul>
-<li><code>ASID (Address Space IDentifier)</code>：基于<code>aarch64</code></li>
-<li><code>PCID (Process Context IDentifier)</code>：基于<code>x86-64</code></li>
-</ul>
-</li>
-<li>换页<code>page swapping</code><ul>
-<li>换出<code>swap out</code></li>
-<li>换入<code>swap in</code></li>
-</ul>
-</li>
-<li>缺页异常<code>page fault</code></li>
-<li>预取<code>prefetching</code>机制：发生<code>swap in</code>时，预测还有哪些页即将被访问，提前将其换入物理内存，减少<code>page fault</code></li>
-<li>按需页分配<code>demand paging</code><ul>
-<li>未分配状态</li>
-<li>已分配但未映射至物理内存状态（初次访问时出发<code>page fault</code>）</li>
-<li>区分两种状态：<ul>
-<li>Linux中，程序的虚拟内存空间由多个虚拟内存区域构成，即<code>VMA (Virtual Memory Area)</code>：含<code>beginning VA</code>，<code>ending VA</code>，访问权限等信息。</li>
-<li>P -&gt; page fault<ul>
-<li>P属于VMA：已分配未映射</li>
-<li>P不属于VMA：未分配</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>页替换策略<ul>
-<li><code>MIN/OPT (Minimum / Optimal 最优策略)</code></li>
-<li><code>FIFO (First-In First-Out)</code></li>
-<li><code>Second Chance</code></li>
-<li><code>LRU (Least Recently Used)</code>：基于程序过去频繁访问的页后续也可能被访问</li>
-<li><code>MRU (Most Recently Used)</code>：基于程序不会反复访问相同地址情况</li>
-<li><code>clock algorithm</code>：时钟算法策略</li>
-</ul>
-</li>
-<li>工作集模型<code>working set model</code><ul>
-<li>基于：优先将非工作集中的页换出</li>
-<li>工作集时钟算法：<ul>
-<li>维护2个状态：<strong>上次使用时间</strong>和<strong>访问位</strong></li>
-<li>定期检查算时间间隔</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>共享内存<code>shared memory</code><ul>
-<li>写时拷贝<code>copy-on-write</code></li>
-<li>内存去重<code>memory deduplication</code><ul>
-<li>定期扫描相同内容的物理页，找到映射对应的虚拟页，保留一个物理页，其余通过<code>copy-on-write</code>映射到该物理页，释放其他物理页。</li>
-<li>如Linux的<code>KSM (Kernel Same-page Merging)</code>机制</li>
-<li>性能下降产生延迟，资源利用率提高</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>内存压缩<ul>
-<li>如Linux的<code>zswap</code>机制，<code>zswap</code>区域（仍属于内存区域）：为内存换页过程提供缓冲区</li>
-<li>更加高效的磁盘批量<code>I/O</code></li>
-</ul>
-</li>
-<li>大页<code>huge page</code><ul>
-<li>Linux提供透明大页<code>transparent huge page</code>机制：自动将一个应用程序中连续的4KB内存页合并成2MB的内存页</li>
-<li>提高效率（减少TLB项，提高TLB命中率），可能浪费物理内存资源</li>
-</ul>
-</li>
-<li>内存碎片<code>fragmentation</code><ul>
-<li>内部碎片<code>internal fragmentation</code></li>
-<li>外部碎片<code>external fragmentation</code></li>
-</ul>
-</li>
-<li>伙伴系统<code>buddy system</code><ul>
-<li>减少外部碎片</li>
-</ul>
-</li>
-<li><code>SLAB</code>分配器<ul>
-<li>减少内部碎片</li>
-<li>包括<code>SLAB</code>，<code>SLUB</code>，<code>SLOB</code></li>
-<li>linux-2.6.23之后内核默认采用<code>SLUB</code>分配器（依赖于伙伴系统）</li>
-</ul>
-</li>
-<li>常用空闲链表<ul>
-<li>隐式空闲链表<code>implicit free list</code></li>
-<li>显式空闲链表<code>explicit free list</code></li>
-<li>分离空闲链表<code>segregated free list</code></li>
-</ul>
-</li>
-</ul>
-<h2 id="5-进程与线程"><a href="#5-进程与线程" class="headerlink" title="5 进程与线程"></a>5 进程与线程</h2><hr>
-<h3 id="process"><a href="#process" class="headerlink" title="process"></a>process</h3><ul>
-<li><p>进程控制块<code>PCB (Process Control Block)</code></p>
-</li>
-<li><p>僵尸进程<code>zombie</code></p>
-</li>
-<li><p>进程管理：</p>
-<ul>
-<li><p>进程组<code>process group</code>：进程的集合 —&gt; 进程组标识符<code>tgid (In Linux PCB)</code></p>
-</li>
-<li><p>会话<code>session</code>：进程组的集合</p>
-<blockquote>
-<p>根据执行状态划分为：</p>
-</blockquote>
-<ul>
-<li>前台进程组<code>foreground thread group</code></li>
-<li>后台进程组<code>background thread group</code></li>
-</ul>
-</li>
-<li><p><code>process group</code>和<code>session</code>主要用于<code>shell</code>环境的中的进程管理</p>
-<ul>
-<li>进程id -&gt; <code>PID</code></li>
-<li>进程组id -&gt; <code>GID</code></li>
-<li>会话id -&gt; <code>SID</code></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>控制中断进程<code>controlling terminal</code></p>
-</li>
-</ul>
-<h3 id="thread"><a href="#thread" class="headerlink" title="thread"></a>thread</h3><ul>
-<li><p>用户态线程<code>user-level thread</code></p>
-</li>
-<li><p>内核态线程<code>kernel-level thread</code></p>
-</li>
-<li><p>多线程模型<code>multithreading model</code></p>
-</li>
-<li><p>线程控制块<code>Thread Control Block</code></p>
-</li>
-<li><p>NPTL<code>Native POSIX Thread Library</code>：自<code>Linux 2.6</code>引入的线程库，沿用至今</p>
-</li>
-</ul>
-<h3 id="fiber"><a href="#fiber" class="headerlink" title="fiber"></a>fiber</h3><blockquote>
-<p>完全在用户态下完成</p>
-</blockquote>
-<ul>
-<li>抢占式多任务处理<code>preemptive multitasking</code></li>
-<li>合作式多任务处理<code>cooperative multitasking</code></li>
-<li><code>(Windows) TLS(Fiber Local Storage)</code> ：纤程本地存储，用来为每个纤程保存同一变量的私有拷贝</li>
-<li>协程<code>coroutine</code>：为了便于与操作系统提供的纤程支持相区分，程序语言提供的纤程支持称为协程</li>
-</ul>
-<h2 id="6-操作系统调度"><a href="#6-操作系统调度" class="headerlink" title="6 操作系统调度"></a>6 操作系统调度</h2><hr>
-<ul>
-<li><p>优先级<code>priority</code></p>
-</li>
-<li><p>时间片<code>time slice</code></p>
-</li>
-<li><p>截止时间<code>deadline</code></p>
-</li>
-<li><p>任务调度&#x2F;CPU调度<code>task scheduling</code></p>
-</li>
-<li><p>线程<code>thread</code>是调度器的调度对象，又叫做<strong>任务</strong><code>task</code></p>
-<ul>
-<li>运行队列<code>run queue</code></li>
-<li><code>Linux</code>使用的调度器会用红黑树实现运行队列</li>
-</ul>
-</li>
-<li><p>确定调度指标<code>what</code> ——&gt; 做出调度决策<code>how</code></p>
-<ul>
-<li><p>调度指标</p>
-<ul>
-<li><p>分类</p>
-<ul>
-<li>性能相关指标<ul>
-<li>批处理任务<ul>
-<li><strong>吞吐量</strong>：单位时间内处理的任务数量</li>
-<li><strong>周转时间</strong>：任务从被发起直到执行结束所需的时间</li>
-</ul>
-</li>
-<li>交互式任务<ul>
-<li><strong>响应时间</strong>：任务从被发起直至第一次向用户返回输出以响应用户所需的时间</li>
-</ul>
-</li>
-<li>调度开销：做出决策的时间应该尽可能短</li>
-</ul>
-</li>
-<li>非性能指标：<strong>公平性</strong>、<strong>资源利用率</strong></li>
-<li>任务场景需求：<strong>实时性</strong>、<strong>能耗</strong></li>
-</ul>
-</li>
-<li><p>权衡</p>
-<ul>
-<li>调度开销和调度效果</li>
-<li>优先级和公平性</li>
-<li>性能与能耗</li>
-</ul>
-</li>
-<li><p>调度机制</p>
-<ul>
-<li><p>进程调度<code>process scheduling</code>机制</p>
-<ul>
-<li><p>长期调度<code>long-term scheduling/job scheduling</code></p>
-<blockquote>
-<p>限制系统中真正被用来进行短期调度管理的进程数量，避免短期调度的开销过大</p>
-<p>根据进程使用的资源类型，分类：计算密集型<code>CPU-bound</code>和<code>I/O</code>密集型<code>I/O-bound</code></p>
-</blockquote>
-</li>
-<li><p>短期调度<code>short-term scheduling/job scheduling</code></p>
-<blockquote>
-<p>实际做出调度决策的机制</p>
-<p>负责进程在 <strong>预备</strong>，<strong>运行</strong>，<strong>阻塞</strong> 状态间的转换 </p>
-</blockquote>
-</li>
-<li><p>中期调度<code>medium-term scheduling/job scheduling</code></p>
-<blockquote>
-<p>长短期调度 —&gt; based on CPU and I&#x2F;O resource</p>
-<p>中期调度 —&gt; based on memory</p>
-<p>中期调度也是换页机制的一部分，当<strong>系统中内存使用量过大</strong>，就会触发换页机制，挂起处于<strong>预备状态</strong>的&#x2F;<strong>阻碍状态</strong>的进程，置为<strong>挂起预备状态&#x2F;挂起阻塞状态</strong>并放入<strong>挂起运行队列&#x2F;挂起阻塞队列</strong></p>
-<p>引入无法被短期调度执行的两个状态</p>
-<ul>
-<li>挂起预备状态<code>suspended ready</code></li>
-<li>挂起阻塞状态<code>suspended blocking</code></li>
-</ul>
-</blockquote>
-</li>
-</ul>
-</li>
-<li><p>批处理队列<code>batch queue</code></p>
-</li>
-<li><p>阻塞队列<code>blocking queue</code></p>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>调度决策</p>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="7-进程间通信"><a href="#7-进程间通信" class="headerlink" title="7 进程间通信"></a>7 进程间通信</h2><hr>
-<ul>
-<li><p>进程间通信<code>Inter-Process Communication (IPC)</code></p>
-</li>
-<li><p>消息<code>message</code>：一种常见通信数据的抽象，包含一个头部<code>header</code>和一个数据段<code>payload</code></p>
-<ul>
-<li><code>header</code> : 魔数<code>magic number</code>，状态<code>state</code>，消息长度<code>message length</code>，验证码<code>verification code</code>等</li>
-<li><code>payload</code> : 纯数据（如字符串<code>string</code>），系统资源（如文件描述符<code>file descriptor</code>）</li>
-</ul>
-</li>
-<li><p>消息传递基本接口：</p>
-<ul>
-<li><code>Send(message)</code></li>
-<li><code>Recv(message)</code></li>
-<li><code>RPC(req_message, resp_message)</code>  —&gt; 远程过程调用：<code>Remote Procedure Call</code></li>
-<li><code>Reply(resp_message)</code></li>
-</ul>
-</li>
-<li><p>内存重映射<code>memory remapping</code></p>
-</li>
-<li><p><code>IPC Classification</code></p>
-<ul>
-<li>单向（管道，信号等）和双向（RPC）</li>
-<li>同步（阻塞进程直到该IPC操作完成）和异步（非阻塞的，进程发起一次操作即可返回，不需要等待其完成）<ul>
-<li><p>同步：被调用者<code>callee</code>处理请求时，调用者<code>caller</code>会处于<code>block</code>的状态，当<code>callee</code>执行完任务后，控制流会切回<code>caller</code></p>
-<ul>
-<li>一般是<strong>双向</strong><code>IPC</code>（或<code>RPC</code>）</li>
-</ul>
-</li>
-<li><p>异步：多个并行的控制流，异步<code>IPC</code>通常通过【轮询内存状态】或【注册回调函数】（如果<code>kernel</code>支持的话）来获取返回结果。</p>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>超时机制</p>
-<ul>
-<li>拒绝服务<code>denial-of-service</code></li>
-</ul>
-</li>
-<li><p>通信连接管理</p>
-<ul>
-<li>直接通信：通信的<code>process</code>一方需要<strong>显示</strong>地标识另一方</li>
-<li>间接通信：通过一个中间<strong>信箱</strong>完成通信，每一个信箱有一个唯一的标识符，共享信箱交换<code>message</code>，进程间连接的建立发生在共享一个<strong>信箱</strong>时候。（如管道）</li>
-</ul>
-</li>
-<li><p>权限检查机制</p>
-<ul>
-<li>微内核，如<code>seL4</code>等微内核系统的<code>Capability</code>机制</li>
-<li>宏内核，如<code>Linux</code>， 将【IPC安全检查机制】和【文件检查】结合在一起</li>
-</ul>
-</li>
-<li><p><code>System V</code>进程间通信：即【宏内核】下的三种进程间通信机制：</p>
-<ul>
-<li><code>System V</code>消息队列</li>
-<li><code>System V</code>信号量</li>
-<li><code>System V</code>共享内存</li>
-</ul>
-</li>
-<li><p><code>System V</code>通信的权限管理：在<code>Linux</code>等宏内核中是基于文件<code>File</code>的权限检查机制</p>
-<ul>
-<li><p>访问模式<code>mode</code></p>
-</li>
-<li><p>权限检查</p>
-<blockquote>
-<p><code>Linux</code>对<code>IPC</code>进行权限管理的<code>IPC_PERM</code>结构，类似文件的【<strong>访问模式</strong>】，权限检查机制确保安全性</p>
-</blockquote>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta"># uid 用户标识符</span></span><br><span class="line">  <span class="meta"># gid 用户组标识符</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">ipc_perm</span> &#123;</span></span><br><span class="line">    <span class="type">key_t</span> key; <span class="comment">// 进程可以根据key来索引到一个IPC对象</span></span><br><span class="line">    <span class="type">uid_t</span> uid; <span class="comment">// owner uid</span></span><br><span class="line">    <span class="type">gid_t</span> gid; <span class="comment">// owner gid</span></span><br><span class="line">    <span class="type">uid_t</span> cuid; <span class="comment">// creator uid</span></span><br><span class="line">    <span class="type">gid_t</span> cgid; <span class="comment">// creator gid</span></span><br><span class="line">    <span class="type">mode_t</span> mode; <span class="comment">// 访问模式</span></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>继承</p>
-<ul>
-<li>除了命名服务外的另外一种常见的【<strong>分发权限</strong>】的方式</li>
-</ul>
-</li>
-<li><p><code>Linux</code>中，<strong>匿名管道</strong> —&gt; 用于父子进程之间的通信，内核通过在<code>fork</code>时<strong>复制</strong><code>copy</code>文件描述符表<code>File Descriptor Table</code>来建立<strong>父子进程</strong>之间的连接</p>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="命名服务"><a href="#命名服务" class="headerlink" title="命名服务"></a>命名服务</h3><blockquote>
-<p><code>naming server</code></p>
-</blockquote>
-<ul>
-<li><p>【<strong>权限分发</strong>】通过一个用户态的服务——<strong>命名服务</strong>实现</p>
-</li>
-<li><p>过程：</p>
-<ol>
-<li>各个服务（如文件系统服务，数据库系统服务等）向<code>naming server</code>注册自己的服务名。</li>
-<li>客户端进程向<code>naming server</code>上查询当前服务，并选择所需要的<strong>服务</strong>去尝试获取权限。</li>
-<li>是否分发权限，是由<code>naming server</code>和对应的<strong>服务端进程</strong>（如文件系统进程，网络系统进程，数据库进程）根据特定的策略（如无条件，需要私钥签名的证书）来判断的。</li>
-</ol>
-</li>
-<li><p>优点：</p>
-<ul>
-<li>各个服务不再是<code>kernel</code>中的<code>ID</code>等抽象的表示，而是对应用更友好的<strong>名字<code>name</code></strong></li>
-</ul>
-</li>
-<li><p><code>naming server</code>一般在用户态</p>
-</li>
-</ul>
-<h3 id="宏内核IPC"><a href="#宏内核IPC" class="headerlink" title="宏内核IPC"></a>宏内核<code>IPC</code></h3><blockquote>
-<ul>
-<li><input checked="" disabled="" type="checkbox"> 管道<code>pipe</code></li>
-<li><input checked="" disabled="" type="checkbox"> <code>System V</code>：常指宏内核下三种具体的<code>IPC</code>机制<ul>
-<li><input checked="" disabled="" type="checkbox"> 消息队列</li>
-<li><input checked="" disabled="" type="checkbox"> 信号量</li>
-<li><input checked="" disabled="" type="checkbox"> 共享内存</li>
-</ul>
-</li>
-<li><input checked="" disabled="" type="checkbox"> <code>Linux</code>信号机制</li>
-<li><input checked="" disabled="" type="checkbox"> 套接字<code>socket</code>机制</li>
-</ul>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>IPC机制</th>
-<th>数据抽象</th>
-<th>参与者</th>
-<th>方向</th>
-<th>内核实现</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>管道<code>pipe</code></td>
-<td>字节流</td>
-<td>两个进程</td>
-<td>单向</td>
-<td>通常是<code>FIFO</code>缓冲区管理数据，分为<strong>匿名管道</strong>和<strong>命名管道</strong></td>
-</tr>
-<tr>
-<td>消息队列<code>MQ</code></td>
-<td>消息</td>
-<td>多进程</td>
-<td>单向双向</td>
-<td>队列的组织方式，通过【文件权限】管理对队列的访问</td>
-</tr>
-<tr>
-<td>信号量<code>semaphore</code></td>
-<td>计数器</td>
-<td>多进程</td>
-<td>单向双向</td>
-<td>内核<code>kernel</code>维护共享计数器，通过文件权限管理对计数器的访问</td>
-</tr>
-<tr>
-<td>共享内存<code>chm</code></td>
-<td>内存区间</td>
-<td>多进程</td>
-<td>单向双向</td>
-<td>内核维护共享内存的内存区间，通过文件的权限来管理对共享内存的访问</td>
-</tr>
-<tr>
-<td>信号<code>signal</code></td>
-<td>事件编号</td>
-<td>多进程</td>
-<td>单向</td>
-<td>为线程&#x2F;进程维护【信号等待队列】，通过用户 &#x2F; 组等的权限管理信号的操作</td>
-</tr>
-<tr>
-<td>套接字<code>socket</code></td>
-<td>数据报文</td>
-<td>两个进程</td>
-<td>单向双向</td>
-<td>有基于<code>IP + port</code>和基于<code>file path</code>的寻址方式，利用网络栈来管理通信</td>
-</tr>
-</tbody></table>
-<h4 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h4><ul>
-<li><p>匿名管道：通过<code>pipe</code>的系统调用创建</p>
-<blockquote>
-<p>父子进程</p>
-</blockquote>
-</li>
-<li><p>命名管道：通过<code>mkfifo</code>命令创建 —&gt; 指定一个全局文件名</p>
-<blockquote>
-<p>远距离进程（任意两个进程）</p>
-</blockquote>
-</li>
-</ul>
-<h4 id="System-V-消息队列"><a href="#System-V-消息队列" class="headerlink" title="System V 消息队列"></a><code>System V</code> 消息队列</h4><ul>
-<li><p>发送和接收<code>message</code>的接口是<code>kernel</code>提供的</p>
-</li>
-<li><p><code>kernel</code>从<code>system memory</code>中分配一个队列数据结构，作为消息<code>message</code>的内核对象</p>
-</li>
-<li><p><code>MQ</code>基本操作：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In Linux, the following operations are defined <span class="keyword">as</span> system call.</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><code>msgget</code>：允许进程获取已有消息队列的连接，或者创建一个新的消息队列</li>
-<li><code>msgsnd</code>：发消息</li>
-<li><code>msgrcv</code>：收消息</li>
-<li><code>msgctl</code>：可以控制和管理一个消息队列，如修改消息队列的权限信息，或删除消息队列</li>
-</ul>
-</li>
-<li><p>消息发送和消息接收一般是【<strong>非阻塞的</strong>】</p>
-</li>
-<li><p><code>Linux kernel</code>实现：</p>
-<ul>
-<li>【<strong>系统管理员</strong>】通常可以配置【<strong>单个消息</strong>】<code>single message</code>的最大空间、【<strong>单个消息队列</strong>】<code>single MQ</code>的最大空间、全系统的消息队列个数</li>
-<li>通常建议使用【<strong>共享内存机制</strong>】传递长消息，而非使用<code>MQ</code></li>
-<li>消息在用户态和内核态之间传递时，会有拷贝开销：<ul>
-<li><code>copy_from_user</code></li>
-<li><code>copy_to_user</code></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="System-V-信号量"><a href="#System-V-信号量" class="headerlink" title="System V 信号量"></a><code>System V</code> 信号量</h4><ul>
-<li>通过对信号量的<code>PV</code>操作限制可以保证执行顺序</li>
-<li>关键：封装一个计数器</li>
-</ul>
-<h4 id="System-V-共享内存"><a href="#System-V-共享内存" class="headerlink" title="System V 共享内存"></a><code>System V</code> 共享内存</h4><blockquote>
-<p>在<code>Linux</code>的系统设计中，将共享内存的机制封装在了一个特殊的文件系统中（即共享内存文件系统<code>shm 文件系统</code>），实际中使用<code>tmpfs</code>实现</p>
-</blockquote>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">	* kernel 为全局所有的共享内存维护一个全局队列结构,由结构体 [shmid_kernel] 组成</span><br><span class="line">	* IPC <span class="title function_">key</span> <span class="params">(全局唯一)</span> --&gt; <span class="keyword">struct</span> shmid_kernel</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> shmid_kernel &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">file</span> <span class="title">file</span>;</span>--&gt; VFS <span class="class"><span class="keyword">struct</span> <span class="title">inode</span> </span></span><br><span class="line"><span class="class">                     --&gt;</span> 一段共享物理内存页的集合(也就是共享内存对应的物理内存)</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[process1] and [process2]</span><br><span class="line">    * By <span class="title function_">shm_at</span> <span class="params">(kernel API)</span>---&gt; Reflect [shared memory] to [Virtual Address Space]</span><br><span class="line">    * kernel会为process1和process2分配两个<span class="title function_">VMA</span><span class="params">(Virtual Memory Area)</span>结构体,均指向file</span><br><span class="line">    * 两个VMA对应的虚拟地址可以不同, 只需要映射到相同的物理内存</span><br><span class="line">    * 支持任意数量的进程共享同一个共享内存区域, 只需要为它们分配[指向 <span class="keyword">struct</span> file 的VMA]即可</span><br><span class="line">    * 取消映射<span class="params">(detach操作)</span>只会影响当前进程的映射</span><br><span class="line"></span><br><span class="line">shm : shared memory</span><br><span class="line">shm_at: 建立对共享内存的映射的接口</span><br><span class="line">shm_dt: 取消共享内存和虚拟内存之间的映射的接口 </span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="信号IPC"><a href="#信号IPC" class="headerlink" title="信号IPC"></a>信号<code>IPC</code></h4><ul>
-<li><p>信号<code>signal</code>：具备【单向的事件通知】能力（信号量<code>semaphore</code>有通知能力，但需要进程主动查询计数器的状态或陷入阻塞状态等待通知）</p>
-</li>
-<li><p>信号传递信息很短，只有一个编号，且由<code>kernel</code>传递</p>
-</li>
-<li><p><code>Linux</code>早起使用信号有31（1~31号）个，后续<code>POSIX</code>标准引入了编号32~64的其他信号</p>
-<ul>
-<li>传统信号称为【常规信号】<ul>
-<li>进程多次收到，<code>kernel</code>只会记录一次</li>
-</ul>
-</li>
-<li><code>POSIX</code>引入称为【实时信号】<ul>
-<li>进程多次收到，<code>kernel</code>不会丢弃相同信号时间</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><code>Linux</code>：<code>kernel</code>会为每个进程和线程准备一个【信号事件等待队列】</p>
-<ul>
-<li>一个进程内的多个线程<ul>
-<li>共享该进程的【信号事件队列】</li>
-<li>拥有自己私有的【等待队列】</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><code>Linux</code>提供了一个专门的系统调用<code>sigprocmask</code>：允许用户程序设置对特定信号的阻塞<code>block</code>状态</p>
-<ul>
-<li>信号阻塞，<code>Linux</code>不会再触发该信号对应的<code>handler function</code>，直到该信号被解除<code>block</code>，信号阻塞不阻碍信号被添加到等待队列上</li>
-</ul>
-</li>
-<li><p><code>signal</code>既用于<code>IPC</code>也用于进程管理</p>
-</li>
-<li><p>内核对信号的处理</p>
-<ul>
-<li><p>时机：通常是<code>kernel</code>执行完<code>exception</code>, <code>interrupt</code>, <code>syscall</code>返回用户态的时刻</p>
-</li>
-<li><p>方式：</p>
-<ul>
-<li>忽略</li>
-<li>用户处理函数：调用【用户注册】的【信号处理函数】</li>
-<li>内核默认处理函数：调用【默认】的【内核处理函数】</li>
-</ul>
-</li>
-<li><p>Linux信号内核与用户态之间的切换</p>
-<blockquote>
-<p>步骤<code>2</code>Linux完成从内核到用户态的切换后（转向<code>handler</code>），就会把【相关栈状态】和【上下文】清空，所以为了避免执行完<code>handler</code>返回时无法恢复到当初系统调用时候用户态的上下文等，在切换到用户态执行<code>handler</code>时，<code>Linux</code>会将【<code>syscall</code>的返回值】和【此前的用户态的上下文（PC，register等）】保存在【用户栈】上。因此步骤<code>4</code>就会从用户栈上提取上下文等信息以恢复到当初系统调用时候的环境。</p>
-</blockquote>
-<pre class="mermaid">    flowchart TD    
-    subgraph usr
-    B(调用syscall1)
-    C(handler) --> D(sigreturn)
-    end
-    
-    subgraph kern
-    A1(syscall1) --> A2(ret_to_user)
-    A3(sigreturn) --> A4(ret_to_user)
-    end
-    
-    B -->|1.用户态进程系统调用进入内核态| A1
-    A2 -->|2.内核态处理完系统调用时,\n发现有signal,于是切换到\n用户态处理函数位置,让其处理信号事件| C
-    D --> |3.信号处理完后,信号处理函数\n会通过系统调用sigreturn返回内核.\n该系统调用的主要作用即辅助内核\n恢复到被信号打断之前的上下文context|A3
-    A4 --> |4.继续完成在系统调用被打断时的任务,\n即syscall返回时回到原用户态|B</pre></li>
-</ul>
-</li>
-<li><p>可重入<code>reentrant</code>函数：允许多个任务（☞对信号事件的响应和处理）并发使用，而不必担心【共享数据】的错误</p>
-<ul>
-<li>实现可重入函数的前提<ul>
-<li>不使用<code>static data</code>或者<code>static data</code>只读</li>
-<li>尽量只是用<code>local data</code></li>
-<li>在必须使用全局共享数据的时候，需要保护对全局数据的访问（防止死锁）</li>
-<li>避免在函数中修改自己的代码</li>
-<li>不调用【不可重入函数】，很多常见的库函数的实现（如<code>malloc</code>）都是不可重入的</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="套接字"><a href="#套接字" class="headerlink" title="套接字"></a>套接字</h4><ul>
-<li><p>客户端通过【地址】找到要调用的服务端进程</p>
-<ul>
-<li><code>IP + port</code>：通信双方通常使用【本地回环地址<code>127.0.0.1</code>】，然后各自绑定在不同的端口上，OS网络协议栈可以识别回环地址，将通信转发到目标端口对应的进程</li>
-<li><code>UNIX domain socket</code>：本地文件系统的一个路径</li>
-</ul>
-</li>
-<li><p>协议</p>
-<ul>
-<li>传输控制协议<code>TCP : Transmission Control Protocol</code><ul>
-<li>可靠性好</li>
-<li>（数据丢失情况下）数据重传</li>
-<li>（数据乱序到达情况下）数据顺序维护</li>
-</ul>
-</li>
-<li>用户数据报协议<code>UDP : User Datagram Protocol</code><ul>
-<li>简单</li>
-<li>传输性能较好</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><code>Linux</code>套接字</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">socket(<span class="type">int</span> domain, <span class="type">int</span> type, <span class="type">int</span> protocol);</span><br><span class="line">* domain: 寻址方式, [IP + port] or [local path];</span><br><span class="line">* type: 通信方式, [SOCK_STREAM](数据流,对应[TCP]) or [SOCK_DGRAM](数据报,对应[UDP])</span><br><span class="line">* protocol: 定义协议相关配置, [TCP] or [UDP];</span><br></pre></td></tr></table></figure></li>
-</ul>
-]]></content>
-      <categories>
-        <category>system</category>
-      </categories>
-      <tags>
-        <tag>operating system</tag>
-        <tag>system</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>OS Notes Part(III)</title>
-    <url>/2022/07/07/system/os-notes-third/</url>
-    <content><![CDATA[<h1 id="Modern-Operating-System-III"><a href="#Modern-Operating-System-III" class="headerlink" title="Modern Operating System (III)"></a>Modern Operating System (III)</h1><blockquote>
-<ul>
-<li><input disabled="" type="checkbox"> 设备管理</li>
-<li><input disabled="" type="checkbox"> 系统虚拟化</li>
-</ul>
-</blockquote>
-<h2 id="10-设备管理"><a href="#10-设备管理" class="headerlink" title="10 设备管理"></a>10 设备管理</h2><ul>
-<li>设备树<code>device tree</code>文件拓展名为<code>.dts</code>编译生成的二进制文件为<code>.dtb</code>，操作系统启动时<code>kernel</code>通过读取<code>dtb</code>二进制文件获取设备信息</li>
-<li>通过<code>MMIO</code>内存映射的方式可以实现<code>CPU</code>对设备的控制，但需要不断【轮询】设备的状态寄存器，效率低下，因此引入【中断】处理机制</li>
-<li>ARM架构在CPU和设备之间引入了【中断控制器<code>interrupt controller</code>】来管理中断<ul>
-<li>优先级<code>priority</code></li>
-<li>抢占<code>preemption</code></li>
-</ul>
-</li>
-<li><code>ARMv8</code>中断控制器称为【<strong>通用中断控制器</strong><code>Generic Interrupt Controller, GIC</code>】</li>
-</ul>
-<h3 id="设备驱动"><a href="#设备驱动" class="headerlink" title="设备驱动"></a>设备驱动</h3><h4 id="Interrupt-Review"><a href="#Interrupt-Review" class="headerlink" title="Interrupt Review"></a>Interrupt Review</h4><ul>
-<li><p><code>Linux</code>中断处理过程</p>
-<ul>
-<li>top half : 完成一些必要但轻量级的工作, 如向中断控制器确认中断<ul>
-<li>硬中断处理函数(又称为中断服务例程<code>ISR (Interrupt Service Routine</code>)</li>
-</ul>
-</li>
-<li>bottom half : 完成剩余的、复杂且时延要求较低的操作<ul>
-<li>软中断</li>
-<li>tasklet</li>
-<li>工作队列</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>Linux 通过<code>request_irq()</code>注册设备的硬中断处理函数</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">request_irq</span><span class="params">(</span></span><br><span class="line"><span class="params">  <span class="type">unsigned</span> <span class="type">int</span> irq, <span class="comment">// 申请中断号</span></span></span><br><span class="line"><span class="params">  <span class="type">iqr_handler_t</span> handler, <span class="comment">//中断处理函数</span></span></span><br><span class="line"><span class="params">  <span class="type">unsigned</span> <span class="type">long</span> irqflags, <span class="comment">//中断类型</span></span></span><br><span class="line"><span class="params">  <span class="type">const</span> <span class="type">char</span>* devname, <span class="comment">//设备名</span></span></span><br><span class="line"><span class="params">  <span class="type">void</span> * dev_id, <span class="comment">//设备id</span></span></span><br><span class="line"><span class="params">)</span>;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h4 id="tasklet-mechanism"><a href="#tasklet-mechanism" class="headerlink" title="tasklet mechanism"></a>tasklet mechanism</h4><blockquote>
-<p>Linux软中断只能在代码编译时静态分配, 无法根据需要进行动态创建, 因此Linux基于软中断了tasklet机制</p>
-</blockquote>
-<ul>
-<li><p><code>Linux</code>中<code>tasklet</code>结构体的声明</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> &#123;</span></span><br><span class="line">    TASKLET_STATE_SCHED, <span class="comment">// 已在kernel注册,可调度</span></span><br><span class="line">    TASKLET_STATE_RUN <span class="comment">//当前正在运行</span></span><br><span class="line">&#125;;      </span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">tasklet_struct</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">tasklet_struct</span> *<span class="title">next</span>;</span><span class="comment">//链表</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> state;<span class="comment">//是否被调度</span></span><br><span class="line">    <span class="type">atomic_t</span> count;<span class="comment">//是否被禁用,count&gt;0被禁用;count==0被启动</span></span><br><span class="line">    <span class="type">void</span> (*func)(<span class="type">unsigned</span> <span class="type">long</span>);<span class="comment">//回调函数,即被执行的具体函数</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> data;<span class="comment">//func的参数</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>tasklet</code>机制与<code>softirq</code>区别</p>
-<ul>
-<li><code>tasklet</code>允许在运行时动态创建,<code>softirq</code>在代码编译时已经分配好了</li>
-<li><code>Linux</code>不允许在多个<code>CPU</code>上并发执行<code>tasklet</code>, 然而<code>Linux</code>允许<code>softirq</code>在多个<code>CPU</code>上并行执行来提升软中断的处理效率, 并且<code>softirq</code>可以被硬中断抢占</li>
-<li><code>tasklet</code>依托于<strong>中断上下文</strong>, 不能睡眠, 不可抢占, 可能引起系统延迟</li>
-<li><code>work queue</code>依托于<strong>线程上下文</strong>, 允许睡眠, 降低了<code>bottom half</code>的开发难度, 同时也关注效率</li>
-</ul>
-</li>
-</ul>
-<h4 id="work-queue"><a href="#work-queue" class="headerlink" title="work queue"></a>work queue</h4><ul>
-<li><code>work queue</code>把需要推迟的函数,即<code>bottom half</code>, 交给内核线程执行</li>
-<li><code>CMWQ (Concurrency Managed WorkQueue)</code>: 并发可管理工作队列<ul>
-<li>提出线程池<code>worker-pool</code>, 不同<code>work queue</code>之间可以共享线程池, 从而有效减少了<strong>资源浪费</strong>和<strong>频繁调度</strong></li>
-</ul>
-</li>
-</ul>
-<h3 id="设备驱动和设备驱动模型"><a href="#设备驱动和设备驱动模型" class="headerlink" title="设备驱动和设备驱动模型"></a>设备驱动和设备驱动模型</h3><ul>
-<li>设备驱动<code>device driver</code>: 操作系统中负责控制设备的定制化程序<ul>
-<li>定制化: 驱动本身需要根据设备的<strong>具体型号</strong>和<strong>相应参数</strong>进行特定配置</li>
-</ul>
-</li>
-</ul>
-<h4 id="设备驱动模型"><a href="#设备驱动模型" class="headerlink" title="设备驱动模型"></a>设备驱动模型</h4><ul>
-<li><code>OS</code>事先规定好一组【数据结构】和应该实现的【接口】, 然后【驱动开发人员】将【设备驱动】转化为对【数据结构的填充】以及【接口函数的挂在】</li>
-<li><code>Linux kernel</code>从2.6版本后引入<em><strong>设备驱动模型</strong></em></li>
-</ul>
-<h5 id="Linux设备抽象"><a href="#Linux设备抽象" class="headerlink" title="Linux设备抽象"></a>Linux设备抽象</h5><ul>
-<li><p>Modern OS : 采用可拓展的结构设计</p>
-<ul>
-<li>即: OS新功能可以通过新加载的模块来实现, 驱动程序也是这样</li>
-</ul>
-</li>
-<li><p>Linux 设备抽象</p>
-<ul>
-<li><p>查看内核代码:</p>
-<ul>
-<li>Linux的内核源代码可以从很多途径得到. 一般来讲, 在安装的linux系统下, <code>/usr/src/linux</code>目录下的东西就是内核源代码。.对于源代码的阅读,要想比较顺利,事先最好对源代码的知识背景有一定的了解.</li>
-</ul>
-</li>
-<li><p><code>linux/drivers</code>目录</p>
-<ul>
-<li><p>每个子目录基本上代表了一种<strong>设备驱动</strong></p>
-<blockquote>
-<p>此处介绍三种基本设备抽象<br>1.字符设备 2.块设备 3.网络设备</p>
-</blockquote>
-</li>
-</ul>
-</li>
-<li><p><code>linux/drivers/char</code>  –&gt; 字符设备<code>char device</code></p>
-<blockquote>
-<ul>
-<li>粒度: <strong>字节</strong></li>
-<li>字符设备包含了标准的文件操作接口, <code>open</code>, <code>read</code>, <code>write</code>, <code>close</code></li>
-<li><code>fb</code>(显存),<code>tty</code>(终端),<code>alsa</code>(声卡)</li>
-<li><code>major number</code>主设备号, <code>minor number</code>次设备号</li>
-</ul>
-</blockquote>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /proc/devices </span><br><span class="line">  --&gt; 查看Character devices文件系统获取字符设备列表</span><br><span class="line">Character devices:</span><br><span class="line">1 mem</span><br><span class="line">4 /dev/vc/0</span><br><span class="line">4 <span class="built_in">tty</span></span><br><span class="line">4 ttyS</span><br><span class="line">5 /dev/tty</span><br><span class="line">5 /dev/console</span><br><span class="line">5 /dev/ptmx</span><br><span class="line">5 ttyprintk</span><br><span class="line">6 lp</span><br><span class="line">7 vcs</span><br><span class="line">...</span><br><span class="line">29 fb</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>对于每一个<code>char device</code>, <code>Linux</code>都会分配一个主设备号<code>major number</code>, 用于<em><strong>识别操作该设备的驱动实体</strong></em>, 一个驱动可能同时操作同类型的多个设备,就会分配一个次设备号<code>minor number</code></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">ls</span> -la /dev/tty /dev/console</span><br><span class="line">crw--w---- 1 root <span class="built_in">tty</span> 5, 1 7月   7 18:46 /dev/console</span><br><span class="line">crw-rw-rw- 1 root <span class="built_in">tty</span> 5, 0 7月   7 18:45 /dev/tty</span><br><span class="line">&gt; major number: 5</span><br><span class="line">&gt; minor number: 0, 1</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>块设备<code>Block Device</code></p>
-<blockquote>
-<ul>
-<li>粒度: <em><strong>块</strong></em> (设备寻址的最小单元,有512bytes,1KB or 4KB)</li>
-<li><code>ramdisk</code>:虚拟磁盘</li>
-<li>储存卡(<code>SD</code>卡和<code>MMC</code>卡)</li>
-<li>磁盘(<code>HDD</code>和<code>SSD</code>)等</li>
-</ul>
-</blockquote>
-</li>
-<li><p>网络设备<code>network device</code></p>
-<blockquote>
-<ul>
-<li>粒度（处理的数据单位）：网络包<code>packet</code></li>
-</ul>
-</blockquote>
-</li>
-</ul>
-</li>
-</ul>
-<h5 id="Linux-设备驱动模型"><a href="#Linux-设备驱动模型" class="headerlink" title="Linux 设备驱动模型"></a>Linux 设备驱动模型</h5><ul>
-<li><p>设备<code>device</code></p>
-</li>
-<li><p>驱动<code>driver</code></p>
-</li>
-<li><p>总线<code>bus</code></p>
-</li>
-<li><p>类<code>class</code></p>
-</li>
-</ul>
-<h5 id="Linux-的sysfs文件系统"><a href="#Linux-的sysfs文件系统" class="headerlink" title="Linux 的sysfs文件系统"></a>Linux 的<code>sysfs</code>文件系统</h5><ul>
-<li><p><code>sysfs</code>挂载目录为<code>/sys</code></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># virtualbox @ virtualbox-VirtualBox in /sys [22:45:56] </span></span><br><span class="line">$ <span class="built_in">ls</span></span><br><span class="line">block  bus  class  dev  devices  firmware  fs  hypervisor  kernel  module  power</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>block : 当前系统可用块设备，如【磁盘】和【分区】</p>
-</li>
-<li><p>bus：系统中总线（PCI，IDE，USB）连接的物理设备情况</p>
-</li>
-<li><p>class：当前系统中可用的驱动类型，如【网卡】，【声卡】，【USB设备】</p>
-</li>
-<li><p>dev：当前系统中字符设备和块设备的主次设备号</p>
-</li>
-<li><p>devices：系统中已挂载设备的层次化结构</p>
-</li>
-<li><p>firmware：如x86上的<code>ACPI</code>等系统固件信息</p>
-</li>
-<li><p>fs：当前系统已挂载的【文件系统信息】</p>
-</li>
-<li><p>module：当前系统已加载的内核模块，Linux设备驱动均有对应的内核模块</p>
-</li>
-<li><p>power：电源管理子系统的相关信息</p>
-</li>
-</ul>
-<h5 id="L4设备驱动模型"><a href="#L4设备驱动模型" class="headerlink" title="L4设备驱动模型"></a>L4设备驱动模型</h5><ul>
-<li><p>设备驱动环境<code>Device Driver Environment, DDE</code></p>
-<ul>
-<li>复用其他OS上的设备驱动环境</li>
-</ul>
-</li>
-<li><p>DDE层次</p>
-<ul>
-<li><p>DDEKit</p>
-</li>
-<li><p>DDE系统环境</p>
-</li>
-<li><p>原生驱动</p>
-</li>
-</ul>
-</li>
-</ul>
-<h5 id="Linux-用户态驱动框架"><a href="#Linux-用户态驱动框架" class="headerlink" title="Linux 用户态驱动框架"></a>Linux 用户态驱动框架</h5><blockquote>
-<ol>
-<li><p>避免重构</p>
-</li>
-<li><p>规避约束：Linux需要满足GNU的许可证<code>General Public License, GPL</code>，而商用的驱动代码放在用户态方便闭源，如Linux上的<code>NVIDIA</code>驱动</p>
-</li>
-</ol>
-</blockquote>
-<h6 id="两种Linux用户态驱动框架"><a href="#两种Linux用户态驱动框架" class="headerlink" title="两种Linux用户态驱动框架"></a>两种Linux用户态驱动框架</h6><ul>
-<li><p>用户空间<code>I/O</code>，<code>Userspace I/O, UIO</code></p>
-</li>
-<li><p>虚拟空间<code>I/O</code>，&#96;Virtual Function I&#x2F;O, VFIO</p>
-</li>
-</ul>
-<h2 id="11-系统虚拟化"><a href="#11-系统虚拟化" class="headerlink" title="11 系统虚拟化"></a>11 系统虚拟化</h2><ul>
-<li><p>虚拟监控器<code>VMM (Virtual Machine Monitor)</code>，也称为<code>Hypervisor</code></p>
-</li>
-<li><p>虚拟机<code>VM (Virtual Machine)</code></p>
-</li>
-<li><p>基础设施即服务<code>IaaS (Infrastructure)</code></p>
-</li>
-<li><p>虚拟机自省<code>VMI (Virtual Machine Introspection)</code>技术：允许<code>VMM</code>从外部检查虚拟机内部状态是否正确，判断虚拟机是否遭到入寝</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">虚拟机: guest machine</span><br><span class="line">对应物理主机: host machine</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>系统虚拟化技术</p>
-</li>
-<li><p>系统虚拟化技术</p>
-<ul>
-<li><p>CPU虚拟化</p>
-</li>
-<li><p>内存虚拟化</p>
-</li>
-<li><p>I&#x2F;O虚拟化</p>
-</li>
-</ul>
-</li>
-<li><p>虚拟机监控器分类</p>
-<blockquote>
-<p>Hypervisor，又称虚拟机监控器（英语：<strong>virtual machine monitor</strong>，缩写为VMM），是用来创建与执行虚拟机的软件、固件或硬件。 被hypervisor用来执行一个或多个虚拟机的电脑称为宿主机（host machine），这些虚拟机则称为客户机（guest machine）。</p>
-</blockquote>
-<ul>
-<li><p>Type-1：Xen</p>
-</li>
-<li><p>Type-2：Qemu, KVM</p>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="CPU虚拟化"><a href="#CPU虚拟化" class="headerlink" title="CPU虚拟化"></a>CPU虚拟化</h3><h4 id="下陷和模拟"><a href="#下陷和模拟" class="headerlink" title="下陷和模拟"></a>下陷和模拟</h4><blockquote>
-<p><code>trap-and-emulate</code></p>
-</blockquote>
-<h4 id="可虚拟化架构和不可虚拟化架构"><a href="#可虚拟化架构和不可虚拟化架构" class="headerlink" title="可虚拟化架构和不可虚拟化架构"></a>可虚拟化架构和不可虚拟化架构</h4><ul>
-<li><p>指令</p>
-<ul>
-<li><p>特权指令<code>privileged instruction</code>：在【用户态】执行时会触发下陷<code>trap</code>的指令</p>
-</li>
-<li><p>敏感指令<code>sensitive instruction</code>：管理物理资源或者更改CPU状态的指令</p>
-<ul>
-<li><p>读写特殊寄存器或执行特殊指令以更改CPU状态</p>
-</li>
-<li><p>读写敏感内存</p>
-</li>
-<li><p>执行<code>I/O</code>指令，如<code>x86</code>中的<code>in</code>和<code>out</code>指令</p>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>可虚拟化架构：所有<code>sensitive instruction</code>都是<code>privileged instruction</code>，即所有敏感指令在非特权级下执行都会出发下陷<code>trap</code></p>
-</li>
-<li><p>不可虚拟化架构：不满足上定义的架构</p>
-</li>
-<li><p>弥补不可虚拟化架构缺陷的方法（5种）</p>
-<ul>
-<li><p>解释执行</p>
-<ul>
-<li><p>粒度：单条指令</p>
-</li>
-<li><p>过程：指令 –&gt; 软件模拟</p>
-</li>
-<li><p>评估：带来较大的性能开销</p>
-</li>
-</ul>
-</li>
-<li><p>动态二进制翻译</p>
-<ul>
-<li><p>粒度：基本块<code>basic block</code>（一段按顺序执行的代码块，中间没有任何改变控制流的指令）</p>
-</li>
-<li><p>过程：翻译后的<code>basic block</code>成为【代码补丁】，并放置于【代码补丁缓存】中，执行基本块的核心就在于执行代码补丁</p>
-</li>
-<li><p>评估：批量翻译，缓存</p>
-</li>
-</ul>
-</li>
-<li><p>扫描与翻译</p>
-<ul>
-<li>过程：（宿主机与虚拟机的【指令集架构<code>ISA (Instruction Set Architecture</code>】相同）只让<code>sensitive instruction</code>下陷，其他指令直接执行</li>
-</ul>
-</li>
-<li><p>半虚拟化技术</p>
-<ul>
-<li><p>全虚拟化<code>full virtualization</code>：无需修改<code>guest machine</code>源码的方式</p>
-</li>
-<li><p>半虚拟化<code>para-virtualization</code>：允许修改客户虚拟机源码的方式</p>
-<ul>
-<li><p>超级调用<code>hypercall</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">hypervisor 提供--&gt;hypercall--&gt; Virtual Machine</span><br><span class="line">修改 guest machine 的代码</span><br><span class="line">--&gt; 替换 [不可虚拟化的指令] 改为超级调用 [hypercall]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>优势：</p>
-<ol>
-<li><p>带来更高性能</p>
-</li>
-<li><p>缓解语义鸿沟<code>semantic gap</code></p>
-</li>
-</ol>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>硬件虚拟化技术</p>
-<ul>
-<li><p>x86</p>
-<ul>
-<li><p>根模式<code>root mode</code>和非根模式<code>non-root mode</code></p>
-</li>
-<li><p><code>Intel VT-x</code>为每一个虚拟机提供了【虚拟机控制结构<code>VMCS (Virtual Machine Control Structure)</code>】</p>
-</li>
-</ul>
-</li>
-<li><p>ARMv8</p>
-<ul>
-<li><p>增加<code>EL2</code>特权级</p>
-</li>
-<li><p>在<code>ARMv8.0</code>的硬件虚拟化中，必须将<code>KVM</code>的一部分功能从<code>Linux</code>中剥离出来，以<code>Lowvisor</code>的形式运行在<code>EL2</code>中，OS和其他<code>KVM</code>功能依然运行在<code>EL1</code>中</p>
-<blockquote>
-<ol>
-<li><p>但<code>KVM</code>和<code>Lowvisor</code>可能有多次特权级转换，带来开销</p>
-</li>
-<li><p>为了解决性能和开销问题，<code>ARMv8.1</code>提出<code>VHE (Virtual Host Extension)</code></p>
-</li>
-</ol>
-</blockquote>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">  --&gt; hypercall                  --&gt; hypercall(maybe)</span><br><span class="line">VM              KVM <span class="title function_">Lowvisor</span><span class="params">(EL2)</span>                    Linux and <span class="title function_">KVM</span><span class="params">(EL1)</span> </span><br><span class="line">  <span class="keyword">return</span>    &lt;--                  <span class="keyword">return</span>    &lt;--<span class="params">(maybe)</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li><p><code>VHE</code>：可在<code>EL2</code>运行完整的<code>Host Machine</code>系统，<code>KVM</code>进入<code>EL2</code>，其与宿主操作系统<code>Linux</code>之间的交互不会带来任何特权级转换</p>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="内存虚拟化"><a href="#内存虚拟化" class="headerlink" title="内存虚拟化"></a>内存虚拟化</h3><ul>
-<li><p>客户虚拟地址<code>GVA (Guest Virtual Address)</code>：进程和客户操作系统使用的虚拟地址</p>
-</li>
-<li><p>客户物理地址<code>GPA (Guest Physical Address)</code>：虚拟机内部使用的物理地址</p>
-</li>
-<li><p>主机物理地址<code>HPA (Host Physical Address)</code>：真正在总线中访问的物理地址</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">GVA -第一阶段地址翻译-&gt; GPA -第二阶段地址翻译-&gt; HPA</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h4 id="影子页表"><a href="#影子页表" class="headerlink" title="影子页表"></a>影子页表</h4><ul>
-<li><p><code>SPT (Shadow Page Table)</code></p>
-</li>
-<li><p>一般页表使用过程</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="number">1.</span> 静态配置(OS)[VA -PT-&gt; PA] </span><br><span class="line"><span class="number">2.</span> 页表安装(OS)[PT base_address-&gt;页表基址寄存器] </span><br><span class="line"><span class="number">3.</span> 动态翻译(MMU)[VA -&gt; PA]</span><br><span class="line">* PT:Page Table</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>影子页表使用过程</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="number">1.</span> 静态配置(OS)[GVA -PT-&gt; GPA] </span><br><span class="line"><span class="number">2.</span> 页表安装(OS)[PT base_address-&gt;页表基址寄存器]</span><br><span class="line"><span class="number">3.</span> 虚拟机下陷(Hypervisor)[GVA -new PT-&gt; HPA]</span><br><span class="line"><span class="number">4.</span> 页表安装(Hypervisor)[new PT base_address-&gt;页表基址寄存器]</span><br><span class="line"><span class="number">3.</span> 动态翻译(MMU)[GVA -&gt; HPA]</span><br><span class="line">* PT:Page Table</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="I-x2F-O虚拟化"><a href="#I-x2F-O虚拟化" class="headerlink" title="I&#x2F;O虚拟化"></a>I&#x2F;O虚拟化</h3><h3 id="QEMU-x2F-KVM"><a href="#QEMU-x2F-KVM" class="headerlink" title="QEMU&#x2F;KVM"></a>QEMU&#x2F;KVM</h3><h4 id="KVM"><a href="#KVM" class="headerlink" title="KVM"></a>KVM</h4><h4 id="QEMU"><a href="#QEMU" class="headerlink" title="QEMU"></a>QEMU</h4>]]></content>
-      <categories>
-        <category>system</category>
-      </categories>
-      <tags>
-        <tag>operating system</tag>
-        <tag>system</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>heap 2</title>
-    <url>/2022/06/17/pwn/heap-2/</url>
-    <content><![CDATA[<p><img src="/2022/06/17/pwn/heap-2/program_virtual_address_memory_space.png" alt="program_virtual_address_memory_space"></p>
-]]></content>
-      <categories>
-        <category>pwn</category>
-      </categories>
-      <tags>
-        <tag>pwn</tag>
-        <tag>heap</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>python spider</title>
-    <url>/2022/07/22/system/python-spider-1/</url>
-    <content><![CDATA[<h1 id="web-spider"><a href="#web-spider" class="headerlink" title="web spider"></a>web spider</h1><hr>
-<h2 id="Search-Engine"><a href="#Search-Engine" class="headerlink" title="Search Engine"></a>Search Engine</h2><h3 id="Crawl-the-web-page"><a href="#Crawl-the-web-page" class="headerlink" title="Crawl the web page"></a>Crawl the web page</h3><ul>
-<li>Robots协议（也叫爬虫协议、机器人协议等），全称是“网络爬虫排除标准”（Robots Exclusion Protocol），网站通过Robots协议告诉搜索引擎哪些页面可以抓取，哪些页面不能抓取</li>
-</ul>
-<h3 id="Data-storage"><a href="#Data-storage" class="headerlink" title="Data storage"></a>Data storage</h3><ul>
-<li>搜索引擎通过爬虫爬取到的网页，将数据存入原始页面数据库</li>
-<li>页面数据一般是HTML</li>
-</ul>
-<h3 id="Pre-processing"><a href="#Pre-processing" class="headerlink" title="Pre-processing"></a>Pre-processing</h3><ul>
-<li>搜索引擎将爬虫抓取回来的页面，进行各种步骤的预处理。<ul>
-<li>提取文字</li>
-<li>中文分词</li>
-<li>消除噪音（比如版权声明文字、导航条、广告等……）</li>
-<li>索引处理</li>
-<li>链接关系计算</li>
-<li>特殊文件处理</li>
-</ul>
-</li>
-<li>搜索引擎通常还能抓取HTML以外的和索引以文字为基础的多种文件类型，如 PDF、Word、WPS、XLS、PPT、TXT 文件等</li>
-<li>搜索引擎还不能处理图片、视频、Flash 这类非文字内容，也不能执行脚本和程序</li>
-</ul>
-<h3 id="Provide-search-services-and-website-ranking"><a href="#Provide-search-services-and-website-ranking" class="headerlink" title="Provide search services and website ranking"></a>Provide search services and website ranking</h3><p>* </p>
-]]></content>
-      <categories>
-        <category>system</category>
-      </categories>
-      <tags>
-        <tag>operating system</tag>
-        <tag>system</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Static Linking</title>
-    <url>/2022/08/05/system/static-link/</url>
-    <content><![CDATA[<h1 id="编译和链接"><a href="#编译和链接" class="headerlink" title="编译和链接"></a>编译和链接</h1><hr>
-<h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><ul>
-<li><p>编译：扫描 -&gt; 语法分析 -&gt; 语义分析 -&gt; 源代码优化 -&gt; 代码生成 -&gt; 目标代码优化</p>
-</li>
-<li><p>下图为从源代码<code>Source Code</code>到最终目标代码<code>Final Target Code</code>的过程</p>
-<pre class="mermaid">  flowchart TD
-    A(Source Code) --> |Scanner| B(Tokens)
-    B --> |Parser| C(Syntax Tree)
-    C --> |Semantic Analyzer| D(Commented Syntax Tree)
-    D --> |Source Code Optimizer| E(Intermediate Representation)
-    E --> |Code Generator| F(Target Code)
-    F --> |Code Optimizer| G(Final Target Code)</pre></li>
-</ul>
-<h3 id="词法分析"><a href="#词法分析" class="headerlink" title="词法分析"></a>词法分析</h3><blockquote>
-<p>Lexical Analysis</p>
-</blockquote>
-<ul>
-<li>扫描器<code>scanner</code></li>
-<li>有限状态机<code>FSM (Finite State Machine)</code>算法：将源代码的字符分割成一系列的记号<code>Token</code></li>
-<li><code>lex</code>：按照用户描述好的词法规则将输入的字符串分割成一个个记号</li>
-</ul>
-<h3 id="语法分析"><a href="#语法分析" class="headerlink" title="语法分析"></a>语法分析</h3><blockquote>
-<p>Syntax Analysis</p>
-</blockquote>
-<ul>
-<li>语法分析器<code>Grammar Parser</code></li>
-<li>语法树<code>Syntax Tree</code></li>
-<li>上下文无关语法<code>Context-free Grammar</code></li>
-<li><code>yacc</code>：Yet Another Compiler Compiler，根据用户给定的语法规则对输入记号序列进行解析，从而构建出一颗语法树</li>
-</ul>
-<h3 id="语义分析"><a href="#语义分析" class="headerlink" title="语义分析"></a>语义分析</h3><blockquote>
-<p>Semantic Analysis</p>
-</blockquote>
-<ul>
-<li>语义分析器<code>Semantic Analyzer</code></li>
-<li>编译器能分析的是静态语义<code>Static Semantic</code>：静态语义通常包括<strong>声明</strong>和<strong>类型</strong>的匹配，<strong>类型的转换</strong></li>
-</ul>
-<h3 id="中间语言生成"><a href="#中间语言生成" class="headerlink" title="中间语言生成"></a>中间语言生成</h3><ul>
-<li><p>源码级优化器<code>Source Code Optimizer</code></p>
-</li>
-<li><p>中间代码<code>Intermediate Code</code></p>
-<blockquote>
-<p>使得编译器分为前端和后端，前端负责产生机器无关的中间代码，后端负责将中间代码转换为目标机器代码，通常同一个前端可以通过组合不同的后端适配不同的平台</p>
-</blockquote>
-<ul>
-<li><p>三地址码<code>Three-address Code</code></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">x = y op z</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>P-代码<code>P-Code</code></p>
-</li>
-</ul>
-</li>
-<li><p>编译器后端</p>
-<ul>
-<li><p>代码生成器<code>Code Generator</code></p>
-</li>
-<li><p>目标代码生成器<code>Target Code Optimizer</code></p>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="链接器"><a href="#链接器" class="headerlink" title="链接器"></a>链接器</h2><ul>
-<li>符号<code>Symbol</code>：表示一个地址，可能是一段子程序（函数）的地址，也可能是一个变量的起始地址</li>
-<li>模块间通信方式：符号引用</li>
-<li>链接<code>Linking</code>：<ul>
-<li>地址和空间分配<code>Address and Storage Allocation</code></li>
-<li>符号决议<code>Symbol Resolution</code>（or Symbol Binding, Name Binding, Name Resolution, Address Binding, Instruction Binding）</li>
-<li>重定位<code>Relocation</code></li>
-</ul>
-</li>
-<li>运行时库<code>Runtime Library</code>：支持程序运行的基本函数的集合</li>
-<li>重定位入口<code>Relocation Entry</code></li>
-</ul>
-<h1 id="目标文件"><a href="#目标文件" class="headerlink" title="目标文件"></a>目标文件</h1><hr>
-<h2 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h2><ul>
-<li>COFF：Common file format –&gt; .obj (windows) &amp; .o (Linux)</li>
-<li>动态链接库 (Dynamic Linking Library)：.dll (windows) &amp; .so (Linux)</li>
-<li>静态链接库 (Static Linking Library)：.lib(windows) &amp; .a(linux)</li>
-</ul>
-]]></content>
-      <categories>
-        <category>system</category>
-      </categories>
-      <tags>
-        <tag>static linking</tag>
-        <tag>linker</tag>
       </tags>
   </entry>
   <entry>
@@ -3096,6 +2036,1066 @@
       <tags>
         <tag>operating system</tag>
         <tag>system</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>OS Notes Part(III)</title>
+    <url>/2022/07/07/system/os-notes-third/</url>
+    <content><![CDATA[<h1 id="Modern-Operating-System-III"><a href="#Modern-Operating-System-III" class="headerlink" title="Modern Operating System (III)"></a>Modern Operating System (III)</h1><blockquote>
+<ul>
+<li><input disabled="" type="checkbox"> 设备管理</li>
+<li><input disabled="" type="checkbox"> 系统虚拟化</li>
+</ul>
+</blockquote>
+<h2 id="10-设备管理"><a href="#10-设备管理" class="headerlink" title="10 设备管理"></a>10 设备管理</h2><ul>
+<li>设备树<code>device tree</code>文件拓展名为<code>.dts</code>编译生成的二进制文件为<code>.dtb</code>，操作系统启动时<code>kernel</code>通过读取<code>dtb</code>二进制文件获取设备信息</li>
+<li>通过<code>MMIO</code>内存映射的方式可以实现<code>CPU</code>对设备的控制，但需要不断【轮询】设备的状态寄存器，效率低下，因此引入【中断】处理机制</li>
+<li>ARM架构在CPU和设备之间引入了【中断控制器<code>interrupt controller</code>】来管理中断<ul>
+<li>优先级<code>priority</code></li>
+<li>抢占<code>preemption</code></li>
+</ul>
+</li>
+<li><code>ARMv8</code>中断控制器称为【<strong>通用中断控制器</strong><code>Generic Interrupt Controller, GIC</code>】</li>
+</ul>
+<h3 id="设备驱动"><a href="#设备驱动" class="headerlink" title="设备驱动"></a>设备驱动</h3><h4 id="Interrupt-Review"><a href="#Interrupt-Review" class="headerlink" title="Interrupt Review"></a>Interrupt Review</h4><ul>
+<li><p><code>Linux</code>中断处理过程</p>
+<ul>
+<li>top half : 完成一些必要但轻量级的工作, 如向中断控制器确认中断<ul>
+<li>硬中断处理函数(又称为中断服务例程<code>ISR (Interrupt Service Routine</code>)</li>
+</ul>
+</li>
+<li>bottom half : 完成剩余的、复杂且时延要求较低的操作<ul>
+<li>软中断</li>
+<li>tasklet</li>
+<li>工作队列</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Linux 通过<code>request_irq()</code>注册设备的硬中断处理函数</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">request_irq</span><span class="params">(</span></span><br><span class="line"><span class="params">  <span class="type">unsigned</span> <span class="type">int</span> irq, <span class="comment">// 申请中断号</span></span></span><br><span class="line"><span class="params">  <span class="type">iqr_handler_t</span> handler, <span class="comment">//中断处理函数</span></span></span><br><span class="line"><span class="params">  <span class="type">unsigned</span> <span class="type">long</span> irqflags, <span class="comment">//中断类型</span></span></span><br><span class="line"><span class="params">  <span class="type">const</span> <span class="type">char</span>* devname, <span class="comment">//设备名</span></span></span><br><span class="line"><span class="params">  <span class="type">void</span> * dev_id, <span class="comment">//设备id</span></span></span><br><span class="line"><span class="params">)</span>;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="tasklet-mechanism"><a href="#tasklet-mechanism" class="headerlink" title="tasklet mechanism"></a>tasklet mechanism</h4><blockquote>
+<p>Linux软中断只能在代码编译时静态分配, 无法根据需要进行动态创建, 因此Linux基于软中断了tasklet机制</p>
+</blockquote>
+<ul>
+<li><p><code>Linux</code>中<code>tasklet</code>结构体的声明</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> &#123;</span></span><br><span class="line">    TASKLET_STATE_SCHED, <span class="comment">// 已在kernel注册,可调度</span></span><br><span class="line">    TASKLET_STATE_RUN <span class="comment">//当前正在运行</span></span><br><span class="line">&#125;;      </span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">tasklet_struct</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">tasklet_struct</span> *<span class="title">next</span>;</span><span class="comment">//链表</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> state;<span class="comment">//是否被调度</span></span><br><span class="line">    <span class="type">atomic_t</span> count;<span class="comment">//是否被禁用,count&gt;0被禁用;count==0被启动</span></span><br><span class="line">    <span class="type">void</span> (*func)(<span class="type">unsigned</span> <span class="type">long</span>);<span class="comment">//回调函数,即被执行的具体函数</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> data;<span class="comment">//func的参数</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>tasklet</code>机制与<code>softirq</code>区别</p>
+<ul>
+<li><code>tasklet</code>允许在运行时动态创建,<code>softirq</code>在代码编译时已经分配好了</li>
+<li><code>Linux</code>不允许在多个<code>CPU</code>上并发执行<code>tasklet</code>, 然而<code>Linux</code>允许<code>softirq</code>在多个<code>CPU</code>上并行执行来提升软中断的处理效率, 并且<code>softirq</code>可以被硬中断抢占</li>
+<li><code>tasklet</code>依托于<strong>中断上下文</strong>, 不能睡眠, 不可抢占, 可能引起系统延迟</li>
+<li><code>work queue</code>依托于<strong>线程上下文</strong>, 允许睡眠, 降低了<code>bottom half</code>的开发难度, 同时也关注效率</li>
+</ul>
+</li>
+</ul>
+<h4 id="work-queue"><a href="#work-queue" class="headerlink" title="work queue"></a>work queue</h4><ul>
+<li><code>work queue</code>把需要推迟的函数,即<code>bottom half</code>, 交给内核线程执行</li>
+<li><code>CMWQ (Concurrency Managed WorkQueue)</code>: 并发可管理工作队列<ul>
+<li>提出线程池<code>worker-pool</code>, 不同<code>work queue</code>之间可以共享线程池, 从而有效减少了<strong>资源浪费</strong>和<strong>频繁调度</strong></li>
+</ul>
+</li>
+</ul>
+<h3 id="设备驱动和设备驱动模型"><a href="#设备驱动和设备驱动模型" class="headerlink" title="设备驱动和设备驱动模型"></a>设备驱动和设备驱动模型</h3><ul>
+<li>设备驱动<code>device driver</code>: 操作系统中负责控制设备的定制化程序<ul>
+<li>定制化: 驱动本身需要根据设备的<strong>具体型号</strong>和<strong>相应参数</strong>进行特定配置</li>
+</ul>
+</li>
+</ul>
+<h4 id="设备驱动模型"><a href="#设备驱动模型" class="headerlink" title="设备驱动模型"></a>设备驱动模型</h4><ul>
+<li><code>OS</code>事先规定好一组【数据结构】和应该实现的【接口】, 然后【驱动开发人员】将【设备驱动】转化为对【数据结构的填充】以及【接口函数的挂在】</li>
+<li><code>Linux kernel</code>从2.6版本后引入<em><strong>设备驱动模型</strong></em></li>
+</ul>
+<h5 id="Linux设备抽象"><a href="#Linux设备抽象" class="headerlink" title="Linux设备抽象"></a>Linux设备抽象</h5><ul>
+<li><p>Modern OS : 采用可拓展的结构设计</p>
+<ul>
+<li>即: OS新功能可以通过新加载的模块来实现, 驱动程序也是这样</li>
+</ul>
+</li>
+<li><p>Linux 设备抽象</p>
+<ul>
+<li><p>查看内核代码:</p>
+<ul>
+<li>Linux的内核源代码可以从很多途径得到. 一般来讲, 在安装的linux系统下, <code>/usr/src/linux</code>目录下的东西就是内核源代码。.对于源代码的阅读,要想比较顺利,事先最好对源代码的知识背景有一定的了解.</li>
+</ul>
+</li>
+<li><p><code>linux/drivers</code>目录</p>
+<ul>
+<li><p>每个子目录基本上代表了一种<strong>设备驱动</strong></p>
+<blockquote>
+<p>此处介绍三种基本设备抽象<br>1.字符设备 2.块设备 3.网络设备</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p><code>linux/drivers/char</code>  –&gt; 字符设备<code>char device</code></p>
+<blockquote>
+<ul>
+<li>粒度: <strong>字节</strong></li>
+<li>字符设备包含了标准的文件操作接口, <code>open</code>, <code>read</code>, <code>write</code>, <code>close</code></li>
+<li><code>fb</code>(显存),<code>tty</code>(终端),<code>alsa</code>(声卡)</li>
+<li><code>major number</code>主设备号, <code>minor number</code>次设备号</li>
+</ul>
+</blockquote>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /proc/devices </span><br><span class="line">  --&gt; 查看Character devices文件系统获取字符设备列表</span><br><span class="line">Character devices:</span><br><span class="line">1 mem</span><br><span class="line">4 /dev/vc/0</span><br><span class="line">4 <span class="built_in">tty</span></span><br><span class="line">4 ttyS</span><br><span class="line">5 /dev/tty</span><br><span class="line">5 /dev/console</span><br><span class="line">5 /dev/ptmx</span><br><span class="line">5 ttyprintk</span><br><span class="line">6 lp</span><br><span class="line">7 vcs</span><br><span class="line">...</span><br><span class="line">29 fb</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>对于每一个<code>char device</code>, <code>Linux</code>都会分配一个主设备号<code>major number</code>, 用于<em><strong>识别操作该设备的驱动实体</strong></em>, 一个驱动可能同时操作同类型的多个设备,就会分配一个次设备号<code>minor number</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">ls</span> -la /dev/tty /dev/console</span><br><span class="line">crw--w---- 1 root <span class="built_in">tty</span> 5, 1 7月   7 18:46 /dev/console</span><br><span class="line">crw-rw-rw- 1 root <span class="built_in">tty</span> 5, 0 7月   7 18:45 /dev/tty</span><br><span class="line">&gt; major number: 5</span><br><span class="line">&gt; minor number: 0, 1</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>块设备<code>Block Device</code></p>
+<blockquote>
+<ul>
+<li>粒度: <em><strong>块</strong></em> (设备寻址的最小单元,有512bytes,1KB or 4KB)</li>
+<li><code>ramdisk</code>:虚拟磁盘</li>
+<li>储存卡(<code>SD</code>卡和<code>MMC</code>卡)</li>
+<li>磁盘(<code>HDD</code>和<code>SSD</code>)等</li>
+</ul>
+</blockquote>
+</li>
+<li><p>网络设备<code>network device</code></p>
+<blockquote>
+<ul>
+<li>粒度（处理的数据单位）：网络包<code>packet</code></li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="Linux-设备驱动模型"><a href="#Linux-设备驱动模型" class="headerlink" title="Linux 设备驱动模型"></a>Linux 设备驱动模型</h5><ul>
+<li><p>设备<code>device</code></p>
+</li>
+<li><p>驱动<code>driver</code></p>
+</li>
+<li><p>总线<code>bus</code></p>
+</li>
+<li><p>类<code>class</code></p>
+</li>
+</ul>
+<h5 id="Linux-的sysfs文件系统"><a href="#Linux-的sysfs文件系统" class="headerlink" title="Linux 的sysfs文件系统"></a>Linux 的<code>sysfs</code>文件系统</h5><ul>
+<li><p><code>sysfs</code>挂载目录为<code>/sys</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># virtualbox @ virtualbox-VirtualBox in /sys [22:45:56] </span></span><br><span class="line">$ <span class="built_in">ls</span></span><br><span class="line">block  bus  class  dev  devices  firmware  fs  hypervisor  kernel  module  power</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>block : 当前系统可用块设备，如【磁盘】和【分区】</p>
+</li>
+<li><p>bus：系统中总线（PCI，IDE，USB）连接的物理设备情况</p>
+</li>
+<li><p>class：当前系统中可用的驱动类型，如【网卡】，【声卡】，【USB设备】</p>
+</li>
+<li><p>dev：当前系统中字符设备和块设备的主次设备号</p>
+</li>
+<li><p>devices：系统中已挂载设备的层次化结构</p>
+</li>
+<li><p>firmware：如x86上的<code>ACPI</code>等系统固件信息</p>
+</li>
+<li><p>fs：当前系统已挂载的【文件系统信息】</p>
+</li>
+<li><p>module：当前系统已加载的内核模块，Linux设备驱动均有对应的内核模块</p>
+</li>
+<li><p>power：电源管理子系统的相关信息</p>
+</li>
+</ul>
+<h5 id="L4设备驱动模型"><a href="#L4设备驱动模型" class="headerlink" title="L4设备驱动模型"></a>L4设备驱动模型</h5><ul>
+<li><p>设备驱动环境<code>Device Driver Environment, DDE</code></p>
+<ul>
+<li>复用其他OS上的设备驱动环境</li>
+</ul>
+</li>
+<li><p>DDE层次</p>
+<ul>
+<li><p>DDEKit</p>
+</li>
+<li><p>DDE系统环境</p>
+</li>
+<li><p>原生驱动</p>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="Linux-用户态驱动框架"><a href="#Linux-用户态驱动框架" class="headerlink" title="Linux 用户态驱动框架"></a>Linux 用户态驱动框架</h5><blockquote>
+<ol>
+<li><p>避免重构</p>
+</li>
+<li><p>规避约束：Linux需要满足GNU的许可证<code>General Public License, GPL</code>，而商用的驱动代码放在用户态方便闭源，如Linux上的<code>NVIDIA</code>驱动</p>
+</li>
+</ol>
+</blockquote>
+<h6 id="两种Linux用户态驱动框架"><a href="#两种Linux用户态驱动框架" class="headerlink" title="两种Linux用户态驱动框架"></a>两种Linux用户态驱动框架</h6><ul>
+<li><p>用户空间<code>I/O</code>，<code>Userspace I/O, UIO</code></p>
+</li>
+<li><p>虚拟空间<code>I/O</code>，&#96;Virtual Function I&#x2F;O, VFIO</p>
+</li>
+</ul>
+<h2 id="11-系统虚拟化"><a href="#11-系统虚拟化" class="headerlink" title="11 系统虚拟化"></a>11 系统虚拟化</h2><ul>
+<li><p>虚拟监控器<code>VMM (Virtual Machine Monitor)</code>，也称为<code>Hypervisor</code></p>
+</li>
+<li><p>虚拟机<code>VM (Virtual Machine)</code></p>
+</li>
+<li><p>基础设施即服务<code>IaaS (Infrastructure)</code></p>
+</li>
+<li><p>虚拟机自省<code>VMI (Virtual Machine Introspection)</code>技术：允许<code>VMM</code>从外部检查虚拟机内部状态是否正确，判断虚拟机是否遭到入寝</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">虚拟机: guest machine</span><br><span class="line">对应物理主机: host machine</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>系统虚拟化技术</p>
+</li>
+<li><p>系统虚拟化技术</p>
+<ul>
+<li><p>CPU虚拟化</p>
+</li>
+<li><p>内存虚拟化</p>
+</li>
+<li><p>I&#x2F;O虚拟化</p>
+</li>
+</ul>
+</li>
+<li><p>虚拟机监控器分类</p>
+<blockquote>
+<p>Hypervisor，又称虚拟机监控器（英语：<strong>virtual machine monitor</strong>，缩写为VMM），是用来创建与执行虚拟机的软件、固件或硬件。 被hypervisor用来执行一个或多个虚拟机的电脑称为宿主机（host machine），这些虚拟机则称为客户机（guest machine）。</p>
+</blockquote>
+<ul>
+<li><p>Type-1：Xen</p>
+</li>
+<li><p>Type-2：Qemu, KVM</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="CPU虚拟化"><a href="#CPU虚拟化" class="headerlink" title="CPU虚拟化"></a>CPU虚拟化</h3><h4 id="下陷和模拟"><a href="#下陷和模拟" class="headerlink" title="下陷和模拟"></a>下陷和模拟</h4><blockquote>
+<p><code>trap-and-emulate</code></p>
+</blockquote>
+<h4 id="可虚拟化架构和不可虚拟化架构"><a href="#可虚拟化架构和不可虚拟化架构" class="headerlink" title="可虚拟化架构和不可虚拟化架构"></a>可虚拟化架构和不可虚拟化架构</h4><ul>
+<li><p>指令</p>
+<ul>
+<li><p>特权指令<code>privileged instruction</code>：在【用户态】执行时会触发下陷<code>trap</code>的指令</p>
+</li>
+<li><p>敏感指令<code>sensitive instruction</code>：管理物理资源或者更改CPU状态的指令</p>
+<ul>
+<li><p>读写特殊寄存器或执行特殊指令以更改CPU状态</p>
+</li>
+<li><p>读写敏感内存</p>
+</li>
+<li><p>执行<code>I/O</code>指令，如<code>x86</code>中的<code>in</code>和<code>out</code>指令</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>可虚拟化架构：所有<code>sensitive instruction</code>都是<code>privileged instruction</code>，即所有敏感指令在非特权级下执行都会出发下陷<code>trap</code></p>
+</li>
+<li><p>不可虚拟化架构：不满足上定义的架构</p>
+</li>
+<li><p>弥补不可虚拟化架构缺陷的方法（5种）</p>
+<ul>
+<li><p>解释执行</p>
+<ul>
+<li><p>粒度：单条指令</p>
+</li>
+<li><p>过程：指令 –&gt; 软件模拟</p>
+</li>
+<li><p>评估：带来较大的性能开销</p>
+</li>
+</ul>
+</li>
+<li><p>动态二进制翻译</p>
+<ul>
+<li><p>粒度：基本块<code>basic block</code>（一段按顺序执行的代码块，中间没有任何改变控制流的指令）</p>
+</li>
+<li><p>过程：翻译后的<code>basic block</code>成为【代码补丁】，并放置于【代码补丁缓存】中，执行基本块的核心就在于执行代码补丁</p>
+</li>
+<li><p>评估：批量翻译，缓存</p>
+</li>
+</ul>
+</li>
+<li><p>扫描与翻译</p>
+<ul>
+<li>过程：（宿主机与虚拟机的【指令集架构<code>ISA (Instruction Set Architecture</code>】相同）只让<code>sensitive instruction</code>下陷，其他指令直接执行</li>
+</ul>
+</li>
+<li><p>半虚拟化技术</p>
+<ul>
+<li><p>全虚拟化<code>full virtualization</code>：无需修改<code>guest machine</code>源码的方式</p>
+</li>
+<li><p>半虚拟化<code>para-virtualization</code>：允许修改客户虚拟机源码的方式</p>
+<ul>
+<li><p>超级调用<code>hypercall</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">hypervisor 提供--&gt;hypercall--&gt; Virtual Machine</span><br><span class="line">修改 guest machine 的代码</span><br><span class="line">--&gt; 替换 [不可虚拟化的指令] 改为超级调用 [hypercall]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>优势：</p>
+<ol>
+<li><p>带来更高性能</p>
+</li>
+<li><p>缓解语义鸿沟<code>semantic gap</code></p>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>硬件虚拟化技术</p>
+<ul>
+<li><p>x86</p>
+<ul>
+<li><p>根模式<code>root mode</code>和非根模式<code>non-root mode</code></p>
+</li>
+<li><p><code>Intel VT-x</code>为每一个虚拟机提供了【虚拟机控制结构<code>VMCS (Virtual Machine Control Structure)</code>】</p>
+</li>
+</ul>
+</li>
+<li><p>ARMv8</p>
+<ul>
+<li><p>增加<code>EL2</code>特权级</p>
+</li>
+<li><p>在<code>ARMv8.0</code>的硬件虚拟化中，必须将<code>KVM</code>的一部分功能从<code>Linux</code>中剥离出来，以<code>Lowvisor</code>的形式运行在<code>EL2</code>中，OS和其他<code>KVM</code>功能依然运行在<code>EL1</code>中</p>
+<blockquote>
+<ol>
+<li><p>但<code>KVM</code>和<code>Lowvisor</code>可能有多次特权级转换，带来开销</p>
+</li>
+<li><p>为了解决性能和开销问题，<code>ARMv8.1</code>提出<code>VHE (Virtual Host Extension)</code></p>
+</li>
+</ol>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">  --&gt; hypercall                  --&gt; hypercall(maybe)</span><br><span class="line">VM              KVM <span class="title function_">Lowvisor</span><span class="params">(EL2)</span>                    Linux and <span class="title function_">KVM</span><span class="params">(EL1)</span> </span><br><span class="line">  <span class="keyword">return</span>    &lt;--                  <span class="keyword">return</span>    &lt;--<span class="params">(maybe)</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p><code>VHE</code>：可在<code>EL2</code>运行完整的<code>Host Machine</code>系统，<code>KVM</code>进入<code>EL2</code>，其与宿主操作系统<code>Linux</code>之间的交互不会带来任何特权级转换</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="内存虚拟化"><a href="#内存虚拟化" class="headerlink" title="内存虚拟化"></a>内存虚拟化</h3><ul>
+<li><p>客户虚拟地址<code>GVA (Guest Virtual Address)</code>：进程和客户操作系统使用的虚拟地址</p>
+</li>
+<li><p>客户物理地址<code>GPA (Guest Physical Address)</code>：虚拟机内部使用的物理地址</p>
+</li>
+<li><p>主机物理地址<code>HPA (Host Physical Address)</code>：真正在总线中访问的物理地址</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">GVA -第一阶段地址翻译-&gt; GPA -第二阶段地址翻译-&gt; HPA</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="影子页表"><a href="#影子页表" class="headerlink" title="影子页表"></a>影子页表</h4><ul>
+<li><p><code>SPT (Shadow Page Table)</code></p>
+</li>
+<li><p>一般页表使用过程</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="number">1.</span> 静态配置(OS)[VA -PT-&gt; PA] </span><br><span class="line"><span class="number">2.</span> 页表安装(OS)[PT base_address-&gt;页表基址寄存器] </span><br><span class="line"><span class="number">3.</span> 动态翻译(MMU)[VA -&gt; PA]</span><br><span class="line">* PT:Page Table</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>影子页表使用过程</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="number">1.</span> 静态配置(OS)[GVA -PT-&gt; GPA] </span><br><span class="line"><span class="number">2.</span> 页表安装(OS)[PT base_address-&gt;页表基址寄存器]</span><br><span class="line"><span class="number">3.</span> 虚拟机下陷(Hypervisor)[GVA -new PT-&gt; HPA]</span><br><span class="line"><span class="number">4.</span> 页表安装(Hypervisor)[new PT base_address-&gt;页表基址寄存器]</span><br><span class="line"><span class="number">3.</span> 动态翻译(MMU)[GVA -&gt; HPA]</span><br><span class="line">* PT:Page Table</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="I-x2F-O虚拟化"><a href="#I-x2F-O虚拟化" class="headerlink" title="I&#x2F;O虚拟化"></a>I&#x2F;O虚拟化</h3><h3 id="QEMU-x2F-KVM"><a href="#QEMU-x2F-KVM" class="headerlink" title="QEMU&#x2F;KVM"></a>QEMU&#x2F;KVM</h3><h4 id="KVM"><a href="#KVM" class="headerlink" title="KVM"></a>KVM</h4><h4 id="QEMU"><a href="#QEMU" class="headerlink" title="QEMU"></a>QEMU</h4>]]></content>
+      <categories>
+        <category>system</category>
+      </categories>
+      <tags>
+        <tag>operating system</tag>
+        <tag>system</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>OS Notes Part(I)</title>
+    <url>/2022/06/27/system/os-notes-first/</url>
+    <content><![CDATA[<h1 id="Modern-Operating-System-I"><a href="#Modern-Operating-System-I" class="headerlink" title="Modern Operating System (I)"></a>Modern Operating System (I)</h1><blockquote>
+<p>前几章内容暂省略</p>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> 内存管理</li>
+<li><input checked="" disabled="" type="checkbox"> 进程与线程</li>
+<li><input disabled="" type="checkbox"> 操作系统调度</li>
+<li><input checked="" disabled="" type="checkbox"> 进程间通信</li>
+</ul>
+</blockquote>
+<h2 id="4-内存管理"><a href="#4-内存管理" class="headerlink" title="4 内存管理"></a>4 内存管理</h2><hr>
+<ul>
+<li>转址旁路缓存<code>TLB (Translation Lookaside Buffer)</code><ul>
+<li>TLB命中：<code>TLB hit</code></li>
+<li>TLB未命中：<code>TLB miss</code></li>
+</ul>
+</li>
+<li><code>AArch64 (based on ARMv8.0)</code> 架构：4级页表<ul>
+<li>最小页：有<code>4KB</code>,<code>16KB</code>,<code>64KB</code>,可通过<code>TCR_EL1</code>进行配置</li>
+</ul>
+</li>
+<li>一种TLB刷新机制：为<code>TLB</code>缓存项打”标签”来减少程序切换时TLB刷新的开销<ul>
+<li><code>ASID (Address Space IDentifier)</code>：基于<code>aarch64</code></li>
+<li><code>PCID (Process Context IDentifier)</code>：基于<code>x86-64</code></li>
+</ul>
+</li>
+<li>换页<code>page swapping</code><ul>
+<li>换出<code>swap out</code></li>
+<li>换入<code>swap in</code></li>
+</ul>
+</li>
+<li>缺页异常<code>page fault</code></li>
+<li>预取<code>prefetching</code>机制：发生<code>swap in</code>时，预测还有哪些页即将被访问，提前将其换入物理内存，减少<code>page fault</code></li>
+<li>按需页分配<code>demand paging</code><ul>
+<li>未分配状态</li>
+<li>已分配但未映射至物理内存状态（初次访问时出发<code>page fault</code>）</li>
+<li>区分两种状态：<ul>
+<li>Linux中，程序的虚拟内存空间由多个虚拟内存区域构成，即<code>VMA (Virtual Memory Area)</code>：含<code>beginning VA</code>，<code>ending VA</code>，访问权限等信息。</li>
+<li>P -&gt; page fault<ul>
+<li>P属于VMA：已分配未映射</li>
+<li>P不属于VMA：未分配</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>页替换策略<ul>
+<li><code>MIN/OPT (Minimum / Optimal 最优策略)</code></li>
+<li><code>FIFO (First-In First-Out)</code></li>
+<li><code>Second Chance</code></li>
+<li><code>LRU (Least Recently Used)</code>：基于程序过去频繁访问的页后续也可能被访问</li>
+<li><code>MRU (Most Recently Used)</code>：基于程序不会反复访问相同地址情况</li>
+<li><code>clock algorithm</code>：时钟算法策略</li>
+</ul>
+</li>
+<li>工作集模型<code>working set model</code><ul>
+<li>基于：优先将非工作集中的页换出</li>
+<li>工作集时钟算法：<ul>
+<li>维护2个状态：<strong>上次使用时间</strong>和<strong>访问位</strong></li>
+<li>定期检查算时间间隔</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>共享内存<code>shared memory</code><ul>
+<li>写时拷贝<code>copy-on-write</code></li>
+<li>内存去重<code>memory deduplication</code><ul>
+<li>定期扫描相同内容的物理页，找到映射对应的虚拟页，保留一个物理页，其余通过<code>copy-on-write</code>映射到该物理页，释放其他物理页。</li>
+<li>如Linux的<code>KSM (Kernel Same-page Merging)</code>机制</li>
+<li>性能下降产生延迟，资源利用率提高</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>内存压缩<ul>
+<li>如Linux的<code>zswap</code>机制，<code>zswap</code>区域（仍属于内存区域）：为内存换页过程提供缓冲区</li>
+<li>更加高效的磁盘批量<code>I/O</code></li>
+</ul>
+</li>
+<li>大页<code>huge page</code><ul>
+<li>Linux提供透明大页<code>transparent huge page</code>机制：自动将一个应用程序中连续的4KB内存页合并成2MB的内存页</li>
+<li>提高效率（减少TLB项，提高TLB命中率），可能浪费物理内存资源</li>
+</ul>
+</li>
+<li>内存碎片<code>fragmentation</code><ul>
+<li>内部碎片<code>internal fragmentation</code></li>
+<li>外部碎片<code>external fragmentation</code></li>
+</ul>
+</li>
+<li>伙伴系统<code>buddy system</code><ul>
+<li>减少外部碎片</li>
+</ul>
+</li>
+<li><code>SLAB</code>分配器<ul>
+<li>减少内部碎片</li>
+<li>包括<code>SLAB</code>，<code>SLUB</code>，<code>SLOB</code></li>
+<li>linux-2.6.23之后内核默认采用<code>SLUB</code>分配器（依赖于伙伴系统）</li>
+</ul>
+</li>
+<li>常用空闲链表<ul>
+<li>隐式空闲链表<code>implicit free list</code></li>
+<li>显式空闲链表<code>explicit free list</code></li>
+<li>分离空闲链表<code>segregated free list</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="5-进程与线程"><a href="#5-进程与线程" class="headerlink" title="5 进程与线程"></a>5 进程与线程</h2><hr>
+<h3 id="process"><a href="#process" class="headerlink" title="process"></a>process</h3><ul>
+<li><p>进程控制块<code>PCB (Process Control Block)</code></p>
+</li>
+<li><p>僵尸进程<code>zombie</code></p>
+</li>
+<li><p>进程管理：</p>
+<ul>
+<li><p>进程组<code>process group</code>：进程的集合 —&gt; 进程组标识符<code>tgid (In Linux PCB)</code></p>
+</li>
+<li><p>会话<code>session</code>：进程组的集合</p>
+<blockquote>
+<p>根据执行状态划分为：</p>
+</blockquote>
+<ul>
+<li>前台进程组<code>foreground thread group</code></li>
+<li>后台进程组<code>background thread group</code></li>
+</ul>
+</li>
+<li><p><code>process group</code>和<code>session</code>主要用于<code>shell</code>环境的中的进程管理</p>
+<ul>
+<li>进程id -&gt; <code>PID</code></li>
+<li>进程组id -&gt; <code>GID</code></li>
+<li>会话id -&gt; <code>SID</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>控制中断进程<code>controlling terminal</code></p>
+</li>
+</ul>
+<h3 id="thread"><a href="#thread" class="headerlink" title="thread"></a>thread</h3><ul>
+<li><p>用户态线程<code>user-level thread</code></p>
+</li>
+<li><p>内核态线程<code>kernel-level thread</code></p>
+</li>
+<li><p>多线程模型<code>multithreading model</code></p>
+</li>
+<li><p>线程控制块<code>Thread Control Block</code></p>
+</li>
+<li><p>NPTL<code>Native POSIX Thread Library</code>：自<code>Linux 2.6</code>引入的线程库，沿用至今</p>
+</li>
+</ul>
+<h3 id="fiber"><a href="#fiber" class="headerlink" title="fiber"></a>fiber</h3><blockquote>
+<p>完全在用户态下完成</p>
+</blockquote>
+<ul>
+<li>抢占式多任务处理<code>preemptive multitasking</code></li>
+<li>合作式多任务处理<code>cooperative multitasking</code></li>
+<li><code>(Windows) TLS(Fiber Local Storage)</code> ：纤程本地存储，用来为每个纤程保存同一变量的私有拷贝</li>
+<li>协程<code>coroutine</code>：为了便于与操作系统提供的纤程支持相区分，程序语言提供的纤程支持称为协程</li>
+</ul>
+<h2 id="6-操作系统调度"><a href="#6-操作系统调度" class="headerlink" title="6 操作系统调度"></a>6 操作系统调度</h2><hr>
+<ul>
+<li><p>优先级<code>priority</code></p>
+</li>
+<li><p>时间片<code>time slice</code></p>
+</li>
+<li><p>截止时间<code>deadline</code></p>
+</li>
+<li><p>任务调度&#x2F;CPU调度<code>task scheduling</code></p>
+</li>
+<li><p>线程<code>thread</code>是调度器的调度对象，又叫做<strong>任务</strong><code>task</code></p>
+<ul>
+<li>运行队列<code>run queue</code></li>
+<li><code>Linux</code>使用的调度器会用红黑树实现运行队列</li>
+</ul>
+</li>
+<li><p>确定调度指标<code>what</code> ——&gt; 做出调度决策<code>how</code></p>
+<ul>
+<li><p>调度指标</p>
+<ul>
+<li><p>分类</p>
+<ul>
+<li>性能相关指标<ul>
+<li>批处理任务<ul>
+<li><strong>吞吐量</strong>：单位时间内处理的任务数量</li>
+<li><strong>周转时间</strong>：任务从被发起直到执行结束所需的时间</li>
+</ul>
+</li>
+<li>交互式任务<ul>
+<li><strong>响应时间</strong>：任务从被发起直至第一次向用户返回输出以响应用户所需的时间</li>
+</ul>
+</li>
+<li>调度开销：做出决策的时间应该尽可能短</li>
+</ul>
+</li>
+<li>非性能指标：<strong>公平性</strong>、<strong>资源利用率</strong></li>
+<li>任务场景需求：<strong>实时性</strong>、<strong>能耗</strong></li>
+</ul>
+</li>
+<li><p>权衡</p>
+<ul>
+<li>调度开销和调度效果</li>
+<li>优先级和公平性</li>
+<li>性能与能耗</li>
+</ul>
+</li>
+<li><p>调度机制</p>
+<ul>
+<li><p>进程调度<code>process scheduling</code>机制</p>
+<ul>
+<li><p>长期调度<code>long-term scheduling/job scheduling</code></p>
+<blockquote>
+<p>限制系统中真正被用来进行短期调度管理的进程数量，避免短期调度的开销过大</p>
+<p>根据进程使用的资源类型，分类：计算密集型<code>CPU-bound</code>和<code>I/O</code>密集型<code>I/O-bound</code></p>
+</blockquote>
+</li>
+<li><p>短期调度<code>short-term scheduling/job scheduling</code></p>
+<blockquote>
+<p>实际做出调度决策的机制</p>
+<p>负责进程在 <strong>预备</strong>，<strong>运行</strong>，<strong>阻塞</strong> 状态间的转换 </p>
+</blockquote>
+</li>
+<li><p>中期调度<code>medium-term scheduling/job scheduling</code></p>
+<blockquote>
+<p>长短期调度 —&gt; based on CPU and I&#x2F;O resource</p>
+<p>中期调度 —&gt; based on memory</p>
+<p>中期调度也是换页机制的一部分，当<strong>系统中内存使用量过大</strong>，就会触发换页机制，挂起处于<strong>预备状态</strong>的&#x2F;<strong>阻碍状态</strong>的进程，置为<strong>挂起预备状态&#x2F;挂起阻塞状态</strong>并放入<strong>挂起运行队列&#x2F;挂起阻塞队列</strong></p>
+<p>引入无法被短期调度执行的两个状态</p>
+<ul>
+<li>挂起预备状态<code>suspended ready</code></li>
+<li>挂起阻塞状态<code>suspended blocking</code></li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>批处理队列<code>batch queue</code></p>
+</li>
+<li><p>阻塞队列<code>blocking queue</code></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>调度决策</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="7-进程间通信"><a href="#7-进程间通信" class="headerlink" title="7 进程间通信"></a>7 进程间通信</h2><hr>
+<ul>
+<li><p>进程间通信<code>Inter-Process Communication (IPC)</code></p>
+</li>
+<li><p>消息<code>message</code>：一种常见通信数据的抽象，包含一个头部<code>header</code>和一个数据段<code>payload</code></p>
+<ul>
+<li><code>header</code> : 魔数<code>magic number</code>，状态<code>state</code>，消息长度<code>message length</code>，验证码<code>verification code</code>等</li>
+<li><code>payload</code> : 纯数据（如字符串<code>string</code>），系统资源（如文件描述符<code>file descriptor</code>）</li>
+</ul>
+</li>
+<li><p>消息传递基本接口：</p>
+<ul>
+<li><code>Send(message)</code></li>
+<li><code>Recv(message)</code></li>
+<li><code>RPC(req_message, resp_message)</code>  —&gt; 远程过程调用：<code>Remote Procedure Call</code></li>
+<li><code>Reply(resp_message)</code></li>
+</ul>
+</li>
+<li><p>内存重映射<code>memory remapping</code></p>
+</li>
+<li><p><code>IPC Classification</code></p>
+<ul>
+<li>单向（管道，信号等）和双向（RPC）</li>
+<li>同步（阻塞进程直到该IPC操作完成）和异步（非阻塞的，进程发起一次操作即可返回，不需要等待其完成）<ul>
+<li><p>同步：被调用者<code>callee</code>处理请求时，调用者<code>caller</code>会处于<code>block</code>的状态，当<code>callee</code>执行完任务后，控制流会切回<code>caller</code></p>
+<ul>
+<li>一般是<strong>双向</strong><code>IPC</code>（或<code>RPC</code>）</li>
+</ul>
+</li>
+<li><p>异步：多个并行的控制流，异步<code>IPC</code>通常通过【轮询内存状态】或【注册回调函数】（如果<code>kernel</code>支持的话）来获取返回结果。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>超时机制</p>
+<ul>
+<li>拒绝服务<code>denial-of-service</code></li>
+</ul>
+</li>
+<li><p>通信连接管理</p>
+<ul>
+<li>直接通信：通信的<code>process</code>一方需要<strong>显示</strong>地标识另一方</li>
+<li>间接通信：通过一个中间<strong>信箱</strong>完成通信，每一个信箱有一个唯一的标识符，共享信箱交换<code>message</code>，进程间连接的建立发生在共享一个<strong>信箱</strong>时候。（如管道）</li>
+</ul>
+</li>
+<li><p>权限检查机制</p>
+<ul>
+<li>微内核，如<code>seL4</code>等微内核系统的<code>Capability</code>机制</li>
+<li>宏内核，如<code>Linux</code>， 将【IPC安全检查机制】和【文件检查】结合在一起</li>
+</ul>
+</li>
+<li><p><code>System V</code>进程间通信：即【宏内核】下的三种进程间通信机制：</p>
+<ul>
+<li><code>System V</code>消息队列</li>
+<li><code>System V</code>信号量</li>
+<li><code>System V</code>共享内存</li>
+</ul>
+</li>
+<li><p><code>System V</code>通信的权限管理：在<code>Linux</code>等宏内核中是基于文件<code>File</code>的权限检查机制</p>
+<ul>
+<li><p>访问模式<code>mode</code></p>
+</li>
+<li><p>权限检查</p>
+<blockquote>
+<p><code>Linux</code>对<code>IPC</code>进行权限管理的<code>IPC_PERM</code>结构，类似文件的【<strong>访问模式</strong>】，权限检查机制确保安全性</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta"># uid 用户标识符</span></span><br><span class="line">  <span class="meta"># gid 用户组标识符</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">ipc_perm</span> &#123;</span></span><br><span class="line">    <span class="type">key_t</span> key; <span class="comment">// 进程可以根据key来索引到一个IPC对象</span></span><br><span class="line">    <span class="type">uid_t</span> uid; <span class="comment">// owner uid</span></span><br><span class="line">    <span class="type">gid_t</span> gid; <span class="comment">// owner gid</span></span><br><span class="line">    <span class="type">uid_t</span> cuid; <span class="comment">// creator uid</span></span><br><span class="line">    <span class="type">gid_t</span> cgid; <span class="comment">// creator gid</span></span><br><span class="line">    <span class="type">mode_t</span> mode; <span class="comment">// 访问模式</span></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>继承</p>
+<ul>
+<li>除了命名服务外的另外一种常见的【<strong>分发权限</strong>】的方式</li>
+</ul>
+</li>
+<li><p><code>Linux</code>中，<strong>匿名管道</strong> —&gt; 用于父子进程之间的通信，内核通过在<code>fork</code>时<strong>复制</strong><code>copy</code>文件描述符表<code>File Descriptor Table</code>来建立<strong>父子进程</strong>之间的连接</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="命名服务"><a href="#命名服务" class="headerlink" title="命名服务"></a>命名服务</h3><blockquote>
+<p><code>naming server</code></p>
+</blockquote>
+<ul>
+<li><p>【<strong>权限分发</strong>】通过一个用户态的服务——<strong>命名服务</strong>实现</p>
+</li>
+<li><p>过程：</p>
+<ol>
+<li>各个服务（如文件系统服务，数据库系统服务等）向<code>naming server</code>注册自己的服务名。</li>
+<li>客户端进程向<code>naming server</code>上查询当前服务，并选择所需要的<strong>服务</strong>去尝试获取权限。</li>
+<li>是否分发权限，是由<code>naming server</code>和对应的<strong>服务端进程</strong>（如文件系统进程，网络系统进程，数据库进程）根据特定的策略（如无条件，需要私钥签名的证书）来判断的。</li>
+</ol>
+</li>
+<li><p>优点：</p>
+<ul>
+<li>各个服务不再是<code>kernel</code>中的<code>ID</code>等抽象的表示，而是对应用更友好的<strong>名字<code>name</code></strong></li>
+</ul>
+</li>
+<li><p><code>naming server</code>一般在用户态</p>
+</li>
+</ul>
+<h3 id="宏内核IPC"><a href="#宏内核IPC" class="headerlink" title="宏内核IPC"></a>宏内核<code>IPC</code></h3><blockquote>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> 管道<code>pipe</code></li>
+<li><input checked="" disabled="" type="checkbox"> <code>System V</code>：常指宏内核下三种具体的<code>IPC</code>机制<ul>
+<li><input checked="" disabled="" type="checkbox"> 消息队列</li>
+<li><input checked="" disabled="" type="checkbox"> 信号量</li>
+<li><input checked="" disabled="" type="checkbox"> 共享内存</li>
+</ul>
+</li>
+<li><input checked="" disabled="" type="checkbox"> <code>Linux</code>信号机制</li>
+<li><input checked="" disabled="" type="checkbox"> 套接字<code>socket</code>机制</li>
+</ul>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>IPC机制</th>
+<th>数据抽象</th>
+<th>参与者</th>
+<th>方向</th>
+<th>内核实现</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>管道<code>pipe</code></td>
+<td>字节流</td>
+<td>两个进程</td>
+<td>单向</td>
+<td>通常是<code>FIFO</code>缓冲区管理数据，分为<strong>匿名管道</strong>和<strong>命名管道</strong></td>
+</tr>
+<tr>
+<td>消息队列<code>MQ</code></td>
+<td>消息</td>
+<td>多进程</td>
+<td>单向双向</td>
+<td>队列的组织方式，通过【文件权限】管理对队列的访问</td>
+</tr>
+<tr>
+<td>信号量<code>semaphore</code></td>
+<td>计数器</td>
+<td>多进程</td>
+<td>单向双向</td>
+<td>内核<code>kernel</code>维护共享计数器，通过文件权限管理对计数器的访问</td>
+</tr>
+<tr>
+<td>共享内存<code>chm</code></td>
+<td>内存区间</td>
+<td>多进程</td>
+<td>单向双向</td>
+<td>内核维护共享内存的内存区间，通过文件的权限来管理对共享内存的访问</td>
+</tr>
+<tr>
+<td>信号<code>signal</code></td>
+<td>事件编号</td>
+<td>多进程</td>
+<td>单向</td>
+<td>为线程&#x2F;进程维护【信号等待队列】，通过用户 &#x2F; 组等的权限管理信号的操作</td>
+</tr>
+<tr>
+<td>套接字<code>socket</code></td>
+<td>数据报文</td>
+<td>两个进程</td>
+<td>单向双向</td>
+<td>有基于<code>IP + port</code>和基于<code>file path</code>的寻址方式，利用网络栈来管理通信</td>
+</tr>
+</tbody></table>
+<h4 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h4><ul>
+<li><p>匿名管道：通过<code>pipe</code>的系统调用创建</p>
+<blockquote>
+<p>父子进程</p>
+</blockquote>
+</li>
+<li><p>命名管道：通过<code>mkfifo</code>命令创建 —&gt; 指定一个全局文件名</p>
+<blockquote>
+<p>远距离进程（任意两个进程）</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="System-V-消息队列"><a href="#System-V-消息队列" class="headerlink" title="System V 消息队列"></a><code>System V</code> 消息队列</h4><ul>
+<li><p>发送和接收<code>message</code>的接口是<code>kernel</code>提供的</p>
+</li>
+<li><p><code>kernel</code>从<code>system memory</code>中分配一个队列数据结构，作为消息<code>message</code>的内核对象</p>
+</li>
+<li><p><code>MQ</code>基本操作：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In Linux, the following operations are defined <span class="keyword">as</span> system call.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>msgget</code>：允许进程获取已有消息队列的连接，或者创建一个新的消息队列</li>
+<li><code>msgsnd</code>：发消息</li>
+<li><code>msgrcv</code>：收消息</li>
+<li><code>msgctl</code>：可以控制和管理一个消息队列，如修改消息队列的权限信息，或删除消息队列</li>
+</ul>
+</li>
+<li><p>消息发送和消息接收一般是【<strong>非阻塞的</strong>】</p>
+</li>
+<li><p><code>Linux kernel</code>实现：</p>
+<ul>
+<li>【<strong>系统管理员</strong>】通常可以配置【<strong>单个消息</strong>】<code>single message</code>的最大空间、【<strong>单个消息队列</strong>】<code>single MQ</code>的最大空间、全系统的消息队列个数</li>
+<li>通常建议使用【<strong>共享内存机制</strong>】传递长消息，而非使用<code>MQ</code></li>
+<li>消息在用户态和内核态之间传递时，会有拷贝开销：<ul>
+<li><code>copy_from_user</code></li>
+<li><code>copy_to_user</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="System-V-信号量"><a href="#System-V-信号量" class="headerlink" title="System V 信号量"></a><code>System V</code> 信号量</h4><ul>
+<li>通过对信号量的<code>PV</code>操作限制可以保证执行顺序</li>
+<li>关键：封装一个计数器</li>
+</ul>
+<h4 id="System-V-共享内存"><a href="#System-V-共享内存" class="headerlink" title="System V 共享内存"></a><code>System V</code> 共享内存</h4><blockquote>
+<p>在<code>Linux</code>的系统设计中，将共享内存的机制封装在了一个特殊的文件系统中（即共享内存文件系统<code>shm 文件系统</code>），实际中使用<code>tmpfs</code>实现</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">	* kernel 为全局所有的共享内存维护一个全局队列结构,由结构体 [shmid_kernel] 组成</span><br><span class="line">	* IPC <span class="title function_">key</span> <span class="params">(全局唯一)</span> --&gt; <span class="keyword">struct</span> shmid_kernel</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> shmid_kernel &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">file</span> <span class="title">file</span>;</span>--&gt; VFS <span class="class"><span class="keyword">struct</span> <span class="title">inode</span> </span></span><br><span class="line"><span class="class">                     --&gt;</span> 一段共享物理内存页的集合(也就是共享内存对应的物理内存)</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[process1] and [process2]</span><br><span class="line">    * By <span class="title function_">shm_at</span> <span class="params">(kernel API)</span>---&gt; Reflect [shared memory] to [Virtual Address Space]</span><br><span class="line">    * kernel会为process1和process2分配两个<span class="title function_">VMA</span><span class="params">(Virtual Memory Area)</span>结构体,均指向file</span><br><span class="line">    * 两个VMA对应的虚拟地址可以不同, 只需要映射到相同的物理内存</span><br><span class="line">    * 支持任意数量的进程共享同一个共享内存区域, 只需要为它们分配[指向 <span class="keyword">struct</span> file 的VMA]即可</span><br><span class="line">    * 取消映射<span class="params">(detach操作)</span>只会影响当前进程的映射</span><br><span class="line"></span><br><span class="line">shm : shared memory</span><br><span class="line">shm_at: 建立对共享内存的映射的接口</span><br><span class="line">shm_dt: 取消共享内存和虚拟内存之间的映射的接口 </span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="信号IPC"><a href="#信号IPC" class="headerlink" title="信号IPC"></a>信号<code>IPC</code></h4><ul>
+<li><p>信号<code>signal</code>：具备【单向的事件通知】能力（信号量<code>semaphore</code>有通知能力，但需要进程主动查询计数器的状态或陷入阻塞状态等待通知）</p>
+</li>
+<li><p>信号传递信息很短，只有一个编号，且由<code>kernel</code>传递</p>
+</li>
+<li><p><code>Linux</code>早起使用信号有31（1~31号）个，后续<code>POSIX</code>标准引入了编号32~64的其他信号</p>
+<ul>
+<li>传统信号称为【常规信号】<ul>
+<li>进程多次收到，<code>kernel</code>只会记录一次</li>
+</ul>
+</li>
+<li><code>POSIX</code>引入称为【实时信号】<ul>
+<li>进程多次收到，<code>kernel</code>不会丢弃相同信号时间</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><code>Linux</code>：<code>kernel</code>会为每个进程和线程准备一个【信号事件等待队列】</p>
+<ul>
+<li>一个进程内的多个线程<ul>
+<li>共享该进程的【信号事件队列】</li>
+<li>拥有自己私有的【等待队列】</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><code>Linux</code>提供了一个专门的系统调用<code>sigprocmask</code>：允许用户程序设置对特定信号的阻塞<code>block</code>状态</p>
+<ul>
+<li>信号阻塞，<code>Linux</code>不会再触发该信号对应的<code>handler function</code>，直到该信号被解除<code>block</code>，信号阻塞不阻碍信号被添加到等待队列上</li>
+</ul>
+</li>
+<li><p><code>signal</code>既用于<code>IPC</code>也用于进程管理</p>
+</li>
+<li><p>内核对信号的处理</p>
+<ul>
+<li><p>时机：通常是<code>kernel</code>执行完<code>exception</code>, <code>interrupt</code>, <code>syscall</code>返回用户态的时刻</p>
+</li>
+<li><p>方式：</p>
+<ul>
+<li>忽略</li>
+<li>用户处理函数：调用【用户注册】的【信号处理函数】</li>
+<li>内核默认处理函数：调用【默认】的【内核处理函数】</li>
+</ul>
+</li>
+<li><p>Linux信号内核与用户态之间的切换</p>
+<blockquote>
+<p>步骤<code>2</code>Linux完成从内核到用户态的切换后（转向<code>handler</code>），就会把【相关栈状态】和【上下文】清空，所以为了避免执行完<code>handler</code>返回时无法恢复到当初系统调用时候用户态的上下文等，在切换到用户态执行<code>handler</code>时，<code>Linux</code>会将【<code>syscall</code>的返回值】和【此前的用户态的上下文（PC，register等）】保存在【用户栈】上。因此步骤<code>4</code>就会从用户栈上提取上下文等信息以恢复到当初系统调用时候的环境。</p>
+</blockquote>
+<pre class="mermaid">    flowchart TD    
+    subgraph usr
+    B(调用syscall1)
+    C(handler) --> D(sigreturn)
+    end
+    
+    subgraph kern
+    A1(syscall1) --> A2(ret_to_user)
+    A3(sigreturn) --> A4(ret_to_user)
+    end
+    
+    B -->|1.用户态进程系统调用进入内核态| A1
+    A2 -->|2.内核态处理完系统调用时,\n发现有signal,于是切换到\n用户态处理函数位置,让其处理信号事件| C
+    D --> |3.信号处理完后,信号处理函数\n会通过系统调用sigreturn返回内核.\n该系统调用的主要作用即辅助内核\n恢复到被信号打断之前的上下文context|A3
+    A4 --> |4.继续完成在系统调用被打断时的任务,\n即syscall返回时回到原用户态|B</pre></li>
+</ul>
+</li>
+<li><p>可重入<code>reentrant</code>函数：允许多个任务（☞对信号事件的响应和处理）并发使用，而不必担心【共享数据】的错误</p>
+<ul>
+<li>实现可重入函数的前提<ul>
+<li>不使用<code>static data</code>或者<code>static data</code>只读</li>
+<li>尽量只是用<code>local data</code></li>
+<li>在必须使用全局共享数据的时候，需要保护对全局数据的访问（防止死锁）</li>
+<li>避免在函数中修改自己的代码</li>
+<li>不调用【不可重入函数】，很多常见的库函数的实现（如<code>malloc</code>）都是不可重入的</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="套接字"><a href="#套接字" class="headerlink" title="套接字"></a>套接字</h4><ul>
+<li><p>客户端通过【地址】找到要调用的服务端进程</p>
+<ul>
+<li><code>IP + port</code>：通信双方通常使用【本地回环地址<code>127.0.0.1</code>】，然后各自绑定在不同的端口上，OS网络协议栈可以识别回环地址，将通信转发到目标端口对应的进程</li>
+<li><code>UNIX domain socket</code>：本地文件系统的一个路径</li>
+</ul>
+</li>
+<li><p>协议</p>
+<ul>
+<li>传输控制协议<code>TCP : Transmission Control Protocol</code><ul>
+<li>可靠性好</li>
+<li>（数据丢失情况下）数据重传</li>
+<li>（数据乱序到达情况下）数据顺序维护</li>
+</ul>
+</li>
+<li>用户数据报协议<code>UDP : User Datagram Protocol</code><ul>
+<li>简单</li>
+<li>传输性能较好</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><code>Linux</code>套接字</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">socket(<span class="type">int</span> domain, <span class="type">int</span> type, <span class="type">int</span> protocol);</span><br><span class="line">* domain: 寻址方式, [IP + port] or [local path];</span><br><span class="line">* type: 通信方式, [SOCK_STREAM](数据流,对应[TCP]) or [SOCK_DGRAM](数据报,对应[UDP])</span><br><span class="line">* protocol: 定义协议相关配置, [TCP] or [UDP];</span><br></pre></td></tr></table></figure></li>
+</ul>
+]]></content>
+      <categories>
+        <category>system</category>
+      </categories>
+      <tags>
+        <tag>operating system</tag>
+        <tag>system</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python spider</title>
+    <url>/2022/07/22/system/python-spider-1/</url>
+    <content><![CDATA[<h1 id="web-spider"><a href="#web-spider" class="headerlink" title="web spider"></a>web spider</h1><hr>
+<h2 id="Search-Engine"><a href="#Search-Engine" class="headerlink" title="Search Engine"></a>Search Engine</h2><h3 id="Crawl-the-web-page"><a href="#Crawl-the-web-page" class="headerlink" title="Crawl the web page"></a>Crawl the web page</h3><ul>
+<li>Robots协议（也叫爬虫协议、机器人协议等），全称是“网络爬虫排除标准”（Robots Exclusion Protocol），网站通过Robots协议告诉搜索引擎哪些页面可以抓取，哪些页面不能抓取</li>
+</ul>
+<h3 id="Data-storage"><a href="#Data-storage" class="headerlink" title="Data storage"></a>Data storage</h3><ul>
+<li>搜索引擎通过爬虫爬取到的网页，将数据存入原始页面数据库</li>
+<li>页面数据一般是HTML</li>
+</ul>
+<h3 id="Pre-processing"><a href="#Pre-processing" class="headerlink" title="Pre-processing"></a>Pre-processing</h3><ul>
+<li>搜索引擎将爬虫抓取回来的页面，进行各种步骤的预处理。<ul>
+<li>提取文字</li>
+<li>中文分词</li>
+<li>消除噪音（比如版权声明文字、导航条、广告等……）</li>
+<li>索引处理</li>
+<li>链接关系计算</li>
+<li>特殊文件处理</li>
+</ul>
+</li>
+<li>搜索引擎通常还能抓取HTML以外的和索引以文字为基础的多种文件类型，如 PDF、Word、WPS、XLS、PPT、TXT 文件等</li>
+<li>搜索引擎还不能处理图片、视频、Flash 这类非文字内容，也不能执行脚本和程序</li>
+</ul>
+<h3 id="Provide-search-services-and-website-ranking"><a href="#Provide-search-services-and-website-ranking" class="headerlink" title="Provide search services and website ranking"></a>Provide search services and website ranking</h3><p>* </p>
+]]></content>
+      <categories>
+        <category>system</category>
+      </categories>
+      <tags>
+        <tag>operating system</tag>
+        <tag>system</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Static Linking</title>
+    <url>/2022/08/05/system/static-link/</url>
+    <content><![CDATA[<h1 id="编译和链接"><a href="#编译和链接" class="headerlink" title="编译和链接"></a>编译和链接</h1><hr>
+<h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><ul>
+<li><p>编译：扫描 -&gt; 语法分析 -&gt; 语义分析 -&gt; 源代码优化 -&gt; 代码生成 -&gt; 目标代码优化</p>
+</li>
+<li><p>下图为从源代码<code>Source Code</code>到最终目标代码<code>Final Target Code</code>的过程</p>
+<pre class="mermaid">  flowchart TD
+    A(Source Code) --> |Scanner| B(Tokens)
+    B --> |Parser| C(Syntax Tree)
+    C --> |Semantic Analyzer| D(Commented Syntax Tree)
+    D --> |Source Code Optimizer| E(Intermediate Representation)
+    E --> |Code Generator| F(Target Code)
+    F --> |Code Optimizer| G(Final Target Code)</pre></li>
+</ul>
+<h3 id="词法分析"><a href="#词法分析" class="headerlink" title="词法分析"></a>词法分析</h3><blockquote>
+<p>Lexical Analysis</p>
+</blockquote>
+<ul>
+<li>扫描器<code>scanner</code></li>
+<li>有限状态机<code>FSM (Finite State Machine)</code>算法：将源代码的字符分割成一系列的记号<code>Token</code></li>
+<li><code>lex</code>：按照用户描述好的词法规则将输入的字符串分割成一个个记号</li>
+</ul>
+<h3 id="语法分析"><a href="#语法分析" class="headerlink" title="语法分析"></a>语法分析</h3><blockquote>
+<p>Syntax Analysis</p>
+</blockquote>
+<ul>
+<li>语法分析器<code>Grammar Parser</code></li>
+<li>语法树<code>Syntax Tree</code></li>
+<li>上下文无关语法<code>Context-free Grammar</code></li>
+<li><code>yacc</code>：Yet Another Compiler Compiler，根据用户给定的语法规则对输入记号序列进行解析，从而构建出一颗语法树</li>
+</ul>
+<h3 id="语义分析"><a href="#语义分析" class="headerlink" title="语义分析"></a>语义分析</h3><blockquote>
+<p>Semantic Analysis</p>
+</blockquote>
+<ul>
+<li>语义分析器<code>Semantic Analyzer</code></li>
+<li>编译器能分析的是静态语义<code>Static Semantic</code>：静态语义通常包括<strong>声明</strong>和<strong>类型</strong>的匹配，<strong>类型的转换</strong></li>
+</ul>
+<h3 id="中间语言生成"><a href="#中间语言生成" class="headerlink" title="中间语言生成"></a>中间语言生成</h3><ul>
+<li><p>源码级优化器<code>Source Code Optimizer</code></p>
+</li>
+<li><p>中间代码<code>Intermediate Code</code></p>
+<blockquote>
+<p>使得编译器分为前端和后端，前端负责产生机器无关的中间代码，后端负责将中间代码转换为目标机器代码，通常同一个前端可以通过组合不同的后端适配不同的平台</p>
+</blockquote>
+<ul>
+<li><p>三地址码<code>Three-address Code</code></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">x = y op z</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>P-代码<code>P-Code</code></p>
+</li>
+</ul>
+</li>
+<li><p>编译器后端</p>
+<ul>
+<li><p>代码生成器<code>Code Generator</code></p>
+</li>
+<li><p>目标代码生成器<code>Target Code Optimizer</code></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="链接器"><a href="#链接器" class="headerlink" title="链接器"></a>链接器</h2><ul>
+<li>符号<code>Symbol</code>：表示一个地址，可能是一段子程序（函数）的地址，也可能是一个变量的起始地址</li>
+<li>模块间通信方式：符号引用</li>
+<li>链接<code>Linking</code>：<ul>
+<li>地址和空间分配<code>Address and Storage Allocation</code></li>
+<li>符号决议<code>Symbol Resolution</code>（or Symbol Binding, Name Binding, Name Resolution, Address Binding, Instruction Binding）</li>
+<li>重定位<code>Relocation</code></li>
+</ul>
+</li>
+<li>运行时库<code>Runtime Library</code>：支持程序运行的基本函数的集合</li>
+<li>重定位入口<code>Relocation Entry</code></li>
+</ul>
+<h1 id="目标文件"><a href="#目标文件" class="headerlink" title="目标文件"></a>目标文件</h1><hr>
+<h2 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h2><ul>
+<li>COFF：Common file format –&gt; .obj (windows) &amp; .o (Linux)</li>
+<li>动态链接库 (Dynamic Linking Library)：.dll (windows) &amp; .so (Linux)</li>
+<li>静态链接库 (Static Linking Library)：.lib(windows) &amp; .a(linux)</li>
+</ul>
+]]></content>
+      <categories>
+        <category>system</category>
+      </categories>
+      <tags>
+        <tag>static linking</tag>
+        <tag>linker</tag>
       </tags>
   </entry>
   <entry>
