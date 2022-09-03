@@ -19,43 +19,6 @@
       </tags>
   </entry>
   <entry>
-    <title>解决vscode连接本地vmware失败问题</title>
-    <url>/2022/07/10/configure/configure-001-vscode-connect-vmware/</url>
-    <content><![CDATA[<h3 id="在本地虚拟机vmware中安装ssh"><a href="#在本地虚拟机vmware中安装ssh" class="headerlink" title="在本地虚拟机vmware中安装ssh"></a>在本地虚拟机vmware中安装ssh</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install -y openssh-server</span><br></pre></td></tr></table></figure>
-
-<p>开启服务</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo /etc/init.d/ssh start</span><br></pre></td></tr></table></figure>
-
-<p>查看进程中是否有开启该服务</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ps -e | grep ssh</span><br><span class="line">   1616 ?        00:00:00 ssh-agent</span><br><span class="line">   4892 ?        00:00:00 sshd</span><br><span class="line">   6339 ?        00:00:00 sshd</span><br><span class="line">   6417 ?        00:00:00 sshd</span><br></pre></td></tr></table></figure>
-
-<p>在<code>vscode</code>上配置即可</p>
-]]></content>
-      <categories>
-        <category>configure</category>
-      </categories>
-      <tags>
-        <tag>vscode</tag>
-        <tag>Virtual Machine</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>解决qemu在ubuntu20.04安装找不到命令问题</title>
-    <url>/2022/07/11/configure/configure-002-qemu-ubuntu/</url>
-    <content><![CDATA[<h3 id="qemu找不到命令"><a href="#qemu找不到命令" class="headerlink" title="qemu找不到命令"></a>qemu找不到命令</h3><ul>
-<li><p>更改命令</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install qemu-system</span><br></pre></td></tr></table></figure></li>
-</ul>
-]]></content>
-      <categories>
-        <category>configure</category>
-      </categories>
-      <tags>
-        <tag>Virtual Machine</tag>
-        <tag>qemu</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Customize NexT</title>
     <url>/2022/06/16/configure/next%20tips/</url>
     <content><![CDATA[<h1 id="NexT-in-Hexo-Customized"><a href="#NexT-in-Hexo-Customized" class="headerlink" title="NexT in Hexo Customized"></a>NexT in Hexo Customized</h1><hr>
@@ -207,11 +170,33 @@
   <entry>
     <title>Configure Problem Collection I</title>
     <url>/2022/08/07/configure/questions-config-collection-1/</url>
-    <content><![CDATA[<h2 id="22-x2F-8-x2F-7-Github-connection-confused"><a href="#22-x2F-8-x2F-7-Github-connection-confused" class="headerlink" title="22&#x2F;8&#x2F;7 Github connection confused"></a>22&#x2F;8&#x2F;7 Github connection confused</h2><hr>
+    <content><![CDATA[<h2 id="22-x2F-7-x2F-10-Vscode-connect-to-local-VMWare-failed"><a href="#22-x2F-7-x2F-10-Vscode-connect-to-local-VMWare-failed" class="headerlink" title="22&#x2F;7&#x2F;10 Vscode connect to local VMWare failed"></a>22&#x2F;7&#x2F;10 Vscode connect to local VMWare failed</h2><hr>
+<h3 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h3><ol>
+<li><p>在本地虚拟机vmware中安装ssh</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install -y openssh-server</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>开启服务</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo /etc/init.d/ssh start</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看进程中是否有开启该服务</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ps -e | grep ssh</span><br><span class="line">   1616 ?        00:00:00 ssh-agent</span><br><span class="line">   4892 ?        00:00:00 sshd</span><br><span class="line">   6339 ?        00:00:00 sshd</span><br><span class="line">   6417 ?        00:00:00 sshd</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在<code>vscode</code>上配置即可</p>
+</li>
+</ol>
+<h2 id="22-x2F-7-x2F-11-Download-qemu-failed"><a href="#22-x2F-7-x2F-11-Download-qemu-failed" class="headerlink" title="22&#x2F;7&#x2F;11 Download qemu failed"></a>22&#x2F;7&#x2F;11 Download qemu failed</h2><hr>
 <h3 id="Description"><a href="#Description" class="headerlink" title="Description"></a>Description</h3><blockquote>
+<p>qemu找不到命令</p>
+</blockquote>
+<h3 id="Solution-1"><a href="#Solution-1" class="headerlink" title="Solution"></a>Solution</h3><ol>
+<li><p>更改命令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install qemu-system</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="22-x2F-8-x2F-7-Github-connection-confused"><a href="#22-x2F-8-x2F-7-Github-connection-confused" class="headerlink" title="22&#x2F;8&#x2F;7 Github connection confused"></a>22&#x2F;8&#x2F;7 Github connection confused</h2><hr>
+<h3 id="Description-1"><a href="#Description-1" class="headerlink" title="Description"></a>Description</h3><blockquote>
 <p>ssh: connect to host github.com port 22: Connection refused</p>
 </blockquote>
-<h3 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h3><ol>
+<h3 id="Solution-2"><a href="#Solution-2" class="headerlink" title="Solution"></a>Solution</h3><ol>
 <li><p>22 port 被屏蔽，尝试连接Github 443端口</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ vim ~/.ssh/config</span><br><span class="line"><span class="comment"># Add section below to it</span></span><br><span class="line">Host github.com</span><br><span class="line">  Hostname ssh.github.com</span><br><span class="line">  Port 443</span><br></pre></td></tr></table></figure>
 </li>
@@ -220,7 +205,7 @@
 </ol>
 <h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p><a href="https://segmentfault.com/a/1190000041909858">Variable Methods solving connection confusion</a></p>
 <h2 id="22-x2F-9-x2F-3-hexo在Google由于加载fonts而启动过慢问题"><a href="#22-x2F-9-x2F-3-hexo在Google由于加载fonts而启动过慢问题" class="headerlink" title="22&#x2F;9&#x2F;3 hexo在Google由于加载fonts而启动过慢问题"></a>22&#x2F;9&#x2F;3 hexo在Google由于加载fonts而启动过慢问题</h2><hr>
-<h3 id="Solution-1"><a href="#Solution-1" class="headerlink" title="Solution"></a>Solution</h3><ol>
+<h3 id="Solution-3"><a href="#Solution-3" class="headerlink" title="Solution"></a>Solution</h3><ol>
 <li><p>打开 next themes 配置，找到</p>
 <figure class="highlight json"><table><tr><td class="code"><pre><span class="line">font<span class="punctuation">:</span></span><br><span class="line">  enable<span class="punctuation">:</span> <span class="keyword">false</span></span><br><span class="line"></span><br><span class="line">  # Uri of fonts host<span class="punctuation">,</span> e.g. https<span class="punctuation">:</span><span class="comment">//fonts.googleapis.com (Default).</span></span><br><span class="line">  host<span class="punctuation">:</span> </span><br></pre></td></tr></table></figure>
 </li>
@@ -228,6 +213,7 @@
 <figure class="highlight json"><table><tr><td class="code"><pre><span class="line">font<span class="punctuation">:</span></span><br><span class="line">  enable<span class="punctuation">:</span> <span class="keyword">false</span></span><br><span class="line"></span><br><span class="line">  # Uri of fonts host<span class="punctuation">,</span> e.g. https<span class="punctuation">:</span><span class="comment">//fonts.googleapis.com (Default).</span></span><br><span class="line">  host<span class="punctuation">:</span> fonts.lug.ustc.edu.cn</span><br></pre></td></tr></table></figure></li>
 </ol>
 <p>再加载后从Google打开blog加载就畅通无阻了</p>
+<h3 id="Reference-1"><a href="#Reference-1" class="headerlink" title="Reference"></a>Reference</h3><p><a href="https://anson2416.github.io/posts/ae382d5a/">https://anson2416.github.io/posts/ae382d5a/</a></p>
 ]]></content>
       <categories>
         <category>configure</category>
