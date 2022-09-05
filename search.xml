@@ -214,6 +214,24 @@
 </ol>
 <p>再加载后从Google打开blog加载就畅通无阻了</p>
 <h3 id="Reference-1"><a href="#Reference-1" class="headerlink" title="Reference"></a>Reference</h3><p><a href="https://anson2416.github.io/posts/ae382d5a/">https://anson2416.github.io/posts/ae382d5a/</a></p>
+<figure class="highlight vbnet"><table><tr><td class="code"><pre><span class="line">Broadly speaking: <span class="keyword">end</span>-user impact.  <span class="keyword">If</span> we don<span class="comment">&#x27;t have reports of the</span></span><br><span class="line">issue causing a user-visible problem <span class="built_in">and</span> we don<span class="comment">&#x27;t expect such things to</span></span><br><span class="line">occur, don<span class="comment">&#x27;t backport.  Why risk causing some regression when we cannot</span></span><br><span class="line">identify any benefit?  (<span class="built_in">and</span> boy <span class="keyword">do</span> my fingers <span class="keyword">get</span> tired asking people</span><br><span class="line"><span class="keyword">to</span> describe the user-visible effects <span class="keyword">of</span> the bug they claim <span class="keyword">to</span> have fixed!)</span><br><span class="line"></span><br><span class="line"><span class="keyword">Of</span> course, screwups can happen <span class="built_in">and</span> user-useful patches may be passed</span><br><span class="line">over.</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ]]></content>
       <categories>
         <category>configure</category>
@@ -3152,6 +3170,19 @@
       <tags>
         <tag>system</tag>
         <tag>compiler</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux kernel regression</title>
+    <url>/2022/09/06/system/linux-kernel-regression/</url>
+    <content><![CDATA[<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p>[1] <a href="https://lwn.net/Articles/414223/">A more detailed look at kernel regressions (from LWN.net)</a></p>
+]]></content>
+      <categories>
+        <category>system</category>
+      </categories>
+      <tags>
+        <tag>operating system</tag>
+        <tag>Linux kernel</tag>
       </tags>
   </entry>
 </search>
