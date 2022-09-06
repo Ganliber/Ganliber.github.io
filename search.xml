@@ -3175,7 +3175,28 @@
   <entry>
     <title>Linux kernel regression</title>
     <url>/2022/09/06/system/linux-kernel-regression/</url>
-    <content><![CDATA[<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p>[1] <a href="https://lwn.net/Articles/414223/">A more detailed look at kernel regressions (from LWN.net)</a></p>
+    <content><![CDATA[<h2 id="Linux-Kernel-Regression"><a href="#Linux-Kernel-Regression" class="headerlink" title="Linux Kernel Regression"></a>Linux Kernel Regression</h2><h3 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h3><h4 id="总建议"><a href="#总建议" class="headerlink" title="总建议"></a>总建议</h4><ul>
+<li><p>“<em>我们拒绝出现回归</em>”是Linux内核开发的首要规则</p>
+</li>
+<li><p>如果某程序在原先的Linux内核上运行良好，但在较新版本上效果更差、或者根本不能用，那么你就碰见回归问题了。</p>
+</li>
+<li><p>按照<a href="https://docs.kernel.org/translations/zh_CN/admin-guide/reporting-issues.html">报告问题</a>中所说的报告你的问题，该文档已经包含了所有关于回归的重要方面。两个重点：</p>
+<ol>
+<li>在报告主题中使用<code>[REGRESSION]</code>开头</li>
+<li>抄送或转发到 <a href="https://lore.kernel.org/regressions/">回归邮件列表</a> -&gt;  <a href="mailto:regressions@lists.linux.dev">regressions@lists.linux.dev</a></li>
+</ol>
+</li>
+<li><p>可选但是建议：在发送或转发报告时，指明该回归发生的起点，以便Linux内核回归 追踪机器人<code>regzbot</code>可以追踪此问题：</p>
+<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line"><span class="selector-id">#regzbot</span> introduced v5.<span class="number">13</span>.<span class="selector-class">.v5</span>.<span class="number">14</span>-rc1</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="关于-regression"><a href="#关于-regression" class="headerlink" title="关于 regression"></a>关于 regression</h3><ol>
+<li>如果某程序&#x2F;实例在原先的Linux内核上运行良好，但在较新版本上效果更差、或者根本不能用，那么你就碰见回归问题了。“无回归规则”不允许出现这种情况。如果偶然发生了，导致问题的开发者应当迅速修复问题。</li>
+<li>也就是说，若Linux 5.13中的WiFi驱动程序运行良好，但是在5.14版本上却不能用、速度明显变慢或出现错误，那就出现了回归。如果某正常工作的应用程序突然在新内核上出现不稳定，这也是回归；这些问题可能是由于procfs、sysfs或Linux提供给用户空间 软件的许多其他接口之一的变化。<strong>但请记住，前述例子中的5.14需要使用类似于5.13的配置构建。</strong>这可以用 实现，详细解释见下。<code>make olddefconfig</code></li>
+<li>注意<code>1</code>中所说的“实例”：即使开发者需要遵循“无回归”规则，但仍可自由地改变内核的任何方面，甚至是导出到用户空间的API或ABI，只要别破坏现有的应用程序或 用例。</li>
+<li>还需注意，“无回归”规则只限制内核提供给用户空间的接口。它不适用于内核内部接 口，比如一些外部开发的驱动程序用来插入钩子到内核的模块API。</li>
+</ol>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>[1] <a href="https://lwn.net/Articles/414223/">A more detailed look at kernel regressions (from LWN.net)</a></p>
+<p>[2] <a href="https://docs.kernel.org/translations/zh_CN/admin-guide/reporting-regressions.html">报告回归问题 — The Linux Kernel documentation</a></p>
 ]]></content>
       <categories>
         <category>system</category>
