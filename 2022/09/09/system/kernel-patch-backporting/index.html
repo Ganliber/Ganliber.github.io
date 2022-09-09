@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-indicator.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ganliber.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+  <meta name="description" content="The process of reviewing, accepting and merging a patch in Linux kernel">
+<meta property="og:type" content="article">
+<meta property="og:title" content="kernel-patch-backporting">
+<meta property="og:url" content="https://ganliber.github.io/2022/09/09/system/kernel-patch-backporting/index.html">
+<meta property="og:site_name" content="Ganliber&#39;s Home">
+<meta property="og:description" content="The process of reviewing, accepting and merging a patch in Linux kernel">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-09-09T06:55:56.000Z">
+<meta property="article:modified_time" content="2022-09-09T17:32:50.210Z">
+<meta property="article:author" content="Gan Gecen">
+<meta property="article:tag" content="operating system">
+<meta property="article:tag" content="Linux kernel">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://ganliber.github.io/2022/09/09/system/kernel-patch-backporting/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>kernel-patch-backporting | Ganliber's Home</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Ganliber's Home</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">16</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">4</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">18</span></a>
+
+  </li>
+        <li class="menu-item menu-item-pwn">
+
+    <a href="/pwn/" rel="section"><i class="fas fa-flag-checkered fa-fw"></i>pwn</a>
+
+  </li>
+        <li class="menu-item menu-item-system">
+
+    <a href="/system/" rel="section"><i class="fas fa-laptop-code fa-fw"></i>system</a>
+
+  </li>
+        <li class="menu-item menu-item-paper">
+
+    <a href="/paper/" rel="section"><i class="fas fa-glasses fa-fw"></i>paper</a>
+
+  </li>
+        <li class="menu-item menu-item-configure">
+
+    <a href="/configure/" rel="section"><i class="fas fa-wrench fa-fw"></i>configure</a>
+
+  </li>
+        <li class="menu-item menu-item-link">
+
+    <a href="/link/" rel="section"><i class="fa fa-link fa-fw"></i>link</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://ganliber.github.io/2022/09/09/system/kernel-patch-backporting/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Gan Gecen">
+      <meta itemprop="description" content="An information security practitioner, focusing on system, Linux and pwn">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ganliber's Home">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          kernel-patch-backporting
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-09-09 14:55:56" itemprop="dateCreated datePublished" datetime="2022-09-09T14:55:56+08:00">2022-09-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-09-10 01:32:50" itemprop="dateModified" datetime="2022-09-10T01:32:50+08:00">2022-09-10</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/system/" itemprop="url" rel="index"><span itemprop="name">system</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/2022/09/09/system/kernel-patch-backporting/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/09/09/system/kernel-patch-backporting/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+            <div class="post-description"> The process of reviewing, accepting and merging a patch in Linux kernel  </div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Using-quilt-to-manage-patches"><a href="#Using-quilt-to-manage-patches" class="headerlink" title="Using quilt to manage patches"></a>Using quilt to manage patches</h1><hr>
+<h2 id="diff-patch"><a href="#diff-patch" class="headerlink" title="diff + patch"></a>diff + patch</h2><h3 id="Demo-structure"><a href="#Demo-structure" class="headerlink" title="Demo structure"></a>Demo structure</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">origin-project</span><br><span class="line">├── new-project</span><br><span class="line">│   ├── build</span><br><span class="line">│   │   └── Makefile</span><br><span class="line">│   ├── inc</span><br><span class="line">│   │   ├── def1.h</span><br><span class="line">│   │   └── def2.h</span><br><span class="line">│   └── src</span><br><span class="line">│       ├── drivers</span><br><span class="line">│       │   ├── drv1.c</span><br><span class="line">│       │   ├── drv1.h</span><br><span class="line">│       │   ├── drv2.c</span><br><span class="line">│       │   └── drv2.h</span><br><span class="line">│       ├── lib</span><br><span class="line">│       │   ├── lib1.c</span><br><span class="line">│       │   ├── lib1.h</span><br><span class="line">│       │   ├── lib2.c</span><br><span class="line">│       │   └── lib2.h</span><br><span class="line">│       └── sys</span><br><span class="line">│           ├── sys1.c</span><br><span class="line">│           └── sys1.h</span><br><span class="line">└── old-project</span><br><span class="line">    ├── build</span><br><span class="line">    │   └── Makefile</span><br><span class="line">    ├── inc</span><br><span class="line">    │   ├── def1.h</span><br><span class="line">    │   └── def2.h</span><br><span class="line">    └── src</span><br><span class="line">        ├── drivers</span><br><span class="line">        │   ├── drv1.c</span><br><span class="line">        │   ├── drv1.h</span><br><span class="line">        │   ├── drv2.c</span><br><span class="line">        │   └── drv2.h</span><br><span class="line">        ├── lib</span><br><span class="line">        │   ├── lib1.c</span><br><span class="line">        │   ├── lib1.h</span><br><span class="line">        │   ├── lib2.c</span><br><span class="line">        │   └── lib2.h</span><br><span class="line">        └── sys</span><br><span class="line">            ├── sys1.c</span><br><span class="line">            └── sys1.h</span><br></pre></td></tr></table></figure>
+
+<h3 id="Usage-1-file-patch"><a href="#Usage-1-file-patch" class="headerlink" title="Usage 1 : file patch"></a>Usage 1 : file patch</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">$ diff </span><br><span class="line">[1]</span><br><span class="line">    diff -u [old-file] [new-file] &gt; [patch-file]</span><br><span class="line">    [---] -&gt; old file</span><br><span class="line">    [+++] -&gt; new file</span><br><span class="line">    [@@ -a,b +c,d @@] between <span class="string">&#x27;@@&#x27;</span> is the different partition, the other lines is <span class="string">&quot;context&quot;</span>.</span><br><span class="line">          -&gt; <span class="keyword">in</span> old file, beginning from line-a, there are b lines that have been changed.</span><br><span class="line">          -&gt; <span class="keyword">in</span> new file, beginning from line-c, there are d lines that differentiate from old one.</span><br><span class="line">[2]</span><br><span class="line">	diff -Nur [old-dir] [new-dir] &gt; [patch-file]</span><br><span class="line">	diff -Naur [old-dir] [new-dir] &gt; [patch-file]</span><br><span class="line">	[-u] unified style</span><br><span class="line">	[-N] treat non-existent file as empty files, without [-N], patch will not include the file that new-proj includes but old-proj dose not include.</span><br><span class="line">    [-r] compare sub-dir</span><br><span class="line">    [-a] treat all files as text files</span><br><span class="line">$ patch</span><br><span class="line">	patch -pn &lt; [patch-file]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>make patch <code>drv1-h.diff</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">diff -u old-project/src/drivers/drv1.h new-project/src/drivers/drv1.h &gt; ../drv1-h.diff</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>make copy of <code>old-file</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cp</span> -r old-project ../old-project-cp</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>apply patch in <code>old-project-cp</code></p>
+<blockquote>
+<p>About <code>-pn</code> : n means removing the n-level of <code>&#39;/&#39;</code>, for example, <code>-p1</code> means that the file to be patched is <code>src/drivers/drv1.h</code> without <code>old-project/</code>, <code>-p2</code> means that the file is <code>drivers/drv1.h</code></p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">  $ <span class="built_in">cat</span> -n ../drv1-h.diff</span><br><span class="line">       1  --- old-project/src/drivers/drv1.h      2022-09-09 16:29:55.524191836 +0800</span><br><span class="line">       2  +++ new-project/src/drivers/drv1.h      2022-09-09 16:31:28.137213185 +0800</span><br><span class="line">       3  @@ -7,9 +7,8 @@</span><br><span class="line">       4   typedef struct </span><br><span class="line">       5   &#123;</span><br><span class="line">       6       /* data */</span><br><span class="line">       7  -    int p1;</span><br><span class="line">       8  -    int p2;</span><br><span class="line">       9  -    int p3;</span><br><span class="line">      10  +    int p_new1;</span><br><span class="line">      11  +    int p_new2;</span><br><span class="line">      12   &#125; lib1;</span><br><span class="line">      13   </span><br><span class="line">      14   void func_lib1(void);</span><br><span class="line">  $ patch -p1 &lt; ../drv1-h.diff </span><br><span class="line">  patching file src/drivers/drv1.h</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">### Usage 2 : dir patch</span></span><br><span class="line"></span><br><span class="line">```bash</span><br><span class="line">diff -Nur old-project new-project &gt; ../prj-dir.diff</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>View patch content</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cat</span> -n ../prj-dir.diff </span><br><span class="line">     1  diff --color -Nur old-project/src/drivers/drv1.h new-project/src/drivers/drv1.h</span><br><span class="line">     2  --- old-project/src/drivers/drv1.h      2022-09-09 16:29:55.524191836 +0800</span><br><span class="line">     3  +++ new-project/src/drivers/drv1.h      2022-09-09 16:31:28.137213185 +0800</span><br><span class="line">     4  @@ -7,9 +7,8 @@</span><br><span class="line">     5   typedef struct </span><br><span class="line">     6   &#123;</span><br><span class="line">     7       /* data */</span><br><span class="line">     8  -    int p1;</span><br><span class="line">     9  -    int p2;</span><br><span class="line">    10  -    int p3;</span><br><span class="line">    11  +    int p_new1;</span><br><span class="line">    12  +    int p_new2;</span><br><span class="line">    13   &#125; lib1;</span><br><span class="line">    14   </span><br><span class="line">    15   void func_lib1(void);</span><br><span class="line">    16  diff --color -Nur old-project/src/usr/usr.c new-project/src/usr/usr.c</span><br><span class="line">    17  --- old-project/src/usr/usr.c   1970-01-01 08:00:00.000000000 +0800</span><br><span class="line">    18  +++ new-project/src/usr/usr.c   2022-09-09 17:11:23.733029333 +0800</span><br><span class="line">    19  @@ -0,0 +1 @@</span><br><span class="line">    20  +<span class="comment">#include &quot;usr.h&quot;</span></span><br><span class="line">    21  diff --color -Nur old-project/src/usr/usr.h new-project/src/usr/usr.h</span><br><span class="line">    22  --- old-project/src/usr/usr.h   1970-01-01 08:00:00.000000000 +0800</span><br><span class="line">    23  +++ new-project/src/usr/usr.h   2022-09-09 17:10:52.065591264 +0800</span><br><span class="line">    24  @@ -0,0 +1,4 @@</span><br><span class="line">    25  +<span class="comment">#ifndef USR1_H</span></span><br><span class="line">    26  +<span class="comment">#define USR1_H</span></span><br><span class="line">    27  +<span class="comment">#include &quot;def.h&quot;</span></span><br><span class="line">    28  +<span class="comment">#endif</span></span><br></pre></td></tr></table></figure>
+
+<p>Apply patch</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ patch -p1 &lt; ../prj-dir.diff</span><br><span class="line">patching file src/drivers/drv1.h</span><br><span class="line">patching file src/usr/usr.c</span><br><span class="line">patching file src/usr/usr.h</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="quilt"><a href="#quilt" class="headerlink" title="quilt"></a>quilt</h2><ul>
+<li><p><code>quilt</code> manages patches by using stack.</p>
+</li>
+<li><p>structure</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">patches</span><br><span class="line"><span class="title">.pc</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>instruction set</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">quilt import [patch-file] //导入补丁(not app)</span><br><span class="line">quilt applied //查看已经应用的补丁</span><br><span class="line">quilt unapplied //查看还没有应用的补丁</span><br><span class="line">quilt top //查询栈顶补丁(已应用的最新补丁)</span><br><span class="line">quilt push //应用补丁</span><br><span class="line">	quilt push -a //应用所有补丁</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">proj</span><br><span class="line">├── build</span><br><span class="line">│   └── Makefile</span><br><span class="line">├── inc</span><br><span class="line">│   ├── def1<span class="selector-class">.h</span></span><br><span class="line">│   └── def2<span class="selector-class">.h</span></span><br><span class="line">└── <span class="attribute">src</span></span><br><span class="line">    ├── drivers</span><br><span class="line">    │   ├── drv1<span class="selector-class">.c</span></span><br><span class="line">    │   ├── drv1<span class="selector-class">.h</span></span><br><span class="line">    │   ├── drv2<span class="selector-class">.c</span></span><br><span class="line">    │   └── drv2<span class="selector-class">.h</span></span><br><span class="line">    ├── lib</span><br><span class="line">    │   ├── lib1<span class="selector-class">.c</span></span><br><span class="line">    │   ├── lib1<span class="selector-class">.h</span></span><br><span class="line">    │   ├── lib2<span class="selector-class">.c</span></span><br><span class="line">    │   └── lib2<span class="selector-class">.h</span></span><br><span class="line">    └── sys</span><br><span class="line">        ├── sys1<span class="selector-class">.c</span></span><br><span class="line">        └── sys1.h</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>Import patch through <code>quilt</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ quilt import ../prj.diff</span><br><span class="line">Importing patch ../prj.diff (stored as patches/prj.diff)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>After <code>quilt import</code>, a dir named <code>patches</code> will be generated under the current dir.</p>
+<blockquote>
+<p>series will play as a patch-queue list recording the deployed patches in order. </p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">ls</span></span><br><span class="line">build  inc  patches  src</span><br><span class="line">$ <span class="built_in">ls</span> patches   </span><br><span class="line">prj.diff  series</span><br><span class="line">$ <span class="built_in">cat</span> -n series         </span><br><span class="line">     1  prj.diff</span><br></pre></td></tr></table></figure>
+</li>
+<li></li>
+</ul>
+<h2 id="Overview-on-process-of-backporting-in-stable-queue"><a href="#Overview-on-process-of-backporting-in-stable-queue" class="headerlink" title="Overview on process of backporting in stable-queue"></a>Overview on process of backporting in stable-queue</h2><hr>
+<h3 id="scripts-list-used-for-backporting-patches-to-stable-queue-up-to-now"><a href="#scripts-list-used-for-backporting-patches-to-stable-queue-up-to-now" class="headerlink" title="scripts list used for backporting patches to stable-queue up to now"></a>scripts list used for backporting patches to stable-queue up to now</h3><figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">added-<span class="keyword">to</span>-stable</span><br><span class="line">bad_stable</span><br><span class="line"><span class="keyword">c</span><span class="number">2</span>p</span><br><span class="line">convert_to_utf<span class="number">8</span></span><br><span class="line">dorelease</span><br><span class="line">dropped_commits</span><br><span class="line">guess-charset</span><br><span class="line">makemail</span><br><span class="line">make_message_id</span><br><span class="line">mbox<span class="number">2</span>send</span><br><span class="line">quilt-mail</span><br><span class="line">smtpsend</span><br><span class="line">splitmbox.py</span><br><span class="line">tag_stable</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Gan Gecen
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://ganliber.github.io/2022/09/09/system/kernel-patch-backporting/" title="kernel-patch-backporting">https://ganliber.github.io/2022/09/09/system/kernel-patch-backporting/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/operating-system/" rel="tag"># operating system</a>
+              <a href="/tags/Linux-kernel/" rel="tag"># Linux kernel</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/09/06/system/linux-kernel-regression/" rel="prev" title="Linux kernel regression">
+      <i class="fa fa-chevron-left"></i> Linux kernel regression
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Using-quilt-to-manage-patches"><span class="nav-number">1.</span> <span class="nav-text">Using quilt to manage patches</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#diff-patch"><span class="nav-number">1.1.</span> <span class="nav-text">diff + patch</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Demo-structure"><span class="nav-number">1.1.1.</span> <span class="nav-text">Demo structure</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Usage-1-file-patch"><span class="nav-number">1.1.2.</span> <span class="nav-text">Usage 1 : file patch</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#quilt"><span class="nav-number">1.2.</span> <span class="nav-text">quilt</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Demo"><span class="nav-number">1.2.1.</span> <span class="nav-text">Demo</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Overview-on-process-of-backporting-in-stable-queue"><span class="nav-number">1.3.</span> <span class="nav-text">Overview on process of backporting in stable-queue</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#scripts-list-used-for-backporting-patches-to-stable-queue-up-to-now"><span class="nav-number">1.3.1.</span> <span class="nav-text">scripts list used for backporting patches to stable-queue up to now</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Gan Gecen"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Gan Gecen</p>
+  <div class="site-description" itemprop="description">An information security practitioner, focusing on system, Linux and pwn</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Ganliber" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Ganliber" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:Gecenliber@outlook.com" title="E-Mail → mailto:Gecenliber@outlook.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/Ganliber" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;Ganliber" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gan Gecen</span>
+</div>
+
+<!--
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+-->
+
+
+<div class="powered-by">
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <i class="fa fa-user-md"></i>
+    <span id="busuanzi_container_site_uv">
+        访客数:<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_pv">
+        访问量:<span id="busuanzi_value_site_pv"></span>
+    </span>
+</div>
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://Ganliber.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://ganliber.github.io/2022/09/09/system/kernel-patch-backporting/";
+    this.page.identifier = "2022/09/09/system/kernel-patch-backporting/";
+    this.page.title = "kernel-patch-backporting";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://Ganliber.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+</script>
+
+</body>
+</html>
