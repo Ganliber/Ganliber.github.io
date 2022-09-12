@@ -3246,7 +3246,7 @@
 <figure class="highlight asciidoc"><table><tr><td class="code"><pre><span class="line">patches</span><br><span class="line"><span class="title">.pc</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p>instruction set</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">quilt import [patch-file] //导入补丁(not applied)</span><br><span class="line">quilt applied //查看已经应用的补丁</span><br><span class="line">quilt unapplied //查看还没有应用的补丁</span><br><span class="line">quilt top //查询栈顶补丁(已应用的最新补丁)</span><br><span class="line">quilt push //应用补丁</span><br><span class="line">	quilt push -a //应用所有补丁</span><br><span class="line">quilt add [-P <span class="string">&#x27;patch-name&#x27;</span>] [file-name]</span><br><span class="line">	//为指定补丁保存了指定文件的当前快照</span><br><span class="line">	//将文件的当前状态和补丁联系起来</span><br><span class="line">	//如果没有指定补丁名,就与栈顶补丁联系起来</span><br><span class="line">quilt new [new-patch-name] //不想修改原补丁, 新建patch</span><br><span class="line">quilt diff -z [-P <span class="string">&#x27;patch-name&#x27;</span>] [file-name] //查看指定补丁指定文件当前改动</span><br><span class="line">quilt diff -z</span><br><span class="line">quilt files [patch-name] //查看与补丁相关联的文件</span><br><span class="line">quilt files -val //查看所有补丁联系的所有文件</span><br><span class="line">	// -v : 更友好的显示</span><br><span class="line">	// -a : 所有补丁</span><br><span class="line">	// -l : 显示补丁名</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/* 对于一个patch其实在quilt中不只是一个补丁文件, 而是一个补丁环境, 具有与其关联的文件(修改&amp;未修改) */</span><br><span class="line">quilt import [patch-file] //导入补丁(not applied)</span><br><span class="line">quilt applied //查看已经应用的补丁</span><br><span class="line">quilt unapplied //查看还没有应用的补丁</span><br><span class="line">quilt top //查询栈顶补丁(已应用的最新补丁)</span><br><span class="line">quilt previous //查询上一个补丁</span><br><span class="line">quilt push //应用补丁</span><br><span class="line">	quilt push -a //应用所有补丁</span><br><span class="line">quilt pop //回退刚刚文件的改动</span><br><span class="line">quilt add [-P <span class="string">&#x27;patch-name&#x27;</span>] [file-name]</span><br><span class="line">	//为指定补丁保存了指定文件的当前快照</span><br><span class="line">	//将文件的当前状态和补丁联系起来</span><br><span class="line">	//如果没有指定补丁名,就与栈顶补丁联系起来</span><br><span class="line">quilt remove [-P <span class="string">&#x27;patch-name&#x27;</span>] [file-name]</span><br><span class="line">	//取消关联文件</span><br><span class="line">quilt new [new-patch-name] //不想修改原补丁, 新建patch</span><br><span class="line">quilt diff //查看对比修改的内容</span><br><span class="line">quilt diff -z [-P <span class="string">&#x27;patch-name&#x27;</span>] [file-name] //查看指定补丁指定文件当前改动</span><br><span class="line">quilt diff -z</span><br><span class="line">quilt files [patch-name] //查看与补丁相关联的文件</span><br><span class="line">quilt files -val //查看所有补丁联系的所有文件</span><br><span class="line">	// -v : 更友好的显示</span><br><span class="line">	// -a : 所有补丁</span><br><span class="line">	// -l : 显示补丁名</span><br><span class="line">quilt refresh </span><br><span class="line">	//修改完成后将该记录更新至补丁之中</span><br><span class="line">	//刷新指定的补丁，或默认刷新最上面的补丁。补丁文件中实际补丁之前的文件将被保留。</span><br></pre></td></tr></table></figure></li>
 </ul>
 <h3 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h3><figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line">proj</span><br><span class="line">├── build</span><br><span class="line">│   └── Makefile</span><br><span class="line">├── inc</span><br><span class="line">│   ├── def1<span class="selector-class">.h</span></span><br><span class="line">│   └── def2<span class="selector-class">.h</span></span><br><span class="line">└── <span class="attribute">src</span></span><br><span class="line">    ├── drivers</span><br><span class="line">    │   ├── drv1<span class="selector-class">.c</span></span><br><span class="line">    │   ├── drv1<span class="selector-class">.h</span></span><br><span class="line">    │   ├── drv2<span class="selector-class">.c</span></span><br><span class="line">    │   └── drv2<span class="selector-class">.h</span></span><br><span class="line">    ├── lib</span><br><span class="line">    │   ├── lib1<span class="selector-class">.c</span></span><br><span class="line">    │   ├── lib1<span class="selector-class">.h</span></span><br><span class="line">    │   ├── lib2<span class="selector-class">.c</span></span><br><span class="line">    │   └── lib2<span class="selector-class">.h</span></span><br><span class="line">    └── sys</span><br><span class="line">        ├── sys1<span class="selector-class">.c</span></span><br><span class="line">        └── sys1.h</span><br></pre></td></tr></table></figure>
 
@@ -3266,18 +3266,48 @@
 <h2 id="Backporting-in-stable-queue"><a href="#Backporting-in-stable-queue" class="headerlink" title="Backporting in stable-queue"></a>Backporting in stable-queue</h2><blockquote>
 <p>Overview on process of backporting in stable-queue</p>
 </blockquote>
-<h3 id="scripts-list-used-for-backporting-patches-to-stable-queue-up-to-now"><a href="#scripts-list-used-for-backporting-patches-to-stable-queue-up-to-now" class="headerlink" title="scripts list used for backporting patches to stable-queue up to now"></a>scripts list used for backporting patches to stable-queue up to now</h3><figure class="highlight llvm"><table><tr><td class="code"><pre><span class="line">added-<span class="keyword">to</span>-stable</span><br><span class="line">bad_stable</span><br><span class="line"><span class="keyword">c</span><span class="number">2</span>p</span><br><span class="line">convert_to_utf<span class="number">8</span></span><br><span class="line">dorelease</span><br><span class="line">dropped_commits</span><br><span class="line">guess-charset</span><br><span class="line">makemail</span><br><span class="line">make_message_id</span><br><span class="line">mbox<span class="number">2</span>send</span><br><span class="line">quilt-mail</span><br><span class="line">smtpsend</span><br><span class="line">splitmbox.py</span><br><span class="line">tag_stable</span><br></pre></td></tr></table></figure>
+<h3 id="scripts-list-used-for-backporting-patches-to-stable-queue-up-to-now"><a href="#scripts-list-used-for-backporting-patches-to-stable-queue-up-to-now" class="headerlink" title="scripts list used for backporting patches to stable-queue up to now"></a>scripts list used for backporting patches to stable-queue up to now</h3><figure class="highlight asciidoc"><table><tr><td class="code"><pre><span class="line"><span class="bullet">* </span>added-to-stable</span><br><span class="line"><span class="code">  bad_stable</span></span><br><span class="line"><span class="bullet">* </span>c2p</span><br><span class="line"><span class="code">  convert_to_utf8</span></span><br><span class="line"><span class="code">  dorelease</span></span><br><span class="line"><span class="code">  dropped_commits</span></span><br><span class="line"><span class="code">  guess-charset</span></span><br><span class="line"><span class="code">  makemail</span></span><br><span class="line"><span class="code">  make_message_id</span></span><br><span class="line"><span class="code">  mbox2send</span></span><br><span class="line"><span class="code">  quilt-mail</span></span><br><span class="line"><span class="code">  smtpsend</span></span><br><span class="line"><span class="code">  splitmbox.py</span></span><br><span class="line"><span class="code">  tag_stable</span></span><br></pre></td></tr></table></figure>
 
+<h2 id="procedure"><a href="#procedure" class="headerlink" title="procedure"></a>procedure</h2><ul>
+<li><p>Select patch.</p>
+<p>( Manually ) select suitable patch from mail-queue-stable, get the <code>commit id</code> of that patch.</p>
+</li>
+<li><p>Grab the patch.</p>
+<p><code>c2p</code> ( written in perl ) : <code>commit id</code> -&gt; <code>patch</code> ( grab this patch from linus’tree ( upstream ) )</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./scripts/c2p [commit-id]</span><br></pre></td></tr></table></figure>
 
-
-
-
-
-
-
-
+<ul>
+<li>Grabs the patch by commit id</li>
+<li>Formats the patch into proper layout needed for a stable tree.</li>
+<li>Enter a editor where maintainer( Greg or Levin ) can edit it.</li>
+<li>After editing, this script will copy it into stable-tree directory</li>
+</ul>
+</li>
+<li><p>Check before applying it.</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">* [example]</span><br><span class="line">	patch -p1 --dry-run &lt; ../patch-name.patch</span><br><span class="line">* Greg make a <span class="built_in">alias</span> <span class="keyword">for</span> it like:</span><br><span class="line">	<span class="built_in">alias</span> p1=<span class="string">&#x27;patch -p1 --dry-run&#x27;</span></span><br><span class="line">* About parameter <span class="string">&#x27;--dry-run&#x27;</span>:</span><br><span class="line">	The --dry-run option tells patch to <span class="keyword">do</span> everything apart from actually modifying the files. patch will perform all of its pre-flight checks on the files and <span class="keyword">if</span> it encounters any problems, it reports them. Either way, no files are modified.</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Apply that patch.</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">quilt import ../patch-name.patch</span><br><span class="line">	* import this patch to the quilt-series-patch-queue</span><br><span class="line">q push</span><br><span class="line">	* Apply this patch, <span class="string">&#x27;q&#x27;</span> is the <span class="built_in">alias</span> of <span class="string">&#x27;quilt&#x27;</span></span><br><span class="line">q refresh</span><br><span class="line">	* Refreshes the specified patch, or the topmost patch by default.Documentation that comes before the actual patch <span class="keyword">in</span> the patch file is retained.</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Git commit in stable-tree.</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git add queue-[version]/</span><br><span class="line">git commit -a</span><br><span class="line">	// edit the note message</span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Notify the author his patch has been merged in the stable-[version] tree.</p>
+<blockquote>
+<p>In the file <code>added-to-stable</code>, there are one line :</p>
+<p><code>~/bin/msmtp-enqueue.sh -a coco &quot;$to&quot;</code></p>
+<p>which means that the msmtp will send the email to the author according to <code>commit-id</code>.</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./scripts/added-to-stable [patch-file]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Build the patch into the stable-kernel image.</p>
+</li>
+<li><p>Testing it.</p>
+</li>
+</ul>
 <h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>[1] <a href="https://blog.csdn.net/vampirem/article/details/11485575">https://blog.csdn.net/vampirem/article/details/11485575</a></p>
 <p>[2] <a href="https://www.youtube.com/watch?v=6zUVS4kJtrA&amp;list=PLbzoR-pLrL6qucl8-lOnzvhFc2UM1tcZA">https://www.youtube.com/watch?v=6zUVS4kJtrA&amp;list=PLbzoR-pLrL6qucl8-lOnzvhFc2UM1tcZA</a></p>
+<p>[3] <a href="http://www.kroah.com/log/linux/how-i-do-stable.html">linux kernel monkey log (kroah.com)</a></p>
 ]]></content>
       <categories>
         <category>system</category>
