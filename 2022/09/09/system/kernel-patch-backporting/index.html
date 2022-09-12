@@ -21,15 +21,15 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"ganliber.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
-  <meta name="description" content="The process of reviewing, accepting and merging a patch in Linux kernel">
+  <meta name="description" content="The process of reviewing, accepting and merging a patch in the -stable tree of Linux kernel">
 <meta property="og:type" content="article">
-<meta property="og:title" content="kernel-patch-backporting">
+<meta property="og:title" content="How do Linux kernel maintainers of stable tree do patch backporting?">
 <meta property="og:url" content="https://ganliber.github.io/2022/09/09/system/kernel-patch-backporting/index.html">
 <meta property="og:site_name" content="Ganliber&#39;s Home">
-<meta property="og:description" content="The process of reviewing, accepting and merging a patch in Linux kernel">
+<meta property="og:description" content="The process of reviewing, accepting and merging a patch in the -stable tree of Linux kernel">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-09-09T06:55:56.000Z">
-<meta property="article:modified_time" content="2022-09-12T13:46:47.959Z">
+<meta property="article:modified_time" content="2022-09-12T13:53:00.776Z">
 <meta property="article:author" content="Gan Gecen">
 <meta property="article:tag" content="operating system">
 <meta property="article:tag" content="Linux kernel">
@@ -48,7 +48,7 @@
   };
 </script>
 
-  <title>kernel-patch-backporting | Ganliber's Home</title>
+  <title>How do Linux kernel maintainers of stable tree do patch backporting? | Ganliber's Home</title>
   
 
 
@@ -234,7 +234,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          kernel-patch-backporting
+          How do Linux kernel maintainers of stable tree do patch backporting?
         </h1>
 
         <div class="post-meta">
@@ -251,7 +251,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-09-12 21:46:47" itemprop="dateModified" datetime="2022-09-12T21:46:47+08:00">2022-09-12</time>
+                <time title="Modified: 2022-09-12 21:53:00" itemprop="dateModified" datetime="2022-09-12T21:53:00+08:00">2022-09-12</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -278,7 +278,7 @@
   </span>
   
   
-            <div class="post-description"> The process of reviewing, accepting and merging a patch in Linux kernel  </div>
+            <div class="post-description"> The process of reviewing, accepting and merging a patch in the -stable tree of Linux kernel  </div>
 
         </div>
       </header>
@@ -346,7 +346,10 @@
 <h2 id="Backporting-in-stable-queue"><a href="#Backporting-in-stable-queue" class="headerlink" title="Backporting in stable-queue"></a>Backporting in stable-queue</h2><blockquote>
 <p>Overview on process of backporting in stable-queue</p>
 </blockquote>
-<h3 id="scripts-list-used-for-backporting-patches-to-stable-queue-up-to-now"><a href="#scripts-list-used-for-backporting-patches-to-stable-queue-up-to-now" class="headerlink" title="scripts list used for backporting patches to stable-queue up to now"></a>scripts list used for backporting patches to stable-queue up to now</h3><figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">* </span>added-to-stable</span><br><span class="line"><span class="code">  bad_stable</span></span><br><span class="line"><span class="bullet">* </span>c2p</span><br><span class="line"><span class="code">  convert_to_utf8</span></span><br><span class="line"><span class="code">  dorelease</span></span><br><span class="line"><span class="code">  dropped_commits</span></span><br><span class="line"><span class="code">  guess-charset</span></span><br><span class="line"><span class="code">  makemail</span></span><br><span class="line"><span class="code">  make_message_id</span></span><br><span class="line"><span class="code">  mbox2send</span></span><br><span class="line"><span class="code">  quilt-mail</span></span><br><span class="line"><span class="code">  smtpsend</span></span><br><span class="line"><span class="code">  splitmbox.py</span></span><br><span class="line"><span class="code">  tag_stable</span></span><br></pre></td></tr></table></figure>
+<h3 id="scripts-list"><a href="#scripts-list" class="headerlink" title="scripts list"></a>scripts list</h3><blockquote>
+<p>Scripts used for backporting patches to stable-queue up to now</p>
+</blockquote>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">* </span>added-to-stable</span><br><span class="line"><span class="code">  bad_stable</span></span><br><span class="line"><span class="bullet">* </span>c2p</span><br><span class="line"><span class="code">  convert_to_utf8</span></span><br><span class="line"><span class="code">  dorelease</span></span><br><span class="line"><span class="code">  dropped_commits</span></span><br><span class="line"><span class="code">  guess-charset</span></span><br><span class="line"><span class="code">  makemail</span></span><br><span class="line"><span class="code">  make_message_id</span></span><br><span class="line"><span class="code">  mbox2send</span></span><br><span class="line"><span class="code">  quilt-mail</span></span><br><span class="line"><span class="code">  smtpsend</span></span><br><span class="line"><span class="code">  splitmbox.py</span></span><br><span class="line"><span class="code">  tag_stable</span></span><br></pre></td></tr></table></figure>
 
 <h2 id="procedure"><a href="#procedure" class="headerlink" title="procedure"></a>procedure</h2><ul>
 <li><p>Select patch.</p>
@@ -385,9 +388,11 @@
 <li><p>Testing it.</p>
 </li>
 </ul>
-<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>[1] <a target="_blank" rel="noopener" href="https://blog.csdn.net/vampirem/article/details/11485575">https://blog.csdn.net/vampirem/article/details/11485575</a></p>
-<p>[2] <a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=6zUVS4kJtrA&amp;list=PLbzoR-pLrL6qucl8-lOnzvhFc2UM1tcZA">https://www.youtube.com/watch?v=6zUVS4kJtrA&amp;list=PLbzoR-pLrL6qucl8-lOnzvhFc2UM1tcZA</a></p>
-<p>[3] <a target="_blank" rel="noopener" href="http://www.kroah.com/log/linux/how-i-do-stable.html">linux kernel monkey log (kroah.com)</a></p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/vampirem/article/details/11485575">https://blog.csdn.net/vampirem/article/details/11485575</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=6zUVS4kJtrA&amp;list=PLbzoR-pLrL6qucl8-lOnzvhFc2UM1tcZA">https://www.youtube.com/watch?v=6zUVS4kJtrA&amp;list=PLbzoR-pLrL6qucl8-lOnzvhFc2UM1tcZA</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.kroah.com/log/linux/how-i-do-stable.html">linux kernel monkey log (kroah.com)</a></li>
+</ul>
 
     </div>
 
@@ -403,7 +408,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>Post link: </strong>
-    <a href="https://ganliber.github.io/2022/09/09/system/kernel-patch-backporting/" title="kernel-patch-backporting">https://ganliber.github.io/2022/09/09/system/kernel-patch-backporting/</a>
+    <a href="https://ganliber.github.io/2022/09/09/system/kernel-patch-backporting/" title="How do Linux kernel maintainers of stable tree do patch backporting?">https://ganliber.github.io/2022/09/09/system/kernel-patch-backporting/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
@@ -493,7 +498,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Quilt-manage-patches"><span class="nav-number">1.</span> <span class="nav-text">Quilt : manage patches</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#diff-patch"><span class="nav-number">1.1.</span> <span class="nav-text">diff + patch</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Demo-structure"><span class="nav-number">1.1.1.</span> <span class="nav-text">Demo structure</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Usage-1-file-patch"><span class="nav-number">1.1.2.</span> <span class="nav-text">Usage 1 : file patch</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#quilt"><span class="nav-number">1.2.</span> <span class="nav-text">quilt</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Demo"><span class="nav-number">1.2.1.</span> <span class="nav-text">Demo</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Backporting-in-stable-queue"><span class="nav-number">1.3.</span> <span class="nav-text">Backporting in stable-queue</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#scripts-list-used-for-backporting-patches-to-stable-queue-up-to-now"><span class="nav-number">1.3.1.</span> <span class="nav-text">scripts list used for backporting patches to stable-queue up to now</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#procedure"><span class="nav-number">1.4.</span> <span class="nav-text">procedure</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">1.5.</span> <span class="nav-text">Reference</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Quilt-manage-patches"><span class="nav-number">1.</span> <span class="nav-text">Quilt : manage patches</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#diff-patch"><span class="nav-number">1.1.</span> <span class="nav-text">diff + patch</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Demo-structure"><span class="nav-number">1.1.1.</span> <span class="nav-text">Demo structure</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Usage-1-file-patch"><span class="nav-number">1.1.2.</span> <span class="nav-text">Usage 1 : file patch</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#quilt"><span class="nav-number">1.2.</span> <span class="nav-text">quilt</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Demo"><span class="nav-number">1.2.1.</span> <span class="nav-text">Demo</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Backporting-in-stable-queue"><span class="nav-number">1.3.</span> <span class="nav-text">Backporting in stable-queue</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#scripts-list"><span class="nav-number">1.3.1.</span> <span class="nav-text">scripts list</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#procedure"><span class="nav-number">1.4.</span> <span class="nav-text">procedure</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">1.5.</span> <span class="nav-text">Reference</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -669,7 +674,7 @@ if (document.querySelectorAll('pre.mermaid').length) {
   var disqus_config = function() {
     this.page.url = "https://ganliber.github.io/2022/09/09/system/kernel-patch-backporting/";
     this.page.identifier = "2022/09/09/system/kernel-patch-backporting/";
-    this.page.title = "kernel-patch-backporting";
+    this.page.title = "How do Linux kernel maintainers of stable tree do patch backporting?";
     };
   NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
     if (window.DISQUS) {

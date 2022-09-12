@@ -3207,7 +3207,7 @@
       </tags>
   </entry>
   <entry>
-    <title>kernel-patch-backporting</title>
+    <title>How do Linux kernel maintainers of stable tree do patch backporting?</title>
     <url>/2022/09/09/system/kernel-patch-backporting/</url>
     <content><![CDATA[<h1 id="Quilt-manage-patches"><a href="#Quilt-manage-patches" class="headerlink" title="Quilt : manage patches"></a>Quilt : manage patches</h1><blockquote>
 <p>Sample code repo : <a href="https://github.com/Ganliber/linux-kernel-backporting">https://github.com/Ganliber/linux-kernel-backporting</a></p>
@@ -3266,7 +3266,10 @@
 <h2 id="Backporting-in-stable-queue"><a href="#Backporting-in-stable-queue" class="headerlink" title="Backporting in stable-queue"></a>Backporting in stable-queue</h2><blockquote>
 <p>Overview on process of backporting in stable-queue</p>
 </blockquote>
-<h3 id="scripts-list-used-for-backporting-patches-to-stable-queue-up-to-now"><a href="#scripts-list-used-for-backporting-patches-to-stable-queue-up-to-now" class="headerlink" title="scripts list used for backporting patches to stable-queue up to now"></a>scripts list used for backporting patches to stable-queue up to now</h3><figure class="highlight asciidoc"><table><tr><td class="code"><pre><span class="line"><span class="bullet">* </span>added-to-stable</span><br><span class="line"><span class="code">  bad_stable</span></span><br><span class="line"><span class="bullet">* </span>c2p</span><br><span class="line"><span class="code">  convert_to_utf8</span></span><br><span class="line"><span class="code">  dorelease</span></span><br><span class="line"><span class="code">  dropped_commits</span></span><br><span class="line"><span class="code">  guess-charset</span></span><br><span class="line"><span class="code">  makemail</span></span><br><span class="line"><span class="code">  make_message_id</span></span><br><span class="line"><span class="code">  mbox2send</span></span><br><span class="line"><span class="code">  quilt-mail</span></span><br><span class="line"><span class="code">  smtpsend</span></span><br><span class="line"><span class="code">  splitmbox.py</span></span><br><span class="line"><span class="code">  tag_stable</span></span><br></pre></td></tr></table></figure>
+<h3 id="scripts-list"><a href="#scripts-list" class="headerlink" title="scripts list"></a>scripts list</h3><blockquote>
+<p>Scripts used for backporting patches to stable-queue up to now</p>
+</blockquote>
+<figure class="highlight asciidoc"><table><tr><td class="code"><pre><span class="line"><span class="bullet">* </span>added-to-stable</span><br><span class="line"><span class="code">  bad_stable</span></span><br><span class="line"><span class="bullet">* </span>c2p</span><br><span class="line"><span class="code">  convert_to_utf8</span></span><br><span class="line"><span class="code">  dorelease</span></span><br><span class="line"><span class="code">  dropped_commits</span></span><br><span class="line"><span class="code">  guess-charset</span></span><br><span class="line"><span class="code">  makemail</span></span><br><span class="line"><span class="code">  make_message_id</span></span><br><span class="line"><span class="code">  mbox2send</span></span><br><span class="line"><span class="code">  quilt-mail</span></span><br><span class="line"><span class="code">  smtpsend</span></span><br><span class="line"><span class="code">  splitmbox.py</span></span><br><span class="line"><span class="code">  tag_stable</span></span><br></pre></td></tr></table></figure>
 
 <h2 id="procedure"><a href="#procedure" class="headerlink" title="procedure"></a>procedure</h2><ul>
 <li><p>Select patch.</p>
@@ -3305,9 +3308,11 @@
 <li><p>Testing it.</p>
 </li>
 </ul>
-<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>[1] <a href="https://blog.csdn.net/vampirem/article/details/11485575">https://blog.csdn.net/vampirem/article/details/11485575</a></p>
-<p>[2] <a href="https://www.youtube.com/watch?v=6zUVS4kJtrA&amp;list=PLbzoR-pLrL6qucl8-lOnzvhFc2UM1tcZA">https://www.youtube.com/watch?v=6zUVS4kJtrA&amp;list=PLbzoR-pLrL6qucl8-lOnzvhFc2UM1tcZA</a></p>
-<p>[3] <a href="http://www.kroah.com/log/linux/how-i-do-stable.html">linux kernel monkey log (kroah.com)</a></p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a href="https://blog.csdn.net/vampirem/article/details/11485575">https://blog.csdn.net/vampirem/article/details/11485575</a></li>
+<li><a href="https://www.youtube.com/watch?v=6zUVS4kJtrA&amp;list=PLbzoR-pLrL6qucl8-lOnzvhFc2UM1tcZA">https://www.youtube.com/watch?v=6zUVS4kJtrA&amp;list=PLbzoR-pLrL6qucl8-lOnzvhFc2UM1tcZA</a></li>
+<li><a href="http://www.kroah.com/log/linux/how-i-do-stable.html">linux kernel monkey log (kroah.com)</a></li>
+</ul>
 ]]></content>
       <categories>
         <category>system</category>
