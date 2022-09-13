@@ -3207,7 +3207,7 @@
       </tags>
   </entry>
   <entry>
-    <title>How do Linux kernel maintainers of stable tree do patch backporting?</title>
+    <title>How do Linux kernel maintainers of stable tree backport patches?</title>
     <url>/2022/09/09/system/kernel-patch-backporting/</url>
     <content><![CDATA[<h1 id="Quilt-manage-patches"><a href="#Quilt-manage-patches" class="headerlink" title="Quilt : manage patches"></a>Quilt : manage patches</h1><blockquote>
 <p>Sample code repo : <a href="https://github.com/Ganliber/linux-kernel-backporting">https://github.com/Ganliber/linux-kernel-backporting</a></p>
@@ -3273,10 +3273,14 @@
 
 <h2 id="procedure"><a href="#procedure" class="headerlink" title="procedure"></a>procedure</h2><ul>
 <li><p>Select patch.</p>
+<blockquote>
 <p>( Manually ) select suitable patch from mail-queue-stable, get the <code>commit id</code> of that patch.</p>
+</blockquote>
 </li>
 <li><p>Grab the patch.</p>
+<blockquote>
 <p><code>c2p</code> ( written in perl ) : <code>commit id</code> -&gt; <code>patch</code> ( grab this patch from linus’tree ( upstream ) )</p>
+</blockquote>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./scripts/c2p [commit-id]</span><br></pre></td></tr></table></figure>
 
 <ul>
@@ -3297,9 +3301,7 @@
 </li>
 <li><p>Notify the author his patch has been merged in the stable-[version] tree.</p>
 <blockquote>
-<p>In the file <code>added-to-stable</code>, there are one line :</p>
-<p><code>~/bin/msmtp-enqueue.sh -a coco &quot;$to&quot;</code></p>
-<p>which means that the msmtp will send the email to the author according to <code>commit-id</code>.</p>
+<p>In the file <code>added-to-stable</code>, there are one line which means that the msmtp will send the email to the author according to <code>commit-id</code>:<code>~/bin/msmtp-enqueue.sh -a coco &quot;$to&quot;</code></p>
 </blockquote>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./scripts/added-to-stable [patch-file]</span><br></pre></td></tr></table></figure>
 </li>
