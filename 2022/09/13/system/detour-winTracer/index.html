@@ -28,12 +28,14 @@
 <meta property="og:site_name" content="Ganliber&#39;s Home">
 <meta property="og:description" content="winTracer : 基于detour实现的软件行为分析系统">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://ganliber.github.io/2022/09/13/system/detour-winTracer/detour-winTracer/detourLib.png">
 <meta property="article:published_time" content="2022-09-13T07:17:57.000Z">
-<meta property="article:modified_time" content="2022-09-13T07:30:50.219Z">
+<meta property="article:modified_time" content="2022-09-14T06:31:08.837Z">
 <meta property="article:author" content="Gan Gecen">
 <meta property="article:tag" content="windows">
 <meta property="article:tag" content="security">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ganliber.github.io/2022/09/13/system/detour-winTracer/detour-winTracer/detourLib.png">
 
 <link rel="canonical" href="https://ganliber.github.io/2022/09/13/system/detour-winTracer/">
 
@@ -243,10 +245,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2022-09-13 15:17:57 / Modified: 15:30:50" itemprop="dateCreated datePublished" datetime="2022-09-13T15:17:57+08:00">2022-09-13</time>
+              <time title="Created: 2022-09-13 15:17:57" itemprop="dateCreated datePublished" datetime="2022-09-13T15:17:57+08:00">2022-09-13</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-09-14 14:31:08" itemprop="dateModified" datetime="2022-09-14T14:31:08+08:00">2022-09-14</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -283,7 +291,86 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="About-Detour"><a href="#About-Detour" class="headerlink" title="About Detour"></a>About Detour</h2><h2 id="Task"><a href="#Task" class="headerlink" title="Task"></a>Task</h2><table>
+        <blockquote>
+<p>The project Github address : <a target="_blank" rel="noopener" href="https://github.com/Ganliber/winTracer">https://github.com/Ganliber/winTracer</a></p>
+</blockquote>
+<h2 id="About-Detour"><a href="#About-Detour" class="headerlink" title="About Detour"></a>About Detour</h2><blockquote>
+<p>Detours是一个在x86平台上截获任意Win32函数调用的工具库。中断代码可以在运行时动态加载，也可以在静态执行文件处理。其功能主要有：</p>
+<ol>
+<li>拦截x86机器上的任意的win32 API函数。</li>
+<li>插入任意的数据段到PE文件中，修改DDL文件的导入表。</li>
+</ol>
+</blockquote>
+<h3 id="WIN32进程内存管理"><a href="#WIN32进程内存管理" class="headerlink" title="WIN32进程内存管理"></a>WIN32进程内存管理</h3><ul>
+<li>WINDOWS 实现了虚拟存储器，每一WIN32进程拥有4GB的虚存空间</li>
+<li>Detours相关：<ul>
+<li>进程要执行的指令存在于虚存空间</li>
+<li><code>QueryProtectEx</code>：函数把存放指令的页面的权限更改为可读可写可执行，再改写其内容，从而修改正在运行的程序</li>
+<li><code>VirtualAllocEx</code>：从一个进程为另一正运行的进程分配虚存，利用<code>QueryProtectEx</code>把页面权限改为<code>rwx</code>，并以二进制机器码的形式写入要执行的指令，实现为一个正在运行的程序注入任意代码</li>
+</ul>
+</li>
+</ul>
+<h3 id="拦截WIN32-API原理"><a href="#拦截WIN32-API原理" class="headerlink" title="拦截WIN32 API原理"></a>拦截WIN32 API原理</h3><ul>
+<li><p>Functions Overview</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">I.	 Target Function : Function to be intercepted, usually the windows API</span><br><span class="line">II.	 Trampoline Function : Partial replica of the Target function</span><br><span class="line">III. Detour Function : Function used to replace the Target function</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Detour Function</p>
+<ul>
+<li>此函数是用户需要的截获API的一个模拟版本,调用方式,参数个数必须和目标函数相一致,通过对Trampoline函数的调用后,可以获取目标函数的执行结果,而且可以将目标函数的输出结果进行修改后再传回给应用程序</li>
+<li>Detour提供了 <strong>向运行中的应用程序注入Detour函数</strong> 和 <strong>在二进制文件基础上注入Detour函数</strong> 两种方式</li>
+</ul>
+</li>
+<li><p>Detour Binary Injection</p>
+<ul>
+<li>通过Detours提供的开发包可以在二进制EXE文件中添加一个名称为Detour的节表</li>
+<li>主要目的是实现PE加载器加载应用程序的时候会自动加载您编写的Detours DLL，在Detours DLL中的DLLMain中完成对目标函数的Detour</li>
+</ul>
+</li>
+</ul>
+<h3 id="截获API的相关接口"><a href="#截获API的相关接口" class="headerlink" title="截获API的相关接口"></a>截获API的相关接口</h3><ul>
+<li>Detours提供的API 接口可以作为一个共享DLL给外部程序调用，也可以作为一个静态Lib链接到您的程序内部</li>
+<li>因为Detours中的函数会修改应用程序的地址空间，请确保当加入截获函数或者去掉截获函数的时候没有其他线程在进程空间中执行，这是程序员的责任：一个保证该时刻是单线程执行的简单方法就是在加载Detours库的时候在DllMain中呼叫函数</li>
+<li><code>DetourFunctionWithTrampoline</code>：截获目标函数<ul>
+<li>Input：trampoline函数，截获函数的指针</li>
+</ul>
+</li>
+<li><code>DetourFunction</code>：创建一个动态的trampoline函数<ul>
+<li>Input：一个指向Target函数的指针，截获函数的指针</li>
+</ul>
+</li>
+<li><code>DetourFindFunction</code>：当目标函数不是很容易使用的时候，该函数可以找到那个函数，不管它是DLL中导出的函数，或者是可以通过二进制目标函数的调试符号找到，DetourFindFunction返回的函数指针可以用来传递给DetourFunction以生成一个<strong>动态</strong>的trampoline函数<ul>
+<li>Input：库的名字，函数名</li>
+<li>return：function_pointer or NULL</li>
+</ul>
+</li>
+<li><code>DetourRemoveTrampoline</code>：去掉对一个目标函数的截获</li>
+</ul>
+<h3 id="API截获的两种方法"><a href="#API截获的两种方法" class="headerlink" title="API截获的两种方法"></a>API截获的两种方法</h3><ul>
+<li>动态 &amp; 静态</li>
+</ul>
+<h3 id="编译使用Detour库"><a href="#编译使用Detour库" class="headerlink" title="编译使用Detour库"></a>编译使用Detour库</h3><ul>
+<li><p>index <a target="_blank" rel="noopener" href="https://github.com/microsoft/Detours">https://github.com/microsoft/Detours</a>, 下载release并解压</p>
+</li>
+<li><p>打开<code>VS2022</code>文件夹下的<code>x86 Native Command Prompt for VS 2022</code>( 如需编译64位需要<code>x64 Native Command Prompt for VS 2022</code> )</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">powershell</span><br><span class="line"><span class="built_in">cd</span> beforePath/detour<span class="literal">-4</span>.<span class="number">0.1</span>/src</span><br><span class="line">nmake /f Makefile</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在<code>detour-4.0.1</code>文件夹下得到</p>
+<img src="detour-winTracer/detourLib.png" alt="detourLib" style="zoom:50%;" />
+</li>
+<li><p>（法一）VS中新建dll项目，在调试-&gt;dll调试属性-&gt;VC++目录</p>
+<ul>
+<li>在<strong>包含目录</strong>中加上刚才编译出的<strong>include文件夹路径</strong></li>
+<li>在<strong>库目录</strong>上加上<strong>lib.X86</strong>（64位系统则对应lib.X64）</li>
+</ul>
+</li>
+<li><p>（法二）找到<code>include/detour.h</code>以及<code>lib.X86/detour.lib</code>可以复制到一个单独的文件夹下使用</p>
+<ul>
+<li><p>将<code>detour.h</code>和<code>detour.lib</code>复制到VS项目下，然后在<code>main.cpp</code>中通过以下代码调用</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;detour.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> comment(lib, <span class="string">&quot;detour.lib&quot;</span>)</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h2 id="Task"><a href="#Task" class="headerlink" title="Task"></a>Task</h2><h3 id="content"><a href="#content" class="headerlink" title="content"></a>content</h3><table>
 <thead>
 <tr>
 <th>序号</th>
@@ -294,7 +381,7 @@
 <tbody><tr>
 <td>1</td>
 <td>实现基本的第三方进程WindowsAPI截获框架</td>
-<td>框架包括<code>1.1</code>编译生成Detours库；<code>1.2</code>完成挂钩框架DLL，实现对MessageBox调用截获，能打印出调用的参数、进程名称以及进程Exe文件信息；<code>1.3</code>自编或者利用已有恶意代码样例（包含弹出对话框动作）；<code>1.4</code>完成注入动作开启和关闭的“注射器”控制程序</td>
+<td>框架包括<br /><code>1.1</code> 编译生成Detours库<br /><code>1.2</code> 完成挂钩框架DLL，实现对MessageBox调用截获，能打印出调用的参数、进程名称以及进程Exe文件信息<br /><code>1.3</code> 自编或者利用已有恶意代码样例（包含弹出对话框动作）<br /><code>1.4</code> 完成注入动作开启和关闭的“注射器”控制程序</td>
 </tr>
 <tr>
 <td>2</td>
@@ -314,17 +401,17 @@
 <tr>
 <td>5</td>
 <td>堆操作异常行为分析</td>
-<td>设计并完成算法，记录并给出提示：  1.检测堆申请与释放是否一致（正常）；  2.是否发生重复的多次释放（异常）</td>
+<td>设计并完成算法，记录并给出提示：  <br />1.检测堆申请与释放是否一致（正常）<br />2.是否发生重复的多次释放（异常）</td>
 </tr>
 <tr>
 <td>6</td>
 <td>文件操作异常行为分析</td>
-<td>设计并完成算法，记录并给出提示：  1. 判断操作范围是否有多个文件夹；  2. 是否存在自我复制的情况；  3. 是否修改了其它可执行代码包括exe，dll，ocx等；  4. 是否将文件内容读取后发送到网络（选做）；</td>
+<td>设计并完成算法，记录并给出提示：  <br />1. 判断操作范围是否有多个文件夹<br />2. 是否存在自我复制的情况<br />3. 是否修改了其它可执行代码包括exe，dll，ocx等<br />4. 是否将文件内容读取后发送到网络（选做）</td>
 </tr>
 <tr>
 <td>7</td>
 <td>注册表操作异常行为分析</td>
-<td>设计并完成算法，记录并给出提示：  1. 判断是否新增注册表项并判断是否为自启动执行文件项；  2. 是否修改了注册表；  3. 输出所有的注册表操作项；</td>
+<td>设计并完成算法，记录并给出提示： <br /> 1. 判断是否新增注册表项并判断是否为自启动执行文件项<br />2. 是否修改了注册表<br />3. 输出所有的注册表操作项</td>
 </tr>
 <tr>
 <td>8</td>
@@ -339,7 +426,7 @@
 <tr>
 <td>10</td>
 <td>网络通信操作异常行为分析（选做）</td>
-<td>设计并完成算法，记录并给出提示：  1.  实现对网络传输SOCKET操作（连接、发送与接收）API的截获；  2.   打印进程连接端口、协议类型、IP信息  3.  HTTP连接协议的解析，判断传输的内容是否为明文</td>
+<td>设计并完成算法，记录并给出提示：  <br />1. 实现对网络传输SOCKET操作（连接、发送与接收）API的截获 <br />2. 打印进程连接端口、协议类型、IP信息  <br />3. HTTP连接协议的解析，判断传输的内容是否为明文</td>
 </tr>
 <tr>
 <td>11</td>
@@ -347,7 +434,68 @@
 <td>设计并完成算法，记录并给出提示：能够输出内存拷贝信息，并分析拷贝的内容流向。</td>
 </tr>
 </tbody></table>
-<h2 id="Project-Framework"><a href="#Project-Framework" class="headerlink" title="Project Framework"></a>Project Framework</h2><h2 id="Implementation"><a href="#Implementation" class="headerlink" title="Implementation"></a>Implementation</h2>
+<h3 id="API-HOOK"><a href="#API-HOOK" class="headerlink" title="API HOOK"></a>API HOOK</h3><table>
+<thead>
+<tr>
+<th>index</th>
+<th>API type</th>
+<th>WIN32 API</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>弹窗</td>
+<td>MessageBoxW</td>
+</tr>
+<tr>
+<td>2</td>
+<td>堆</td>
+<td>HeapCreate<br />HeapAlloc<br />HeapDestroy<br />HeapFree</td>
+</tr>
+<tr>
+<td>3</td>
+<td>文件</td>
+<td>CreateFile<br />WriteFile<br />ReadFile<br />CloseHandle</td>
+</tr>
+<tr>
+<td>4</td>
+<td>注册表</td>
+<td>RegCreateKeyEx<br />RegCloseKey<br />RegDeleteValue<br />RegOpenKeyEx<br />RegQueryValueEx<br />RegSetValueEx</td>
+</tr>
+<tr>
+<td>5</td>
+<td>网络通信</td>
+<td>socket<br />connect<br />send<br />recv<br />closesocket</td>
+</tr>
+<tr>
+<td>6</td>
+<td>内存拷贝</td>
+<td>CopyMemory<br />MoveMemory</td>
+</tr>
+</tbody></table>
+<h2 id="Project-Framework"><a href="#Project-Framework" class="headerlink" title="Project Framework"></a>Project Framework</h2><h2 id="Implementation"><a href="#Implementation" class="headerlink" title="Implementation"></a>Implementation</h2><h3 id="frontend-MDUI"><a href="#frontend-MDUI" class="headerlink" title="frontend : MDUI"></a>frontend : MDUI</h3><h3 id="Backend-Gin"><a href="#Backend-Gin" class="headerlink" title="Backend : Gin"></a>Backend : Gin</h3><h3 id="Interaction-CGO"><a href="#Interaction-CGO" class="headerlink" title="Interaction : CGO"></a>Interaction : CGO</h3><h3 id="Injector-Detour"><a href="#Injector-Detour" class="headerlink" title="Injector : Detour"></a>Injector : Detour</h3><h2 id="Addition"><a href="#Addition" class="headerlink" title="Addition"></a>Addition</h2><ul>
+<li>WIN32 API with suffix <code>A</code>, <code>W</code>, <code>Ex</code>, <code>ExW</code><ul>
+<li><code>A</code>表示使用ANSI编码作为标准输入与输出流的文本编码</li>
+<li><code>W</code>表示使用Unicode作为编码</li>
+<li><code>Ex</code>表示拓展, 标注了Ex的winapi函数会比没有标Ex的函数多一些参数什么的, 可以说拓展了一些功能</li>
+<li><code>ExA</code>与<code>ExW</code>就是 A,W与Ex的结合了</li>
+</ul>
+</li>
+<li>将L加在字符串前表示其为unicode编码<ul>
+<li>L”What a beautiful flower”</li>
+</ul>
+</li>
+</ul>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li>MDUI : <a target="_blank" rel="noopener" href="https://www.mdui.org/docs/">https://www.mdui.org/docs/</a></li>
+<li>Gin(I) : <a target="_blank" rel="noopener" href="https://www.kancloud.cn/shuangdeyu/gin_book/949411">https://www.kancloud.cn/shuangdeyu/gin_book/949411</a></li>
+<li>Gin(II) : <a target="_blank" rel="noopener" href="https://www.topgoer.com/gin%E6%A1%86%E6%9E%B6/">https://www.topgoer.com/gin%E6%A1%86%E6%9E%B6/</a></li>
+<li>Gin(III)：<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/27370112">https://www.zhihu.com/question/27370112</a></li>
+<li>CGO: <a target="_blank" rel="noopener" href="https://chai2010.cn/advanced-go-programming-book/ch2-cgo/ch2-08-class.html">https://chai2010.cn/advanced-go-programming-book/ch2-cgo/ch2-08-class.html</a></li>
+<li>Detour: </li>
+<li>Win32 API 中文文档：<a target="_blank" rel="noopener" href="http://www.yfvb.com/help/win32sdk/">http://www.yfvb.com/help/win32sdk/</a></li>
+</ul>
+
     </div>
 
     
@@ -452,7 +600,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#About-Detour"><span class="nav-number">1.</span> <span class="nav-text">About Detour</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Task"><span class="nav-number">2.</span> <span class="nav-text">Task</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Project-Framework"><span class="nav-number">3.</span> <span class="nav-text">Project Framework</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Implementation"><span class="nav-number">4.</span> <span class="nav-text">Implementation</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#About-Detour"><span class="nav-number">1.</span> <span class="nav-text">About Detour</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#WIN32%E8%BF%9B%E7%A8%8B%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="nav-number">1.1.</span> <span class="nav-text">WIN32进程内存管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8B%A6%E6%88%AAWIN32-API%E5%8E%9F%E7%90%86"><span class="nav-number">1.2.</span> <span class="nav-text">拦截WIN32 API原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%88%AA%E8%8E%B7API%E7%9A%84%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.3.</span> <span class="nav-text">截获API的相关接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#API%E6%88%AA%E8%8E%B7%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E6%B3%95"><span class="nav-number">1.4.</span> <span class="nav-text">API截获的两种方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E4%BD%BF%E7%94%A8Detour%E5%BA%93"><span class="nav-number">1.5.</span> <span class="nav-text">编译使用Detour库</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Task"><span class="nav-number">2.</span> <span class="nav-text">Task</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#content"><span class="nav-number">2.1.</span> <span class="nav-text">content</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#API-HOOK"><span class="nav-number">2.2.</span> <span class="nav-text">API HOOK</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Project-Framework"><span class="nav-number">3.</span> <span class="nav-text">Project Framework</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Implementation"><span class="nav-number">4.</span> <span class="nav-text">Implementation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#frontend-MDUI"><span class="nav-number">4.1.</span> <span class="nav-text">frontend : MDUI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Backend-Gin"><span class="nav-number">4.2.</span> <span class="nav-text">Backend : Gin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Interaction-CGO"><span class="nav-number">4.3.</span> <span class="nav-text">Interaction : CGO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Injector-Detour"><span class="nav-number">4.4.</span> <span class="nav-text">Injector : Detour</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Addition"><span class="nav-number">5.</span> <span class="nav-text">Addition</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">6.</span> <span class="nav-text">Reference</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
