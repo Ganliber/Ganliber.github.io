@@ -3348,7 +3348,7 @@
 </ul>
 <h3 id="拦截WIN32-API原理"><a href="#拦截WIN32-API原理" class="headerlink" title="拦截WIN32 API原理"></a>拦截WIN32 API原理</h3><ul>
 <li><p>Functions Overview</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">I.	 Target Function : Function to be intercepted, usually the windows API</span><br><span class="line">II.	 Trampoline Function : Partial replica of the Target function</span><br><span class="line">III. Detour Function : Function used to replace the Target function</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">I.   Target Function : Function to be intercepted, usually the windows API</span><br><span class="line">II.  Trampoline Function : Partial replica of the Target function</span><br><span class="line">III. Detour Function : Function used to replace the Target function</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>Detour Function</p>
 <ul>
@@ -3527,8 +3527,9 @@
 <li>Gin(I) : <a href="https://www.kancloud.cn/shuangdeyu/gin_book/949411">https://www.kancloud.cn/shuangdeyu/gin_book/949411</a></li>
 <li>Gin(II) : <a href="https://www.topgoer.com/gin%E6%A1%86%E6%9E%B6/">https://www.topgoer.com/gin%E6%A1%86%E6%9E%B6/</a></li>
 <li>Gin(III)：<a href="https://www.zhihu.com/question/27370112">https://www.zhihu.com/question/27370112</a></li>
-<li>CGO: <a href="https://chai2010.cn/advanced-go-programming-book/ch2-cgo/ch2-08-class.html">https://chai2010.cn/advanced-go-programming-book/ch2-cgo/ch2-08-class.html</a></li>
-<li>Detour: </li>
+<li>CGO : <a href="https://chai2010.cn/advanced-go-programming-book/ch2-cgo/ch2-08-class.html">https://chai2010.cn/advanced-go-programming-book/ch2-cgo/ch2-08-class.html</a></li>
+<li>Go Algorithm : <a href="https://www.pseudoyu.com/zh/2021/05/29/algorithm_data_structure_go/">LeetCode 刷题常用数据结构（Go 篇） · Pseudoyu</a></li>
+<li>Detour: <a href="https://github.com/microsoft/Detours/wiki">https://github.com/microsoft/Detours/wiki</a></li>
 <li>Win32 API 中文文档：<a href="http://www.yfvb.com/help/win32sdk/">http://www.yfvb.com/help/win32sdk/</a></li>
 </ul>
 ]]></content>
