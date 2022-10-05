@@ -3447,7 +3447,7 @@
 <tr>
 <td>7</td>
 <td>注册表操作异常行为分析</td>
-<td>设计并完成算法，记录并给出提示： <br /> 1. 判断是否新增注册表项并判断是否为自启动执行文件项<br />2. 是否修改了注册表<br />3. 输出所有的注册表操作项</td>
+<td>设计并完成算法，记录并给出提示： <br />1. 判断是否新增注册表项并判断是否为自启动执行文件项<br />2. 是否修改了注册表<br />3. 输出所有的注册表操作项</td>
 </tr>
 <tr>
 <td>8</td>
@@ -3480,28 +3480,28 @@
 </thead>
 <tbody><tr>
 <td>1</td>
-<td>弹窗</td>
-<td>MessageBoxW</td>
+<td>弹窗 1</td>
+<td>MessageBoxA<br/>MessageBoxW</td>
 </tr>
 <tr>
 <td>2</td>
-<td>堆</td>
+<td>堆 4</td>
 <td>HeapCreate<br />HeapAlloc<br />HeapDestroy<br />HeapFree</td>
 </tr>
 <tr>
 <td>3</td>
-<td>文件</td>
+<td>文件 4</td>
 <td>CreateFile<br />WriteFile<br />ReadFile<br />CloseHandle</td>
 </tr>
 <tr>
 <td>4</td>
-<td>注册表</td>
-<td>RegCreateKeyEx<br />RegCloseKey<br />RegDeleteValue<br />RegOpenKeyEx<br />RegQueryValueEx<br />RegSetValueEx</td>
+<td>注册表 5</td>
+<td>RegCreateKeyEx<br />RegCloseKey<br />RegDeleteValue<br />RegOpenKeyEx<br />&#x2F;&#x2F;RegQueryValueEx<br />RegSetValueEx</td>
 </tr>
 <tr>
 <td>5</td>
-<td>网络通信</td>
-<td>socket<br />connect<br />send<br />recv<br />closesocket</td>
+<td>网络通信 7</td>
+<td>socket<br />WSAStartup<br />connect<br />send<br />recv<br />closesocket<br />WSACleanup</td>
 </tr>
 <tr>
 <td>6</td>
@@ -3509,7 +3509,69 @@
 <td>CopyMemory<br />MoveMemory</td>
 </tr>
 </tbody></table>
-<h2 id="Project-Framework"><a href="#Project-Framework" class="headerlink" title="Project Framework"></a>Project Framework</h2><h2 id="Implementation"><a href="#Implementation" class="headerlink" title="Implementation"></a>Implementation</h2><h3 id="frontend-MDUI"><a href="#frontend-MDUI" class="headerlink" title="frontend : MDUI"></a>frontend : MDUI</h3><h3 id="Backend-Gin"><a href="#Backend-Gin" class="headerlink" title="Backend : Gin"></a>Backend : Gin</h3><h3 id="Interaction-CGO"><a href="#Interaction-CGO" class="headerlink" title="Interaction : CGO"></a>Interaction : CGO</h3><h3 id="Injector-Detour"><a href="#Injector-Detour" class="headerlink" title="Injector : Detour"></a>Injector : Detour</h3><h2 id="Addition"><a href="#Addition" class="headerlink" title="Addition"></a>Addition</h2><ul>
+<ul>
+<li><p>暂时有 22 个API</p>
+<p>关于 windows 堆</p>
+<ul>
+<li>Windows下的堆主要有两种，进程的默认堆和自己创建的私有堆<br>程序也可以通过 HeapCreate 函数来调用 ntdll 中的RtlCreateHeap 来创建自己的私有堆<br>所以一个进程中可以存在多个堆</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">------------------------ About Windows Heap </span><br><span class="line">Windows下的堆主要有两种，进程的默认堆和自己创建的私有堆</span><br><span class="line">程序也可以通过 HeapCreate 函数来调用 ntdll 中的RtlCreateHeap 来创建自己的私有堆</span><br><span class="line">所以一个进程中可以存在多个堆</span><br><span class="line">------------------------ APIs   </span><br><span class="line">    + HeapCreate <span class="comment">// 创建堆句柄（内核对象）</span></span><br><span class="line">            HANDLE <span class="title function_">HeapCreate</span><span class="params">(</span></span><br><span class="line"><span class="params">              DWORD flOptions, <span class="comment">//堆的相关属性</span></span></span><br><span class="line"><span class="params">              DWORD dwInitialSize, <span class="comment">//堆初始大小</span></span></span><br><span class="line"><span class="params">              DWORD dwMaximumSize <span class="comment">//堆所占内存的最大值</span></span></span><br><span class="line"><span class="params">            )</span>;</span><br><span class="line"></span><br><span class="line">    + GetProcessHeap <span class="comment">// 获取一个堆句柄</span></span><br><span class="line"></span><br><span class="line">    + GetProcessHeaps <span class="comment">// 获取所有堆句柄</span></span><br><span class="line"></span><br><span class="line">    + HeapAlloc <span class="comment">// 申请堆空间   </span></span><br><span class="line">            LPVOID <span class="title function_">HeapAlloc</span><span class="params">(</span></span><br><span class="line"><span class="params">              HANDLE hHeap, <span class="comment">//堆句柄，表示在哪个堆上分配内存</span></span></span><br><span class="line"><span class="params">              DWORD dwFlags, <span class="comment">//分配的内存的相关标志</span></span></span><br><span class="line"><span class="params">              DWORD dwBytes <span class="comment">//大小</span></span></span><br><span class="line"><span class="params">            )</span>;</span><br><span class="line"></span><br><span class="line">    + HeapReAlloc <span class="comment">// 在HeapAlloc的基础上申请一块堆空间</span></span><br><span class="line"></span><br><span class="line">    + HeapFree <span class="comment">// 释放堆空间</span></span><br><span class="line"></span><br><span class="line">    + HeapDestory <span class="comment">// 销毁堆句柄</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="Windows-Heap"><a href="#Windows-Heap" class="headerlink" title="Windows Heap"></a>Windows Heap</h4><ul>
+<li><p>Windows下的堆主要有两种，进程的默认堆和自己创建的私有堆<br>程序也可以通过 HeapCreate 函数来调用 ntdll 中的RtlCreateHeap 来创建自己的私有堆<br>所以一个进程中可以存在多个堆</p>
+</li>
+<li><p>win32 Heap APIs : ( PART )</p>
+<ul>
+<li><p>HeapCreate：创建堆句柄（内核对象）</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">HANDLE <span class="title function_">HeapCreate</span><span class="params">(</span></span><br><span class="line"><span class="params">	DWORD flOptions, <span class="comment">//堆的相关属性</span></span></span><br><span class="line"><span class="params">	DWORD dwInitialSize, <span class="comment">//堆初始大小</span></span></span><br><span class="line"><span class="params">	DWORD dwMaximumSize <span class="comment">//堆所占内存的最大值</span></span></span><br><span class="line"><span class="params">)</span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>GetProcessHeap：获取一个堆句柄</p>
+</li>
+<li><p>GetProcessHeaps：获取所有堆句柄</p>
+</li>
+<li><p>HeapAlloc：申请堆空间（从堆上分配一块内存，且分配的内存是不可移动的，即如果没有连续的空间能满足分配的大小，程序不能将其他零散的 空间利用起来，从而导致分配失败）</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">LPVOID <span class="title function_">HeapAlloc</span><span class="params">(</span></span><br><span class="line"><span class="params">	HANDLE hHeap, <span class="comment">//堆句柄，表示在哪个堆上分配内存</span></span></span><br><span class="line"><span class="params">	DWORD dwFlags, <span class="comment">//分配的内存的相关标志</span></span></span><br><span class="line"><span class="params">	DWORD dwBytes <span class="comment">//大小</span></span></span><br><span class="line"><span class="params">)</span>;</span><br><span class="line">* 如果函数成功，则返回值是指向已分配内存块的指针。</span><br><span class="line">* 如果函数失败，并且您尚未指定HEAP_GENERATE_EXCEPTIONS，则返回值为 <span class="literal">NULL</span>。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>HeapValidate：如果指定的堆或内存块有效，则返回值为<strong>非零值</strong>。如果指定的堆或内存块无效，则返回值为<strong>零</strong>（用来处理堆二次释放问题）</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">BOOL <span class="title function_">HeapValidate</span><span class="params">(</span></span><br><span class="line"><span class="params">  [in]           HANDLE  hHeap,</span></span><br><span class="line"><span class="params">  [in]           DWORD   dwFlags,</span></span><br><span class="line"><span class="params">  [in, optional] LPCVOID lpMem</span></span><br><span class="line"><span class="params">)</span>;</span><br><span class="line">---------------------------------------------------------</span><br><span class="line">[in, optional] lpMem</span><br><span class="line">&gt; 指向指定堆中内存块的指针。此参数可能为空</span><br><span class="line">&gt; 如果此参数为 <span class="literal">NULL</span>，则该函数将尝试验证 hHeap 指定的整个堆。</span><br><span class="line">&gt; 如果此参数不为 <span class="literal">NULL</span>，则该函数将尝试验证 lpMem 所指向的内存块。它不会尝试验证堆的其余部分。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>HeapFree：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。应用程序可以调用 GetLast 错误以获取扩展的错误信息。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">BOOL <span class="title function_">HeapFree</span><span class="params">(</span></span><br><span class="line"><span class="params">  [in] HANDLE                 hHeap,</span></span><br><span class="line"><span class="params">  [in] DWORD                  dwFlags,</span></span><br><span class="line"><span class="params">  [in] _Frees_ptr_opt_ LPVOID lpMem</span></span><br><span class="line"><span class="params">)</span>;</span><br><span class="line">---------------------------------------------------------</span><br><span class="line">[in] lpMem</span><br><span class="line">指向要释放的内存块的指针。此指针由堆分布或堆重新分配函数返回。此指针可以为空</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h2 id="Project-Framework"><a href="#Project-Framework" class="headerlink" title="Project Framework"></a>Project Framework</h2><h2 id="Implementation"><a href="#Implementation" class="headerlink" title="Implementation"></a>Implementation</h2><h3 id="frontend-misa"><a href="#frontend-misa" class="headerlink" title="frontend : misa"></a>frontend : misa</h3><h3 id="Backend-Gin"><a href="#Backend-Gin" class="headerlink" title="Backend : Gin"></a>Backend : Gin</h3><h3 id="Interaction-nlohmann-json"><a href="#Interaction-nlohmann-json" class="headerlink" title="Interaction : nlohmann json"></a>Interaction : nlohmann json</h3><ul>
+<li>[C++ 使用 curl 发送 json 数据](<a href="https://blog.csdn.net/fengfengdiandia/article/details/82453328?ops_request_misc=&amp;request_id=&amp;biz_id=102&amp;utm_term=c++">https://blog.csdn.net/fengfengdiandia/article/details/82453328?ops_request_misc=&amp;request_id=&amp;biz_id=102&amp;utm_term=c++</a> curl 传输json数组&amp;utm_medium&#x3D;distribute.pc_search_result.none-task-blog-2<del>all</del>sobaiduweb~default-1-82453328.142^v48^pc_rank_34_default_2,201^v3^control_1&amp;spm&#x3D;1018.2226.3001.4187)</li>
+<li><a href="https://github.com/alandtsang/cppdemo/tree/master/src/curljson">cppdemo&#x2F;src&#x2F;curljson at master · alandtsang&#x2F;cppdemo (github.com)</a></li>
+<li>windows<code>curl</code>库配置：<a href="https://blog.csdn.net/bency/article/details/80773932">https://blog.csdn.net/bency/article/details/80773932</a></li>
+</ul>
+<h4 id="libcurl导入"><a href="#libcurl导入" class="headerlink" title="libcurl导入"></a>libcurl导入</h4><ul>
+<li><p><a href="https://blog.csdn.net/wcc27857285/article/details/86538804">https://blog.csdn.net/wcc27857285/article/details/86538804</a></p>
+</li>
+<li><p>编译<code>curl</code></p>
+<ol>
+<li><p>运行<code>buildconf.bat</code></p>
+</li>
+<li><p><code>x64 native tools command prompt for vs2022</code>中进入<code>winBuild</code>然后</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line">nmake /f Makefile.vc mode=<span class="keyword">static</span> DEBUG=yes</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>进入<code>builds</code>复制第一个文件夹<code>libcurl-vc-x64-debug-static-ipv6-sspi-schannel</code>下的所有文件</p>
+</li>
+<li><p><code>vs -&gt; 项目 -&gt; [projName]属性 -&gt; 预处理器 -&gt; 预处理器定义</code> 添加</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">CURL_STATICLIB;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>粘贴到项目下的<code>libcurl</code>文件夹下，最终该<code>VS</code>项目目录如下</p>
+<figure class="highlight gauss"><table><tr><td class="code"><pre><span class="line">.</span><br><span class="line">├─libcurl</span><br><span class="line">│  ├─bin</span><br><span class="line">│  ├─include</span><br><span class="line">│  │  └─curl</span><br><span class="line">│  └─<span class="keyword">lib</span></span><br><span class="line">├─nlohmann</span><br><span class="line">│  ├─detail</span><br><span class="line">│  │  ├─conversions</span><br><span class="line">│  │  ├─input</span><br><span class="line">│  │  ├─iterators</span><br><span class="line">│  │  ├─meta</span><br><span class="line">│  │  │  └─call_std</span><br><span class="line">│  │  └─<span class="keyword">output</span></span><br><span class="line">│  └─thirdparty</span><br><span class="line">│      └─hedley</span><br><span class="line">└─x64</span><br><span class="line">    └─<span class="keyword">Debug</span></span><br><span class="line">        └─jsonProj.tlog</span><br></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><p>Debug模式：由于我不喜欢在项目的preference里配置，就以<code>#pragma</code>的形式载入库</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;nlohmann/json.hpp&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;libcurl/include/curl/curl.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> comment(lib, <span class="string">&quot;ws2_32.lib&quot;</span>)</span></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> comment(lib, <span class="string">&quot;wldap32.lib&quot;</span>)</span></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> comment(lib, <span class="string">&quot;crypt32.lib&quot;</span>)</span></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> comment(lib, <span class="string">&quot;advapi32.lib&quot;</span>)</span></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> comment(lib, <span class="string">&quot;libcurl/lib/libcurl_a_debug.lib&quot;</span>)</span></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> comment(lib, <span class="string">&quot;winmm.lib&quot;</span>)</span></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> comment(lib, <span class="string">&quot;Normaliz.lib&quot;</span>)</span></span><br><span class="line"></span><br><span class="line">using json = nlohmann::json;</span><br><span class="line"></span><br><span class="line">using namespace <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">	json j;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;Fuck u&quot;</span>;</span><br><span class="line">	curl_easy_init();</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="How-do-C-send-json-to-other-server-by-http"><a href="#How-do-C-send-json-to-other-server-by-http" class="headerlink" title="How do C++ send json to other server by http"></a>How do C++ send json to other server by http</h4><ul>
+<li><p>Code as follows : this will send <code>POST</code> request to local server at 9999 port with <code>/uploadApiInformation</code></p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">sendApiInformation</span><span class="params">(json&amp; info)</span> </span>&#123;</span><br><span class="line">	<span class="comment">//取消hook</span></span><br><span class="line">	<span class="built_in">DetourTransactionBegin</span>();</span><br><span class="line">	<span class="built_in">DetourUpdateThread</span>(<span class="built_in">GetCurrentThread</span>());</span><br><span class="line">	<span class="built_in">detachAllDetours</span>();</span><br><span class="line"></span><br><span class="line">	CURL* curl; <span class="comment">// handler</span></span><br><span class="line">	CURLcode code = CURLE_FAILED_INIT;</span><br><span class="line">	std::string url = <span class="string">&quot;127.0.0.1:9999/uploadApiInformation&quot;</span>;</span><br><span class="line">	<span class="comment">//std::string url = &quot;10.12.173.133:9999/uploadApiInformation&quot;;</span></span><br><span class="line">	std::string dump = info.<span class="built_in">dump</span>();</span><br><span class="line">	std::cout &lt;&lt; dump &lt;&lt; endl;</span><br><span class="line">	std::cout &lt;&lt; <span class="string">&quot;Why u bully me?&quot;</span> &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">	curl = <span class="built_in">curl_easy_init</span>(); <span class="comment">// initialize handler</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (curl) &#123;</span><br><span class="line">		<span class="built_in">curl_easy_setopt</span>(curl, CURLOPT_URL, url.<span class="built_in">c_str</span>());</span><br><span class="line">		<span class="built_in">curl_easy_setopt</span>(curl, CURLOPT_POST, <span class="number">1L</span>); <span class="comment">// POST</span></span><br><span class="line">		<span class="built_in">curl_easy_setopt</span>(curl, CURLOPT_POSTFIELDS, dump.<span class="built_in">c_str</span>());</span><br><span class="line">		<span class="comment">//curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);</span></span><br><span class="line">		<span class="comment">//curl_easy_setopt(curl, CURLOPT_WRITEDATA, NULL);</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line">		code = <span class="built_in">curl_easy_perform</span>(curl);</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> (code != CURLE_OK) &#123;</span><br><span class="line">			<span class="built_in">fprintf</span>(stderr, <span class="string">&quot;curl_easy_perform() failed: %s\n&quot;</span>,</span><br><span class="line">				<span class="built_in">curl_easy_strerror</span>(code));</span><br><span class="line">			<span class="keyword">return</span> code;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> &#123;</span><br><span class="line">			cout &lt;&lt; <span class="string">&quot;ApiInformation send successfully!&quot;</span> &lt;&lt; endl;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">curl_easy_cleanup</span>(curl);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//重新 Hook</span></span><br><span class="line">	<span class="built_in">DetourTransactionBegin</span>();</span><br><span class="line">	<span class="built_in">DetourUpdateThread</span>(<span class="built_in">GetCurrentThread</span>());</span><br><span class="line">	<span class="built_in">attachAllDetours</span>();</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> code;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="Injector-Detour"><a href="#Injector-Detour" class="headerlink" title="Injector : Detour"></a>Injector : Detour</h3><h2 id="Addition"><a href="#Addition" class="headerlink" title="Addition"></a>Addition</h2><ul>
 <li>WIN32 API with suffix <code>A</code>, <code>W</code>, <code>Ex</code>, <code>ExW</code><ul>
 <li><code>A</code>表示使用ANSI编码作为标准输入与输出流的文本编码</li>
 <li><code>W</code>表示使用Unicode作为编码</li>
@@ -3530,7 +3592,8 @@
 <li>CGO : <a href="https://chai2010.cn/advanced-go-programming-book/ch2-cgo/ch2-08-class.html">https://chai2010.cn/advanced-go-programming-book/ch2-cgo/ch2-08-class.html</a></li>
 <li>Go Algorithm : <a href="https://www.pseudoyu.com/zh/2021/05/29/algorithm_data_structure_go/">LeetCode 刷题常用数据结构（Go 篇） · Pseudoyu</a></li>
 <li>Detour: <a href="https://github.com/microsoft/Detours/wiki">https://github.com/microsoft/Detours/wiki</a></li>
-<li>Win32 API 中文文档：<a href="http://www.yfvb.com/help/win32sdk/">http://www.yfvb.com/help/win32sdk/</a></li>
+<li>Win32 API 中文文档：<a href="http://www.office-cn.net/t/api/index.html">http://www.office-cn.net/t/api/index.html</a></li>
+<li>Windows Heap：<a href="https://payloads.online/archivers/2018-12-21/1/">Windows Heap - Memory Management</a></li>
 </ul>
 ]]></content>
       <categories>
@@ -3539,6 +3602,144 @@
       <tags>
         <tag>windows</tag>
         <tag>security</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>About Golang</title>
+    <url>/2022/09/16/configure/golang-points/</url>
+    <content><![CDATA[<h3 id="同一个包下调用"><a href="#同一个包下调用" class="headerlink" title="同一个包下调用"></a>同一个包下调用</h3><ul>
+<li><p>同一包下如<code>main.go</code>调用别的文件中的函数( 不论是否以大写字母开头 )，直接调用即可，但运行时候使用</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">	go run .</span><br><span class="line">or </span><br><span class="line">	go build</span><br><span class="line">	./fileName.exe</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>本地包调用和远程包调用</p>
+<ul>
+<li><a href="https://www.liwenzhou.com/posts/Go/import_local_package_in_go_module/">如何使用go module导入本地包 | 李文周的博客 (liwenzhou.com)</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="多项目管理"><a href="#多项目管理" class="headerlink" title="多项目管理"></a>多项目管理</h3><ul>
+<li><p>关于<code>golang</code>的环境变量:GOPATH 、GOROOT 的具体作用可以问度娘，很多的。</p>
+<figure class="highlight mathematica"><table><tr><td class="code"><pre><span class="line"><span class="variable">GOPATH</span> 设置两个目录很有用。</span><br><span class="line"></span><br><span class="line">第一个目录作为第三方包的存放位置，第二个目录作为你自己的项目。</span><br><span class="line"></span><br><span class="line">将第三方的<span class="variable">GOPATH</span>放置到第一位，这样子 <span class="variable">go</span> <span class="variable">install</span> 将使用它作为默认的位置。 然后你可以在第二个 <span class="variable">GOPATH</span>目录下工作。</span><br><span class="line"></span><br><span class="line">如：设置 <span class="variable">GOPATH</span>为 <span class="built_in">E</span><span class="operator">:</span>\<span class="variable">GOPATH</span><span class="operator">;</span><span class="built_in">E</span><span class="operator">:</span>\<span class="type">GO_WORK</span></span><br><span class="line"></span><br><span class="line"><span class="variable">go</span> <span class="variable">get</span> 第三方的包的时候将会安装到 <span class="built_in">E</span><span class="operator">:</span>\<span class="variable">GOPATH</span> 下。</span><br><span class="line"></span><br><span class="line"><span class="built_in">E</span><span class="operator">:</span>\<span class="type">GO_WORK</span>\<span class="variable">src</span>下是自己创建的<span class="variable">golang</span>工程。</span><br><span class="line"></span><br><span class="line">这样<span class="variable">golang</span>工程 和 <span class="variable">golang</span>依赖包将会分别存储在两个位置<span class="operator">.</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="关于测试文件"><a href="#关于测试文件" class="headerlink" title="关于测试文件"></a>关于测试文件</h3><ul>
+<li>名称以 <code>_test.go</code> 结尾的文件不是由 <code>go build</code> 命令生成的，将通过 <code>go tests</code> 命令运行测试</li>
+</ul>
+<h3 id="关于Go的理解"><a href="#关于Go的理解" class="headerlink" title="关于Go的理解"></a>关于Go的理解</h3><ul>
+<li>Go 不是面向对象的编程 (OOP) 语言，但采用 Go 可以实现许多 OOP 功能。</li>
+</ul>
+<h3 id="关于CGO"><a href="#关于CGO" class="headerlink" title="关于CGO"></a>关于CGO</h3><h4 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h4><table>
+<thead>
+<tr>
+<th>C 语言类型</th>
+<th>CGO 类型</th>
+<th>Go 语言类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>char</td>
+<td>C.char</td>
+<td>byte</td>
+</tr>
+<tr>
+<td>singed char</td>
+<td>C.schar</td>
+<td>int8</td>
+</tr>
+<tr>
+<td>unsigned char</td>
+<td>C.uchar</td>
+<td>uint8</td>
+</tr>
+<tr>
+<td>short</td>
+<td>C.short</td>
+<td>int16</td>
+</tr>
+<tr>
+<td>unsigned short</td>
+<td>C.ushort</td>
+<td>uint16</td>
+</tr>
+<tr>
+<td>int</td>
+<td>C.int</td>
+<td>int32</td>
+</tr>
+<tr>
+<td>unsigned int</td>
+<td>C.uint</td>
+<td>uint32</td>
+</tr>
+<tr>
+<td>long</td>
+<td>C.long</td>
+<td>int32</td>
+</tr>
+<tr>
+<td>unsigned long</td>
+<td>C.ulong</td>
+<td>uint32</td>
+</tr>
+<tr>
+<td>long long int</td>
+<td>C.longlong</td>
+<td>int64</td>
+</tr>
+<tr>
+<td>unsigned long long int</td>
+<td>C.ulonglong</td>
+<td>uint64</td>
+</tr>
+<tr>
+<td>float</td>
+<td>C.float</td>
+<td>float32</td>
+</tr>
+<tr>
+<td>double</td>
+<td>C.double</td>
+<td>float64</td>
+</tr>
+<tr>
+<td>size_t</td>
+<td>C.size_t</td>
+<td>uint</td>
+</tr>
+</tbody></table>
+<h3 id="结构体"><a href="#结构体" class="headerlink" title="结构体"></a>结构体</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">struct A &#123;</span></span><br><span class="line"><span class="comment">    int   size: 10; // 位字段无法访问</span></span><br><span class="line"><span class="comment">    float arr[];    // 零长的数组也无法访问</span></span><br><span class="line"><span class="comment">&#125;;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;C&quot;</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> a C.struct_A</span><br><span class="line">    fmt.Println(a.size) <span class="comment">// 错误: 位字段无法访问</span></span><br><span class="line">    fmt.Println(a.arr)  <span class="comment">// 错误: 零长的数组也无法访问</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>数组 &amp; 字符串</p>
+<p>CGO 的 C 虚拟包提供了以下一组函数，用于 Go 语言和 C 语言之间数组和字符串的双向转换：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Go string to C string</span></span><br><span class="line"><span class="comment">// The C string is allocated in the C heap using malloc.</span></span><br><span class="line"><span class="comment">// It is the caller&#x27;s responsibility to arrange for it to be</span></span><br><span class="line"><span class="comment">// freed, such as by calling C.free (be sure to include stdlib.h</span></span><br><span class="line"><span class="comment">// if C.free is needed).</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">C</span>.<span class="title">CString</span><span class="params">(<span class="type">string</span>)</span></span> *C.char</span><br><span class="line"></span><br><span class="line"><span class="comment">// Go []byte slice to C array</span></span><br><span class="line"><span class="comment">// The C array is allocated in the C heap using malloc.</span></span><br><span class="line"><span class="comment">// It is the caller&#x27;s responsibility to arrange for it to be</span></span><br><span class="line"><span class="comment">// freed, such as by calling C.free (be sure to include stdlib.h</span></span><br><span class="line"><span class="comment">// if C.free is needed).</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">C</span>.<span class="title">CBytes</span><span class="params">([]<span class="type">byte</span>)</span></span> unsafe.Pointer</span><br><span class="line"></span><br><span class="line"><span class="comment">// C string to Go string</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">C</span>.<span class="title">GoString</span><span class="params">(*C.char)</span></span> <span class="type">string</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// C data with explicit length to Go string</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">C</span>.<span class="title">GoStringN</span><span class="params">(*C.char, C.<span class="type">int</span>)</span></span> <span class="type">string</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// C data with explicit length to Go []byte</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">C</span>.<span class="title">GoBytes</span><span class="params">(unsafe.Pointer, C.<span class="type">int</span>)</span></span> []<span class="type">byte</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Gin"><a href="#Gin" class="headerlink" title="Gin"></a>Gin</h3><h4 id="RESTful-API"><a href="#RESTful-API" class="headerlink" title="RESTful API"></a>RESTful API</h4><ul>
+<li>REST的含义就是客户端与Web服务器之间进行交互的时候，使用HTTP协议中的4个请求方法代表不同的动作<ul>
+<li><code>GET</code>用来获取资源</li>
+<li><code>POST</code>用来新建资源</li>
+<li><code>PUT</code>用来更新资源</li>
+<li><code>DELETE</code>用来删除资源</li>
+</ul>
+</li>
+</ul>
+<h4 id="渲染"><a href="#渲染" class="headerlink" title="渲染"></a>渲染</h4><ul>
+<li>Gin框架中使用<code>LoadHTMLGlob()</code>或者<code>LoadHTMLFiles()</code>方法进行HTML模板渲染</li>
+</ul>
+<h4 id="项目管理"><a href="#项目管理" class="headerlink" title="项目管理"></a>项目管理</h4><ul>
+<li>Golang包管理：GoVender</li>
+<li>govender 是对Golang的包依赖管理的一个插件，该工具将项目依赖的外部包拷贝到项目下的 vendor 目录下，并通过 vendor.json 文件来记录依赖包的版本，方便用户使用相对稳定的依赖。</li>
+</ul>
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul>
+<li><a href="https://gitee.com/moxi159753/LearningNotes/tree/master/Golang/Gin%E6%A1%86%E6%9E%B6/1_Gin%E5%86%85%E5%AE%B9%E4%BB%8B%E7%BB%8D">https://gitee.com/moxi159753/LearningNotes/tree/master/Golang/Gin%E6%A1%86%E6%9E%B6/1_Gin%E5%86%85%E5%AE%B9%E4%BB%8B%E7%BB%8D</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>configure</category>
+      </categories>
+      <tags>
+        <tag>configure</tag>
+        <tag>Golang</tag>
       </tags>
   </entry>
 </search>

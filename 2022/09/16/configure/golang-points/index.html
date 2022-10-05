@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-indicator.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ganliber.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+  <meta name="description" content="Language points of Golang encountered in learning and practice.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="About Golang">
+<meta property="og:url" content="https://ganliber.github.io/2022/09/16/configure/golang-points/index.html">
+<meta property="og:site_name" content="Ganliber&#39;s Home">
+<meta property="og:description" content="Language points of Golang encountered in learning and practice.">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-09-16T09:34:52.000Z">
+<meta property="article:modified_time" content="2022-09-20T07:09:37.591Z">
+<meta property="article:author" content="Gan Gecen">
+<meta property="article:tag" content="configure">
+<meta property="article:tag" content="Golang">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://ganliber.github.io/2022/09/16/configure/golang-points/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>About Golang | Ganliber's Home</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Ganliber's Home</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">19</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">4</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">20</span></a>
+
+  </li>
+        <li class="menu-item menu-item-pwn">
+
+    <a href="/pwn/" rel="section"><i class="fas fa-flag-checkered fa-fw"></i>pwn</a>
+
+  </li>
+        <li class="menu-item menu-item-system">
+
+    <a href="/system/" rel="section"><i class="fas fa-laptop-code fa-fw"></i>system</a>
+
+  </li>
+        <li class="menu-item menu-item-paper">
+
+    <a href="/paper/" rel="section"><i class="fas fa-glasses fa-fw"></i>paper</a>
+
+  </li>
+        <li class="menu-item menu-item-configure">
+
+    <a href="/configure/" rel="section"><i class="fas fa-wrench fa-fw"></i>configure</a>
+
+  </li>
+        <li class="menu-item menu-item-link">
+
+    <a href="/link/" rel="section"><i class="fa fa-link fa-fw"></i>link</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://ganliber.github.io/2022/09/16/configure/golang-points/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Gan Gecen">
+      <meta itemprop="description" content="An information security practitioner, focusing on system, Linux and pwn">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ganliber's Home">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          About Golang
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-09-16 17:34:52" itemprop="dateCreated datePublished" datetime="2022-09-16T17:34:52+08:00">2022-09-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-09-20 15:09:37" itemprop="dateModified" datetime="2022-09-20T15:09:37+08:00">2022-09-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/configure/" itemprop="url" rel="index"><span itemprop="name">configure</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/2022/09/16/configure/golang-points/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/09/16/configure/golang-points/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+            <div class="post-description">Language points of Golang encountered in learning and practice.</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="同一个包下调用"><a href="#同一个包下调用" class="headerlink" title="同一个包下调用"></a>同一个包下调用</h3><ul>
+<li><p>同一包下如<code>main.go</code>调用别的文件中的函数( 不论是否以大写字母开头 )，直接调用即可，但运行时候使用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">	go run .</span><br><span class="line">or </span><br><span class="line">	go build</span><br><span class="line">	./fileName.exe</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>本地包调用和远程包调用</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.liwenzhou.com/posts/Go/import_local_package_in_go_module/">如何使用go module导入本地包 | 李文周的博客 (liwenzhou.com)</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="多项目管理"><a href="#多项目管理" class="headerlink" title="多项目管理"></a>多项目管理</h3><ul>
+<li><p>关于<code>golang</code>的环境变量:GOPATH 、GOROOT 的具体作用可以问度娘，很多的。</p>
+<figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">GOPATH</span> 设置两个目录很有用。</span><br><span class="line"></span><br><span class="line">第一个目录作为第三方包的存放位置，第二个目录作为你自己的项目。</span><br><span class="line"></span><br><span class="line">将第三方的<span class="variable">GOPATH</span>放置到第一位，这样子 <span class="variable">go</span> <span class="variable">install</span> 将使用它作为默认的位置。 然后你可以在第二个 <span class="variable">GOPATH</span>目录下工作。</span><br><span class="line"></span><br><span class="line">如：设置 <span class="variable">GOPATH</span>为 <span class="built_in">E</span><span class="operator">:</span>\<span class="variable">GOPATH</span><span class="operator">;</span><span class="built_in">E</span><span class="operator">:</span>\<span class="type">GO_WORK</span></span><br><span class="line"></span><br><span class="line"><span class="variable">go</span> <span class="variable">get</span> 第三方的包的时候将会安装到 <span class="built_in">E</span><span class="operator">:</span>\<span class="variable">GOPATH</span> 下。</span><br><span class="line"></span><br><span class="line"><span class="built_in">E</span><span class="operator">:</span>\<span class="type">GO_WORK</span>\<span class="variable">src</span>下是自己创建的<span class="variable">golang</span>工程。</span><br><span class="line"></span><br><span class="line">这样<span class="variable">golang</span>工程 和 <span class="variable">golang</span>依赖包将会分别存储在两个位置<span class="operator">.</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="关于测试文件"><a href="#关于测试文件" class="headerlink" title="关于测试文件"></a>关于测试文件</h3><ul>
+<li>名称以 <code>_test.go</code> 结尾的文件不是由 <code>go build</code> 命令生成的，将通过 <code>go tests</code> 命令运行测试</li>
+</ul>
+<h3 id="关于Go的理解"><a href="#关于Go的理解" class="headerlink" title="关于Go的理解"></a>关于Go的理解</h3><ul>
+<li>Go 不是面向对象的编程 (OOP) 语言，但采用 Go 可以实现许多 OOP 功能。</li>
+</ul>
+<h3 id="关于CGO"><a href="#关于CGO" class="headerlink" title="关于CGO"></a>关于CGO</h3><h4 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h4><table>
+<thead>
+<tr>
+<th>C 语言类型</th>
+<th>CGO 类型</th>
+<th>Go 语言类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>char</td>
+<td>C.char</td>
+<td>byte</td>
+</tr>
+<tr>
+<td>singed char</td>
+<td>C.schar</td>
+<td>int8</td>
+</tr>
+<tr>
+<td>unsigned char</td>
+<td>C.uchar</td>
+<td>uint8</td>
+</tr>
+<tr>
+<td>short</td>
+<td>C.short</td>
+<td>int16</td>
+</tr>
+<tr>
+<td>unsigned short</td>
+<td>C.ushort</td>
+<td>uint16</td>
+</tr>
+<tr>
+<td>int</td>
+<td>C.int</td>
+<td>int32</td>
+</tr>
+<tr>
+<td>unsigned int</td>
+<td>C.uint</td>
+<td>uint32</td>
+</tr>
+<tr>
+<td>long</td>
+<td>C.long</td>
+<td>int32</td>
+</tr>
+<tr>
+<td>unsigned long</td>
+<td>C.ulong</td>
+<td>uint32</td>
+</tr>
+<tr>
+<td>long long int</td>
+<td>C.longlong</td>
+<td>int64</td>
+</tr>
+<tr>
+<td>unsigned long long int</td>
+<td>C.ulonglong</td>
+<td>uint64</td>
+</tr>
+<tr>
+<td>float</td>
+<td>C.float</td>
+<td>float32</td>
+</tr>
+<tr>
+<td>double</td>
+<td>C.double</td>
+<td>float64</td>
+</tr>
+<tr>
+<td>size_t</td>
+<td>C.size_t</td>
+<td>uint</td>
+</tr>
+</tbody></table>
+<h3 id="结构体"><a href="#结构体" class="headerlink" title="结构体"></a>结构体</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">struct A &#123;</span></span><br><span class="line"><span class="comment">    int   size: 10; // 位字段无法访问</span></span><br><span class="line"><span class="comment">    float arr[];    // 零长的数组也无法访问</span></span><br><span class="line"><span class="comment">&#125;;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;C&quot;</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> a C.struct_A</span><br><span class="line">    fmt.Println(a.size) <span class="comment">// 错误: 位字段无法访问</span></span><br><span class="line">    fmt.Println(a.arr)  <span class="comment">// 错误: 零长的数组也无法访问</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>数组 &amp; 字符串</p>
+<p>CGO 的 C 虚拟包提供了以下一组函数，用于 Go 语言和 C 语言之间数组和字符串的双向转换：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Go string to C string</span></span><br><span class="line"><span class="comment">// The C string is allocated in the C heap using malloc.</span></span><br><span class="line"><span class="comment">// It is the caller&#x27;s responsibility to arrange for it to be</span></span><br><span class="line"><span class="comment">// freed, such as by calling C.free (be sure to include stdlib.h</span></span><br><span class="line"><span class="comment">// if C.free is needed).</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">C</span>.<span class="title">CString</span><span class="params">(<span class="type">string</span>)</span></span> *C.char</span><br><span class="line"></span><br><span class="line"><span class="comment">// Go []byte slice to C array</span></span><br><span class="line"><span class="comment">// The C array is allocated in the C heap using malloc.</span></span><br><span class="line"><span class="comment">// It is the caller&#x27;s responsibility to arrange for it to be</span></span><br><span class="line"><span class="comment">// freed, such as by calling C.free (be sure to include stdlib.h</span></span><br><span class="line"><span class="comment">// if C.free is needed).</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">C</span>.<span class="title">CBytes</span><span class="params">([]<span class="type">byte</span>)</span></span> unsafe.Pointer</span><br><span class="line"></span><br><span class="line"><span class="comment">// C string to Go string</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">C</span>.<span class="title">GoString</span><span class="params">(*C.char)</span></span> <span class="type">string</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// C data with explicit length to Go string</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">C</span>.<span class="title">GoStringN</span><span class="params">(*C.char, C.<span class="type">int</span>)</span></span> <span class="type">string</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// C data with explicit length to Go []byte</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">C</span>.<span class="title">GoBytes</span><span class="params">(unsafe.Pointer, C.<span class="type">int</span>)</span></span> []<span class="type">byte</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Gin"><a href="#Gin" class="headerlink" title="Gin"></a>Gin</h3><h4 id="RESTful-API"><a href="#RESTful-API" class="headerlink" title="RESTful API"></a>RESTful API</h4><ul>
+<li>REST的含义就是客户端与Web服务器之间进行交互的时候，使用HTTP协议中的4个请求方法代表不同的动作<ul>
+<li><code>GET</code>用来获取资源</li>
+<li><code>POST</code>用来新建资源</li>
+<li><code>PUT</code>用来更新资源</li>
+<li><code>DELETE</code>用来删除资源</li>
+</ul>
+</li>
+</ul>
+<h4 id="渲染"><a href="#渲染" class="headerlink" title="渲染"></a>渲染</h4><ul>
+<li>Gin框架中使用<code>LoadHTMLGlob()</code>或者<code>LoadHTMLFiles()</code>方法进行HTML模板渲染</li>
+</ul>
+<h4 id="项目管理"><a href="#项目管理" class="headerlink" title="项目管理"></a>项目管理</h4><ul>
+<li>Golang包管理：GoVender</li>
+<li>govender 是对Golang的包依赖管理的一个插件，该工具将项目依赖的外部包拷贝到项目下的 vendor 目录下，并通过 vendor.json 文件来记录依赖包的版本，方便用户使用相对稳定的依赖。</li>
+</ul>
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://gitee.com/moxi159753/LearningNotes/tree/master/Golang/Gin%E6%A1%86%E6%9E%B6/1_Gin%E5%86%85%E5%AE%B9%E4%BB%8B%E7%BB%8D">https://gitee.com/moxi159753/LearningNotes/tree/master/Golang/Gin%E6%A1%86%E6%9E%B6/1_Gin%E5%86%85%E5%AE%B9%E4%BB%8B%E7%BB%8D</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Gan Gecen
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://ganliber.github.io/2022/09/16/configure/golang-points/" title="About Golang">https://ganliber.github.io/2022/09/16/configure/golang-points/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/configure/" rel="tag"># configure</a>
+              <a href="/tags/Golang/" rel="tag"># Golang</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/09/13/system/detour-winTracer/" rel="prev" title="Implementation of winTracer by Detour">
+      <i class="fa fa-chevron-left"></i> Implementation of winTracer by Detour
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8C%E4%B8%80%E4%B8%AA%E5%8C%85%E4%B8%8B%E8%B0%83%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text">同一个包下调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">多项目管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E6%B5%8B%E8%AF%95%E6%96%87%E4%BB%B6"><span class="nav-number">3.</span> <span class="nav-text">关于测试文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8EGo%E7%9A%84%E7%90%86%E8%A7%A3"><span class="nav-number">4.</span> <span class="nav-text">关于Go的理解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8ECGO"><span class="nav-number">5.</span> <span class="nav-text">关于CGO</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="nav-number">5.1.</span> <span class="nav-text">类型转换</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%84%E4%BD%93"><span class="nav-number">6.</span> <span class="nav-text">结构体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Gin"><span class="nav-number">7.</span> <span class="nav-text">Gin</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#RESTful-API"><span class="nav-number">7.1.</span> <span class="nav-text">RESTful API</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B8%B2%E6%9F%93"><span class="nav-number">7.2.</span> <span class="nav-text">渲染</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86"><span class="nav-number">7.3.</span> <span class="nav-text">项目管理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reference"><span class="nav-number">8.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Gan Gecen"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Gan Gecen</p>
+  <div class="site-description" itemprop="description">An information security practitioner, focusing on system, Linux and pwn</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Ganliber" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Ganliber" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:Gecenliber@outlook.com" title="E-Mail → mailto:Gecenliber@outlook.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/Ganliber" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;Ganliber" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gan Gecen</span>
+</div>
+
+<!--
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+-->
+
+
+<div class="powered-by">
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <i class="fa fa-user-md"></i>
+    <span id="busuanzi_container_site_uv">
+        访客数:<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_pv">
+        访问量:<span id="busuanzi_value_site_pv"></span>
+    </span>
+</div>
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://Ganliber.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://ganliber.github.io/2022/09/16/configure/golang-points/";
+    this.page.identifier = "2022/09/16/configure/golang-points/";
+    this.page.title = "About Golang";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://Ganliber.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+</script>
+
+</body>
+</html>
