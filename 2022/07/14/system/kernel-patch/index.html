@@ -35,7 +35,7 @@
 <meta property="og:image" content="https://ganliber.github.io/2022/07/14/system/kernel-patch/No_error_and_no_warning.png">
 <meta property="og:image" content="https://ganliber.github.io/2022/07/14/system/kernel-patch/send_patch_success.png">
 <meta property="article:published_time" content="2022-07-14T08:17:16.000Z">
-<meta property="article:modified_time" content="2022-07-20T06:32:08.805Z">
+<meta property="article:modified_time" content="2023-03-10T12:39:05.595Z">
 <meta property="article:author" content="Gan Gecen">
 <meta property="article:tag" content="operating system">
 <meta property="article:tag" content="Linux kernel">
@@ -145,7 +145,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">24</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">25</span></a>
 
   </li>
         <li class="menu-item menu-item-pwn">
@@ -258,7 +258,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-07-20 14:32:08" itemprop="dateModified" datetime="2022-07-20T14:32:08+08:00">2022-07-20</time>
+                <time title="Modified: 2023-03-10 20:39:05" itemprop="dateModified" datetime="2023-03-10T20:39:05+08:00">2023-03-10</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -427,7 +427,14 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">git send-email </span><br><span class="line">	<span class="comment"># --subject-prefix=&quot;PATCH v2&quot;  </span></span><br><span class="line">	--smtp-server /usr/bin/msmtp </span><br><span class="line">	--to davem@davemloft.net</span><br><span class="line">	--to kuba@kernel.org</span><br><span class="line">	--to edumazet@google.com</span><br><span class="line">	--to chuck.lever@oracle.com</span><br><span class="line">	--to u202011061@gmail.com <span class="comment"># &lt;------ to yourself</span></span><br><span class="line">	-cc linux-nfs@vger.kernel.org</span><br><span class="line">	-cc netdev@vger.kernel.org</span><br><span class="line">	-cc linux-kernel@vger.kernel.org </span><br><span class="line">	0001-net-sunrpc-auth_null-modified-test.patch</span><br></pre></td></tr></table></figure>
 
 <p>For test, you can just send it to yourself.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git send-email --smtp-server /usr/bin/msmtp --to u202011061@gmail.com --cc Gecenliber@outlook.com 0001-net-sunrpc-auth_null-modified-test.patch</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git send-email --smtp-server /usr/bin/msmtp --to u202011061@gmail.com --cc Gecenliber@outlook.com 0001-net-sunrpc-auth_null-modified-test.patch</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>If you want to simplify the process of manually adding all maintainers to your email，you can do as follows.</p>
+<p>copy the following lines into <code>~/.gitconfig</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[sendemail]</span><br><span class="line">    tocmd =<span class="string">&quot;`pwd`/scripts/get_maintainer.pl --nogit --nogit-fallback --norolestats --nol&quot;</span></span><br><span class="line">    cccmd =<span class="string">&quot;`pwd`/scripts/get_maintainer.pl --nogit --nogit-fallback --norolestats --nom&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>And send email like that : pay attention to parameter <code>--smtp-server /usr/bin/msmtp</code> which is important.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git send-email --smtp-server /usr/bin/msmtp  0001-atm-he-fix-potential-ioremap-leak-of-membase-in-he_d.patch</span><br></pre></td></tr></table></figure></li>
 </ol>
 <h2 id="Succeed"><a href="#Succeed" class="headerlink" title="Succeed"></a>Succeed</h2><blockquote>
 <p>Happy~</p>
@@ -560,7 +567,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-count">25</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -614,7 +621,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2022</span>
+  <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

@@ -1406,7 +1406,14 @@
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git send-email </span><br><span class="line">	<span class="comment"># --subject-prefix=&quot;PATCH v2&quot;  </span></span><br><span class="line">	--smtp-server /usr/bin/msmtp </span><br><span class="line">	--to davem@davemloft.net</span><br><span class="line">	--to kuba@kernel.org</span><br><span class="line">	--to edumazet@google.com</span><br><span class="line">	--to chuck.lever@oracle.com</span><br><span class="line">	--to u202011061@gmail.com <span class="comment"># &lt;------ to yourself</span></span><br><span class="line">	-cc linux-nfs@vger.kernel.org</span><br><span class="line">	-cc netdev@vger.kernel.org</span><br><span class="line">	-cc linux-kernel@vger.kernel.org </span><br><span class="line">	0001-net-sunrpc-auth_null-modified-test.patch</span><br></pre></td></tr></table></figure>
 
 <p>For test, you can just send it to yourself.</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git send-email --smtp-server /usr/bin/msmtp --to u202011061@gmail.com --cc Gecenliber@outlook.com 0001-net-sunrpc-auth_null-modified-test.patch</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git send-email --smtp-server /usr/bin/msmtp --to u202011061@gmail.com --cc Gecenliber@outlook.com 0001-net-sunrpc-auth_null-modified-test.patch</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>If you want to simplify the process of manually adding all maintainers to your email，you can do as follows.</p>
+<p>copy the following lines into <code>~/.gitconfig</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[sendemail]</span><br><span class="line">    tocmd =<span class="string">&quot;`pwd`/scripts/get_maintainer.pl --nogit --nogit-fallback --norolestats --nol&quot;</span></span><br><span class="line">    cccmd =<span class="string">&quot;`pwd`/scripts/get_maintainer.pl --nogit --nogit-fallback --norolestats --nom&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>And send email like that : pay attention to parameter <code>--smtp-server /usr/bin/msmtp</code> which is important.</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git send-email --smtp-server /usr/bin/msmtp  0001-atm-he-fix-potential-ioremap-leak-of-membase-in-he_d.patch</span><br></pre></td></tr></table></figure></li>
 </ol>
 <h2 id="Succeed"><a href="#Succeed" class="headerlink" title="Succeed"></a>Succeed</h2><blockquote>
 <p>Happy~</p>
@@ -3934,7 +3941,7 @@
   <entry>
     <title>MIT 6.S081 lab2 system calls</title>
     <url>/2022/11/08/system/mit-6-S081-lab2/</url>
-    <content><![CDATA[<h1 id="Lab2"><a href="#Lab2" class="headerlink" title="Lab2"></a>Lab2</h1><h2 id="Basics"><a href="#Basics" class="headerlink" title="Basics"></a>Basics</h2><h3 id="code-organization"><a href="#code-organization" class="headerlink" title="code organization"></a>code organization</h3><blockquote>
+    <content><![CDATA[<h2 id="Basics"><a href="#Basics" class="headerlink" title="Basics"></a>Basics</h2><h3 id="code-organization"><a href="#code-organization" class="headerlink" title="code organization"></a>code organization</h3><blockquote>
 <p>under folder <code>/kernel</code>, and APIs are defined in <code>kernel/defs.h</code></p>
 </blockquote>
 <img src="mit-6-S081-lab2/code-organization.png" alt="Figure-2.2" style="zoom:38%;" />
@@ -4130,6 +4137,22 @@
       <tags>
         <tag>Linux</tag>
         <tag>net protocol</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MIT 6.S081 lab2 Page Tables</title>
+    <url>/2022/11/17/system/mit-6-S081-lab3/</url>
+    <content><![CDATA[<h2 id="Basics"><a href="#Basics" class="headerlink" title="Basics"></a>Basics</h2><h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a href="https://pdos.csail.mit.edu/6.828/2020/labs/pgtbl.html">Lab: page tables (mit.edu)</a></li>
+<li><a href="https://xv6-chinese.readthedocs.io/zh/latest/docs/cover.html">xv6 ch-document</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>system</category>
+      </categories>
+      <tags>
+        <tag>operating system</tag>
+        <tag>Unix C</tag>
       </tags>
   </entry>
 </search>

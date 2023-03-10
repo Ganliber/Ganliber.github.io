@@ -30,7 +30,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://ganliber.github.io/2022/11/08/system/mit-6-S081-lab2/mit-6-S081-lab2/code-organization.png">
 <meta property="article:published_time" content="2022-11-07T17:31:49.000Z">
-<meta property="article:modified_time" content="2022-11-16T12:21:35.076Z">
+<meta property="article:modified_time" content="2022-11-17T03:17:03.539Z">
 <meta property="article:author" content="Gan Gecen">
 <meta property="article:tag" content="operating system">
 <meta property="article:tag" content="Unix C">
@@ -140,7 +140,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">24</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">25</span></a>
 
   </li>
         <li class="menu-item menu-item-pwn">
@@ -253,7 +253,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-16 20:21:35" itemprop="dateModified" datetime="2022-11-16T20:21:35+08:00">2022-11-16</time>
+                <time title="Modified: 2022-11-17 11:17:03" itemprop="dateModified" datetime="2022-11-17T11:17:03+08:00">2022-11-17</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -291,7 +291,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="Lab2"><a href="#Lab2" class="headerlink" title="Lab2"></a>Lab2</h1><h2 id="Basics"><a href="#Basics" class="headerlink" title="Basics"></a>Basics</h2><h3 id="code-organization"><a href="#code-organization" class="headerlink" title="code organization"></a>code organization</h3><blockquote>
+        <h2 id="Basics"><a href="#Basics" class="headerlink" title="Basics"></a>Basics</h2><h3 id="code-organization"><a href="#code-organization" class="headerlink" title="code organization"></a>code organization</h3><blockquote>
 <p>under folder <code>/kernel</code>, and APIs are defined in <code>kernel/defs.h</code></p>
 </blockquote>
 <img src="mit-6-S081-lab2/code-organization.png" alt="Figure-2.2" style="zoom:38%;" />
@@ -497,7 +497,10 @@
     <a href="/2022/10/20/system/tftp-selfmade/" rel="prev" title="Selfmade TFTP in Linux">
       <i class="fa fa-chevron-left"></i> Selfmade TFTP in Linux
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2022/11/17/system/mit-6-S081-lab3/" rel="next" title="MIT 6.S081 lab2 Page Tables">
+      MIT 6.S081 lab2 Page Tables <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -563,7 +566,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Lab2"><span class="nav-number">1.</span> <span class="nav-text">Lab2</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Basics"><span class="nav-number">1.1.</span> <span class="nav-text">Basics</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#code-organization"><span class="nav-number">1.1.1.</span> <span class="nav-text">code organization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mode"><span class="nav-number">1.1.2.</span> <span class="nav-text">mode</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#proc"><span class="nav-number">1.1.3.</span> <span class="nav-text">proc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#starting-xv6"><span class="nav-number">1.1.4.</span> <span class="nav-text">starting xv6</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#syscall-numbers"><span class="nav-number">1.1.5.</span> <span class="nav-text">syscall numbers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#syscall-function-pointers-array"><span class="nav-number">1.1.6.</span> <span class="nav-text">syscall function pointers array</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Solution"><span class="nav-number">1.2.</span> <span class="nav-text">Solution</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#trap-procedure"><span class="nav-number">1.2.1.</span> <span class="nav-text">trap procedure</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sys-trace"><span class="nav-number">1.2.2.</span> <span class="nav-text">sys_trace</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sys-sysinfotest"><span class="nav-number">1.2.3.</span> <span class="nav-text">sys_sysinfotest</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Result"><span class="nav-number">1.3.</span> <span class="nav-text">Result</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Additional-knowledge"><span class="nav-number">1.4.</span> <span class="nav-text">Additional knowledge</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#attribute"><span class="nav-number">1.4.1.</span> <span class="nav-text">__attribute__</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#riscv-comments"><span class="nav-number">1.4.2.</span> <span class="nav-text">riscv comments</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">1.5.</span> <span class="nav-text">Reference</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Basics"><span class="nav-number">1.</span> <span class="nav-text">Basics</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#code-organization"><span class="nav-number">1.1.</span> <span class="nav-text">code organization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mode"><span class="nav-number">1.2.</span> <span class="nav-text">mode</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#proc"><span class="nav-number">1.3.</span> <span class="nav-text">proc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#starting-xv6"><span class="nav-number">1.4.</span> <span class="nav-text">starting xv6</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#syscall-numbers"><span class="nav-number">1.5.</span> <span class="nav-text">syscall numbers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#syscall-function-pointers-array"><span class="nav-number">1.6.</span> <span class="nav-text">syscall function pointers array</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Solution"><span class="nav-number">2.</span> <span class="nav-text">Solution</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#trap-procedure"><span class="nav-number">2.1.</span> <span class="nav-text">trap procedure</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sys-trace"><span class="nav-number">2.2.</span> <span class="nav-text">sys_trace</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sys-sysinfotest"><span class="nav-number">2.3.</span> <span class="nav-text">sys_sysinfotest</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Result"><span class="nav-number">3.</span> <span class="nav-text">Result</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Additional-knowledge"><span class="nav-number">4.</span> <span class="nav-text">Additional knowledge</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#attribute"><span class="nav-number">4.1.</span> <span class="nav-text">__attribute__</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#riscv-comments"><span class="nav-number">4.2.</span> <span class="nav-text">riscv comments</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -579,7 +582,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-count">25</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -633,7 +636,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2022</span>
+  <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
