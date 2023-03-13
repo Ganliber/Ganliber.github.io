@@ -4155,4 +4155,62 @@
         <tag>Unix C</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Patch Submission Records</title>
+    <url>/2023/03/13/pwn/patches/</url>
+    <content><![CDATA[<h3 id="1"><a href="#1" class="headerlink" title="1"></a>1</h3><h4 id="Description"><a href="#Description" class="headerlink" title="Description"></a>Description</h4><p>Bug reported by <code>smatch</code>:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">drivers/atm/he.c:<span class="number">1520</span> he_start() warn: <span class="string">&#x27;he_dev-&gt;membase&#x27;</span> from <span class="title function_">ioremap</span><span class="params">()</span> not released on lines: 1061,1118,1168,1417,1427,1433,1468.</span><br></pre></td></tr></table></figure>
+
+<h4 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="literal">false</span> positive.</span><br></pre></td></tr></table></figure>
+
+<h3 id="2"><a href="#2" class="headerlink" title="2"></a>2</h3><h4 id="Description-1"><a href="#Description-1" class="headerlink" title="Description"></a>Description</h4><p>Bug reported by <code>smatch</code>:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">drivers/gpu/drm/tiny/bochs.c:<span class="number">290</span> bochs_hw_init() warn: <span class="string">&#x27;bochs-&gt;mmio&#x27;</span> from <span class="title function_">ioremap</span><span class="params">()</span> not released on lines: 246,250,254.</span><br></pre></td></tr></table></figure>
+
+<h4 id="Solution-1"><a href="#Solution-1" class="headerlink" title="Solution"></a>Solution</h4><p><strong>About <code>drivers/gpu/drm/tiny/bochs.c</code></strong></p>
+<p><code>drivers/gpu/drm/tiny/bochs.c</code>是Linux内核中的一个设备驱动程序，用于支持<code>Bochs/QEMU</code>虚拟机的图形显示器。它实现了Direct Rendering Manager（DRM）子系统中的驱动程序接口，使得Linux操作系统可以与<code>Bochs/QEMU</code>虚拟机的图形显示器进行通信，以在虚拟环境中显示图形界面。</p>
+<p>DRM是Direct Rendering Manager的缩写，是Linux内核中的一个子系统。它提供了用于管理图形硬件设备和处理图形渲染的驱动程序接口，并且允许用户空间应用程序直接访问图形硬件资源。</p>
+<p>DRM还提供了一些特殊的功能，例如Kernel Mode Setting（KMS），它允许内核控制显卡输出的分辨率、刷新率等参数，从而改善图形显示性能和质量。此外，DRM还支持3D加速、视频解码等高级图形处理技术，使得Linux系统在图形渲染方面具备与Windows和macOS等操作系统相当的能力。</p>
+<p><strong>About <code>ioremap</code> &amp; <code>iounmap</code></strong></p>
+<p>在Linux内核中，ioremap()和iounmap()是用于映射物理地址到虚拟地址的函数。</p>
+<p>ioremap()函数将一个物理地址映射到内核虚拟地址空间中，并返回这个虚拟地址。这个函数通常用于驱动程序需要访问硬件设备的寄存器或者其他I&#x2F;O内存时使用。通过使用ioremap()，驱动程序可以获得一个虚拟地址，用于访问I&#x2F;O内存。</p>
+<p>iounmap()函数则是用于撤销ioremap()所创建的虚拟地址映射。当驱动程序不再需要访问I&#x2F;O内存时，应该调用iounmap()来释放这些虚拟地址空间，以便其他进程或驱动程序可以使用它们。</p>
+<p>需要注意的是，因为<code>ioremap()</code>和<code>iounmap()</code>都涉及到对内核虚拟地址空间的修改，因此必须在内核模块中使用，并且需要特权权限才能够使用。</p>
+<p>lines in function <code>bochs_hw_init</code></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">	<span class="keyword">if</span> ((id &amp; <span class="number">0xfff0</span>) != VBE_DISPI_ID0) &#123;</span><br><span class="line">		DRM_ERROR(<span class="string">&quot;ID mismatch\n&quot;</span>);</span><br><span class="line"><span class="number">246</span>		<span class="keyword">return</span> -ENODEV;</span><br><span class="line">	&#125;</span><br><span class="line">...</span><br><span class="line">	<span class="keyword">if</span> ((pdev-&gt;resource[<span class="number">0</span>].flags &amp; IORESOURCE_MEM) == <span class="number">0</span>)</span><br><span class="line"><span class="number">250</span>		<span class="keyword">return</span> -ENODEV;</span><br><span class="line">...</span><br><span class="line">	<span class="keyword">if</span> (addr == <span class="number">0</span>)</span><br><span class="line"><span class="number">254</span>		<span class="keyword">return</span> -ENODEV;</span><br></pre></td></tr></table></figure>
+
+<p>原文件即有的<code>ioremap</code>, in <code>bochs_hw_init</code>:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">bochs-&gt;mmio = ioremap(ioaddr, iosize);</span><br><span class="line">bochs-&gt;fb_map = ioremap(addr, size);</span><br></pre></td></tr></table></figure>
+
+<p>原文件即有的<code>iounmap</code>, in <code>bochs_hw_fini</code>:</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">bochs_hw_fini</span><span class="params">(<span class="keyword">struct</span> drm_device *dev)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">bochs_device</span> *<span class="title">bochs</span> =</span> dev-&gt;dev_private;</span><br><span class="line">	<span class="comment">/* <span class="doctag">TODO:</span> shot down existing vram mappings */</span></span><br><span class="line">	<span class="keyword">if</span> (bochs-&gt;mmio)</span><br><span class="line">		iounmap(bochs-&gt;mmio);</span><br><span class="line">	<span class="keyword">if</span> (bochs-&gt;ioports)</span><br><span class="line">		release_region(VBE_DISPI_IOPORT_INDEX, <span class="number">2</span>);</span><br><span class="line">	<span class="keyword">if</span> (bochs-&gt;fb_map)</span><br><span class="line">		iounmap(bochs-&gt;fb_map);</span><br><span class="line">	pci_release_regions(to_pci_dev(dev-&gt;dev));</span><br><span class="line">	kfree(bochs-&gt;edid);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>发现<code>bochs_load</code>中，调用<code>bochs_hw_init(dev)</code>得到返回值<code>ret</code>，</p>
+<ol>
+<li><p>如果<code>ret</code>为非0，会直接返回，唯一一处调用<code>bochs_load</code>的在函数<code>bochs_pci_probe</code>，中的判断为</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">	ret = bochs_load(dev);</span><br><span class="line">	<span class="keyword">if</span> (ret)</span><br><span class="line">		<span class="keyword">goto</span> err_free_dev;</span><br><span class="line">...</span><br><span class="line">err_hw_fini:</span><br><span class="line">	bochs_hw_fini(dev);			(X)</span><br><span class="line">err_free_dev: 					&lt;---</span><br><span class="line">	drm_dev_put(dev);</span><br><span class="line">	<span class="keyword">return</span> ret;</span><br></pre></td></tr></table></figure>
+
+<p>此时不会进入<code>bochs_hw_fini</code>即不会释放。</p>
+</li>
+<li><p>如果<code>ret</code>为0（<code>bochs_hw_init</code>初始化成功）则进一步初始化<code>drmm_vram_helper_init</code>，和我们后续的分析无关。</p>
+</li>
+</ol>
+<p>注意在<code>bochs_hw_init</code>中的返回值共有</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">-EBUSY, -ENOMEM, -ENODEV, <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<p>原文件即有的对<code>bochs_hw_fini</code>的调用： </p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">-&gt; <span class="type">static</span> <span class="type">int</span> <span class="title function_">bochs_load</span><span class="params">(<span class="keyword">struct</span> drm_device *dev)</span>:</span><br><span class="line">	ret = bochs_hw_init(dev);</span><br><span class="line">	<span class="keyword">if</span> (ret)</span><br><span class="line">		<span class="keyword">return</span> ret;</span><br><span class="line"></span><br><span class="line">	ret = drmm_vram_helper_init(dev, bochs-&gt;fb_base, bochs-&gt;fb_size);</span><br><span class="line">	<span class="keyword">if</span> (ret)</span><br><span class="line">		<span class="keyword">goto</span> err_hw_fini;</span><br><span class="line"></span><br><span class="line">	ret = bochs_kms_init(bochs);</span><br><span class="line">	<span class="keyword">if</span> (ret)</span><br><span class="line">		<span class="keyword">goto</span> err_hw_fini;</span><br><span class="line">err_hw_fini:</span><br><span class="line">	bochs_hw_fini(dev);</span><br><span class="line">	</span><br><span class="line">-&gt; <span class="type">static</span> <span class="type">int</span> <span class="title function_">bochs_pci_probe</span><span class="params">(<span class="keyword">struct</span> pci_dev *pdev, <span class="type">const</span> <span class="keyword">struct</span> pci_device_id *ent)</span></span><br><span class="line">err_hw_fini:</span><br><span class="line">	<span class="title function_">bochs_hw_fini</span><span class="params">(dev)</span>;</span><br><span class="line"></span><br><span class="line">-&gt; <span class="type">static</span> <span class="type">void</span> <span class="title function_">bochs_pci_remove</span><span class="params">(<span class="keyword">struct</span> pci_dev *pdev)</span>:</span><br><span class="line">	<span class="title function_">bochs_hw_fini</span><span class="params">(dev)</span>;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="3"><a href="#3" class="headerlink" title="3"></a>3</h3>]]></content>
+      <categories>
+        <category>pwn</category>
+      </categories>
+      <tags>
+        <tag>Linux kernel</tag>
+        <tag>Operating System</tag>
+      </tags>
+  </entry>
 </search>
